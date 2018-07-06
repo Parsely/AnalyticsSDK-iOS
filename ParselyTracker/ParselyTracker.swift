@@ -27,7 +27,7 @@ public class Parsely {
         self.beacon = Beacon()
     }
     
-    public func trackPageView() {
-        
+    public func trackPageView() { 
+        print("Hello World!")
     }
 }
