@@ -9,7 +9,9 @@
 import UIKit
 
 class FirstViewController: UIViewController {
-
+    @IBOutlet weak var trackPVButton: UIButton!
+    let delegate = UIApplication.shared.delegate as! AppDelegate
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -20,6 +22,9 @@ class FirstViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    @IBAction func didTouchButton(_ sender: Any) {
+        delegate.parsely.trackPageView()
+    }
+    
 }
 

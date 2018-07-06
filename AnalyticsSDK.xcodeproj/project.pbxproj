@@ -14,6 +14,20 @@
 		F40D9A6720EFF74F0030525E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F40D9A6620EFF74F0030525E /* Assets.xcassets */; };
 		F40D9A6A20EFF74F0030525E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F40D9A6820EFF74F0030525E /* LaunchScreen.storyboard */; };
 		F40D9A7520EFF7500030525E /* AnalyticsSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A7420EFF7500030525E /* AnalyticsSDKTests.swift */; };
+		F433339720F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F433338E20F0087E004BB6F5 /* ParselyTracker.framework */; };
+		F433339E20F0087E004BB6F5 /* ParselyTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F433339D20F0087E004BB6F5 /* ParselyTrackerTests.swift */; };
+		F43333A320F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F433338E20F0087E004BB6F5 /* ParselyTracker.framework */; };
+		F43333A420F0087E004BB6F5 /* ParselyTracker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F433338E20F0087E004BB6F5 /* ParselyTracker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F43333AC20F008B7004BB6F5 /* ParselyTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A8020EFFADD0030525E /* ParselyTracker.swift */; };
+		F43333B620F008EF004BB6F5 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333AD20F008EE004BB6F5 /* Session.swift */; };
+		F43333B720F008EF004BB6F5 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333AE20F008EE004BB6F5 /* Video.swift */; };
+		F43333B820F008EF004BB6F5 /* Beacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333AF20F008EE004BB6F5 /* Beacon.swift */; };
+		F43333B920F008EF004BB6F5 /* Sampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B020F008EE004BB6F5 /* Sampler.swift */; };
+		F43333BA20F008EF004BB6F5 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B120F008EE004BB6F5 /* EventQueue.swift */; };
+		F43333BB20F008EF004BB6F5 /* EngagedTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B220F008EF004BB6F5 /* EngagedTime.swift */; };
+		F43333BC20F008EF004BB6F5 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B320F008EF004BB6F5 /* Pixel.swift */; };
+		F43333BD20F008EF004BB6F5 /* Visitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B420F008EF004BB6F5 /* Visitor.swift */; };
+		F43333BE20F008EF004BB6F5 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B520F008EF004BB6F5 /* Event.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,7 +38,42 @@
 			remoteGlobalIDString = F40D9A5920EFF74F0030525E;
 			remoteInfo = AnalyticsSDK;
 		};
+		F433339820F0087E004BB6F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F40D9A5220EFF74F0030525E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F433338D20F0087E004BB6F5;
+			remoteInfo = ParselyTracker;
+		};
+		F433339A20F0087E004BB6F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F40D9A5220EFF74F0030525E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F40D9A5920EFF74F0030525E;
+			remoteInfo = AnalyticsSDK;
+		};
+		F43333A120F0087E004BB6F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F40D9A5220EFF74F0030525E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F433338D20F0087E004BB6F5;
+			remoteInfo = ParselyTracker;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F43333AA20F0087E004BB6F5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F43333A420F0087E004BB6F5 /* ParselyTracker.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		F40D9A5A20EFF74F0030525E /* AnalyticsSDK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnalyticsSDK.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,6 +87,22 @@
 		F40D9A7020EFF7500030525E /* AnalyticsSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnalyticsSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F40D9A7420EFF7500030525E /* AnalyticsSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsSDKTests.swift; sourceTree = "<group>"; };
 		F40D9A7620EFF7500030525E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F40D9A7F20EFF7D70030525E /* AnalyticsSDK.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AnalyticsSDK.entitlements; sourceTree = "<group>"; };
+		F40D9A8020EFFADD0030525E /* ParselyTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParselyTracker.swift; sourceTree = "<group>"; };
+		F433338E20F0087E004BB6F5 /* ParselyTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ParselyTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F433339120F0087E004BB6F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F433339620F0087E004BB6F5 /* ParselyTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParselyTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F433339D20F0087E004BB6F5 /* ParselyTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParselyTrackerTests.swift; sourceTree = "<group>"; };
+		F433339F20F0087E004BB6F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F43333AD20F008EE004BB6F5 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		F43333AE20F008EE004BB6F5 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		F43333AF20F008EE004BB6F5 /* Beacon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Beacon.swift; sourceTree = "<group>"; };
+		F43333B020F008EE004BB6F5 /* Sampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sampler.swift; sourceTree = "<group>"; };
+		F43333B120F008EE004BB6F5 /* EventQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventQueue.swift; sourceTree = "<group>"; };
+		F43333B220F008EF004BB6F5 /* EngagedTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagedTime.swift; sourceTree = "<group>"; };
+		F43333B320F008EF004BB6F5 /* Pixel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
+		F43333B420F008EF004BB6F5 /* Visitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Visitor.swift; sourceTree = "<group>"; };
+		F43333B520F008EF004BB6F5 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F43333A320F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,6 +118,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F433338A20F0087E004BB6F5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F433339320F0087E004BB6F5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F433339720F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +144,8 @@
 			children = (
 				F40D9A5C20EFF74F0030525E /* AnalyticsSDK */,
 				F40D9A7320EFF7500030525E /* AnalyticsSDKTests */,
+				F433338F20F0087E004BB6F5 /* ParselyTracker */,
+				F433339C20F0087E004BB6F5 /* ParselyTrackerTests */,
 				F40D9A5B20EFF74F0030525E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -72,6 +155,8 @@
 			children = (
 				F40D9A5A20EFF74F0030525E /* AnalyticsSDK.app */,
 				F40D9A7020EFF7500030525E /* AnalyticsSDKTests.xctest */,
+				F433338E20F0087E004BB6F5 /* ParselyTracker.framework */,
+				F433339620F0087E004BB6F5 /* ParselyTrackerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -79,6 +164,7 @@
 		F40D9A5C20EFF74F0030525E /* AnalyticsSDK */ = {
 			isa = PBXGroup;
 			children = (
+				F40D9A7F20EFF7D70030525E /* AnalyticsSDK.entitlements */,
 				F40D9A5D20EFF74F0030525E /* AppDelegate.swift */,
 				F40D9A5F20EFF74F0030525E /* FirstViewController.swift */,
 				F40D9A6120EFF74F0030525E /* SecondViewController.swift */,
@@ -99,7 +185,44 @@
 			path = AnalyticsSDKTests;
 			sourceTree = "<group>";
 		};
+		F433338F20F0087E004BB6F5 /* ParselyTracker */ = {
+			isa = PBXGroup;
+			children = (
+				F43333AF20F008EE004BB6F5 /* Beacon.swift */,
+				F43333B220F008EF004BB6F5 /* EngagedTime.swift */,
+				F43333B120F008EE004BB6F5 /* EventQueue.swift */,
+				F43333B520F008EF004BB6F5 /* Event.swift */,
+				F43333B320F008EF004BB6F5 /* Pixel.swift */,
+				F43333B020F008EE004BB6F5 /* Sampler.swift */,
+				F43333AD20F008EE004BB6F5 /* Session.swift */,
+				F43333AE20F008EE004BB6F5 /* Video.swift */,
+				F43333B420F008EF004BB6F5 /* Visitor.swift */,
+				F40D9A8020EFFADD0030525E /* ParselyTracker.swift */,
+				F433339120F0087E004BB6F5 /* Info.plist */,
+			);
+			path = ParselyTracker;
+			sourceTree = "<group>";
+		};
+		F433339C20F0087E004BB6F5 /* ParselyTrackerTests */ = {
+			isa = PBXGroup;
+			children = (
+				F433339D20F0087E004BB6F5 /* ParselyTrackerTests.swift */,
+				F433339F20F0087E004BB6F5 /* Info.plist */,
+			);
+			path = ParselyTrackerTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		F433338B20F0087E004BB6F5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		F40D9A5920EFF74F0030525E /* AnalyticsSDK */ = {
@@ -109,10 +232,12 @@
 				F40D9A5620EFF74F0030525E /* Sources */,
 				F40D9A5720EFF74F0030525E /* Frameworks */,
 				F40D9A5820EFF74F0030525E /* Resources */,
+				F43333AA20F0087E004BB6F5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				F43333A220F0087E004BB6F5 /* PBXTargetDependency */,
 			);
 			name = AnalyticsSDK;
 			productName = AnalyticsSDK;
@@ -137,6 +262,43 @@
 			productReference = F40D9A7020EFF7500030525E /* AnalyticsSDKTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		F433338D20F0087E004BB6F5 /* ParselyTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F43333A920F0087E004BB6F5 /* Build configuration list for PBXNativeTarget "ParselyTracker" */;
+			buildPhases = (
+				F433338920F0087E004BB6F5 /* Sources */,
+				F433338A20F0087E004BB6F5 /* Frameworks */,
+				F433338B20F0087E004BB6F5 /* Headers */,
+				F433338C20F0087E004BB6F5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ParselyTracker;
+			productName = ParselyTracker;
+			productReference = F433338E20F0087E004BB6F5 /* ParselyTracker.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		F433339520F0087E004BB6F5 /* ParselyTrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F43333AB20F0087E004BB6F5 /* Build configuration list for PBXNativeTarget "ParselyTrackerTests" */;
+			buildPhases = (
+				F433339220F0087E004BB6F5 /* Sources */,
+				F433339320F0087E004BB6F5 /* Frameworks */,
+				F433339420F0087E004BB6F5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F433339920F0087E004BB6F5 /* PBXTargetDependency */,
+				F433339B20F0087E004BB6F5 /* PBXTargetDependency */,
+			);
+			name = ParselyTrackerTests;
+			productName = ParselyTrackerTests;
+			productReference = F433339620F0087E004BB6F5 /* ParselyTrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -150,8 +312,22 @@
 					F40D9A5920EFF74F0030525E = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
+						};
 					};
 					F40D9A6F20EFF7500030525E = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = F40D9A5920EFF74F0030525E;
+					};
+					F433338D20F0087E004BB6F5 = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+					};
+					F433339520F0087E004BB6F5 = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
 						TestTargetID = F40D9A5920EFF74F0030525E;
@@ -173,6 +349,8 @@
 			targets = (
 				F40D9A5920EFF74F0030525E /* AnalyticsSDK */,
 				F40D9A6F20EFF7500030525E /* AnalyticsSDKTests */,
+				F433338D20F0087E004BB6F5 /* ParselyTracker */,
+				F433339520F0087E004BB6F5 /* ParselyTrackerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -189,6 +367,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F40D9A6E20EFF7500030525E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F433338C20F0087E004BB6F5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F433339420F0087E004BB6F5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -216,6 +408,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F433338920F0087E004BB6F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F43333BD20F008EF004BB6F5 /* Visitor.swift in Sources */,
+				F43333BC20F008EF004BB6F5 /* Pixel.swift in Sources */,
+				F43333B620F008EF004BB6F5 /* Session.swift in Sources */,
+				F43333AC20F008B7004BB6F5 /* ParselyTracker.swift in Sources */,
+				F43333BE20F008EF004BB6F5 /* Event.swift in Sources */,
+				F43333B720F008EF004BB6F5 /* Video.swift in Sources */,
+				F43333B820F008EF004BB6F5 /* Beacon.swift in Sources */,
+				F43333BA20F008EF004BB6F5 /* EventQueue.swift in Sources */,
+				F43333BB20F008EF004BB6F5 /* EngagedTime.swift in Sources */,
+				F43333B920F008EF004BB6F5 /* Sampler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F433339220F0087E004BB6F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F433339E20F0087E004BB6F5 /* ParselyTrackerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -223,6 +440,21 @@
 			isa = PBXTargetDependency;
 			target = F40D9A5920EFF74F0030525E /* AnalyticsSDK */;
 			targetProxy = F40D9A7120EFF7500030525E /* PBXContainerItemProxy */;
+		};
+		F433339920F0087E004BB6F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F433338D20F0087E004BB6F5 /* ParselyTracker */;
+			targetProxy = F433339820F0087E004BB6F5 /* PBXContainerItemProxy */;
+		};
+		F433339B20F0087E004BB6F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F40D9A5920EFF74F0030525E /* AnalyticsSDK */;
+			targetProxy = F433339A20F0087E004BB6F5 /* PBXContainerItemProxy */;
+		};
+		F43333A220F0087E004BB6F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F433338D20F0087E004BB6F5 /* ParselyTracker */;
+			targetProxy = F43333A120F0087E004BB6F5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -356,6 +588,7 @@
 		F40D9A7A20EFF7500030525E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3Z6SG5Z94;
@@ -371,6 +604,7 @@
 		F40D9A7B20EFF7500030525E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3Z6SG5Z94;
@@ -417,6 +651,86 @@
 			};
 			name = Release;
 		};
+		F43333A520F0087E004BB6F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = N3Z6SG5Z94;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ParselyTracker/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyTracker;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		F43333A620F0087E004BB6F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = N3Z6SG5Z94;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ParselyTracker/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyTracker;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		F43333A720F0087E004BB6F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N3Z6SG5Z94;
+				INFOPLIST_FILE = ParselyTrackerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyTrackerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AnalyticsSDK.app/AnalyticsSDK";
+			};
+			name = Debug;
+		};
+		F43333A820F0087E004BB6F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N3Z6SG5Z94;
+				INFOPLIST_FILE = ParselyTrackerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyTrackerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AnalyticsSDK.app/AnalyticsSDK";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -443,6 +757,24 @@
 			buildConfigurations = (
 				F40D9A7D20EFF7500030525E /* Debug */,
 				F40D9A7E20EFF7500030525E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F43333A920F0087E004BB6F5 /* Build configuration list for PBXNativeTarget "ParselyTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F43333A520F0087E004BB6F5 /* Debug */,
+				F43333A620F0087E004BB6F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F43333AB20F0087E004BB6F5 /* Build configuration list for PBXNativeTarget "ParselyTrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F43333A720F0087E004BB6F5 /* Debug */,
+				F43333A820F0087E004BB6F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
