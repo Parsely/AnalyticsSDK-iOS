@@ -7,3 +7,8 @@
 //
 
 import Foundation
+
+class EngagedTime {
+    // holds the logic for starting and stopping engaged time
+    // uses Sampler for timing
+}

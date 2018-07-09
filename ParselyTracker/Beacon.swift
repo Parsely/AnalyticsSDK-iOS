@@ -9,13 +9,14 @@
 import Foundation
 
 class Beacon {
+    // handles the timer logic for sending requests and managing the queue
     let pixel: Pixel
     
     init() {
         self.pixel = Pixel()
     }
 
-    func trackPageView(params: [String: Any], shouldNotSetLastRequest: Bool) {
+    func trackPageView(params: [String: Any]) {
         let data: [String: Any] = [
             "action": "pageview",
             "date": Date()
@@ -23,7 +24,7 @@ class Beacon {
         let updateData = data.merging(
                 params, uniquingKeysWith: { (old, _new) in old }
         )
-        self.pixel.beacon(data: updateData, shouldNotSetLastRequest: shouldNotSetLastRequest)
+        self.pixel.beacon(data: updateData)
     }
     
 }

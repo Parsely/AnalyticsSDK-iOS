@@ -7,3 +7,12 @@
 //
 
 import Foundation
+
+class Event {
+    // underlying object behind pageview, heartbeat, videostart, vheartbeat, custom events
+    init() {
+        
+    }
+    
+    
+}

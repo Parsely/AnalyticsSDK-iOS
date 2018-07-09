@@ -7,3 +7,8 @@
 //
 
 import Foundation
+
+class Sampler {
+    // handles timers for engagement and video
+    // generates events and pushes them into the event queue
+}

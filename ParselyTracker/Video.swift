@@ -7,3 +7,11 @@
 //
 
 import Foundation
+
+class Video {
+    // underlying object behind a video
+    // - register a video
+    // - start playing
+    // - pause
+    // - stop
+}

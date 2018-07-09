@@ -9,8 +9,8 @@
 import Foundation
 
 class Pixel {
-    
-    func beacon(data: [String: Any], shouldNotSetLastRequest: Bool) {
+    // knows how to make an event into a https pixel request
+    func beacon(data: [String: Any]) {
         
     }
     
