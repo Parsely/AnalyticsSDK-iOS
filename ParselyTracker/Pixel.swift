@@ -9,9 +9,14 @@
 import Foundation
 
 class Pixel {
+    let jsonEncoder = JSONEncoder()
     // knows how to make an event into a https pixel request
     func beacon(data: [String: Any]) {
-        
+        do {
+            let jsonData = try self.jsonEncoder.encode(data)
+            print(jsonData)
+        } catch {
+            print("darn")
+        }
     }
-    
 }

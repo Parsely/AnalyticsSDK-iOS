@@ -23,7 +23,7 @@ class FirstViewController: UIViewController {
     }
 
     @IBAction func didTouchButton(_ sender: Any) {
-        delegate.parsely.trackPageView()
+        delegate.parsely.trackPageView(params: ["action": "pageview"])
     }
     
 }

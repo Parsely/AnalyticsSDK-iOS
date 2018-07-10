@@ -17,14 +17,15 @@ class Beacon {
     }
 
     func trackPageView(params: [String: Any]) {
+        // list of fields added to every event.
         let data: [String: Any] = [
             "action": "pageview",
-            "date": Date()
+            "ts": Date().timeIntervalSince1970,
         ]
-        let updateData = data.merging(
+        let updatedData = data.merging(
                 params, uniquingKeysWith: { (old, _new) in old }
         )
-        self.pixel.beacon(data: updateData)
+        self.pixel.beacon(data: updatedData)
     }
     
 }
