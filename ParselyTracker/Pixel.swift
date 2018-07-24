@@ -7,16 +7,28 @@
 //
 
 import Foundation
+import SwiftHTTP
 
 class Pixel {
-    let jsonEncoder = JSONEncoder()
-    // knows how to make an event into a https pixel request
-    func beacon(data: [String: Any]) {
-        do {
-            let jsonData = try self.jsonEncoder.encode(data)
-            print(jsonData)
-        } catch {
-            print("darn")
+    var _baseURL: String?
+    
+    init() {
+        self._baseURL = nil
+    }
+    
+    func buildPixelURL(now: Date) -> String {
+        if self._baseURL == nil {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd-HH"
+            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+            let dateString = dateFormatter.string(from: now)
+            self._baseURL = "https://srv-\(dateString).pixel.parsely.com/mobileproxy/"
         }
+        return self._baseURL!
+    }
+    
+    func beacon(data: Event) {
+        
+        
     }
 }

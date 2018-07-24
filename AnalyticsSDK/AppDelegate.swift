@@ -13,12 +13,13 @@ import ParselyTracker
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var parsely: ParselyTracker.Parsely!
+    var parsely: Parsely!
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        parsely = ParselyTracker.Parsely.init(apikey: "parsely.com", options: ["track_ip_addresses": true])
+        self.parsely = Parsely.sharedInstance
+
         return true
     }
 

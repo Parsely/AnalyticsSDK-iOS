@@ -25,7 +25,9 @@ class Beacon {
         let updatedData = data.merging(
                 params, uniquingKeysWith: { (old, _new) in old }
         )
-        self.pixel.beacon(data: updatedData)
+        
+        let event = Event(params: updatedData)
+        self.pixel.beacon(data: event)
     }
     
 }
