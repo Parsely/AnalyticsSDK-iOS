@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		01520E457E678B18E060F1EE /* Pods_ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */; };
+		2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F03819E4FAF1F979D5926 /* StorageTests.swift */; };
+		2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
+		2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
+		2A1F0DF37B68B0886A0E6848 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2CD51D282237110A80CD252A /* Pods_AnalyticsSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */; };
 		DD6DF0DF715E6AF4166BA1CA /* Pods_AnalyticsSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B0C6D4E730AEFB429AD06BB /* Pods_AnalyticsSDKTests.framework */; };
 		DFD7BB483E787F03E5494A20 /* Pods_ParselyTrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */; };
@@ -35,7 +39,6 @@
 		F43333BE20F008EF004BB6F5 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B520F008EF004BB6F5 /* Event.swift */; };
 		F441A55C20F3B8BF009B556E /* EventQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F441A55B20F3B8BF009B556E /* EventQueueTests.swift */; };
 		F441A55E20F53A56009B556E /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F441A55D20F53A56009B556E /* EventTests.swift */; };
-		F441A56020F54F4E009B556E /* JSONCodingKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F441A55F20F54F4E009B556E /* JSONCodingKeys.swift */; };
 		F494BFB620FFDD5900025A4C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = F494BFB520FFDD5900025A4C /* Podfile */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +89,8 @@
 
 /* Begin PBXFileReference section */
 		0512C3C37D1324FAF6BE71AD /* Pods-AnalyticsSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDK/Pods-AnalyticsSDK.debug.xcconfig"; sourceTree = "<group>"; };
+		2A1F03819E4FAF1F979D5926 /* StorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
+		2A1F0F92460A849C17B26338 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyTrackerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnalyticsSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B0C6D4E730AEFB429AD06BB /* Pods_AnalyticsSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnalyticsSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,7 +131,6 @@
 		F43333B520F008EF004BB6F5 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		F441A55B20F3B8BF009B556E /* EventQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventQueueTests.swift; sourceTree = "<group>"; };
 		F441A55D20F53A56009B556E /* EventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
-		F441A55F20F54F4E009B556E /* JSONCodingKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONCodingKeys.swift; sourceTree = "<group>"; };
 		F494BFB520FFDD5900025A4C /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		F641C3C76F714CE598D03837 /* Pods-ParselyTrackerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTrackerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -258,7 +262,7 @@
 				F43333B420F008EF004BB6F5 /* Visitor.swift */,
 				F40D9A8020EFFADD0030525E /* ParselyTracker.swift */,
 				F433339120F0087E004BB6F5 /* Info.plist */,
-				F441A55F20F54F4E009B556E /* JSONCodingKeys.swift */,
+				2A1F0F92460A849C17B26338 /* Storage.swift */,
 			);
 			path = ParselyTracker;
 			sourceTree = "<group>";
@@ -271,6 +275,7 @@
 				F441A55B20F3B8BF009B556E /* EventQueueTests.swift */,
 				F441A55D20F53A56009B556E /* EventTests.swift */,
 				F410D63021061D7800DB3EBE /* PixelTests.swift */,
+				2A1F03819E4FAF1F979D5926 /* StorageTests.swift */,
 			);
 			path = ParselyTrackerTests;
 			sourceTree = "<group>";
@@ -380,6 +385,7 @@
 				TargetAttributes = {
 					F40D9A5920EFF74F0030525E = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
@@ -394,6 +400,7 @@
 					};
 					F433338D20F0087E004BB6F5 = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					F433339520F0087E004BB6F5 = {
@@ -582,6 +589,7 @@
 				F40D9A6220EFF74F0030525E /* SecondViewController.swift in Sources */,
 				F40D9A5E20EFF74F0030525E /* AppDelegate.swift in Sources */,
 				F40D9A6020EFF74F0030525E /* FirstViewController.swift in Sources */,
+				2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -606,8 +614,8 @@
 				F43333B820F008EF004BB6F5 /* Beacon.swift in Sources */,
 				F43333BA20F008EF004BB6F5 /* EventQueue.swift in Sources */,
 				F43333BB20F008EF004BB6F5 /* EngagedTime.swift in Sources */,
-				F441A56020F54F4E009B556E /* JSONCodingKeys.swift in Sources */,
 				F43333B920F008EF004BB6F5 /* Sampler.swift in Sources */,
+				2A1F0DF37B68B0886A0E6848 /* Storage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,6 +627,8 @@
 				F441A55C20F3B8BF009B556E /* EventQueueTests.swift in Sources */,
 				F441A55E20F53A56009B556E /* EventTests.swift in Sources */,
 				F433339E20F0087E004BB6F5 /* ParselyTrackerTests.swift in Sources */,
+				2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */,
+				2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -790,7 +800,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.AnalyticsSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -807,7 +817,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.AnalyticsSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -866,7 +876,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyTracker;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -891,7 +901,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyTracker;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

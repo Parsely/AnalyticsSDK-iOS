@@ -15,6 +15,7 @@ public class Parsely {
     private var beacon = Beacon()
     private var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
+    private var session: Session = Session()
     public static let sharedInstance = Parsely()
     
     private init() {
@@ -30,9 +31,7 @@ public class Parsely {
         self.config = self.default_config.merging(
                 options, uniquingKeysWith: { (_old, new) in new }
         )
-        self.beacon = Beacon()
-        self.eventQueue = EventQueue()
-        // TODO: Should get device info and
+        // TODO: Should get device info and session
 
         self.configured = true
     }
