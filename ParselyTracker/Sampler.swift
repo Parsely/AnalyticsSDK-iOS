@@ -127,6 +127,13 @@ class Sampler {
         
     }
     
+    /*
+     * Send a heartbeat for the given key
+     *
+     * @param {string} trackedKey The key for which to send the heartbeat
+     * @param {int} incSecs_ The number of seconds of accumulated time for each
+     *                       key. This should be used only for testing.
+     */
     func sendHeartbeat(trackedKey: String, incSecs_: Int?) -> Void {
         var trackedData = accumulators[trackedKey]
         var incSecs: Int
@@ -139,15 +146,30 @@ class Sampler {
             trackedData!.heartbeatFn(incSecs, true, trackedData!.totalMs)
         }
         trackedData!.ms = 0
-        
-        
-        
-        
-    
     }
     
+    /*
+     * Send heartbeats for all accumulators with accumulated time
+     *
+     * Runs at intervals of _heartbeatInterval and sends heartbeats for
+     * each appropriate key
+     *
+     * @param {int} incSecs_ The number of seconds of accumulated time for each
+     *                       key. This should be used only for testing.
+     */
     func sendHeartbeats(incSecs_: Int?) -> Void {
-        
+        for (key, trackedData) in accumulators {
+            let sendThreshold = trackedData.heartbeatTimeout - heartbeatInterval
+            // for the shortest video, this ensures we send the heartbeats as soon as
+            // possible for longer videos, in the window right before the timeout for
+            // each completion interval
+            if trackedData.ms >= sendThreshold {
+                sendHeartbeat(trackedKey: key, incSecs_: nil)
+            }
+        }
+        Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
+            self.sendHeartbeats(incSecs_: nil)
+        }
     }
     
     
