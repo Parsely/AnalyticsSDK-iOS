@@ -20,29 +20,32 @@ class Storage {
     let expiryDateKey = "expires"
 
     func get(key: String) -> Dictionary<String, Any>? {
-        if let data = self.defaults.dictionary(forKey: key) {
-            if let expiryDate = data[self.expiryDateKey] as? Int {
-                let savedExpiryDate = Date(milliseconds: expiryDate).timeIntervalSince1970
-                if savedExpiryDate >= Date().timeIntervalSince1970 {
+        if var data = self.defaults.dictionary(forKey: key) {
+            if let expiryDate = data[self.expiryDateKey] as? Date {
+                let savedExpiryDate = expiryDate
+                let now = Date()
+                if savedExpiryDate <= now {
+                    self.defaults.removeObject(forKey: key)
                     return nil
                 }
+                data.removeValue(forKey: self.expiryDateKey)
             }
             return data
         }
         return nil
     }
 
-    func set(key: String, value: Dictionary<String, Any>, options: Dictionary<String, Any>) {
+    func set(key: String, value: Dictionary<String, Any>, expires: Date?) {
         var data = value
-        if let expiryDate = options[self.expiryDateKey] {
-           data[self.expiryDateKey] = expiryDate
+        if expires != nil {
+           data[self.expiryDateKey] = expires
         }
         self.defaults.set(data, forKey: key)
     }
 
-    func extendExpiry(key: String, expires: Double) {
+    func extendExpiry(key: String, expires: Date) {
         if let data = self.get(key: key) {
-            self.set(key: key, value: data, options: [self.expiryDateKey: expires])
+            self.set(key: key, value: data, expires: expires)
         }
     }
 

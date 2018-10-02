@@ -23,12 +23,43 @@ class StorageTests: XCTestCase {
         super.tearDown()
     }
 
-    func testGet() {
+    func testSetGetWithoutExpires() {
         let data: Dictionary<String, Any> = ["foo": "bar"]
-        let options = [storage.expiryDateKey: Date().timeIntervalSince1970]
+        storage.set(key: "baz", value: data, options: [:])
+        let _retrievedData = storage.get(key: "baz") ?? [:]
+        let _thing = "stuff"
+    }
+
+    func testSetGetWithExpires() {
+        let data: Dictionary<String, Any> = ["foo": "bar"]
+        let fifteenMinutes = Double(1000 * 15 * 60)
+        let options = [storage.expiryDateKey: Date().timeIntervalSince1970 + fifteenMinutes]
         storage.set(key: "baz", value: data, options: options)
         let retrievedData = storage.get(key: "baz") ?? [:]
-        let thing = "stuff"
+        XCTAssertEqual(data as NSObject, retrievedData as NSObject)
+    }
+
+    func testGetSetWithNegativeExpires() {
+        let data: Dictionary<String, Any> = ["foo": "bar"]
+        let fifteenMinutes = Double(1000 * 15 * 60) * -1.0
+        let options = [storage.expiryDateKey: Date() + fifteenMinutes]
+        storage.set(key: "baz", value: data, options: options)
+        let retrievedData = storage.get(key: "baz") ?? [:]
+        XCTAssertEqual(data as NSObject, retrievedData as NSObject)
+    }
+
+    func testDataTypes() {
+        let data: Dictionary<String, Any> = [
+            "foo": "bar",
+            "baz": 10,
+            "bzz": 10.5,
+            "lol": ["huh": "yah", "right": 10, "yup": 10.5],
+            "millis": Date().millisecondsSince1970
+        ]
+        let options = [storage.expiryDateKey: Date().millisecondsSince1970]
+        storage.set(key: "bzz", value: data, options: options)
+        let retrievedData = storage.get(key: "bzz") ?? [:]
+        XCTAssertEqual(data as NSObject, retrievedData as NSObject)
     }
 
 }
