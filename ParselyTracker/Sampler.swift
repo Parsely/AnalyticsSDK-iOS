@@ -43,7 +43,6 @@ class Sampler {
         // _baseHeartbeatInterval, but videos that are short enough to require a smaller
         // interval can change it
         heartbeatInterval = baseHeartbeatInterval
-
     }
     
     
@@ -86,8 +85,11 @@ class Sampler {
         }
         if hasStartedSampling == false {
             hasStartedSampling = true
-            
-            
+            // set the first timeout for all of the heartbeats;
+            // the callback will set itself again with the correct interval
+            Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
+                self.sendHeartbeats(incSecs_: nil)
+            }
         }
     }
     
@@ -123,8 +125,8 @@ class Sampler {
         return timeoutDefault
     }
     
-    public func dropKey() -> Void {
-        
+    public func dropKey(key: String) -> Void {
+        accumulators.removeValue(forKey: key)
     }
     
     /*
