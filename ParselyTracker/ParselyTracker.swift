@@ -16,6 +16,11 @@ public class Parsely {
     private var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
     private var session: Session = Session()
+    public var secondsBetweenHeartbeats: Int? {
+        get {
+            return config["secondsBetweenHeartbeats"] as! Int?
+        }
+    }
     public static let sharedInstance = Parsely()
     
     private init() {
