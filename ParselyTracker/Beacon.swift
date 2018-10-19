@@ -15,7 +15,6 @@ class Beacon {
     init() {
         self.pixel = Pixel()
     }
-
     func trackPageView(params: [String: Any]) {
         // list of fields added to every event.
         let data: [String: Any] = [
@@ -29,5 +28,4 @@ class Beacon {
         let event = Event(params: updatedData)
         self.pixel.beacon(data: event)
     }
-    
 }

@@ -1,5 +1,5 @@
 //
-//  sampler.swift
+//  Sampler.swift
 //  AnalyticsSDK
 //
 //  Created by Chris Wisecarver on 5/17/18.
@@ -16,9 +16,13 @@ struct Accumulator {
     var ms: Int = 0
     var totalMs: Int = 0
     var lastSampleTime: Date
-    var sampleFn: () -> Bool // it's a closure
-    var heartbeatFn: (Int, Bool, Int) -> Void
     var heartbeatTimeout: Int
+}
+
+protocol Accumulates {
+    func sampleFn(params: Dictionary<String, Any?>) -> Bool
+    func heartbeatFn(params: Dictionary<String, Any?>) -> Void
+    func trackKey(key: String,  duration: Int) -> Void
 }
 
 class Sampler {
@@ -70,29 +74,27 @@ class Sampler {
      function should accept the number of seconds
      accumulated after rounding.
      */
-    public func trackKey(key: String, sampleFunc: @escaping () -> Bool, heartbeatFunc: @escaping (Int, Bool, Int) -> Void, duration: Int) -> Void {
-        if accumulators.index(forKey: key) == nil {
-            let heartbeatTimeout = timeoutFromDuration(duration: duration)
-            accumulators[key] = Accumulator.init(
-                ms: 0,
-                totalMs: 0,
-                lastSampleTime: Date(),
-                sampleFn: sampleFunc,
-                heartbeatFn: heartbeatFunc,
-                heartbeatTimeout: heartbeatTimeout
-            )
-            heartbeatInterval = min(heartbeatInterval, heartbeatTimeout)
-        }
-        if hasStartedSampling == false {
-            hasStartedSampling = true
-            // set the first timeout for all of the heartbeats;
-            // the callback will set itself again with the correct interval
-            Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
-                self.sendHeartbeats(incSecs_: nil)
-            }
-        }
+  public func trackKey(key: String,  duration: Int) -> Void {
+      if accumulators.index(forKey: key) == nil {
+          let heartbeatTimeout = timeoutFromDuration(duration: duration)
+          accumulators[key] = Accumulator.init(
+              ms: 0,
+              totalMs: 0,
+              lastSampleTime: Date(),
+              heartbeatTimeout: heartbeatTimeout
+          )
+          heartbeatInterval = min(heartbeatInterval, heartbeatTimeout)
+      }
+      if hasStartedSampling == false {
+          hasStartedSampling = true
+          // set the first timeout for all of the heartbeats;
+          // the callback will set itself again with the correct interval
+          Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
+              self.sendHeartbeats(incSecs_: nil)
+          }
+      }
     }
-    
+
     private func timeoutFromDuration(duration: Int?) -> Int {
         /* Returns an appropriate interval timeout in ms, based on the duration
          * of the item being tracked (also in ms), to ensure each of the 5 completion
@@ -125,6 +127,10 @@ class Sampler {
         return timeoutDefault
     }
     
+    // these are stubs that should be overriden by child classes
+    func heartbeatFn(params: Dictionary<String, Any?>) -> Void {}
+    func sampleFn(params: Dictionary<String, Any?>) -> Bool { return false }
+    
     public func dropKey(key: String) -> Void {
         accumulators.removeValue(forKey: key)
     }
@@ -145,7 +151,11 @@ class Sampler {
             incSecs = trackedData!.ms / 1000
         }
         if incSecs > 0 && Float(incSecs) <= (Float(baseHeartbeatInterval / 1000) + 0.25) {
-            trackedData!.heartbeatFn(incSecs, true, trackedData!.totalMs)
+            self.heartbeatFn(params: [
+                "roundedSeconds": incSecs,
+                "enableHeartbeats": true,
+                "totalMs": trackedData!.totalMs
+            ])
         }
         trackedData!.ms = 0
     }

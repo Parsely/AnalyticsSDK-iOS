@@ -12,7 +12,8 @@ public class Parsely {
     private var apikey = ""
     private var config: [String: Any] = [:]
     private var default_config = [String: Any]()
-    private var beacon = Beacon()
+    var beacon = Beacon()
+    var lastRequest: Dictionary<String, Any?>? = [:]
     private var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
     private var session: Session = Session()
@@ -21,6 +22,7 @@ public class Parsely {
             return config["secondsBetweenHeartbeats"] as! Int?
         }
     }
+    public var videoPlaying = false
     public static let sharedInstance = Parsely()
     
     private init() {
