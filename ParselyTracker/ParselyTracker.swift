@@ -25,11 +25,10 @@ public class Parsely {
     public var videoPlaying = false
     public var isEngaged: Bool = false;
     public static let sharedInstance = Parsely()
-    let engagedTimeInstance = EngagedTime()
-    let videoInstance = Video()
+    var engagedTimeInstance: EngagedTime?
+    var videoInstance: Video?
     
     private init() {
-        
     }
     
     public func configure(apikey: String, options: [String: Any]) {
@@ -51,18 +50,30 @@ public class Parsely {
     }
 
     public func startEngagement() {
-        self.engagedTimeInstance.startInteraction()
+        if self.engagedTimeInstance == nil {
+            self.engagedTimeInstance = EngagedTime()
+        }
+        self.engagedTimeInstance!.startInteraction()
     }
 
     public func stopEngagement() {
-        self.engagedTimeInstance.endInteraction()
+        if self.engagedTimeInstance == nil {
+            self.engagedTimeInstance = EngagedTime()
+        }
+        self.engagedTimeInstance!.endInteraction()
     }
 
     public func trackPlay(videoID: String, metadata:[String: Any], urlOverride: String) {
-        self.videoInstance.trackPlay(vId: videoID, metadata: metadata, urlOverride: urlOverride)
+        if self.videoInstance == nil {
+            self.videoInstance = Video()
+        }
+        self.videoInstance!.trackPlay(vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 
     public func trackPause(videoID: String, metadata:[String: Any], urlOverride: String) {
-        self.videoInstance.trackPause(vId: videoID, metadata: metadata, urlOverride: urlOverride)
+        if self.videoInstance == nil {
+            self.videoInstance = Video()
+        }
+        self.videoInstance!.trackPause(vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 }
