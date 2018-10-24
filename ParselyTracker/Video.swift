@@ -27,6 +27,7 @@ class Video: Sampler, Accumulates {
     var trackedVideos: Dictionary<String, TrackedVideo> = [:]
     
     override init() {
+        super.init()
         Parsely.sharedInstance.videoPlaying = false
     }
     

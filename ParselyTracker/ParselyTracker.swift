@@ -23,7 +23,10 @@ public class Parsely {
         }
     }
     public var videoPlaying = false
+    public var isEngaged: Bool = false;
     public static let sharedInstance = Parsely()
+    let engagedTimeInstance = EngagedTime()
+    let videoInstance = Video()
     
     private init() {
         
@@ -48,15 +51,18 @@ public class Parsely {
     }
 
     public func startEngagement() {
-
+        self.engagedTimeInstance.startInteraction()
     }
 
     public func stopEngagement() {
+        self.engagedTimeInstance.endInteraction()
     }
 
     public func trackPlay(videoID: String, metadata:[String: Any], urlOverride: String) {
+        self.videoInstance.trackPlay(vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 
     public func trackPause(videoID: String, metadata:[String: Any], urlOverride: String) {
+        self.videoInstance.trackPause(vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 }
