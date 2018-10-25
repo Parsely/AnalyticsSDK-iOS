@@ -5,3 +5,4 @@
 /Pods
 /.idea
 xcuserdata/
+**/xcuserdata/
