@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os.log
 
 class FirstViewController: UIViewController {
     @IBOutlet weak var trackPVButton: UIButton!
@@ -23,6 +24,7 @@ class FirstViewController: UIViewController {
     }
 
     @IBAction func didTouchButton(_ sender: Any) {
+        os_log("didTouchButton", log: OSLog.default, type: .debug)
         delegate.parsely.trackPageView(params: ["action": "pageview"])
     }
     

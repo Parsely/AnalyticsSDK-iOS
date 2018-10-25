@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftHTTP
+import os.log
 
 class Pixel {
     var _baseURL: String?
@@ -28,7 +29,6 @@ class Pixel {
     }
     
     func beacon(data: Event) {
-        
-        
+        os_log("Fired beacon", log: OSLog.default, type: .debug)
     }
 }

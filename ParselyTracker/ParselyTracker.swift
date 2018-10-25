@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.log
 
 public class Parsely {
     private var apikey = ""
@@ -29,9 +30,11 @@ public class Parsely {
     var videoInstance: Video?
     
     private init() {
+        os_log("Initializing ParselyTracker", log: OSLog.default, type: .info)
     }
     
     public func configure(apikey: String, options: [String: Any]) {
+        os_log("Configuring ParselyTracker", log: OSLog.default, type: .info)
         self.apikey = apikey
         self.default_config = [
             "interval": 10,
@@ -46,6 +49,7 @@ public class Parsely {
     }
     
     public func trackPageView(params: [String: Any]) {
+        os_log("Tracking PageView", log: OSLog.default, type: .info)
         self.beacon.trackPageView(params: params)
     }
 

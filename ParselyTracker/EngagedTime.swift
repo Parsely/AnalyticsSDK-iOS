@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.log
 
 class EngagedTime: Sampler, Accumulates {
     let ENGAGED_TIME_SAMPLER_KEY = "engagedTime"
@@ -18,6 +19,7 @@ class EngagedTime: Sampler, Accumulates {
     
     override func sampleFn(params: Dictionary<String, Any?>) -> Bool {
         Parsely.sharedInstance.isEngaged = isInteracting || Parsely.sharedInstance.videoPlaying
+        os_log("Sampling engaged time", log: OSLog.default, type: .info)
         return Parsely.sharedInstance.isEngaged
     }
     
@@ -43,10 +45,12 @@ class EngagedTime: Sampler, Accumulates {
     }
     
     func startInteraction() {
+        os_log("Starting Interaction", log: OSLog.default, type: .debug)
         isInteracting = true
     }
     
     func endInteraction() {
+        os_log("Ending Interaction", log: OSLog.default, type: .debug)
         isInteracting = false
     }
 }
