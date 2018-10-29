@@ -93,7 +93,7 @@ class Video: Sampler, Accumulates {
             "tt": totalMs,
             "urlref": Parsely.sharedInstance.lastRequest?["urlref"]!! ?? ""
         ])
-        pixel.beacon(additionalParams: event)
+        pixel.beacon(additionalParams: event, shouldNotSetLastRequest: false)
         curVideo?._heartbeatsSent += 1
     }
     
@@ -107,7 +107,7 @@ class Video: Sampler, Accumulates {
                     "url": vId,
                     "metadata": metadata,
                     "urlref": Parsely.sharedInstance.lastRequest?["urlref"] as! String
-                ])
+                ]), shouldNotSetLastRequest: false
             )
             
         }

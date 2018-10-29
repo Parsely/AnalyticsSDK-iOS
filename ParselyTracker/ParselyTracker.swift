@@ -11,11 +11,11 @@ import os.log
 
 public class Parsely {
     var apikey = ""
-    private var config: [String: Any] = [:]
+    var config: [String: Any] = [:]
     private var default_config = [String: Any]()
     var beacon = Beacon()
     var lastRequest: Dictionary<String, Any?>? = [:]
-    private var eventQueue: EventQueue<Event> = EventQueue()
+    var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
     private var session: Session = Session()
     public var secondsBetweenHeartbeats: Int? {
@@ -28,6 +28,7 @@ public class Parsely {
     public static let sharedInstance = Parsely()
     var engagedTimeInstance: EngagedTime?
     var videoInstance: Video?
+    var visitorManager: VisitorManager?
     
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.default, type: .info)
@@ -43,14 +44,14 @@ public class Parsely {
         self.config = self.default_config.merging(
                 options, uniquingKeysWith: { (_old, new) in new }
         )
-        // TODO: Should get device info and session
+        self.visitorManager = VisitorManager()
 
         self.configured = true
     }
     
     public func trackPageView(params: [String: Any]) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
-        self.beacon.trackPageView(params: params)
+        self.beacon.trackPageView(params: params, shouldNotSetLastRequest: true)
     }
 
     public func startEngagement() {

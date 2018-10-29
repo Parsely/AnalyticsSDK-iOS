@@ -15,7 +15,7 @@ class Beacon {
     init() {
         self.pixel = Pixel()
     }
-    func trackPageView(params: [String: Any]) {
+    func trackPageView(params: [String: Any], shouldNotSetLastRequest: Bool) {
         // list of fields added to every event.
         let data: [String: Any] = [
             "action": "pageview",
@@ -26,6 +26,6 @@ class Beacon {
         )
         
         let event = Event(params: updatedData)
-        self.pixel.beacon(additionalParams: event)
+        self.pixel.beacon(additionalParams: event, shouldNotSetLastRequest: shouldNotSetLastRequest)
     }
 }
