@@ -26,6 +26,6 @@ class Beacon {
         )
         
         let event = Event(params: updatedData)
-        self.pixel.beacon(data: event)
+        self.pixel.beacon(additionalParams: event)
     }
 }

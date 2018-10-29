@@ -41,7 +41,7 @@ class EngagedTime: Sampler, Accumulates {
             "url": Parsely.sharedInstance.lastRequest?["url"]!! ?? "",
             "urlref": Parsely.sharedInstance.lastRequest?["urlref"]!! ?? ""
         ])
-        pixel.beacon(data: event)
+        pixel.beacon(additionalParams: event)
     }
     
     func startInteraction() {

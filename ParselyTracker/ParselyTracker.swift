@@ -10,7 +10,7 @@ import Foundation
 import os.log
 
 public class Parsely {
-    private var apikey = ""
+    var apikey = ""
     private var config: [String: Any] = [:]
     private var default_config = [String: Any]()
     var beacon = Beacon()

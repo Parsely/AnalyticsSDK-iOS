@@ -93,7 +93,7 @@ class Video: Sampler, Accumulates {
             "tt": totalMs,
             "urlref": Parsely.sharedInstance.lastRequest?["urlref"]!! ?? ""
         ])
-        pixel.beacon(data: event)
+        pixel.beacon(additionalParams: event)
         curVideo?._heartbeatsSent += 1
     }
     
@@ -101,7 +101,7 @@ class Video: Sampler, Accumulates {
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         if (curVideo.hasStartedPlaying != true) {
             curVideo.hasStartedPlaying = true
-            Parsely.sharedInstance.beacon.pixel.beacon(data: Event(params:[
+            Parsely.sharedInstance.beacon.pixel.beacon(additionalParams: Event(params:[
                     "date": Date(),
                     "action": "videostart",
                     "url": vId,

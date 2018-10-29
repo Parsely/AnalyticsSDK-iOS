@@ -13,6 +13,8 @@ class Session {
 
     private var session: Dictionary<String, Any?> = [:]
     private let SESSION_TIMEOUT: TimeInterval = 30 * 60.0 // 30 minutes
+    private let storage: Storage = Storage()
+    private let sessionKey = "_parsely_session"
     // knows how to start, stop, store, and restore a session
     // struct should represent datatype
     // - sid — session ID == session_count
@@ -46,13 +48,12 @@ class Session {
         return deviceInfo
     }
 
-    private func get(extendSession: Bool = false) -> Dictionary<String, Any?> {
-
+    public func get(extendSession: Bool = false) -> Dictionary<String, Any?> {
         if !self.session.isEmpty {
            return self.session
         }
-        // check local storage for a session
-        let session = UserDefaults.standard.dictionary(forKey: "_parsely_session") ?? [:]
+        // check storage for a session
+        let session = self.storage.get(key: self.sessionKey) ?? [:]
         self.session = session
 
         if self.session.isEmpty {
@@ -60,7 +61,7 @@ class Session {
             session["id"] = UUID().uuidString.lowercased()
             session["session_count"] = 0
             session["last_session_ts"] = 0
-            UserDefaults.standard.set(session, forKey: "_parsely_session")
+            self.storage.set(key: self.sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT))
             self.session = session
         }
         return self.session
