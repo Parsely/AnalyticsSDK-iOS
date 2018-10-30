@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.log
 
 extension Array {
     mutating func take(_ elementsCount: Int) -> [Element] {
@@ -28,6 +29,7 @@ struct EventQueue<T> {
     
     mutating func push(_ element:T) {
         // add an object to the end of the queue
+        os_log("Event pushed into queue", log: OSLog.default, type: .info)
         list.append(element)
     }
     
@@ -36,6 +38,7 @@ struct EventQueue<T> {
         if list.isEmpty {
             return nil
         }
+        os_log("Event popped from queue", log: OSLog.default, type: .info)
         return list.removeFirst()
     }
     
@@ -43,8 +46,10 @@ struct EventQueue<T> {
         // remove and return <count> objects from the queue
         // if <count> is 0 or missing get remove and return all
         if count == 0 {
+            os_log("Got %zd events from queue", log: OSLog.default, type: .info, list.count)
             return list.take(list.count)
         }
+        os_log("Got %zd events from queue", log: OSLog.default, type: .info, count)
         return list.take(count)
     }
 }
