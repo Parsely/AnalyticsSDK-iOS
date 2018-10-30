@@ -25,27 +25,27 @@ class StorageTests: XCTestCase {
 
     func testSetGetWithoutExpires() {
         let data: Dictionary<String, Any> = ["foo": "bar"]
-        storage.set(key: "baz", value: data, options: [:])
-        let _retrievedData = storage.get(key: "baz") ?? [:]
-        let _thing = "stuff"
+        storage.set(key: "baz", value: data, expires: nil)
+        _ = storage.get(key: "baz") ?? [:]
+        _ = "stuff"
     }
 
     func testSetGetWithExpires() {
-        let data: Dictionary<String, Any> = ["foo": "bar"]
+        let data: Dictionary<String, Any?> = ["foo": "bar"]
         let fifteenMinutes = Double(1000 * 15 * 60)
-        let options = [storage.expiryDateKey: Date().timeIntervalSince1970 + fifteenMinutes]
-        storage.set(key: "baz", value: data, options: options)
+        let expires = Date(timeIntervalSinceNow: TimeInterval(exactly: fifteenMinutes)!)
+        storage.set(key: "baz", value: data, expires: expires)
         let retrievedData = storage.get(key: "baz") ?? [:]
         XCTAssertEqual(data as NSObject, retrievedData as NSObject)
     }
 
     func testGetSetWithNegativeExpires() {
-        let data: Dictionary<String, Any> = ["foo": "bar"]
+        let data: Dictionary<String, Any?> = ["foo": "bar"]
         let fifteenMinutes = Double(1000 * 15 * 60) * -1.0
-        let options = [storage.expiryDateKey: Date() + fifteenMinutes]
-        storage.set(key: "baz", value: data, options: options)
+        let expires = Date(timeIntervalSinceNow: TimeInterval(exactly: fifteenMinutes)!)
+        storage.set(key: "baz", value: data, expires: expires)
         let retrievedData = storage.get(key: "baz") ?? [:]
-        XCTAssertEqual(data as NSObject, retrievedData as NSObject)
+        XCTAssert(retrievedData.isEmpty)
     }
 
     func testDataTypes() {
@@ -56,8 +56,9 @@ class StorageTests: XCTestCase {
             "lol": ["huh": "yah", "right": 10, "yup": 10.5],
             "millis": Date().millisecondsSince1970
         ]
-        let options = [storage.expiryDateKey: Date().millisecondsSince1970]
-        storage.set(key: "bzz", value: data, options: options)
+        let fifteenMinutes = Double(1000 * 15 * 60)
+        let expires = Date(timeIntervalSinceNow: TimeInterval(exactly: fifteenMinutes)!)
+        storage.set(key: "bzz", value: data, expires: expires)
         let retrievedData = storage.get(key: "bzz") ?? [:]
         XCTAssertEqual(data as NSObject, retrievedData as NSObject)
     }
