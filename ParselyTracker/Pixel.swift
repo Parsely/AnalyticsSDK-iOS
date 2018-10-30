@@ -12,14 +12,9 @@ import os.log
 
 class Pixel {
     var _baseURL: String?
-    var configData: Dictionary<String, Any?>
-    
+
     init() {
         self._baseURL = nil
-        self.configData = [
-            "idsite": Parsely.sharedInstance.apikey,
-            "data": [:]
-        ]
     }
     
     func buildPixelURL(now: Date) -> String {
@@ -38,7 +33,7 @@ class Pixel {
         let session = Session().get(extendSession: true)
         let rand = Date().millisecondsSince1970
         var data: Dictionary<String,Any?> = ["rand": rand]
-        data = data.merging(self.configData, uniquingKeysWith: { (old, _new) in old })
+        data = data.merging(["idsite": Parsely.sharedInstance.apikey, "data": [:]], uniquingKeysWith: { (old, _new) in old })
         data = data.merging(session, uniquingKeysWith: { (old, _new) in old })
         data = data.merging(additionalParams.toDict(), uniquingKeysWith: { (old, _new) in old })
         let visitorInfo = Parsely.sharedInstance.visitorManager?.getVisitorInfo(shouldExtendExisting: true)
