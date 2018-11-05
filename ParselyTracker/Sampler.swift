@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.log
 
 let SAMPLE_RATE = 100
 let MIN_TIME_BETWEEN_HEARTBEATS = 1000
@@ -22,7 +23,7 @@ struct Accumulator {
 protocol Accumulates {
     func sampleFn(params: Dictionary<String, Any?>) -> Bool
     func heartbeatFn(params: Dictionary<String, Any?>) -> Void
-    func trackKey(key: String,  duration: Int) -> Void
+    func trackKey(key: String,  duration: Int?) -> Void
 }
 
 class Sampler {
@@ -74,7 +75,8 @@ class Sampler {
      function should accept the number of seconds
      accumulated after rounding.
      */
-  public func trackKey(key: String,  duration: Int) -> Void {
+  public func trackKey(key: String,  duration: Int?) -> Void {
+     os_log("Tracking Key: %s", log: OSLog.default, type: .debug, key)
       if accumulators.index(forKey: key) == nil {
           let heartbeatTimeout = timeoutFromDuration(duration: duration)
           accumulators[key] = Accumulator.init(
@@ -89,7 +91,7 @@ class Sampler {
           hasStartedSampling = true
           // set the first timeout for all of the heartbeats;
           // the callback will set itself again with the correct interval
-          Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
+          Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval/1000), repeats: false) { timer in
               self.sendHeartbeats(incSecs_: nil)
           }
       }
@@ -170,6 +172,7 @@ class Sampler {
      *                       key. This should be used only for testing.
      */
     func sendHeartbeats(incSecs_: Int?) -> Void {
+        os_log("Sending heartbeats, incSecs_: %d", log: OSLog.default, type: .debug, incSecs_ ?? "nil")
         for (key, trackedData) in accumulators {
             let sendThreshold = trackedData.heartbeatTimeout - heartbeatInterval
             // for the shortest video, this ensures we send the heartbeats as soon as
@@ -179,7 +182,7 @@ class Sampler {
                 sendHeartbeat(trackedKey: key, incSecs_: nil)
             }
         }
-        Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
+        Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval/1000), repeats: false) { timer in
             self.sendHeartbeats(incSecs_: nil)
         }
     }

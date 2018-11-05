@@ -15,6 +15,7 @@ class EngagedTime: Sampler, Accumulates {
 
     override init() {
         super.init()
+        self.trackKey(key: self.ENGAGED_TIME_SAMPLER_KEY, duration: nil)
     }
     
     override func sampleFn(params: Dictionary<String, Any?>) -> Bool {

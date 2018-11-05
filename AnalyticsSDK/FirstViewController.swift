@@ -22,11 +22,27 @@ class FirstViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
     @IBAction func didTouchButton(_ sender: Any) {
         os_log("didTouchButton", log: OSLog.default, type: .debug)
         delegate.parsely.trackPageView(params: ["action": "pageview"])
     }
     
+    @IBAction func didStartEngagement(_ sender: Any) {
+        os_log("didStartEngagement", log: OSLog.default, type: .debug)
+        delegate.parsely.startEngagement()
+    }
+    
+    @IBAction func didStopEngagement(_ sender: Any) {
+        os_log("didStopEngagement", log: OSLog.default, type: .debug)
+        delegate.parsely.stopEngagement()
+    }
+    @IBAction func didStartVideo(_ sender: Any) {
+        os_log("didStartVideo", log: OSLog.default, type: .debug)
+        delegate.parsely.trackPlay(videoID: "videoOne", metadata: [:], urlOverride: "")
+    }
+    @IBAction func didPauseVideo(_ sender: Any) {
+        os_log("didStopVideo", log: OSLog.default, type: .debug)
+        delegate.parsely.trackPause(videoID: "videoOne", metadata: [:], urlOverride: "")
+    }
 }
 

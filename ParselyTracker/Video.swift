@@ -55,6 +55,8 @@ class Video: Sampler, Accumulates {
         } else {
             trackedVideos[vId] = TrackedVideo.init(id: vId, isPlaying: false, hasStartedPlaying: false, metadata: metadata, urlOverride: urlOverride!, _heartbeatsSent: 0)
         }
+        self.trackKey(key: vId, duration: metadata["duration"] as? Int)
+        
         self.sendHeartbeat(trackedKey: vId, incSecs_: trackedVideos[vId]!.metadata["duration"] as? Int)
         
         return trackedVideos[vId]!
@@ -106,7 +108,7 @@ class Video: Sampler, Accumulates {
                     "action": "videostart",
                     "url": vId,
                     "metadata": metadata,
-                    "urlref": Parsely.sharedInstance.lastRequest?["urlref"] as! String
+                    "urlref": Parsely.sharedInstance.lastRequest?["urlref"] as? String ?? ""
                 ]), shouldNotSetLastRequest: false
             )
             
