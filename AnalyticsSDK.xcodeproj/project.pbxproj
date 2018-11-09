@@ -40,6 +40,11 @@
 		F441A55C20F3B8BF009B556E /* EventQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F441A55B20F3B8BF009B556E /* EventQueueTests.swift */; };
 		F441A55E20F53A56009B556E /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F441A55D20F53A56009B556E /* EventTests.swift */; };
 		F494BFB620FFDD5900025A4C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = F494BFB520FFDD5900025A4C /* Podfile */; };
+		F4BF86682190DAFC00BD3867 /* EngagedTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF86672190DAFC00BD3867 /* EngagedTimeTests.swift */; };
+		F4BF866A2190DB1C00BD3867 /* BeaconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF86692190DB1C00BD3867 /* BeaconTests.swift */; };
+		F4BF866C2190DB3C00BD3867 /* SessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF866B2190DB3C00BD3867 /* SessionTests.swift */; };
+		F4BF866E2190DB4A00BD3867 /* VideoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF866D2190DB4A00BD3867 /* VideoTests.swift */; };
+		F4BF86702190DB5A00BD3867 /* VisitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF866F2190DB5A00BD3867 /* VisitorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +137,11 @@
 		F441A55B20F3B8BF009B556E /* EventQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventQueueTests.swift; sourceTree = "<group>"; };
 		F441A55D20F53A56009B556E /* EventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
 		F494BFB520FFDD5900025A4C /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		F4BF86672190DAFC00BD3867 /* EngagedTimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagedTimeTests.swift; sourceTree = "<group>"; };
+		F4BF86692190DB1C00BD3867 /* BeaconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconTests.swift; sourceTree = "<group>"; };
+		F4BF866B2190DB3C00BD3867 /* SessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTests.swift; sourceTree = "<group>"; };
+		F4BF866D2190DB4A00BD3867 /* VideoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTests.swift; sourceTree = "<group>"; };
+		F4BF866F2190DB5A00BD3867 /* VisitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitorTests.swift; sourceTree = "<group>"; };
 		F641C3C76F714CE598D03837 /* Pods-ParselyTrackerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTrackerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -276,6 +286,11 @@
 				F441A55D20F53A56009B556E /* EventTests.swift */,
 				F410D63021061D7800DB3EBE /* PixelTests.swift */,
 				2A1F03819E4FAF1F979D5926 /* StorageTests.swift */,
+				F4BF86672190DAFC00BD3867 /* EngagedTimeTests.swift */,
+				F4BF86692190DB1C00BD3867 /* BeaconTests.swift */,
+				F4BF866B2190DB3C00BD3867 /* SessionTests.swift */,
+				F4BF866D2190DB4A00BD3867 /* VideoTests.swift */,
+				F4BF866F2190DB5A00BD3867 /* VisitorTests.swift */,
 			);
 			path = ParselyTrackerTests;
 			sourceTree = "<group>";
@@ -625,11 +640,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				F410D63121061D7800DB3EBE /* PixelTests.swift in Sources */,
+				F4BF866E2190DB4A00BD3867 /* VideoTests.swift in Sources */,
 				F441A55C20F3B8BF009B556E /* EventQueueTests.swift in Sources */,
 				F441A55E20F53A56009B556E /* EventTests.swift in Sources */,
+				F4BF86682190DAFC00BD3867 /* EngagedTimeTests.swift in Sources */,
 				F433339E20F0087E004BB6F5 /* ParselyTrackerTests.swift in Sources */,
 				2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */,
+				F4BF866C2190DB3C00BD3867 /* SessionTests.swift in Sources */,
 				2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */,
+				F4BF866A2190DB1C00BD3867 /* BeaconTests.swift in Sources */,
+				F4BF86702190DB5A00BD3867 /* VisitorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

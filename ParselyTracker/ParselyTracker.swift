@@ -18,9 +18,12 @@ public class Parsely {
     var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
     private var session: Session = Session()
-    public var secondsBetweenHeartbeats: Int? {
+    public var secondsBetweenHeartbeats: TimeInterval? {
         get {
-            return config["secondsBetweenHeartbeats"] as! Int?
+            if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! Int? {
+                return TimeInterval(exactly: secondsBtwnHeartbeats)
+            }
+            return nil
         }
     }
     public var videoPlaying = false
@@ -29,6 +32,7 @@ public class Parsely {
     var engagedTimeInstance: EngagedTime?
     var videoInstance: Video?
     var visitorManager: VisitorManager?
+    var accumulators: Dictionary<String, Accumulator> = [:]
     
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.default, type: .info)

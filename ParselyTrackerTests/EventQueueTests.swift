@@ -25,7 +25,6 @@ class EventQueueTests: XCTestCase {
         for i:Int in 0...30 {
             self.queue.push(i)
         }
-
     }
     
     override func tearDown() {
