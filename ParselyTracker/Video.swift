@@ -55,9 +55,9 @@ class Video: Sampler, Accumulates {
         } else {
             trackedVideos[vId] = TrackedVideo.init(id: vId, isPlaying: false, hasStartedPlaying: false, metadata: metadata, urlOverride: urlOverride!, _heartbeatsSent: 0)
         }
-        self.trackKey(key: vId, duration: TimeInterval(exactly: metadata["duration"] as? Int ?? 0))
+        self.trackKey(key: vId, duration: TimeInterval(metadata["duration"] as? Int ?? 0))
         
-        self.sendHeartbeat(trackedKey: vId, incSecs_: trackedVideos[vId]!.metadata["duration"] as? Int)
+        self.sendHeartbeat(trackedKey: vId)
         
         return trackedVideos[vId]!
     }
@@ -126,7 +126,7 @@ class Video: Sampler, Accumulates {
         if var curVideo = trackedVideos[vId] {
             curVideo.hasStartedPlaying = false
             curVideo.isPlaying = false
-            sendHeartbeat(trackedKey: vId, incSecs_: nil)
+            sendHeartbeat(trackedKey: vId)
             dropKey(key: vId)
             setVideoPlayingFlag()
         }

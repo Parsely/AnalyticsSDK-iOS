@@ -21,7 +21,7 @@ public class Parsely {
     public var secondsBetweenHeartbeats: TimeInterval? {
         get {
             if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! Int? {
-                return TimeInterval(exactly: secondsBtwnHeartbeats)
+                return TimeInterval(secondsBtwnHeartbeats)
             }
             return nil
         }

@@ -10,13 +10,13 @@ import Foundation
 import os.log
 
 let SAMPLE_RATE = 100
-let MIN_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(integerLiteral: 1)
-let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(integerLiteral: 15)
+let MIN_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(1)
+let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(15)
 let BACKOFF_THRESHOLD = 60
 
 struct Accumulator {
-    var ms: Int = 0
-    var totalMs: Int = 0
+    var ms: TimeInterval = TimeInterval(0)
+    var totalMs: TimeInterval = TimeInterval(0)
     var lastSampleTime: Date?
     var lastPositiveSampleTime: Date?
     var heartbeatTimeout: TimeInterval?
@@ -29,6 +29,12 @@ protocol Accumulates {
 //    func sampleFn(params: Dictionary<String, Any?>) -> Bool
 //    func heartbeatFn(params: Dictionary<String, Any?>) -> Void
     func trackKey(key: String,  duration: TimeInterval?) -> Void
+}
+
+extension TimeInterval {
+    func milliseconds() -> Int {
+        return Int(self * 1000)
+    }
 }
 
 class Sampler {
@@ -84,8 +90,8 @@ class Sampler {
     if Parsely.sharedInstance.accumulators.index(forKey: key) == nil {
           let heartbeatTimeout = timeoutFromDuration(duration: duration)
           Parsely.sharedInstance.accumulators[key] = Accumulator.init(
-              ms: 0,
-              totalMs: 0,
+              ms: TimeInterval(0),
+              totalMs: TimeInterval(0),
               lastSampleTime: Date(),
               lastPositiveSampleTime: nil,
               heartbeatTimeout: nil,
@@ -99,12 +105,10 @@ class Sampler {
           hasStartedSampling = true
           // set the first timeout for all of the heartbeats;
           // the callback will set itself again with the correct interval
-          Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval/1000), repeats: false) { timer in
-              self.sendHeartbeats(incSecs_: nil)
-          }
+          Timer.scheduledTimer(timeInterval: heartbeatInterval/1000, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
       }
     }
-
+    
     private func timeoutFromDuration(duration: TimeInterval?) -> TimeInterval {
         /* Returns an appropriate interval timeout in ms, based on the duration
          * of the item being tracked (also in ms), to ensure each of the 5 completion
@@ -139,7 +143,7 @@ class Sampler {
     
     private func sample(_currentTime: Date?, lastSampleTime: Date, _backoffThreshold: TimeInterval?) -> Void {
         let currentTime = _currentTime ?? Date()
-        let backoffThreshold = _backoffThreshold ?? TimeInterval(exactly: BACKOFF_THRESHOLD)
+        let backoffThreshold = _backoffThreshold ?? TimeInterval(BACKOFF_THRESHOLD)
         
         var trackedData: Accumulator, shouldCountSample: Bool, increment: TimeInterval, _lastSampleTime: Date, timeSinceLastPositiveSample: TimeInterval
         
@@ -147,9 +151,24 @@ class Sampler {
             _lastSampleTime = trackedData.lastSampleTime ?? lastSampleTime
             increment = currentTime.timeIntervalSince(_lastSampleTime)
             
-            shouldCountSample = self.sampleFn(params: [:])
+            shouldCountSample = trackedData.sampleFn([:])
             
-            
+            if shouldCountSample {
+                trackedData.ms += increment
+                trackedData.totalMs += increment
+            }
+            trackedData.lastSampleTime = currentTime
+            if (shouldCountSample) {
+                timeSinceLastPositiveSample = currentTime.timeIntervalSince(trackedData.lastPositiveSampleTime!)
+                // this condition denotes a key that's been tracked for long enough
+                // to start backing off *and* has been negative since before the
+                // last time it would have sent a heartbeat - eg a video that
+                // just became unpaused
+                if (trackedData.totalMs > backoffThreshold && timeSinceLastPositiveSample > self.heartbeatInterval) {
+                    
+                }
+                
+            }
         }
     }
     
@@ -168,14 +187,9 @@ class Sampler {
      * @param {int} incSecs_ The number of seconds of accumulated time for each
      *                       key. This should be used only for testing.
      */
-    func sendHeartbeat(trackedKey: String, incSecs_: Int?) -> Void {
+    func sendHeartbeat(trackedKey: String) -> Void {
         var trackedData = Parsely.sharedInstance.accumulators[trackedKey]
-        var incSecs: Int
-        if incSecs_ != nil {
-            incSecs = incSecs_!
-        } else {
-            incSecs = trackedData!.ms / 1000
-        }
+        let incSecs: Int = Int(trackedData!.ms)
         if incSecs > 0 && Float(incSecs) <= (Float(baseHeartbeatInterval / 1000) + 0.25) {
             self.heartbeatFn(params: [
                 "roundedSeconds": incSecs,
@@ -195,19 +209,20 @@ class Sampler {
      * @param {int} incSecs_ The number of seconds of accumulated time for each
      *                       key. This should be used only for testing.
      */
-    func sendHeartbeats(incSecs_: Int?) -> Void {
-        os_log("Sending heartbeats, incSecs_: %d", log: OSLog.default, type: .debug, incSecs_ ?? "nil")
+    @objc func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.
+        // maybe just wrap it in a dictionary and set it to nil if the key isn't there.
+        os_log("Sending heartbeats", log: OSLog.default, type: .debug)
         for (key, trackedData) in Parsely.sharedInstance.accumulators {
             let sendThreshold = trackedData.heartbeatTimeout! - heartbeatInterval
             // for the shortest video, this ensures we send the heartbeats as soon as
             // possible for longer videos, in the window right before the timeout for
             // each completion interval
             if Double(trackedData.ms) >= sendThreshold {
-                sendHeartbeat(trackedKey: key, incSecs_: nil)
+                sendHeartbeat(trackedKey: key)
             }
         }
         Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval/1000), repeats: false) { timer in
-            self.sendHeartbeats(incSecs_: nil)
+            self.sendHeartbeats()
         }
     }
     
