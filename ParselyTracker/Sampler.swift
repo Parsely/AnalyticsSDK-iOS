@@ -109,6 +109,16 @@ class Sampler {
       }
     }
     
+    private func setHeartbeatInterval(trackedData: Accumulator, timeout: TimeInterval) {
+//        trackedData.heartbeatTimeout = timeout
+        Parsely.sharedInstance.accumulators[]
+        
+        // determine if the interval between heartbeats needs to decrease
+        // to account for the new tracked item
+        self.heartbeatInterval = min(self.heartbeatInterval, timeout)
+        
+    }
+    
     private func timeoutFromDuration(duration: TimeInterval?) -> TimeInterval {
         /* Returns an appropriate interval timeout in ms, based on the duration
          * of the item being tracked (also in ms), to ensure each of the 5 completion
@@ -165,6 +175,7 @@ class Sampler {
                 // last time it would have sent a heartbeat - eg a video that
                 // just became unpaused
                 if (trackedData.totalMs > backoffThreshold && timeSinceLastPositiveSample > self.heartbeatInterval) {
+                    self.
                     
                 }
                 
