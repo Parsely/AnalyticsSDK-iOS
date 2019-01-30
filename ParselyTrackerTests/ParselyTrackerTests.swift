@@ -21,13 +21,17 @@ class ParselyTrackerTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
+    let parselyTracker: Parsely = Parsely.sharedInstance
+
+    func testConfigure() {}
+    func testTrackPageView() {}
+    func testStartEngagement() {}
+    func testStopEngagement() {}
+    func testTrackPlay() {}
+    func testTrackPause() {}
     
     func testPerformanceExample() {
-        // This is an example of a performance test case.
+        // TODO
         self.measure {
             // Put the code you want to measure the time of here.
         }
