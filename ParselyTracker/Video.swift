@@ -117,8 +117,8 @@ class Video: Sampler, Accumulates {
             // register the changes on the global object
             // Q: how does function scope affect things modified on the
             //  curVideo inside this function?
-            self.trackedVideos[vId] = curVideo
-            self.setVideoPlayingFlag()
+            trackedVideos[vId] = curVideo
+            setVideoPlayingFlag()
         }
     }
     
@@ -126,8 +126,8 @@ class Video: Sampler, Accumulates {
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         curVideo.isPlaying = false
         // TODO: extract to method
-        self.trackedVideos[vId] = curVideo
-        self.setVideoPlayingFlag()
+        trackedVideos[vId] = curVideo
+        setVideoPlayingFlag()
     }
     
     func reset(vId: String) -> Void {
