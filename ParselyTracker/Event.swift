@@ -22,4 +22,9 @@ class Event {
         // eventually this should validate the contents
         return self.originalData
     }
+
+    func toJSON() -> String {
+        return ""
+    }
+
 }
