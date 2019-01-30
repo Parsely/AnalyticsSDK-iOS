@@ -63,4 +63,14 @@ class StorageTests: XCTestCase {
         XCTAssertEqual(data as NSObject, retrievedData as NSObject)
     }
 
+    func testExtendExpiry() {
+        XCTAssert(false,
+                  "TODO: test storage.extendExpiry()")
+    }
+
+    func testExpire() {
+        XCTAssert(false,
+                  "TODO: test storage.expire()")
+    }
+
 }
