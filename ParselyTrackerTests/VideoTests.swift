@@ -24,7 +24,9 @@ class VideoTests: XCTestCase {
         XCTAssert(parselyTrackerInstance.accumulators.count == 0)
         self.parselyTrackerInstance.trackPlay(videoID: "videoId", metadata: [:], urlOverride: "")
         XCTAssert(parselyTrackerInstance.videoPlaying == true)
-        XCTAssert(parselyTrackerInstance.accumulators.count == 0)
+        // calling trackKey on a Sampler should add an object
+        // to the Parsely.sharedInstance.accumulators
+        XCTAssert(parselyTrackerInstance.accumulators.count == 1)
         
     }
 }

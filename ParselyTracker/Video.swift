@@ -112,6 +112,10 @@ class Video: Sampler, Accumulates {
                 ]), shouldNotSetLastRequest: false
             )
             curVideo.isPlaying = true
+            // register the changes on the global object
+            // Q: how does function scope affect things modified on the
+            //  curVideo inside this function?
+            self.trackedVideos[vId] = curVideo
             self.setVideoPlayingFlag()
         }
     }
