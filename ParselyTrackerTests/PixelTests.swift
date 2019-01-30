@@ -6,4 +6,22 @@
 //  Copyright © 2018 Parse.ly. All rights reserved.
 //
 
+import XCTest
+@testable import ParselyTracker
 import Foundation
+
+class PixelTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+    }
+
+    let parselyTracker: Parsely = Parsely.sharedInstance
+
+    func testBuildPixelURL() {}
+    func testBeacon() {}
+
+}
