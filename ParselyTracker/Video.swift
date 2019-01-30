@@ -38,6 +38,8 @@ class Video: Sampler, Accumulates {
         let playingVideos = trackedVideos.values.filter { $0.isPlaying }
         if playingVideos.count > 0 {
             Parsely.sharedInstance.videoPlaying = true
+        } else {
+            Parsely.sharedInstance.videoPlaying = false
         }
     }
     
@@ -123,6 +125,8 @@ class Video: Sampler, Accumulates {
     func trackPause(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) -> Void {
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         curVideo.isPlaying = false
+        // TODO: extract to method
+        self.trackedVideos[vId] = curVideo
         self.setVideoPlayingFlag()
     }
     
