@@ -99,13 +99,14 @@ class Sampler {
               sampleFn: self.sampleFn,
               heartbeatFn: self.heartbeatFn
           )
-          heartbeatInterval = min(heartbeatInterval, heartbeatTimeout)
+        // updates the global interval as well as this trackedData
+        self.setHeartbeatInterval(trackedKey: key, timeout: heartbeatTimeout)
       }
       if hasStartedSampling == false {
           hasStartedSampling = true
           // set the first timeout for all of the heartbeats;
           // the callback will set itself again with the correct interval
-          Timer.scheduledTimer(timeInterval: heartbeatInterval/1000, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
+          Timer.scheduledTimer(timeInterval: self.heartbeatInterval/1000, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
       }
     }
     
