@@ -21,10 +21,27 @@ class VideoTests: XCTestCase {
     }
     
     func testTrackVideo() {
-        XCTAssert(parselyTrackerInstance.accumulators.count == 0)
+        // pre-track state
+        XCTAssert(parselyTrackerInstance.accumulators.count == 0,
+                  "Parsely.sharedInstance.accumulators should be empty before calling trackPlay")
+
+        // call trackPlay
         self.parselyTrackerInstance.trackPlay(videoID: "videoId", metadata: [:], urlOverride: "")
-        XCTAssert(parselyTrackerInstance.videoPlaying == true)
-        XCTAssert(parselyTrackerInstance.accumulators.count == 0)
+
+        // post-track state
+        XCTAssert(parselyTrackerInstance.videoPlaying == true,
+                  "trackPlay should set the global videoPlaying flag")
+        XCTAssert(parselyTrackerInstance.accumulators.count == 1,
+                  "trackPlay should populate Parsely.sharedInstance.accumulators with one object")
+
+        // call trackPause
+        self.parselyTrackerInstance.trackPause(videoID: "videoId", metadata: [:], urlOverride: "")
+
+        // post-pause state
+        XCTAssert(parselyTrackerInstance.accumulators.count == 1,
+                  "trackPause should not remove an accumulator from Parsely.sharedInstance.accumulators")
+        XCTAssert(parselyTrackerInstance.videoPlaying == false,
+                  "trackPause should register no videos are currently playing")
         
     }
 }

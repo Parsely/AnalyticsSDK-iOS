@@ -38,6 +38,8 @@ class Video: Sampler, Accumulates {
         let playingVideos = trackedVideos.values.filter { $0.isPlaying }
         if playingVideos.count > 0 {
             Parsely.sharedInstance.videoPlaying = true
+        } else {
+            Parsely.sharedInstance.videoPlaying = false
         }
     }
     
@@ -112,6 +114,10 @@ class Video: Sampler, Accumulates {
                 ]), shouldNotSetLastRequest: false
             )
             curVideo.isPlaying = true
+            // register the changes on the global object
+            // Q: how does function scope affect things modified on the
+            //  curVideo inside this function?
+            self.trackedVideos[vId] = curVideo
             self.setVideoPlayingFlag()
         }
     }
@@ -119,6 +125,8 @@ class Video: Sampler, Accumulates {
     func trackPause(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) -> Void {
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         curVideo.isPlaying = false
+        // TODO: extract to method
+        self.trackedVideos[vId] = curVideo
         self.setVideoPlayingFlag()
     }
     
