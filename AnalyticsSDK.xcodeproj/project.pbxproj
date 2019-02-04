@@ -13,6 +13,7 @@
 		2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F0DF37B68B0886A0E6848 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2CD51D282237110A80CD252A /* Pods_AnalyticsSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */; };
+		B2BC46FD22090244000B937A /* SamplerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BC46FC22090244000B937A /* SamplerTests.swift */; };
 		DD6DF0DF715E6AF4166BA1CA /* Pods_AnalyticsSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B0C6D4E730AEFB429AD06BB /* Pods_AnalyticsSDKTests.framework */; };
 		DFD7BB483E787F03E5494A20 /* Pods_ParselyTrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */; };
 		F40D9A5E20EFF74F0030525E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A5D20EFF74F0030525E /* AppDelegate.swift */; };
@@ -103,6 +104,7 @@
 		9CD753A4903488F9E572497D /* Pods-AnalyticsSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDKTests/Pods-AnalyticsSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A07DD8B365F9DFAC828E58C2 /* Pods-ParselyTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AB009DED9C4184290AB524B3 /* Pods-ParselyTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTracker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTracker/Pods-ParselyTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		B2BC46FC22090244000B937A /* SamplerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplerTests.swift; sourceTree = "<group>"; };
 		C809B31A3D785C1DD2A05C4E /* Pods-AnalyticsSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDKTests/Pods-AnalyticsSDKTests.release.xcconfig"; sourceTree = "<group>"; };
 		EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F32771E2DD5F1A6A68B29BB2 /* Pods-AnalyticsSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDK/Pods-AnalyticsSDK.release.xcconfig"; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 				F4BF866B2190DB3C00BD3867 /* SessionTests.swift */,
 				F4BF866D2190DB4A00BD3867 /* VideoTests.swift */,
 				F4BF866F2190DB5A00BD3867 /* VisitorTests.swift */,
+				B2BC46FC22090244000B937A /* SamplerTests.swift */,
 			);
 			path = ParselyTrackerTests;
 			sourceTree = "<group>";
@@ -643,6 +646,7 @@
 				F4BF866E2190DB4A00BD3867 /* VideoTests.swift in Sources */,
 				F441A55C20F3B8BF009B556E /* EventQueueTests.swift in Sources */,
 				F441A55E20F53A56009B556E /* EventTests.swift in Sources */,
+				B2BC46FD22090244000B937A /* SamplerTests.swift in Sources */,
 				F4BF86682190DAFC00BD3867 /* EngagedTimeTests.swift in Sources */,
 				F433339E20F0087E004BB6F5 /* ParselyTrackerTests.swift in Sources */,
 				2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */,
