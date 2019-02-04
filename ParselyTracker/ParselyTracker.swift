@@ -14,6 +14,7 @@ public class Parsely {
     var config: [String: Any] = [:]
     private var default_config = [String: Any]()
     var beacon = Beacon()
+    let track = Track()  // start to replace Beacon
     var lastRequest: Dictionary<String, Any?>? = [:]
     var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
@@ -55,7 +56,7 @@ public class Parsely {
     
     public func trackPageView(params: [String: Any]) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
-        self.beacon.trackPageView(params: params, shouldNotSetLastRequest: true)
+        self.track.pageView(params: params, shouldNotSetLastRequest: true)
     }
 
     public func startEngagement() {
