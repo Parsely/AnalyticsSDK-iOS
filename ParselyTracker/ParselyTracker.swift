@@ -13,8 +13,7 @@ public class Parsely {
     var apikey = ""
     var config: [String: Any] = [:]
     private var default_config = [String: Any]()
-    var beacon = Beacon()
-    let track = Track()  // start to replace Beacon
+    let track = Track()
     var lastRequest: Dictionary<String, Any?>? = [:]
     var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
