@@ -21,6 +21,13 @@ class Track {
         self.pixel = Pixel()
     }
 
+    func event(event: Event, shouldNotSetLastRequest: Bool) {
+        // generic helper function, sends the event as-is
+        self.pixel.beacon(additionalParams: event, shouldNotSetLastRequest: shouldNotSetLastRequest)
+        os_log("Sending an event from Track")
+
+    }
+
     func pageView(params: [String: Any], shouldNotSetLastRequest: Bool) {
         let data: [String: Any] = [
             "action": "pageview",
@@ -31,7 +38,7 @@ class Track {
         )
 
         let event = Event(params: updatedData)
-        os_log("Sending an event from Track")
+        os_log("Sending a pageview from Track")
         self.pixel.beacon(additionalParams: event, shouldNotSetLastRequest: shouldNotSetLastRequest)
     }
 
