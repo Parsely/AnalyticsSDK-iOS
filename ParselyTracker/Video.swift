@@ -17,7 +17,7 @@ struct TrackedVideo {
     var _heartbeatsSent: Int = 0
 }
 
-class Video: Sampler, Accumulates {
+class VideoManager: Sampler, Accumulates {
     // underlying object behind a video
     // - register a video
     // - start playing

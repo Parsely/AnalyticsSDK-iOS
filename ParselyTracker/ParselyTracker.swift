@@ -30,7 +30,7 @@ public class Parsely {
     public var isEngaged: Bool = false;
     public static let sharedInstance = Parsely()
     var engagedTimeInstance: EngagedTime?
-    var videoInstance: Video?
+    var videoManagerInstance: VideoManager?
     var visitorManager: VisitorManager?
     var accumulators: Dictionary<String, Accumulator> = [:]
     
@@ -73,16 +73,16 @@ public class Parsely {
     }
 
     public func trackPlay(videoID: String, metadata:[String: Any], urlOverride: String) {
-        if self.videoInstance == nil {
-            self.videoInstance = Video()
+        if self.videoManagerInstance == nil {
+            self.videoManagerInstance = VideoManager()
         }
-        self.videoInstance!.trackPlay(vId: videoID, metadata: metadata, urlOverride: urlOverride)
+        self.videoManagerInstance!.trackPlay(vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 
     public func trackPause(videoID: String, metadata:[String: Any], urlOverride: String) {
-        if self.videoInstance == nil {
-            self.videoInstance = Video()
+        if self.videoManagerInstance == nil {
+            self.videoManagerInstance = VideoManager()
         }
-        self.videoInstance!.trackPause(vId: videoID, metadata: metadata, urlOverride: urlOverride)
+        self.videoManagerInstance!.trackPause(vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 }
