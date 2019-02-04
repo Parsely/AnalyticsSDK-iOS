@@ -37,9 +37,9 @@ class Track {
             params, uniquingKeysWith: { (old, _new) in old }
         )
 
-        let event = Event(params: updatedData)
+        let event_ = Event(params: updatedData)
         os_log("Sending a pageview from Track")
-        self.pixel.beacon(additionalParams: event, shouldNotSetLastRequest: shouldNotSetLastRequest)
+        event(event: event_, shouldNotSetLastRequest: shouldNotSetLastRequest)
     }
 
     func videoStart(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
