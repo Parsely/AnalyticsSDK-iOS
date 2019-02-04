@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.log
 
 struct TrackedVideo {
     var id: String
@@ -80,7 +81,6 @@ class VideoManager: Sampler, Accumulates {
         }
         
         var curVideo = trackedVideos[vId]
-        let pixel = Pixel()
         var metadataString = ""
         do {
             let metadata = try JSONSerialization.data(withJSONObject: curVideo?.metadata ?? [:], options: .prettyPrinted)
@@ -97,7 +97,8 @@ class VideoManager: Sampler, Accumulates {
             "tt": totalMs,
             "urlref": Parsely.sharedInstance.lastRequest?["urlref"]!! ?? ""
         ])
-        pixel.beacon(additionalParams: event, shouldNotSetLastRequest: false)
+        Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
+        os_log("Sent heartbeat of %s", vId)
         curVideo?._heartbeatsSent += 1
     }
     
@@ -105,7 +106,7 @@ class VideoManager: Sampler, Accumulates {
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         if (curVideo.hasStartedPlaying != true) {
             curVideo.hasStartedPlaying = true
-            Parsely.sharedInstance.beacon.pixel.beacon(additionalParams: Event(params:[
+            Parsely.sharedInstance.track.event(event: Event(params:[
                     "date": Date(),
                     "action": "videostart",
                     "url": vId,
