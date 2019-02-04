@@ -30,7 +30,6 @@ public class Parsely {
     public var videoPlaying = false
     public var isEngaged: Bool = false;
     public static let sharedInstance = Parsely()
-    var engagedTimeInstance: EngagedTime?
     var visitorManager: VisitorManager?
     var accumulators: Dictionary<String, Accumulator> = [:]
     
@@ -59,17 +58,11 @@ public class Parsely {
     }
 
     public func startEngagement() {
-        if self.engagedTimeInstance == nil {
-            self.engagedTimeInstance = EngagedTime()
-        }
-        self.engagedTimeInstance!.startInteraction()
+        track.startEngagement()
     }
 
     public func stopEngagement() {
-        if self.engagedTimeInstance == nil {
-            self.engagedTimeInstance = EngagedTime()
-        }
-        self.engagedTimeInstance!.endInteraction()
+        track.stopEngagement()
     }
 
     public func trackPlay(videoID: String, metadata:[String: Any], urlOverride: String) {

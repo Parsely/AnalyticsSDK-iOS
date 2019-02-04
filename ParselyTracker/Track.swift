@@ -15,7 +15,7 @@ class Track {
 
     let pixel: Pixel
     var videoManagerInstance: VideoManager?
-
+    var engagedTimeInstance: EngagedTime?
 
     init() {
         self.pixel = Pixel()
@@ -49,5 +49,21 @@ class Track {
         }
         videoManagerInstance!.trackPause(vId: vId, metadata: metadata, urlOverride: urlOverride)
         os_log("Tracked videoPause from Track")
+    }
+
+    func startEngagement() {
+        if self.engagedTimeInstance == nil {
+            self.engagedTimeInstance = EngagedTime()
+        }
+        self.engagedTimeInstance!.startInteraction()
+        os_log("track start engagement from Track")
+    }
+
+    func stopEngagement() {
+        if self.engagedTimeInstance == nil {
+            self.engagedTimeInstance = EngagedTime()
+        }
+        self.engagedTimeInstance!.endInteraction()
+        os_log("track stop engagement from Track")
     }
 }
