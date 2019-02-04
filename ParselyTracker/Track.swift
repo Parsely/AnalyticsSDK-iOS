@@ -42,4 +42,12 @@ class Track {
         videoManagerInstance!.trackPlay(vId: vId, metadata: metadata, urlOverride: urlOverride)
         os_log("Tracked videoStart from Track")
     }
+
+    func videoPause(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
+        if self.videoManagerInstance == nil {
+            self.videoManagerInstance = VideoManager()
+        }
+        videoManagerInstance!.trackPause(vId: vId, metadata: metadata, urlOverride: urlOverride)
+        os_log("Tracked videoPause from Track")
+    }
 }
