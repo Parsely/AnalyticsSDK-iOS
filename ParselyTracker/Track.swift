@@ -14,6 +14,8 @@ class Track {
     // and enqueue them to be sent
 
     let pixel: Pixel
+    var videoManagerInstance: VideoManager?
+
 
     init() {
         self.pixel = Pixel()
@@ -31,5 +33,13 @@ class Track {
         let event = Event(params: updatedData)
         os_log("Sending an event from Track")
         self.pixel.beacon(additionalParams: event, shouldNotSetLastRequest: shouldNotSetLastRequest)
+    }
+
+    func videoStart(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
+        if self.videoManagerInstance == nil {
+            self.videoManagerInstance = VideoManager()
+        }
+        videoManagerInstance!.trackPlay(vId: vId, metadata: metadata, urlOverride: urlOverride)
+        os_log("Tracked videoStart from Track")
     }
 }

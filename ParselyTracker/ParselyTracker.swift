@@ -74,10 +74,7 @@ public class Parsely {
     }
 
     public func trackPlay(videoID: String, metadata:[String: Any], urlOverride: String) {
-        if self.videoManagerInstance == nil {
-            self.videoManagerInstance = VideoManager()
-        }
-        self.videoManagerInstance!.trackPlay(vId: videoID, metadata: metadata, urlOverride: urlOverride)
+        track.videoStart(vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 
     public func trackPause(videoID: String, metadata:[String: Any], urlOverride: String) {
