@@ -24,9 +24,9 @@ class SamplerTests: XCTestCase {
         let initialHbValue = sampler.heartbeatInterval
         XCTAssert(initialHbValue == TimeInterval(floatLiteral: 10.5))
         
-        sampler.trackKey(key: "testKey", duration: TimeInterval(floatLiteral: 10.0))
+        sampler.trackKey(key: "testKey", contentDuration: TimeInterval(floatLiteral: 10.0))
         let newHbValue = sampler.heartbeatInterval
-        XCTAssert(newHbValue != initialHbValue, "A shorter duration should decrease the global timeout.")
-        XCTAssert(newHbValue == TimeInterval(floatLiteral: 2.0), "10s duration should account for all completion intervals.")
+        XCTAssert(newHbValue != initialHbValue, "A shorter content duration should decrease the global timeout.")
+        XCTAssert(newHbValue == TimeInterval(floatLiteral: 2.0), "10s content duration should account for all completion intervals.")
     }
 }

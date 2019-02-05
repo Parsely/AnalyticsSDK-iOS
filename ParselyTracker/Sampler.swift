@@ -25,14 +25,14 @@ struct Accumulator {
             sampler!.heartbeatInterval = min(sampler!.heartbeatInterval, newInterval!)
         }
     }
-    var duration: TimeInterval?
+    var contentDuration: TimeInterval?
     var sampler: Sampler?
 }
 
 protocol Accumulates {
 //    func sampleFn(params: Dictionary<String, Any?>) -> Bool
 //    func heartbeatFn(params: Dictionary<String, Any?>) -> Void
-    func trackKey(key: String,  duration: TimeInterval?) -> Void
+    func trackKey(key: String,  contentDuration: TimeInterval?) -> Void
 }
 
 extension TimeInterval {
@@ -55,7 +55,7 @@ class Sampler {
         heartbeatInterval = baseHeartbeatInterval
     }
 
-  public func trackKey(key: String,  duration: TimeInterval?) -> Void {
+  public func trackKey(key: String,  contentDuration: TimeInterval?) -> Void {
      os_log("Tracking Key: %s", log: OSLog.default, type: .debug, key)
     if Parsely.sharedInstance.accumulators.index(forKey: key) == nil {
         var newTrackedData = Accumulator.init(
@@ -64,10 +64,10 @@ class Sampler {
               lastSampleTime: Date(),
               lastPositiveSampleTime: nil,
               heartbeatTimeout: nil,
-              duration: duration,
+              contentDuration: contentDuration,
               sampler: self
           )
-        let heartbeatTimeout = timeoutFromDuration(duration: duration)
+        let heartbeatTimeout = timeoutFromDuration(contentDuration: contentDuration)
         newTrackedData.heartbeatTimeout = heartbeatTimeout
         Parsely.sharedInstance.accumulators[key] = newTrackedData
       }
@@ -77,12 +77,12 @@ class Sampler {
       }
     }
 
-    private func timeoutFromDuration(duration: TimeInterval?) -> TimeInterval {
+    private func timeoutFromDuration(contentDuration: TimeInterval?) -> TimeInterval {
         let timeoutDefault = baseHeartbeatInterval
-        if duration != nil {
-            let completionInterval = duration! / Double(5)
+        if contentDuration != nil {
+            let completionInterval = contentDuration! / Double(5)
             if completionInterval < timeoutDefault / Double(2) {
-                return duration! / 5
+                return contentDuration! / 5
             }
             
             if completionInterval < timeoutDefault {
@@ -115,7 +115,7 @@ class Sampler {
                 if (trackedData.totalMs > backoffThreshold && timeSinceLastPositiveSample > self.heartbeatInterval) {
                     // reset timeout to its value pre backoff
                     // TODO: implement & test the backoff
-                    trackedData.heartbeatTimeout = self.timeoutFromDuration(duration: trackedData.duration)
+                    trackedData.heartbeatTimeout = self.timeoutFromDuration(contentDuration: trackedData.contentDuration)
                 }
             }
         }

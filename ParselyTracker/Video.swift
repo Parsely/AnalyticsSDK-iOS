@@ -58,7 +58,7 @@ class VideoManager: Sampler, Accumulates {
         } else {
             trackedVideos[vId] = TrackedVideo.init(id: vId, isPlaying: false, hasStartedPlaying: false, metadata: metadata, urlOverride: urlOverride!, _heartbeatsSent: 0)
         }
-        self.trackKey(key: vId, duration: TimeInterval(metadata["duration"] as? Int ?? 0))
+        self.trackKey(key: vId, contentDuration: TimeInterval(metadata["duration"] as? Int ?? 0))
         
         self.sendHeartbeat(trackedKey: vId)
         
