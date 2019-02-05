@@ -56,11 +56,11 @@ class VideoManager: Sampler {
                 trackedVideos[vId]?.urlOverride = urlOverride!
             }
         } else {
+            // register video metas
             trackedVideos[vId] = TrackedVideo.init(id: vId, isPlaying: false, hasStartedPlaying: false, metadata: metadata, urlOverride: urlOverride!, _heartbeatsSent: 0)
+            // register with sampler
+            trackKey(key: vId, contentDuration: TimeInterval(metadata["duration"] as? Int ?? 0))
         }
-        self.trackKey(key: vId, contentDuration: TimeInterval(metadata["duration"] as? Int ?? 0))
-        
-        self.sendHeartbeat(trackedKey: vId)
         
         return trackedVideos[vId]!
     }
@@ -103,6 +103,7 @@ class VideoManager: Sampler {
     }
     
     func trackPlay(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) -> Void {
+        // set the video metas in the collector, and merge metadata if it's already being tracked
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         if (curVideo.hasStartedPlaying != true) {
             curVideo.hasStartedPlaying = true
@@ -115,19 +116,20 @@ class VideoManager: Sampler {
                 ]), shouldNotSetLastRequest: false
             )
             curVideo.isPlaying = true
-            // register the changes on the global object
-            // Q: how does function scope affect things modified on the
-            //  curVideo inside this function?
-            trackedVideos[vId] = curVideo
-            setVideoPlayingFlag()
+            updateVideo(video: curVideo)
         }
     }
     
     func trackPause(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) -> Void {
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         curVideo.isPlaying = false
-        // TODO: extract to method
-        trackedVideos[vId] = curVideo
+        updateVideo(video: curVideo)
+        // might as well try
+        sendHeartbeat(trackedKey: vId)
+    }
+
+    private func updateVideo(video: TrackedVideo) {
+        trackedVideos[video.id] = video
         setVideoPlayingFlag()
     }
     
