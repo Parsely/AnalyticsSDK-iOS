@@ -18,6 +18,7 @@ class Pixel {
     }
     
     func buildPixelURL(now: Date) -> String {
+        // todo: move to http client
         if self._baseURL == nil {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd-HH"

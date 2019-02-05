@@ -9,9 +9,9 @@ import XCTest
 @testable import ParselyTracker
 import Foundation
 
-class BeaconTests: XCTestCase {
+class TrackTests: XCTestCase {
     let parselyTrackerInstance: Parsely = Parsely.sharedInstance
-    let parselyBeacon: Beacon = Beacon()
+    let track: Track = Track()
     
     override func setUp() {
         super.setUp()
