@@ -14,8 +14,8 @@ class Track {
     // and enqueue them to be sent
 
     let pixel: Pixel
-    var videoManager: VideoManager?
-    var engagedTime: EngagedTime?
+    lazy var videoManager = VideoManager()
+    lazy var engagedTime = EngagedTime()
 
     init() {
         self.pixel = Pixel()
@@ -43,34 +43,22 @@ class Track {
     }
 
     func videoStart(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
-        if self.videoManager == nil {
-            self.videoManager = VideoManager()
-        }
-        videoManager!.trackPlay(vId: vId, metadata: metadata, urlOverride: urlOverride)
+        videoManager.trackPlay(vId: vId, metadata: metadata, urlOverride: urlOverride)
         os_log("Tracked videoStart from Track")
     }
 
     func videoPause(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
-        if self.videoManager == nil {
-            self.videoManager = VideoManager()
-        }
-        videoManager!.trackPause(vId: vId, metadata: metadata, urlOverride: urlOverride)
+        videoManager.trackPause(vId: vId, metadata: metadata, urlOverride: urlOverride)
         os_log("Tracked videoPause from Track")
     }
 
     func startEngagement() {
-        if self.engagedTime == nil {
-            self.engagedTime = EngagedTime()
-        }
-        self.engagedTime!.startInteraction()
+        self.engagedTime.startInteraction()
         os_log("track start engagement from Track")
     }
 
     func stopEngagement() {
-        if self.engagedTime == nil {
-            self.engagedTime = EngagedTime()
-        }
-        self.engagedTime!.endInteraction()
+        self.engagedTime.endInteraction()
         os_log("track stop engagement from Track")
     }
 }
