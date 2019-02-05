@@ -26,8 +26,6 @@ struct Accumulator {
         }
     }
     var duration: TimeInterval?
-    var sampleFn: (_ params: Dictionary<String, Any?>) -> Bool
-    var heartbeatFn: (_ params: Dictionary<String, Any?>) -> Void
     var sampler: Sampler?
 }
 
@@ -101,8 +99,6 @@ class Sampler {
               lastPositiveSampleTime: nil,
               heartbeatTimeout: nil,
               duration: duration,
-              sampleFn: self.sampleFn,
-              heartbeatFn: self.heartbeatFn,
               sampler: self
           )
         let heartbeatTimeout = timeoutFromDuration(duration: duration)
@@ -159,7 +155,7 @@ class Sampler {
             _lastSampleTime = trackedData.lastSampleTime ?? lastSampleTime
             increment = currentTime.timeIntervalSince(_lastSampleTime)
             
-            shouldCountSample = trackedData.sampleFn([:])
+            shouldCountSample = trackedData.sampler!.sampleFn(params: [:])
             
             if shouldCountSample {
                 trackedData.ms += increment
