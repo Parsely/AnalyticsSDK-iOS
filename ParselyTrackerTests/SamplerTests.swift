@@ -29,4 +29,18 @@ class SamplerTests: XCTestCase {
         XCTAssert(newHbValue != initialHbValue, "A shorter content duration should decrease the global timeout.")
         XCTAssert(newHbValue == TimeInterval(floatLiteral: 2.0), "10s content duration should account for all completion intervals.")
     }
+
+    func testDistinctTrackedItems() {
+        // each sampler should handle it's own tracked items
+        let sampler1 = Sampler()
+        let sampler2 = Sampler()
+        // track the same key, but for different reasons
+        sampler1.trackKey(key: "thing", contentDuration: TimeInterval(floatLiteral: 30))
+        sampler2.trackKey(key: "thing", contentDuration: TimeInterval(floatLiteral: 30))
+//        XCTAssertFalse(sampler1.accumulators["thing"]!.id === sampler2.accumulators["thing"]!.id, "Item should not be tracked in the same location")
+        // dropping a key shouldn't affect the other sampler
+        sampler1.dropKey(key: "thing")
+        XCTAssert(sampler2.accumulators["thing"] != nil,
+                  "Dropping a key in one sampler shouldn't drop it in the other.")
+    }
 }
