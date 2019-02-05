@@ -32,8 +32,7 @@ class EngagedTime: Sampler, Accumulates {
         if enableHeartbeats != true {
             return
         }
-        let pixel = Pixel()
-        
+
         let event = Event(params: [
             "date": Date().timeIntervalSince1970,
             "action": "heartbeat",
@@ -42,7 +41,9 @@ class EngagedTime: Sampler, Accumulates {
             "url": Parsely.sharedInstance.lastRequest?["url"]!! ?? "",
             "urlref": Parsely.sharedInstance.lastRequest?["urlref"]!! ?? ""
         ])
-        pixel.beacon(additionalParams: event, shouldNotSetLastRequest: false)
+        Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
+        os_log("Sent heartbeat for:")
+        dump(params)
     }
     
     func startInteraction() {

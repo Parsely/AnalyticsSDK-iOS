@@ -13,7 +13,7 @@ public class Parsely {
     var apikey = ""
     var config: [String: Any] = [:]
     private var default_config = [String: Any]()
-    var beacon = Beacon()
+    let track = Track()
     var lastRequest: Dictionary<String, Any?>? = [:]
     var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
@@ -29,8 +29,6 @@ public class Parsely {
     public var videoPlaying = false
     public var isEngaged: Bool = false;
     public static let sharedInstance = Parsely()
-    var engagedTimeInstance: EngagedTime?
-    var videoInstance: Video?
     var visitorManager: VisitorManager?
     var accumulators: Dictionary<String, Accumulator> = [:]
     
@@ -55,34 +53,22 @@ public class Parsely {
     
     public func trackPageView(params: [String: Any]) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
-        self.beacon.trackPageView(params: params, shouldNotSetLastRequest: true)
+        self.track.pageview(params: params, shouldNotSetLastRequest: true)
     }
 
     public func startEngagement() {
-        if self.engagedTimeInstance == nil {
-            self.engagedTimeInstance = EngagedTime()
-        }
-        self.engagedTimeInstance!.startInteraction()
+        track.startEngagement()
     }
 
     public func stopEngagement() {
-        if self.engagedTimeInstance == nil {
-            self.engagedTimeInstance = EngagedTime()
-        }
-        self.engagedTimeInstance!.endInteraction()
+        track.stopEngagement()
     }
 
     public func trackPlay(videoID: String, metadata:[String: Any], urlOverride: String) {
-        if self.videoInstance == nil {
-            self.videoInstance = Video()
-        }
-        self.videoInstance!.trackPlay(vId: videoID, metadata: metadata, urlOverride: urlOverride)
+        track.videoStart(vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 
     public func trackPause(videoID: String, metadata:[String: Any], urlOverride: String) {
-        if self.videoInstance == nil {
-            self.videoInstance = Video()
-        }
-        self.videoInstance!.trackPause(vId: videoID, metadata: metadata, urlOverride: urlOverride)
+        track.videoPause(vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 }
