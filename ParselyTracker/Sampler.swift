@@ -19,10 +19,16 @@ struct Accumulator {
     var totalMs: TimeInterval = TimeInterval(0)
     var lastSampleTime: Date?
     var lastPositiveSampleTime: Date?
-    var heartbeatTimeout: TimeInterval?
+    var heartbeatTimeout: TimeInterval? {
+        willSet(newInterval) {
+            print(newInterval!)
+            sampler!.heartbeatInterval = min(sampler!.heartbeatInterval, newInterval!)
+        }
+    }
     var duration: TimeInterval?
     var sampleFn: (_ params: Dictionary<String, Any?>) -> Bool
     var heartbeatFn: (_ params: Dictionary<String, Any?>) -> Void
+    var sampler: Sampler?
 }
 
 protocol Accumulates {
@@ -88,8 +94,7 @@ class Sampler {
   public func trackKey(key: String,  duration: TimeInterval?) -> Void {
      os_log("Tracking Key: %s", log: OSLog.default, type: .debug, key)
     if Parsely.sharedInstance.accumulators.index(forKey: key) == nil {
-          let heartbeatTimeout = timeoutFromDuration(duration: duration)
-          Parsely.sharedInstance.accumulators[key] = Accumulator.init(
+        var newTrackedData = Accumulator.init(
               ms: TimeInterval(0),
               totalMs: TimeInterval(0),
               lastSampleTime: Date(),
@@ -97,10 +102,12 @@ class Sampler {
               heartbeatTimeout: nil,
               duration: duration,
               sampleFn: self.sampleFn,
-              heartbeatFn: self.heartbeatFn
+              heartbeatFn: self.heartbeatFn,
+              sampler: self
           )
-        // updates the global interval as well as this trackedData
-        self.setHeartbeatInterval(trackedKey: key, timeout: heartbeatTimeout)
+        let heartbeatTimeout = timeoutFromDuration(duration: duration)
+        newTrackedData.heartbeatTimeout = heartbeatTimeout
+        Parsely.sharedInstance.accumulators[key] = newTrackedData
       }
       if hasStartedSampling == false {
           hasStartedSampling = true
@@ -109,19 +116,7 @@ class Sampler {
           Timer.scheduledTimer(timeInterval: self.heartbeatInterval/1000, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
       }
     }
-    
-    private func setHeartbeatInterval(trackedKey: String, timeout: TimeInterval) {
-//        trackedData.heartbeatTimeout = timeout
-        // Parsely.sharedInstance.accumulators[] not sure what this was
-        // set the new interval on this object
-        Parsely.sharedInstance.accumulators[trackedKey]?.heartbeatTimeout = timeout
-        
-        // determine if the interval between heartbeats needs to decrease
-        // to account for the new tracked item
-        self.heartbeatInterval = min(self.heartbeatInterval, timeout)
-        
-    }
-    
+
     private func timeoutFromDuration(duration: TimeInterval?) -> TimeInterval {
         /* Returns an appropriate interval timeout in ms, based on the duration
          * of the item being tracked (also in ms), to ensure each of the 5 completion
@@ -158,7 +153,7 @@ class Sampler {
         let currentTime = _currentTime ?? Date()
         let backoffThreshold = _backoffThreshold ?? TimeInterval(BACKOFF_THRESHOLD)
         
-        var trackedData: Accumulator, shouldCountSample: Bool, increment: TimeInterval, _lastSampleTime: Date, timeSinceLastPositiveSample: TimeInterval
+        var shouldCountSample: Bool, increment: TimeInterval, _lastSampleTime: Date, timeSinceLastPositiveSample: TimeInterval
         
         for var (trackedKey, trackedData) in Parsely.sharedInstance.accumulators {
             _lastSampleTime = trackedData.lastSampleTime ?? lastSampleTime
@@ -179,13 +174,9 @@ class Sampler {
                 // just became unpaused
                 if (trackedData.totalMs > backoffThreshold && timeSinceLastPositiveSample > self.heartbeatInterval) {
                     // reset timeout to its value pre backoff
-                    self.setHeartbeatInterval(trackedKey: trackedKey, timeout: self.timeoutFromDuration(duration: trackedData.duration))
-                    // are these needed still?
-                    // sampler._unsetheartbeattimeout()
-                    // sampler.setheartbeattimeout()
-                    
+                    // TODO: implement & test the backoff
+                    trackedData.heartbeatTimeout = self.timeoutFromDuration(duration: trackedData.duration)
                 }
-                
             }
         }
     }
@@ -218,6 +209,7 @@ class Sampler {
         trackedData!.ms = 0
     }
     
+
     /*
      * Send heartbeats for all accumulators with accumulated time
      *
@@ -239,6 +231,7 @@ class Sampler {
                 sendHeartbeat(trackedKey: key)
             }
         }
+        // should repeats be true?
         Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval/1000), repeats: false) { timer in
             self.sendHeartbeats()
         }
