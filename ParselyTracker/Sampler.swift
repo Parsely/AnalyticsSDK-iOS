@@ -29,12 +29,6 @@ struct Accumulator {
     var sampler: Sampler?
 }
 
-protocol Accumulates {
-//    func sampleFn(params: Dictionary<String, Any?>) -> Bool
-//    func heartbeatFn(params: Dictionary<String, Any?>) -> Void
-    func trackKey(key: String,  contentDuration: TimeInterval?) -> Void
-}
-
 extension TimeInterval {
     func milliseconds() -> Int {
         return Int(self * 1000)

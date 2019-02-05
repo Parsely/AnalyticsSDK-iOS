@@ -9,7 +9,7 @@
 import Foundation
 import os.log
 
-class EngagedTime: Sampler, Accumulates {
+class EngagedTime: Sampler {
     let ENGAGED_TIME_SAMPLER_KEY = "engagedTime"
     var isInteracting = false
 
