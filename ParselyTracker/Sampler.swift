@@ -73,6 +73,7 @@ class Sampler {
       }
       if hasStartedSampling == false {
           hasStartedSampling = true
+        // this should start the timer for sampling
           Timer.scheduledTimer(timeInterval: self.heartbeatInterval/1000, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
       }
     }

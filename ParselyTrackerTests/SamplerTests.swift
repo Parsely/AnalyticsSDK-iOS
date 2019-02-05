@@ -23,7 +23,7 @@ class SamplerTests: XCTestCase {
         let sampler = Sampler()
         let initialHbValue = sampler.heartbeatInterval
         XCTAssert(initialHbValue == TimeInterval(floatLiteral: 10.5))
-        
+
         sampler.trackKey(key: "testKey", contentDuration: TimeInterval(floatLiteral: 10.0))
         let newHbValue = sampler.heartbeatInterval
         XCTAssert(newHbValue != initialHbValue, "A shorter content duration should decrease the global timeout.")
