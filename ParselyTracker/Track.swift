@@ -14,8 +14,8 @@ class Track {
     // and enqueue them to be sent
 
     let pixel: Pixel
-    var videoManagerInstance: VideoManager?
-    var engagedTimeInstance: EngagedTime?
+    var videoManager: VideoManager?
+    var engagedTime: EngagedTime?
 
     init() {
         self.pixel = Pixel()
@@ -28,7 +28,7 @@ class Track {
 
     }
 
-    func pageView(params: [String: Any], shouldNotSetLastRequest: Bool) {
+    func pageview(params: [String: Any], shouldNotSetLastRequest: Bool) {
         let data: [String: Any] = [
             "action": "pageview",
             "ts": Date().timeIntervalSince1970,
@@ -43,34 +43,34 @@ class Track {
     }
 
     func videoStart(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
-        if self.videoManagerInstance == nil {
-            self.videoManagerInstance = VideoManager()
+        if self.videoManager == nil {
+            self.videoManager = VideoManager()
         }
-        videoManagerInstance!.trackPlay(vId: vId, metadata: metadata, urlOverride: urlOverride)
+        videoManager!.trackPlay(vId: vId, metadata: metadata, urlOverride: urlOverride)
         os_log("Tracked videoStart from Track")
     }
 
     func videoPause(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
-        if self.videoManagerInstance == nil {
-            self.videoManagerInstance = VideoManager()
+        if self.videoManager == nil {
+            self.videoManager = VideoManager()
         }
-        videoManagerInstance!.trackPause(vId: vId, metadata: metadata, urlOverride: urlOverride)
+        videoManager!.trackPause(vId: vId, metadata: metadata, urlOverride: urlOverride)
         os_log("Tracked videoPause from Track")
     }
 
     func startEngagement() {
-        if self.engagedTimeInstance == nil {
-            self.engagedTimeInstance = EngagedTime()
+        if self.engagedTime == nil {
+            self.engagedTime = EngagedTime()
         }
-        self.engagedTimeInstance!.startInteraction()
+        self.engagedTime!.startInteraction()
         os_log("track start engagement from Track")
     }
 
     func stopEngagement() {
-        if self.engagedTimeInstance == nil {
-            self.engagedTimeInstance = EngagedTime()
+        if self.engagedTime == nil {
+            self.engagedTime = EngagedTime()
         }
-        self.engagedTimeInstance!.endInteraction()
+        self.engagedTime!.endInteraction()
         os_log("track stop engagement from Track")
     }
 }
