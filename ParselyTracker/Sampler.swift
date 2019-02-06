@@ -15,6 +15,7 @@ let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(15)
 let BACKOFF_THRESHOLD = 60
 
 struct Accumulator {
+    var id: String
     var ms: TimeInterval = TimeInterval(0)
     var totalMs: TimeInterval = TimeInterval(0)
     var lastSampleTime: Date?
@@ -29,12 +30,6 @@ struct Accumulator {
     var sampler: Sampler?
 }
 
-protocol Accumulates {
-//    func sampleFn(params: Dictionary<String, Any?>) -> Bool
-//    func heartbeatFn(params: Dictionary<String, Any?>) -> Void
-    func trackKey(key: String,  contentDuration: TimeInterval?) -> Void
-}
-
 extension TimeInterval {
     func milliseconds() -> Int {
         return Int(self * 1000)
@@ -45,6 +40,7 @@ class Sampler {
     var baseHeartbeatInterval = TimeInterval(floatLiteral: 10.5) // default 10.5s
     var heartbeatInterval: TimeInterval
     var hasStartedSampling: Bool = false
+    var accumulators: Dictionary<String, Accumulator> = [:]
     
     init() {
         if let secondsBetweenHeartbeats: TimeInterval = Parsely.sharedInstance.secondsBetweenHeartbeats {
@@ -57,8 +53,9 @@ class Sampler {
 
   public func trackKey(key: String,  contentDuration: TimeInterval?) -> Void {
      os_log("Tracking Key: %s", log: OSLog.default, type: .debug, key)
-    if Parsely.sharedInstance.accumulators.index(forKey: key) == nil {
+    if accumulators.index(forKey: key) == nil {
         var newTrackedData = Accumulator.init(
+              id: key,
               ms: TimeInterval(0),
               totalMs: TimeInterval(0),
               lastSampleTime: Date(),
@@ -69,7 +66,7 @@ class Sampler {
           )
         let heartbeatTimeout = timeoutFromDuration(contentDuration: contentDuration)
         newTrackedData.heartbeatTimeout = heartbeatTimeout
-        Parsely.sharedInstance.accumulators[key] = newTrackedData
+        accumulators[key] = newTrackedData
       }
       if hasStartedSampling == false {
           hasStartedSampling = true
@@ -99,7 +96,7 @@ class Sampler {
         
         var shouldCountSample: Bool, increment: TimeInterval, _lastSampleTime: Date, timeSinceLastPositiveSample: TimeInterval
         
-        for var (trackedKey, trackedData) in Parsely.sharedInstance.accumulators {
+        for var (trackedKey, trackedData) in accumulators {
             _lastSampleTime = trackedData.lastSampleTime ?? lastSampleTime
             increment = currentTime.timeIntervalSince(_lastSampleTime)
             
@@ -123,22 +120,19 @@ class Sampler {
     }
     
     // these are stubs that should be overriden by child classes
-    func heartbeatFn(params: Dictionary<String, Any?>) -> Void {}
+    func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {}
     func sampleFn(params: Dictionary<String, Any?>) -> Bool { return false }
     
     public func dropKey(key: String) -> Void {
-        Parsely.sharedInstance.accumulators.removeValue(forKey: key)
+        accumulators.removeValue(forKey: key)
     }
 
     func sendHeartbeat(trackedKey: String) -> Void {
-        var trackedData = Parsely.sharedInstance.accumulators[trackedKey]
+        var trackedData = accumulators[trackedKey]
         let incSecs: Int = Int(trackedData!.ms)
         if incSecs > 0 && Float(incSecs) <= (Float(baseHeartbeatInterval / 1000) + 0.25) {
-            self.heartbeatFn(params: [
-                "roundedSeconds": incSecs,
-                "enableHeartbeats": true,
-                "totalMs": trackedData!.totalMs
-            ])
+            self.heartbeatFn(data: trackedData!,
+                             enableHeartbeats: true)
         }
         trackedData!.ms = 0
     }
@@ -146,7 +140,7 @@ class Sampler {
     @objc func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.
         // maybe just wrap it in a dictionary and set it to nil if the key isn't there.
         os_log("Sending heartbeats", log: OSLog.default, type: .debug)
-        for (key, trackedData) in Parsely.sharedInstance.accumulators {
+        for (key, trackedData) in accumulators {
             let sendThreshold = trackedData.heartbeatTimeout! - heartbeatInterval
 
             if Double(trackedData.ms) >= sendThreshold {

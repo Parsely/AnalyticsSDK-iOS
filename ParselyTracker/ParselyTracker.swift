@@ -30,7 +30,6 @@ public class Parsely {
     public var isEngaged: Bool = false;
     public static let sharedInstance = Parsely()
     var visitorManager: VisitorManager?
-    var accumulators: Dictionary<String, Accumulator> = [:]
     
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.default, type: .info)
