@@ -47,9 +47,10 @@ class EngagedTimeTests: XCTestCase {
         sleep(2)
         parsely.stopEngagement(id: itemTwo)
         // they should be tracked separately
+        dump(parsely.track.engagedTime.accumulators)
         XCTAssert(parsely.track.engagedTime.accumulators[itemOne]!.id != parsely.track.engagedTime.accumulators[itemTwo]!.id,
                   "The two items should not be tracked in the same Accumulator")
-        XCTAssert(parsely.track.engagedTime.accumulators[itemOne]!.ms > parsely.track.engagedTime.accumulators[itemTwo]!.ms,
+        XCTAssert(parsely.track.engagedTime.accumulators[itemOne]!.ms < parsely.track.engagedTime.accumulators[itemTwo]!.ms,
                   "Waiting for the second item should not add time to the first")
     }
     func testEndInteraction() {}
