@@ -11,17 +11,15 @@ import os.log
 
 class EngagedTime: Sampler {
     let ENGAGED_TIME_SAMPLER_KEY = "engagedTime"
-    var isInteracting = false
 
     override init() {
         super.init()
-        self.trackKey(key: self.ENGAGED_TIME_SAMPLER_KEY, contentDuration: nil)
     }
     
-    override func sampleFn(params: Dictionary<String, Any?>) -> Bool {
-        Parsely.sharedInstance.isEngaged = isInteracting || Parsely.sharedInstance.videoPlaying
+    override func sampleFn(id: String) -> Bool {
+        let trackedData: Accumulator = accumulators[id]!
         os_log("Sampling engaged time", log: OSLog.default, type: .info)
-        return Parsely.sharedInstance.isEngaged
+        return trackedData.isEngaged // TODO: consider video playing
     }
     
     override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) {
@@ -46,11 +44,12 @@ class EngagedTime: Sampler {
     
     func startInteraction(id: String) {
         os_log("Starting Interaction", log: OSLog.default, type: .debug)
-        isInteracting = true
+        trackKey(key: id, contentDuration: nil)
+        accumulators[id]!.isEngaged = true
     }
     
     func endInteraction(id: String) {
         os_log("Ending Interaction", log: OSLog.default, type: .debug)
-        isInteracting = false
+        accumulators[id]!.isEngaged = false
     }
 }
