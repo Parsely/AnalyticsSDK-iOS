@@ -42,14 +42,14 @@ class EngagedTime: Sampler {
         dump(data)
     }
     
-    func startInteraction(id: String) {
+    func startInteraction(url: String) {
         os_log("Starting Interaction", log: OSLog.default, type: .debug)
-        trackKey(key: id, contentDuration: nil)
-        accumulators[id]!.isEngaged = true
+        trackKey(key: url, contentDuration: nil)
+        accumulators[url]!.isEngaged = true
     }
     
-    func endInteraction(id: String) {
+    func endInteraction(url: String) {
         os_log("Ending Interaction", log: OSLog.default, type: .debug)
-        accumulators[id]!.isEngaged = false
+        accumulators[url]!.isEngaged = false
     }
 }

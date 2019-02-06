@@ -56,11 +56,11 @@ public class Parsely {
     }
 
     public func startEngagement(url: String) {
-        track.startEngagement(id: url)
+        track.startEngagement(url: url)
     }
 
     public func stopEngagement(url: String) {
-        track.stopEngagement(id: url)
+        track.stopEngagement(url: url)
     }
 
     public func trackPlay(url: String, videoID: String, metadata:[String: Any], urlOverride: String) {
