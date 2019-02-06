@@ -28,9 +28,10 @@ class Track {
 
     }
 
-    func pageview(params: [String: Any], shouldNotSetLastRequest: Bool) {
+    func pageview(url: String, params: [String: Any], shouldNotSetLastRequest: Bool) {
         let data: [String: Any] = [
             "action": "pageview",
+            "url": url,
             "ts": Date().timeIntervalSince1970,
             ]
         let updatedData = data.merging(
