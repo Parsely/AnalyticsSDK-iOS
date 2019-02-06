@@ -95,7 +95,7 @@ class VideoManager: Sampler {
         curVideo?._heartbeatsSent += 1
     }
     
-    func trackPlay(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) -> Void {
+    func trackPlay(url: String, vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) -> Void {
         // set the video metas in the collector, and merge metadata if it's already being tracked
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         if (curVideo.hasStartedPlaying != true) {
@@ -113,7 +113,7 @@ class VideoManager: Sampler {
         }
     }
     
-    func trackPause(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) -> Void {
+    func trackPause(url: String, vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) -> Void {
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         curVideo.isPlaying = false
         updateVideo(video: curVideo)
