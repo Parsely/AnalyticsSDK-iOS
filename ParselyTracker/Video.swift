@@ -79,19 +79,13 @@ class VideoManager: Sampler {
         let totalMs: Int = Int(data.totalMs)
 
         var curVideo = trackedVideos[vId]
-        var metadataString = ""
-        do {
-            let metadata = try JSONSerialization.data(withJSONObject: curVideo?.metadata ?? [:], options: .prettyPrinted)
-            metadataString = String(data: metadata, encoding: .ascii) ?? ""
-        } catch {
-            metadataString = ""
-        }
+
         let event = Event(params: [
             "date": Date().timeIntervalSince1970,
             "action": "vheartbeat",
             "inc": roundedSecs,
             "url": vId,
-            "metadata": metadataString,
+            "metadata": curVideo!.metadata,
             "tt": totalMs,
             "urlref": Parsely.sharedInstance.lastRequest?["urlref"]!! ?? ""
         ])

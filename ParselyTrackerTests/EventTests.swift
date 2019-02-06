@@ -28,6 +28,11 @@ class EventTests: XCTestCase {
                   "event.toJSON should produce valid JSON")
     }
 
+    func testMetadataEncode() {
+        XCTAssert(false,
+                  "TODO: implement metadata encoding in Event class. Should take a Dictionary, encode to pretty-printedJSON, and ascii encode that. Formerly in Video class")
+    }
+
     func testNested() {
         let now = Date()
         let dataDict: [String: Any] = ["slts": 12345, "_region": 24.74, "__things__": 1985]
