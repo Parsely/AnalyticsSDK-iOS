@@ -58,7 +58,7 @@ class VideoManager: Sampler {
         } else {
             // register video metas
             trackedVideos[vId] = TrackedVideo.init(id: vId, isPlaying: false, hasStartedPlaying: false, metadata: metadata, urlOverride: urlOverride!, _heartbeatsSent: 0)
-            // register with sampler
+            // register with sampler, using same vId as the videos metas
             trackKey(key: vId, contentDuration: TimeInterval(metadata["duration"] as? Int ?? 0))
         }
         
@@ -70,16 +70,14 @@ class VideoManager: Sampler {
         return (trackedVideos[vId]?.isPlaying)!
     }
     
-    override func heartbeatFn(params: Dictionary<String, Any?>) -> Void {
-        let vId: String = params["vId"] as! String
-        let roundedSecs: Int = params["roundedSecs"] as! Int
-        let enableHeartbeats: Bool = params["enableHeartbeats"] as! Bool
-        let totalMs: Int = params["totalMs"] as! Int
-        
+    override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {
         if enableHeartbeats != true {
             return
         }
-        
+        let vId: String = data.id
+        let roundedSecs: Int = Int(data.totalMs / 1000)  // logic check!
+        let totalMs: Int = Int(data.totalMs)
+
         var curVideo = trackedVideos[vId]
         var metadataString = ""
         do {
@@ -98,7 +96,7 @@ class VideoManager: Sampler {
             "urlref": Parsely.sharedInstance.lastRequest?["urlref"]!! ?? ""
         ])
         Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
-        os_log("Sent heartbeat of %s", vId)
+        os_log("Sent vheartbeat for video %s", vId)
         curVideo?._heartbeatsSent += 1
     }
     

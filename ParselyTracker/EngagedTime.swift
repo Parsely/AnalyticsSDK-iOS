@@ -24,14 +24,12 @@ class EngagedTime: Sampler {
         return Parsely.sharedInstance.isEngaged
     }
     
-    override func heartbeatFn(params: Dictionary<String, Any?>) {
-        let roundedSecs: Int = params["roundedSecs"] as! Int
-        let enableHeartbeats: Bool = params["enableHeartbeats"] as! Bool
-        let totalMs: Int = params["totalMs"] as! Int
-
+    override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) {
         if enableHeartbeats != true {
             return
         }
+        let roundedSecs: Int = Int(data.totalMs / 1000)  // logic check!
+        let totalMs: Int = Int(data.totalMs)
 
         let event = Event(params: [
             "date": Date().timeIntervalSince1970,
@@ -43,7 +41,7 @@ class EngagedTime: Sampler {
         ])
         Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
         os_log("Sent heartbeat for:")
-        dump(params)
+        dump(data)
     }
     
     func startInteraction() {
