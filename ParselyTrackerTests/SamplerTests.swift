@@ -37,7 +37,6 @@ class SamplerTests: XCTestCase {
         // track the same key, but for different reasons
         sampler1.trackKey(key: "thing", contentDuration: TimeInterval(floatLiteral: 30))
         sampler2.trackKey(key: "thing", contentDuration: TimeInterval(floatLiteral: 30))
-//        XCTAssertFalse(sampler1.accumulators["thing"]!.id === sampler2.accumulators["thing"]!.id, "Item should not be tracked in the same location")
         // dropping a key shouldn't affect the other sampler
         sampler1.dropKey(key: "thing")
         XCTAssert(sampler2.accumulators["thing"] != nil,
