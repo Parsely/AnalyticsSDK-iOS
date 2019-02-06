@@ -11,6 +11,8 @@ import os.log
 
 struct TrackedVideo {
     var id: String
+    // consider using the Accumulator's isEngaged field instead
+    // and making this strictly metadata
     var isPlaying: Bool = false
     var hasStartedPlaying: Bool = false
     var metadata: Dictionary<String, Any?> = [:]
@@ -65,9 +67,8 @@ class VideoManager: Sampler {
         return trackedVideos[vId]!
     }
     
-    override func sampleFn(params: Dictionary<String, Any?>) -> Bool {
-        let vId: String = params["vId"] as! String
-        return (trackedVideos[vId]?.isPlaying)!
+    override func sampleFn(id: String) -> Bool {
+        return (trackedVideos[id]?.isPlaying)!
     }
     
     override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {
@@ -116,8 +117,6 @@ class VideoManager: Sampler {
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         curVideo.isPlaying = false
         updateVideo(video: curVideo)
-        // might as well try
-        sendHeartbeat(trackedKey: vId)
     }
 
     private func updateVideo(video: TrackedVideo) {
@@ -129,7 +128,6 @@ class VideoManager: Sampler {
         if var curVideo = trackedVideos[vId] {
             curVideo.hasStartedPlaying = false
             curVideo.isPlaying = false
-            sendHeartbeat(trackedKey: vId)
             dropKey(key: vId)
             setVideoPlayingFlag()
         }

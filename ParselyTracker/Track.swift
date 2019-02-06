@@ -52,13 +52,13 @@ class Track {
         os_log("Tracked videoPause from Track")
     }
 
-    func startEngagement() {
-        self.engagedTime.startInteraction()
+    func startEngagement(id: String) {
+        self.engagedTime.startInteraction(id: id)
         os_log("track start engagement from Track")
     }
 
-    func stopEngagement() {
-        self.engagedTime.endInteraction()
+    func stopEngagement(id: String) {
+        self.engagedTime.endInteraction(id: id)
         os_log("track stop engagement from Track")
     }
 }
