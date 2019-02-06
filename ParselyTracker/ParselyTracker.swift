@@ -55,12 +55,12 @@ public class Parsely {
         self.track.pageview(url: url, params: params, shouldNotSetLastRequest: true)
     }
 
-    public func startEngagement(id: String) {
-        track.startEngagement(id: id)
+    public func startEngagement(url: String) {
+        track.startEngagement(id: url)
     }
 
-    public func stopEngagement(id: String) {
-        track.stopEngagement(id: id)
+    public func stopEngagement(url: String) {
+        track.stopEngagement(id: url)
     }
 
     public func trackPlay(videoID: String, metadata:[String: Any], urlOverride: String) {

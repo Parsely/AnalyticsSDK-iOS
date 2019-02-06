@@ -29,12 +29,12 @@ class FirstViewController: UIViewController {
     
     @IBAction func didStartEngagement(_ sender: Any) {
         os_log("didStartEngagement", log: OSLog.default, type: .debug)
-        delegate.parsely.startEngagement(id: "parsely-page")
+        delegate.parsely.startEngagement(url: "parsely-page")
     }
     
     @IBAction func didStopEngagement(_ sender: Any) {
         os_log("didStopEngagement", log: OSLog.default, type: .debug)
-        delegate.parsely.stopEngagement(id: "parsely-page")
+        delegate.parsely.stopEngagement(url: "parsely-page")
     }
     @IBAction func didStartVideo(_ sender: Any) {
         os_log("didStartVideo", log: OSLog.default, type: .debug)
