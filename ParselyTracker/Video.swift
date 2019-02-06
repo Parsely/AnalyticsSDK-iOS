@@ -117,8 +117,6 @@ class VideoManager: Sampler {
         var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
         curVideo.isPlaying = false
         updateVideo(video: curVideo)
-        // might as well try
-        sendHeartbeat(trackedKey: vId)
     }
 
     private func updateVideo(video: TrackedVideo) {
@@ -130,7 +128,6 @@ class VideoManager: Sampler {
         if var curVideo = trackedVideos[vId] {
             curVideo.hasStartedPlaying = false
             curVideo.isPlaying = false
-            sendHeartbeat(trackedKey: vId)
             dropKey(key: vId)
             setVideoPlayingFlag()
         }
