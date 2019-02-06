@@ -15,6 +15,7 @@ let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(15)
 let BACKOFF_THRESHOLD = 60
 
 struct Accumulator {
+    var id: String
     var ms: TimeInterval = TimeInterval(0)
     var totalMs: TimeInterval = TimeInterval(0)
     var lastSampleTime: Date?
@@ -54,6 +55,7 @@ class Sampler {
      os_log("Tracking Key: %s", log: OSLog.default, type: .debug, key)
     if accumulators.index(forKey: key) == nil {
         var newTrackedData = Accumulator.init(
+              id: key,
               ms: TimeInterval(0),
               totalMs: TimeInterval(0),
               lastSampleTime: Date(),
@@ -118,7 +120,7 @@ class Sampler {
     }
     
     // these are stubs that should be overriden by child classes
-    func heartbeatFn(params: Dictionary<String, Any?>) -> Void {}
+    func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {}
     func sampleFn(params: Dictionary<String, Any?>) -> Bool { return false }
     
     public func dropKey(key: String) -> Void {
@@ -129,11 +131,8 @@ class Sampler {
         var trackedData = accumulators[trackedKey]
         let incSecs: Int = Int(trackedData!.ms)
         if incSecs > 0 && Float(incSecs) <= (Float(baseHeartbeatInterval / 1000) + 0.25) {
-            self.heartbeatFn(params: [
-                "roundedSeconds": incSecs,
-                "enableHeartbeats": true,
-                "totalMs": trackedData!.totalMs
-            ])
+            self.heartbeatFn(data: trackedData!,
+                             enableHeartbeats: true)
         }
         trackedData!.ms = 0
     }
