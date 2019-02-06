@@ -72,6 +72,8 @@ class Sampler {
           hasStartedSampling = true
         // this should start the timer for sampling
           Timer.scheduledTimer(timeInterval: self.heartbeatInterval/1000, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
+        // start the sampler loop
+        Timer.scheduledTimer(timeInterval: TimeInterval(SAMPLE_RATE), target: self, selector: #selector(sample), userInfo: nil, repeats: true)
       }
     }
 
@@ -89,14 +91,12 @@ class Sampler {
         }
         return timeoutDefault
     }
-    
-    private func sample(_currentTime: Date?, lastSampleTime: Date, _backoffThreshold: TimeInterval?) -> Void {
-        let currentTime = _currentTime ?? Date()
-        let backoffThreshold = _backoffThreshold ?? TimeInterval(BACKOFF_THRESHOLD)
+    // removed: backoff_threshold, _currentTime (For testing? why was this here?)
+    @objc private func sample(lastSampleTime: Date) -> Void {
+        let currentTime = Date()
+        var shouldCountSample: Bool, increment: TimeInterval, _lastSampleTime: Date
         
-        var shouldCountSample: Bool, increment: TimeInterval, _lastSampleTime: Date, timeSinceLastPositiveSample: TimeInterval
-        
-        for var (trackedKey, trackedData) in accumulators {
+        for var (_, trackedData) in accumulators {
             _lastSampleTime = trackedData.lastSampleTime ?? lastSampleTime
             increment = currentTime.timeIntervalSince(_lastSampleTime)
             
@@ -107,15 +107,12 @@ class Sampler {
                 trackedData.totalMs += increment
             }
             trackedData.lastSampleTime = currentTime
-            if (shouldCountSample) {
-                timeSinceLastPositiveSample = currentTime.timeIntervalSince(trackedData.lastPositiveSampleTime!)
-                // related to backoff
-                if (trackedData.totalMs > backoffThreshold && timeSinceLastPositiveSample > self.heartbeatInterval) {
-                    // reset timeout to its value pre backoff
-                    // TODO: implement & test the backoff
-                    trackedData.heartbeatTimeout = self.timeoutFromDuration(contentDuration: trackedData.contentDuration)
-                }
-            }
+            // related to backoff
+            // backoff implemented here:
+            // if the time since the last positive sample is over the backoff theshold, AND
+            // it's greater than the HB interval:
+            // reset the trackedData's interval.
+            // where to implement the backing off part?
         }
     }
     
