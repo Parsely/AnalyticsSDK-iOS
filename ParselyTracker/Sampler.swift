@@ -53,6 +53,16 @@ class Sampler {
         heartbeatInterval = baseHeartbeatInterval
     }
 
+    // Child classes should override each stub:
+    // heartbeatFn is called every time an Accumulator is eligible to send a heartbeat.
+    // Typical actions: send an event
+    func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {}
+    // sampleFn is called to determine if an Accumulator is eligible to be sampled.
+    // if true, the sample() loop will accumulate time for that item.
+    // e.g. "isPlaying" or "isEngaged" -> true/false
+    func sampleFn(id: String) -> Bool { return false }
+
+    // Register a piece of content to be tracked.
     public func trackKey(key: String,  contentDuration: TimeInterval?) -> Void {
         os_log("Tracking Key: %s", log: OSLog.default, type: .debug, key)
 
@@ -75,7 +85,7 @@ class Sampler {
 
         if hasStartedSampling == false {
             hasStartedSampling = true
-            // start the sampler loop
+            // start the sampler and heartbeat timer loops
             guard samplerTimer == nil else { print("OOPS"); return }
             guard heartbeatsTimer == nil else { print("OOPS HB"); return }
 
@@ -84,22 +94,16 @@ class Sampler {
         }
     }
 
-    private func timeoutFromDuration(contentDuration: TimeInterval?) -> TimeInterval {
-        let timeoutDefault = baseHeartbeatInterval
-        if contentDuration != nil {
-            let completionInterval = contentDuration! / Double(5)
-            if completionInterval < timeoutDefault / Double(2) {
-                return contentDuration! / 5
-            }
-            
-            if completionInterval < timeoutDefault {
-                return timeoutDefault / Double(2)
-            }
-        }
-        return timeoutDefault
+    // Stop tracking this item altogether.
+    public func dropKey(key: String) -> Void {
+        sendHeartbeat(trackedKey: key)
+        accumulators.removeValue(forKey: key)
     }
-    // removed: backoff_threshold, _currentTime (For testing? why was this here?)
+
+    // Sampler loop. Started on first trackKey call. Adds accumulated time to each
+    // Accumulator that is eligible.
     @objc private func sample() -> Void {
+        // removed: backoff_threshold, _currentTime (For testing? why was this here?)
         let currentTime = Date()
         var shouldCountSample: Bool, increment: TimeInterval, _lastSampleTime: Date
         
@@ -118,21 +122,8 @@ class Sampler {
         }
         Timer.scheduledTimer(withTimeInterval: TimeInterval(SAMPLE_RATE / 1000), repeats: false) { timer in self.sample() }
     }
-    
-    // these are stubs that should be overriden by child classes
-    func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {}
-    func sampleFn(id: String) -> Bool { return false }
-    
-    public func dropKey(key: String) -> Void {
-        accumulators.removeValue(forKey: key)
-    }
 
-    private func updateAccumulator(acc: Accumulator) -> Void {
-        // gross, dude
-        accumulators[acc.id] = acc
-    }
-
-    func sendHeartbeat(trackedKey: String) -> Void {
+    private func sendHeartbeat(trackedKey: String) -> Void {
         os_log("Sending heartbeat for %s", trackedKey)
         var trackedData = accumulators[trackedKey]
         let incSecs: Int = Int(trackedData!.ms)
@@ -144,7 +135,7 @@ class Sampler {
         updateAccumulator(acc: trackedData!)
     }
 
-    @objc func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.
+    @objc private func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.
         // maybe just wrap it in a dictionary and set it to nil if the key isn't there.
         os_log("called send heartbeats", log: OSLog.default, type: .debug)
         for (key, trackedData) in accumulators {
@@ -160,5 +151,26 @@ class Sampler {
         }
     }
     
+    // Calculate an accumulator's timeout based on the content length, to ensure we capture
+    // all completion intervals.
+    private func timeoutFromDuration(contentDuration: TimeInterval?) -> TimeInterval {
+        let timeoutDefault = baseHeartbeatInterval
+        if contentDuration != nil {
+            let completionInterval = contentDuration! / Double(5)
+            if completionInterval < timeoutDefault / Double(2) {
+                return contentDuration! / 5
+            }
+            if completionInterval < timeoutDefault {
+                return timeoutDefault / Double(2)
+            }
+        }
+        return timeoutDefault
+    }
+
+    // copies of accumulators passed into methods do not update the shared accumulator[id] copy
+    private func updateAccumulator(acc: Accumulator) -> Void {
+        // gross, dude
+        accumulators[acc.id] = acc
+    }
     
 }
