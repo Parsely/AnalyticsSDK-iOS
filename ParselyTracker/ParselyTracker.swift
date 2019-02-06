@@ -50,7 +50,7 @@ public class Parsely {
         self.configured = true
     }
     
-    public func trackPageView(params: [String: Any]) {
+    public func trackPageView(url: String, params: [String: Any]) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
         self.track.pageview(params: params, shouldNotSetLastRequest: true)
     }
