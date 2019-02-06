@@ -44,12 +44,12 @@ class EngagedTime: Sampler {
         dump(data)
     }
     
-    func startInteraction() {
+    func startInteraction(id: String) {
         os_log("Starting Interaction", log: OSLog.default, type: .debug)
         isInteracting = true
     }
     
-    func endInteraction() {
+    func endInteraction(id: String) {
         os_log("Ending Interaction", log: OSLog.default, type: .debug)
         isInteracting = false
     }
