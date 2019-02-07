@@ -28,9 +28,10 @@ class Track {
 
     }
 
-    func pageview(params: [String: Any], shouldNotSetLastRequest: Bool) {
+    func pageview(url: String, params: [String: Any], shouldNotSetLastRequest: Bool) {
         let data: [String: Any] = [
             "action": "pageview",
+            "url": url,
             "ts": Date().timeIntervalSince1970,
             ]
         let updatedData = data.merging(
@@ -42,23 +43,23 @@ class Track {
         event(event: event_, shouldNotSetLastRequest: shouldNotSetLastRequest)
     }
 
-    func videoStart(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
-        videoManager.trackPlay(vId: vId, metadata: metadata, urlOverride: urlOverride)
+    func videoStart(url: String, vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
+        videoManager.trackPlay(url: url, vId: vId, metadata: metadata, urlOverride: urlOverride)
         os_log("Tracked videoStart from Track")
     }
 
-    func videoPause(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
-        videoManager.trackPause(vId: vId, metadata: metadata, urlOverride: urlOverride)
+    func videoPause(url: String, vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) {
+        videoManager.trackPause(url: url, vId: vId, metadata: metadata, urlOverride: urlOverride)
         os_log("Tracked videoPause from Track")
     }
 
-    func startEngagement(id: String) {
-        self.engagedTime.startInteraction(id: id)
+    func startEngagement(url: String) {
+        self.engagedTime.startInteraction(url: url)
         os_log("track start engagement from Track")
     }
 
-    func stopEngagement(id: String) {
-        self.engagedTime.endInteraction(id: id)
+    func stopEngagement(url: String) {
+        self.engagedTime.endInteraction(url: url)
         os_log("track stop engagement from Track")
     }
 }

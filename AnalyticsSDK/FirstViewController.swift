@@ -24,25 +24,25 @@ class FirstViewController: UIViewController {
     }
     @IBAction func didTouchButton(_ sender: Any) {
         os_log("didTouchButton", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPageView(params: ["action": "pageview"])
+        delegate.parsely.trackPageView(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", params: ["action": "pageview"])
     }
     
     @IBAction func didStartEngagement(_ sender: Any) {
         os_log("didStartEngagement", log: OSLog.default, type: .debug)
-        delegate.parsely.startEngagement(id: "parsely-page")
+        delegate.parsely.startEngagement(url: "parsely-page")
     }
     
     @IBAction func didStopEngagement(_ sender: Any) {
         os_log("didStopEngagement", log: OSLog.default, type: .debug)
-        delegate.parsely.stopEngagement(id: "parsely-page")
+        delegate.parsely.stopEngagement(url: "parsely-page")
     }
     @IBAction func didStartVideo(_ sender: Any) {
         os_log("didStartVideo", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPlay(videoID: "videoOne", metadata: [:], urlOverride: "")
+        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", videoID: "videoOne", metadata: [:], urlOverride: "")
     }
     @IBAction func didPauseVideo(_ sender: Any) {
         os_log("didStopVideo", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPause(videoID: "videoOne", metadata: [:], urlOverride: "")
+        delegate.parsely.trackPause(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", videoID: "videoOne", metadata: [:], urlOverride: "")
     }
 }
 

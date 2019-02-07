@@ -15,7 +15,7 @@ let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(15)
 let BACKOFF_THRESHOLD = 60
 
 struct Accumulator {
-    var id: String
+    var key: String
     var ms: TimeInterval = TimeInterval(0)
     var totalMs: TimeInterval = TimeInterval(0)
     var lastSampleTime: Date?
@@ -60,7 +60,7 @@ class Sampler {
     // sampleFn is called to determine if an Accumulator is eligible to be sampled.
     // if true, the sample() loop will accumulate time for that item.
     // e.g. "isPlaying" or "isEngaged" -> true/false
-    func sampleFn(id: String) -> Bool { return false }
+    func sampleFn(key: String) -> Bool { return false }
 
     // Register a piece of content to be tracked.
     public func trackKey(key: String,  contentDuration: TimeInterval?) -> Void {
@@ -68,7 +68,7 @@ class Sampler {
 
         if accumulators.index(forKey: key) == nil {
             var newTrackedData = Accumulator.init(
-                  id: key,
+                  key: key,
                   ms: TimeInterval(0),
                   totalMs: TimeInterval(0),
                   lastSampleTime: Date(),
@@ -96,7 +96,7 @@ class Sampler {
 
     // Stop tracking this item altogether.
     public func dropKey(key: String) -> Void {
-        sendHeartbeat(trackedKey: key)
+        sendHeartbeat(key: key)
         accumulators.removeValue(forKey: key)
     }
 
@@ -111,9 +111,9 @@ class Sampler {
             _lastSampleTime = trackedData.lastSampleTime!
             increment = currentTime.timeIntervalSince(_lastSampleTime)
 
-            shouldCountSample = trackedData.sampler!.sampleFn(id: trackedData.id)
+            shouldCountSample = trackedData.sampler!.sampleFn(key: trackedData.key)
             if shouldCountSample {
-                print("Counting sample for %s", trackedData.id)
+                print("Counting sample for %s", trackedData.key)
                 trackedData.ms += increment
                 trackedData.totalMs += increment
                 trackedData.lastSampleTime = currentTime
@@ -123,9 +123,9 @@ class Sampler {
         Timer.scheduledTimer(withTimeInterval: TimeInterval(SAMPLE_RATE / 1000), repeats: false) { timer in self.sample() }
     }
 
-    private func sendHeartbeat(trackedKey: String) -> Void {
-        os_log("Sending heartbeat for %s", trackedKey)
-        var trackedData = accumulators[trackedKey]
+    private func sendHeartbeat(key: String) -> Void {
+        os_log("Sending heartbeat for %s", key)
+        var trackedData = accumulators[key]
         let incSecs: Int = Int(trackedData!.ms)
         if incSecs > 0 && Float(incSecs) <= (Float(baseHeartbeatInterval / 1000) + 0.25) {
             trackedData!.sampler!.heartbeatFn(data: trackedData!,
@@ -142,7 +142,7 @@ class Sampler {
             let sendThreshold = trackedData.heartbeatTimeout! - heartbeatInterval
 
             if Double(trackedData.ms) >= sendThreshold {
-                sendHeartbeat(trackedKey: key)
+                sendHeartbeat(key: key)
             }
         }
         // should repeats be true?
@@ -170,7 +170,7 @@ class Sampler {
     // copies of accumulators passed into methods do not update the shared accumulator[id] copy
     private func updateAccumulator(acc: Accumulator) -> Void {
         // gross, dude
-        accumulators[acc.id] = acc
+        accumulators[acc.key] = acc
     }
     
 }

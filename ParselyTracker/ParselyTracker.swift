@@ -50,24 +50,24 @@ public class Parsely {
         self.configured = true
     }
     
-    public func trackPageView(params: [String: Any]) {
+    public func trackPageView(url: String, params: [String: Any]) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
-        self.track.pageview(params: params, shouldNotSetLastRequest: true)
+        self.track.pageview(url: url, params: params, shouldNotSetLastRequest: true)
     }
 
-    public func startEngagement(id: String) {
-        track.startEngagement(id: id)
+    public func startEngagement(url: String) {
+        track.startEngagement(url: url)
     }
 
-    public func stopEngagement(id: String) {
-        track.stopEngagement(id: id)
+    public func stopEngagement(url: String) {
+        track.stopEngagement(url: url)
     }
 
-    public func trackPlay(videoID: String, metadata:[String: Any], urlOverride: String) {
-        track.videoStart(vId: videoID, metadata: metadata, urlOverride: urlOverride)
+    public func trackPlay(url: String, videoID: String, metadata:[String: Any], urlOverride: String) {
+        track.videoStart(url: url, vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 
-    public func trackPause(videoID: String, metadata:[String: Any], urlOverride: String) {
-        track.videoPause(vId: videoID, metadata: metadata, urlOverride: urlOverride)
+    public func trackPause(url: String, videoID: String, metadata:[String: Any], urlOverride: String) {
+        track.videoPause(url: url, vId: videoID, metadata: metadata, urlOverride: urlOverride)
     }
 }
