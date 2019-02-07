@@ -54,10 +54,11 @@ class RequestBuilder {
     
     static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, Any?> {
         // return headers as a Dictionary
-        let userAgent: String = "blarg"
-        let userIP: String = "0.0.0.0"
+        let userAgent: String = getUserAgent()
+        let userIP: String = getUserIP()
         return [userAgent: userAgent, userIP: userIP]
     }
+
     static func buildParamsDict(events: Array<Event>) -> Dictionary<String, Any?> {
         // return a Dictionary with one key, 'events', to pass to the client
         var eventDicts: Array<Dictionary<String, Any?>> = Array<Dictionary<String, Any?>>.init()
@@ -68,6 +69,7 @@ class RequestBuilder {
     }
 
     static private func getDeviceInfo() -> Dictionary<String, Any> {
+        // will be used in getUserAgent()
         var deviceInfo: [String: Any] = [:]
         let mainBundle = Bundle.main
         if let bundleName = mainBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") {
