@@ -20,13 +20,8 @@ struct Accumulator {
     var totalMs: TimeInterval = TimeInterval(0)
     var lastSampleTime: Date?
     var lastPositiveSampleTime: Date?
-    var heartbeatTimeout: TimeInterval? {
-        willSet(newInterval) {
-            sampler!.heartbeatInterval = min(sampler!.heartbeatInterval, newInterval!)
-        }
-    }
+    var heartbeatTimeout: TimeInterval?
     var contentDuration: TimeInterval?
-    var sampler: Sampler?
     var isEngaged: Bool
 }
 
@@ -67,19 +62,16 @@ class Sampler {
         os_log("Tracking Key: %s", log: OSLog.default, type: .debug, key)
 
         if accumulators.index(forKey: key) == nil {
-            var newTrackedData = Accumulator.init(
+            let newTrackedData = Accumulator.init(
                   key: key,
                   ms: TimeInterval(0),
                   totalMs: TimeInterval(0),
                   lastSampleTime: Date(),
                   lastPositiveSampleTime: nil,
-                  heartbeatTimeout: nil,
+                  heartbeatTimeout: timeoutFromDuration(contentDuration: contentDuration),
                   contentDuration: contentDuration,
-                  sampler: self,
                   isEngaged: false
               )
-            let heartbeatTimeout = timeoutFromDuration(contentDuration: contentDuration)
-            newTrackedData.heartbeatTimeout = heartbeatTimeout
             accumulators[key] = newTrackedData
           }
 
@@ -111,7 +103,7 @@ class Sampler {
             _lastSampleTime = trackedData.lastSampleTime!
             increment = currentTime.timeIntervalSince(_lastSampleTime)
 
-            shouldCountSample = trackedData.sampler!.sampleFn(key: trackedData.key)
+            shouldCountSample = sampleFn(key: trackedData.key)
             if shouldCountSample {
                 trackedData.ms += increment
                 trackedData.totalMs += increment
@@ -127,8 +119,7 @@ class Sampler {
         let incSecs: TimeInterval = TimeInterval(trackedData!.ms / 1000)
         if incSecs > 0 && incSecs <= (baseHeartbeatInterval + 0.25) {
             os_log("Sending heartbeat for %s", key)
-            trackedData!.sampler!.heartbeatFn(data: trackedData!,
-                             enableHeartbeats: true)
+            heartbeatFn(data: trackedData!, enableHeartbeats: true)
         }
         trackedData!.ms = 0
         updateAccumulator(acc: trackedData!)
