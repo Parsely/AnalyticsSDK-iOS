@@ -54,8 +54,8 @@ class Track {
         os_log("Tracked videoPause from Track")
     }
 
-    func startEngagement(url: String) {
-        self.engagedTime.startInteraction(url: url)
+    func startEngagement(url: String, eventArgs:Dictionary<String, Any>?) {
+        self.engagedTime.startInteraction(url: url, eventArgs: eventArgs)
         os_log("track start engagement from Track")
     }
 

@@ -53,8 +53,8 @@ public class Parsely {
         self.track.pageview(url: url, params: params, shouldNotSetLastRequest: true)
     }
 
-    public func startEngagement(url: String) {
-        track.startEngagement(url: url)
+    public func startEngagement(url: String, qsargs:[String: Any]? = nil) {
+        track.startEngagement(url: url, eventArgs:qsargs)
     }
 
     public func stopEngagement(url: String) {

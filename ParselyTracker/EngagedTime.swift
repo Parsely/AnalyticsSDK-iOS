@@ -33,17 +33,27 @@ class EngagedTime: Sampler {
             "action": "heartbeat",
             "inc": roundedSecs,
             "tt": totalMs,
-            "url": data.eventArgs!["url"],
-            "urlref": ""  // XXX populate this from a data.eventArgs object
+            "url": data.eventArgs!["url"]
         ])
+        for (k, v) in data.eventArgs! {
+            if !event.originalData.keys.contains(k) {
+                event.originalData[k] = v;
+            }
+        }
         Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
         os_log("Sent heartbeat for:")
         dump(data)
     }
     
-    func startInteraction(url: String) {
+    func startInteraction(url: String, eventArgs: Dictionary<String, Any>?) {
         os_log("Starting Interaction", log: OSLog.default, type: .debug)
-        trackKey(key: url, contentDuration: nil, eventArgs: ["url": url]);
+        var _eventArgs: [String: Any] = ["url": url]
+        if eventArgs != nil {
+            for (k, v) in eventArgs! {
+                _eventArgs[k] = v
+            }
+        }
+        trackKey(key: url, contentDuration: nil, eventArgs: _eventArgs);
         accumulators[url]!.isEngaged = true
     }
     

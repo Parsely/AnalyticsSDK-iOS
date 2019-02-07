@@ -23,7 +23,7 @@ struct Accumulator {
     var heartbeatTimeout: TimeInterval?
     var contentDuration: TimeInterval?
     var isEngaged: Bool
-    var eventArgs: Dictionary<String, String>?
+    var eventArgs: Dictionary<String, Any>?
 }
 
 extension TimeInterval {
@@ -59,7 +59,7 @@ class Sampler {
     func sampleFn(key: String) -> Bool { return false }
 
     // Register a piece of content to be tracked.
-    public func trackKey(key: String,  contentDuration: TimeInterval?, eventArgs: Dictionary<String, String>?) -> Void {
+    public func trackKey(key: String,  contentDuration: TimeInterval?, eventArgs: Dictionary<String, Any>?) -> Void {
         os_log("Tracking Key: %s", log: OSLog.default, type: .debug, key)
 
         if accumulators.index(forKey: key) == nil {
