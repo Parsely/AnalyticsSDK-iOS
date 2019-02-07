@@ -13,6 +13,8 @@ struct TrackedVideo {
     var key: String // matches the Accumulator item, is composed of the url + vId
     var vId: String
     var url: String
+    // consider using the Accumulator's isEngaged field instead
+    // and making this strictly metadata
     var isPlaying: Bool = false
     var hasStartedPlaying: Bool = false
     var metadata: Dictionary<String, Any?> = [:]

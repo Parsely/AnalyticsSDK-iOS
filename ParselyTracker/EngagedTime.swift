@@ -11,14 +11,15 @@ import os.log
 
 class EngagedTime: Sampler {
     let ENGAGED_TIME_SAMPLER_KEY = "engagedTime"
-    var isEngaged: Bool = false
 
     override init() {
         super.init()
     }
     
     override func sampleFn(key : String) -> Bool {
-        return isEngaged
+        let trackedData: Accumulator = accumulators[key]!
+        os_log("Sampling engaged time", log: OSLog.default, type: .info)
+        return trackedData.isEngaged // TODO: consider video playing
     }
     
     override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) {
@@ -44,11 +45,11 @@ class EngagedTime: Sampler {
     func startInteraction(url: String) {
         os_log("Starting Interaction", log: OSLog.default, type: .debug)
         trackKey(key: url, contentDuration: nil)
-        isEngaged = true
+        accumulators[url]!.isEngaged = true
     }
     
     func endInteraction(url: String) {
         os_log("Ending Interaction", log: OSLog.default, type: .debug)
-        isEngaged = false
+        accumulators[url]!.isEngaged = false
     }
 }
