@@ -87,7 +87,7 @@ class Sampler {
             guard heartbeatsTimer == nil else { print("OOPS HB"); return }
 
             self.samplerTimer = Timer.scheduledTimer(timeInterval: TimeInterval(SAMPLE_RATE / 1000), target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
-            self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: TimeInterval(self.heartbeatInterval / 1000), target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
+            self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: TimeInterval(self.heartbeatInterval), target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
         }
     }
 
