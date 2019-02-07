@@ -11,15 +11,9 @@ import UIKit
 
 struct ParselyRequest {
     var url: String
-    var headers: ParselyHeaders
+    var headers: Dictionary<String, Any?>
     var params: Dictionary<String, Any?>
 }
-
-struct ParselyHeaders {
-    var userAgent: String
-    var userIP: String
-}
-
 
 class RequestBuilder {
     
@@ -41,7 +35,7 @@ class RequestBuilder {
         dump(getDeviceInfo())
         return ParselyRequest.init(
             url: buildPixelEndpoint(now: nil),
-            headers: buildHeaders(events: events),
+            headers: buildHeadersDict(events: events),
             params: buildParamsDict(events: events)
         )
     }
@@ -58,10 +52,11 @@ class RequestBuilder {
         return self._baseURL!
     }
     
-    static func buildHeaders(events: Array<Event>) -> ParselyHeaders {
+    static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, Any?> {
+        // return headers as a Dictionary
         let userAgent: String = "blarg"
         let userIP: String = "0.0.0.0"
-        return ParselyHeaders.init(userAgent: userAgent, userIP: userIP)
+        return [userAgent: userAgent, userIP: userIP]
     }
     static func buildParamsDict(events: Array<Event>) -> Dictionary<String, Any?> {
         // return a Dictionary with one key, 'events', to pass to the client
