@@ -99,7 +99,7 @@ class VideoManager: Sampler {
                 metadata: metadata,
                 _heartbeatsSent: 0)
             // register with sampler, using same composite key as the videos metas
-            trackKey(key: key, contentDuration: TimeInterval(metadata["duration"] as? Int ?? 0))
+            trackKey(key: key, contentDuration: TimeInterval(metadata["duration"] as? Int ?? 0), eventArgs:nil)
         }
 
         return trackedVideos[key]!
