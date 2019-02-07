@@ -26,8 +26,6 @@ public class Parsely {
             return nil
         }
     }
-    public var videoPlaying = false
-    public var isEngaged: Bool = false;
     public static let sharedInstance = Parsely()
     var visitorManager: VisitorManager?
     

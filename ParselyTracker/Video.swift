@@ -25,7 +25,6 @@ class VideoManager: Sampler {
     
     override init() {
         super.init()
-        Parsely.sharedInstance.videoPlaying = false
     }
     
     override func sampleFn(key: String) -> Bool {
@@ -107,18 +106,8 @@ class VideoManager: Sampler {
         return trackedVideos[key]!
     }
 
-    private func setVideoPlayingFlag() {
-        let playingVideos = trackedVideos.values.filter { $0.isPlaying }
-        if playingVideos.count > 0 {
-            Parsely.sharedInstance.videoPlaying = true
-        } else {
-            Parsely.sharedInstance.videoPlaying = false
-        }
-    }
-
     private func updateVideo(video: TrackedVideo) {
         trackedVideos[video.key] = video
-        setVideoPlayingFlag()
     }
 
     private func createVideoTrackingKey(vId: String, url: String) -> String {
@@ -131,7 +120,6 @@ class VideoManager: Sampler {
             curVideo.hasStartedPlaying = false
             curVideo.isPlaying = false
             dropKey(key: key)
-            setVideoPlayingFlag()
         }
     }
     
