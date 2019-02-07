@@ -20,13 +20,8 @@ struct Accumulator {
     var totalMs: TimeInterval = TimeInterval(0)
     var lastSampleTime: Date?
     var lastPositiveSampleTime: Date?
-    var heartbeatTimeout: TimeInterval? {
-        willSet(newInterval) {
-            sampler!.heartbeatInterval = min(sampler!.heartbeatInterval, newInterval!)
-        }
-    }
+    var heartbeatTimeout: TimeInterval?
     var contentDuration: TimeInterval?
-    var sampler: Sampler?
     var isEngaged: Bool
 }
 
@@ -67,19 +62,16 @@ class Sampler {
         os_log("Tracking Key: %s", log: OSLog.default, type: .debug, key)
 
         if accumulators.index(forKey: key) == nil {
-            var newTrackedData = Accumulator.init(
+            let newTrackedData = Accumulator.init(
                   key: key,
                   ms: TimeInterval(0),
                   totalMs: TimeInterval(0),
                   lastSampleTime: Date(),
                   lastPositiveSampleTime: nil,
-                  heartbeatTimeout: nil,
+                  heartbeatTimeout: timeoutFromDuration(contentDuration: contentDuration),
                   contentDuration: contentDuration,
-                  sampler: self,
                   isEngaged: false
               )
-            let heartbeatTimeout = timeoutFromDuration(contentDuration: contentDuration)
-            newTrackedData.heartbeatTimeout = heartbeatTimeout
             os_log("Tracking key: %s, data", key)
             dump(newTrackedData)
             accumulators[key] = newTrackedData
@@ -92,7 +84,7 @@ class Sampler {
             guard heartbeatsTimer == nil else { print("OOPS HB"); return }
 
             self.samplerTimer = Timer.scheduledTimer(timeInterval: TimeInterval(SAMPLE_RATE / 1000), target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
-            self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: TimeInterval(self.heartbeatInterval / 1000), target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
+            self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: TimeInterval(self.heartbeatInterval), target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
         }
     }
 
@@ -114,9 +106,8 @@ class Sampler {
             _lastSampleTime = trackedData.lastSampleTime!
             increment = currentTime.timeIntervalSince(_lastSampleTime)
 
-            shouldCountSample = trackedData.sampler!.sampleFn(key: trackedData.key)
+            shouldCountSample = sampleFn(key: trackedData.key)
             if shouldCountSample {
-                os_log("Counting sample for %s", trackedData.key)
                 trackedData.ms += increment
                 trackedData.totalMs += increment
                 trackedData.lastSampleTime = currentTime
@@ -128,10 +119,10 @@ class Sampler {
 
     private func sendHeartbeat(key: String) -> Void {
         var trackedData = accumulators[key]
-        let incSecs: Int = Int(trackedData!.ms)
-        if incSecs > 0 && Float(incSecs) <= (Float(baseHeartbeatInterval / 1000) + 0.25) {
+        let incSecs: TimeInterval = TimeInterval(trackedData!.ms / 1000)
+        if incSecs > 0 && incSecs <= (baseHeartbeatInterval + 0.25) {
             os_log("Sending heartbeat for %s", key)
-            trackedData!.sampler!.heartbeatFn(data: trackedData!, enableHeartbeats: true)
+            heartbeatFn(data: trackedData!, enableHeartbeats: true)
         }
         trackedData!.ms = 0
         updateAccumulator(acc: trackedData!)

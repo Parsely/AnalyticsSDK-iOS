@@ -18,7 +18,6 @@ class EngagedTime: Sampler {
     
     override func sampleFn(key : String) -> Bool {
         let trackedData: Accumulator = accumulators[key]!
-        os_log("Sampling engaged time", log: OSLog.default, type: .info)
         return trackedData.isEngaged // TODO: consider video playing
     }
     
@@ -34,8 +33,8 @@ class EngagedTime: Sampler {
             "action": "heartbeat",
             "inc": roundedSecs,
             "tt": totalMs,
-            "url": Parsely.sharedInstance.lastRequest?["url"]!! ?? "",
-            "urlref": Parsely.sharedInstance.lastRequest?["urlref"]!! ?? ""
+            "url": data.key,  // XXX populate this from a data.eventArgs object
+            "urlref": ""  // XXX populate this from a data.eventArgs object
         ])
         Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
         os_log("Sent heartbeat for:")
