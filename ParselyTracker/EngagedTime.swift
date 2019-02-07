@@ -25,8 +25,8 @@ class EngagedTime: Sampler {
         if enableHeartbeats != true {
             return
         }
-        let roundedSecs: Int = Int(data.totalMs / 1000)  // logic check!
-        let totalMs: Int = Int(data.totalMs)
+        let roundedSecs: Int = Int(data.ms)
+        let totalMs: Int = Int(data.totalMs * 1000)
 
         let event = Event(params: [
             "date": Date().timeIntervalSince1970,
