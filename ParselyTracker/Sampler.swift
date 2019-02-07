@@ -110,7 +110,6 @@ class Sampler {
 
             shouldCountSample = trackedData.sampler!.sampleFn(key: trackedData.key)
             if shouldCountSample {
-                print("Counting sample for %s", trackedData.key)
                 trackedData.ms += increment
                 trackedData.totalMs += increment
                 trackedData.lastSampleTime = currentTime
