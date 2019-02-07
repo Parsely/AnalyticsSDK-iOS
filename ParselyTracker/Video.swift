@@ -63,7 +63,7 @@ class VideoManager: Sampler {
             curVideo.hasStartedPlaying = true
             let event = Event(params:[
                 "action": "videostart",
-                "url": vId
+                "url": url
             ])
             for (k, v) in curVideo.eventArgs {
                 if !event.originalData.keys.contains(k) {
