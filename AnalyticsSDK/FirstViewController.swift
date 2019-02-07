@@ -38,11 +38,11 @@ class FirstViewController: UIViewController {
     }
     @IBAction func didStartVideo(_ sender: Any) {
         os_log("didStartVideo", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", videoID: "videoOne", metadata: [:])
+        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", videoID: "videoOne", qsargs: [:])
     }
     @IBAction func didPauseVideo(_ sender: Any) {
         os_log("didStopVideo", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPause(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", videoID: "videoOne", metadata: [:])
+        delegate.parsely.trackPause(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", videoID: "videoOne", qsargs: [:])
     }
 }
 
