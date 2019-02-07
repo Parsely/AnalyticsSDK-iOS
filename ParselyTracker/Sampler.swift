@@ -27,7 +27,6 @@ struct Accumulator {
     }
     var contentDuration: TimeInterval?
     var sampler: Sampler?
-    var isEngaged: Bool
 }
 
 extension TimeInterval {
@@ -59,7 +58,6 @@ class Sampler {
     func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {}
     // sampleFn is called to determine if an Accumulator is eligible to be sampled.
     // if true, the sample() loop will accumulate time for that item.
-    // e.g. "isPlaying" or "isEngaged" -> true/false
     func sampleFn(key: String) -> Bool { return false }
 
     // Register a piece of content to be tracked.
@@ -75,8 +73,7 @@ class Sampler {
                   lastPositiveSampleTime: nil,
                   heartbeatTimeout: nil,
                   contentDuration: contentDuration,
-                  sampler: self,
-                  isEngaged: false
+                  sampler: self
               )
             let heartbeatTimeout = timeoutFromDuration(contentDuration: contentDuration)
             newTrackedData.heartbeatTimeout = heartbeatTimeout
