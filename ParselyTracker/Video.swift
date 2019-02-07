@@ -35,7 +35,6 @@ class VideoManager: Sampler {
         if enableHeartbeats != true {
             return
         }
-        let vId: String = data.key
         let roundedSecs: Int = Int(data.totalMs / 1000)  // logic check!
         let totalMs: Int = Int(data.totalMs)
         // get metadata for this video, too
@@ -45,7 +44,7 @@ class VideoManager: Sampler {
             "date": Date().timeIntervalSince1970,
             "action": "vheartbeat",
             "inc": roundedSecs,
-            "url": vId,
+            "url": curVideo!.url,
             "metadata": curVideo!.metadata,
             "tt": totalMs,
             "urlref": Parsely.sharedInstance.lastRequest?["urlref"]!! ?? ""
