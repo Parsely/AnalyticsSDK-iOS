@@ -50,6 +50,16 @@ class RequestBuilderTests: XCTestCase {
                   "Should always prefer a passed-in date.")
     }
     
+    func testHeaders() {
+        let events: Array<Event> = makeEvents()
+        let actual: ParselyHeaders = RequestBuilder.buildHeaders(events: events)
+        dump(actual)
+        XCTAssertEqual(actual.userAgent, "parsely-analytics-ios/3.0.0",
+                       "User Agents should be correct.")
+        XCTAssertEqual(actual.userIP, "0.0.0.0",
+                       "User Agents should be correct.")
+    }
+
     func testRequests() {
         let events = makeEvents()
         // the builder should make a request
