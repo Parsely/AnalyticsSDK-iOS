@@ -7,20 +7,17 @@
 //
 
 import Foundation
+import UIKit
 
 struct ParselyRequest {
     var url: String
     var headers: ParselyHeaders
-    var params: ParselyParams
+    var params: Dictionary<String, Any?>
 }
 
 struct ParselyHeaders {
     var userAgent: String
     var userIP: String
-}
-
-struct ParselyParams {
-    var key: String
 }
 
 
@@ -45,7 +42,7 @@ class RequestBuilder {
         return ParselyRequest.init(
             url: buildPixelEndpoint(now: nil),
             headers: buildHeaders(events: events),
-            params: buildParams(events: events)
+            params: buildParamsDict(events: events)
         )
     }
 
@@ -66,8 +63,13 @@ class RequestBuilder {
         let userIP: String = "0.0.0.0"
         return ParselyHeaders.init(userAgent: userAgent, userIP: userIP)
     }
-    static func buildParams(events: Array<Event>) -> ParselyParams {
-        return ParselyParams.init(key: "stuff")
+    static func buildParamsDict(events: Array<Event>) -> Dictionary<String, Any?> {
+        // return a Dictionary with one key, 'events', to pass to the client
+        var eventDicts: Array<Dictionary<String, Any?>> = Array<Dictionary<String, Any?>>.init()
+        for event in events {
+            eventDicts.append(event.toDict())
+        }
+        return ["events": eventDicts]
     }
 
     static private func getDeviceInfo() -> Dictionary<String, Any> {
