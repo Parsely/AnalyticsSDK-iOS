@@ -16,8 +16,8 @@ class EngagedTime: Sampler {
         super.init()
     }
     
-    override func sampleFn(id: String) -> Bool {
-        let trackedData: Accumulator = accumulators[id]!
+    override func sampleFn(key : String) -> Bool {
+        let trackedData: Accumulator = accumulators[key]!
         os_log("Sampling engaged time", log: OSLog.default, type: .info)
         return trackedData.isEngaged // TODO: consider video playing
     }

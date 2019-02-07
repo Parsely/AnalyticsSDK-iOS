@@ -67,15 +67,15 @@ class VideoManager: Sampler {
         return trackedVideos[vId]!
     }
     
-    override func sampleFn(id: String) -> Bool {
-        return (trackedVideos[id]?.isPlaying)!
+    override func sampleFn(key: String) -> Bool {
+        return (trackedVideos[key]?.isPlaying)!
     }
     
     override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {
         if enableHeartbeats != true {
             return
         }
-        let vId: String = data.id
+        let vId: String = data.key
         let roundedSecs: Int = Int(data.totalMs / 1000)  // logic check!
         let totalMs: Int = Int(data.totalMs)
 
