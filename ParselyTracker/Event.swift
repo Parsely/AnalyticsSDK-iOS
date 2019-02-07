@@ -14,7 +14,17 @@ class Event {
     var originalData: [String: Any?]
     
     
-    init(params: [String: Any?]) {
+    init(action: String, url: String, ts: TimeInterval, urlref: String?, extra_data: Dictionary<String, Any?>?) {
+        let params: Dictionary<String, Any?> = [
+            "ts": ts,
+            "parsely_site_uuid": "", // todo: Implement
+            "url": url,
+            "urlref": urlref!,
+            "idsite": Parsely.sharedInstance.apikey,
+            "action": action,
+            "data": extra_data!
+            
+        ]
         self.originalData = params
     }
     
