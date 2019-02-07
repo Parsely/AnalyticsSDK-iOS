@@ -80,6 +80,8 @@ class Sampler {
               )
             let heartbeatTimeout = timeoutFromDuration(contentDuration: contentDuration)
             newTrackedData.heartbeatTimeout = heartbeatTimeout
+            os_log("Tracking key: %s, data", key)
+            dump(newTrackedData)
             accumulators[key] = newTrackedData
           }
 
@@ -96,6 +98,7 @@ class Sampler {
 
     // Stop tracking this item altogether.
     public func dropKey(key: String) -> Void {
+        os_log("Dropping key: %s", key)
         sendHeartbeat(key: key)
         accumulators.removeValue(forKey: key)
     }
@@ -113,7 +116,7 @@ class Sampler {
 
             shouldCountSample = trackedData.sampler!.sampleFn(key: trackedData.key)
             if shouldCountSample {
-                print("Counting sample for %s", trackedData.key)
+                os_log("Counting sample for %s", trackedData.key)
                 trackedData.ms += increment
                 trackedData.totalMs += increment
                 trackedData.lastSampleTime = currentTime
@@ -124,12 +127,11 @@ class Sampler {
     }
 
     private func sendHeartbeat(key: String) -> Void {
-        os_log("Sending heartbeat for %s", key)
         var trackedData = accumulators[key]
         let incSecs: Int = Int(trackedData!.ms)
         if incSecs > 0 && Float(incSecs) <= (Float(baseHeartbeatInterval / 1000) + 0.25) {
-            trackedData!.sampler!.heartbeatFn(data: trackedData!,
-                             enableHeartbeats: true)
+            os_log("Sending heartbeat for %s", key)
+            trackedData!.sampler!.heartbeatFn(data: trackedData!, enableHeartbeats: true)
         }
         trackedData!.ms = 0
         updateAccumulator(acc: trackedData!)
@@ -145,7 +147,6 @@ class Sampler {
                 sendHeartbeat(key: key)
             }
         }
-        // should repeats be true?
         Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
             self.sendHeartbeats()
         }
@@ -158,10 +159,10 @@ class Sampler {
         if contentDuration != nil {
             let completionInterval = contentDuration! / Double(5)
             if completionInterval < timeoutDefault / Double(2) {
-                return contentDuration! / 5
+                return max(contentDuration! / 5, MIN_TIME_BETWEEN_HEARTBEATS)
             }
             if completionInterval < timeoutDefault {
-                return timeoutDefault / Double(2)
+                return max(timeoutDefault / Double(2), MIN_TIME_BETWEEN_HEARTBEATS)
             }
         }
         return timeoutDefault
