@@ -10,7 +10,9 @@ import Foundation
 import os.log
 
 struct TrackedVideo {
-    var id: String
+    var key: String // matches the Accumulator item, is composed of the url + vId
+    var vId: String
+    var url: String
     // consider using the Accumulator's isEngaged field instead
     // and making this strictly metadata
     var isPlaying: Bool = false
@@ -46,25 +48,38 @@ class VideoManager: Sampler {
         }
     }
     
-    private func updateVideoData(vId: String, metadata: Dictionary<String, Any?>, urlOverride: String?) -> TrackedVideo {
+    private func createVideoTrackingKey(vId: String, url: String) -> String {
+        return url + "::" + vId
+    }
+
+    private func updateVideoData(vId: String, url: String, metadata: Dictionary<String, Any?>, urlOverride: String?) -> TrackedVideo {
         if metadata["link"] == nil {
             var metadata = metadata
             metadata["link"] = vId
         }
-        // is this video ID already tracked?
-        if (trackedVideos[vId] != nil) {
-            trackedVideos[vId]!.metadata = trackedVideos[vId]!.metadata.merging(metadata, uniquingKeysWith: { (_old, new) in new })
+        let key: String = createVideoTrackingKey(vId: vId, url: url)
+        // is this video key already tracked?
+        if (trackedVideos[key] != nil) {
+            trackedVideos[key]!.metadata = trackedVideos[key]!.metadata.merging(metadata, uniquingKeysWith: { (_old, new) in new })
             if urlOverride != nil {
-                trackedVideos[vId]?.urlOverride = urlOverride!
+                trackedVideos[key]?.urlOverride = urlOverride!
             }
         } else {
             // register video metas
-            trackedVideos[vId] = TrackedVideo.init(id: vId, isPlaying: false, hasStartedPlaying: false, metadata: metadata, urlOverride: urlOverride!, _heartbeatsSent: 0)
-            // register with sampler, using same vId as the videos metas
-            trackKey(key: vId, contentDuration: TimeInterval(metadata["duration"] as? Int ?? 0))
+            trackedVideos[key] = TrackedVideo.init(
+                key: key,
+                vId: vId,
+                url: url,
+                isPlaying: false,
+                hasStartedPlaying: false,
+                metadata: metadata,
+                urlOverride: urlOverride!,
+                _heartbeatsSent: 0)
+            // register with sampler, using same composite key as the videos metas
+            trackKey(key: key, contentDuration: TimeInterval(metadata["duration"] as? Int ?? 0))
         }
         
-        return trackedVideos[vId]!
+        return trackedVideos[key]!
     }
     
     override func sampleFn(key: String) -> Bool {
@@ -78,9 +93,9 @@ class VideoManager: Sampler {
         let vId: String = data.key
         let roundedSecs: Int = Int(data.totalMs / 1000)  // logic check!
         let totalMs: Int = Int(data.totalMs)
-
-        var curVideo = trackedVideos[vId]
-
+        // get metadata for this video, too
+        var curVideo = trackedVideos[data.key]
+        // TODO: fix video events (need url, vid)
         let event = Event(params: [
             "date": Date().timeIntervalSince1970,
             "action": "vheartbeat",
@@ -91,13 +106,14 @@ class VideoManager: Sampler {
             "urlref": Parsely.sharedInstance.lastRequest?["urlref"]!! ?? ""
         ])
         Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
-        os_log("Sent vheartbeat for video %s", vId)
+        os_log("Sent vheartbeat for video %s", data.key)
         curVideo?._heartbeatsSent += 1
+        updateVideo(video: curVideo!)
     }
     
     func trackPlay(url: String, vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) -> Void {
         // set the video metas in the collector, and merge metadata if it's already being tracked
-        var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
+        var curVideo = self.updateVideoData(vId: vId, url: url, metadata: metadata, urlOverride: urlOverride)
         if (curVideo.hasStartedPlaying != true) {
             curVideo.hasStartedPlaying = true
             Parsely.sharedInstance.track.event(event: Event(params:[
@@ -114,21 +130,21 @@ class VideoManager: Sampler {
     }
     
     func trackPause(url: String, vId: String, metadata: Dictionary<String, Any?>, urlOverride: String) -> Void {
-        var curVideo = self.updateVideoData(vId: vId, metadata: metadata, urlOverride: urlOverride)
+        var curVideo = self.updateVideoData(vId: vId, url: url, metadata: metadata, urlOverride: urlOverride)
         curVideo.isPlaying = false
         updateVideo(video: curVideo)
     }
 
     private func updateVideo(video: TrackedVideo) {
-        trackedVideos[video.id] = video
+        trackedVideos[video.key] = video
         setVideoPlayingFlag()
     }
-    
-    func reset(vId: String) -> Void {
-        if var curVideo = trackedVideos[vId] {
+    // todo: this isn't called anywhere
+    func reset(key: String) -> Void {
+        if var curVideo = trackedVideos[key] {
             curVideo.hasStartedPlaying = false
             curVideo.isPlaying = false
-            dropKey(key: vId)
+            dropKey(key: key)
             setVideoPlayingFlag()
         }
     }
