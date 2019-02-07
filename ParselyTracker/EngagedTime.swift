@@ -33,8 +33,8 @@ class EngagedTime: Sampler {
             "action": "heartbeat",
             "inc": roundedSecs,
             "tt": totalMs,
-            "url": data.key,
-            "urlref": ""
+            "url": data.key,  // XXX populate this from a data.eventArgs object
+            "urlref": ""  // XXX populate this from a data.eventArgs object
         ])
         Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
         os_log("Sent heartbeat for:")
