@@ -72,6 +72,8 @@ class Sampler {
                   contentDuration: contentDuration,
                   isEngaged: false
               )
+            os_log("Tracking key: %s, data", key)
+            dump(newTrackedData)
             accumulators[key] = newTrackedData
           }
 
@@ -88,6 +90,7 @@ class Sampler {
 
     // Stop tracking this item altogether.
     public func dropKey(key: String) -> Void {
+        os_log("Dropping key: %s", key)
         sendHeartbeat(key: key)
         accumulators.removeValue(forKey: key)
     }
@@ -135,7 +138,6 @@ class Sampler {
                 sendHeartbeat(key: key)
             }
         }
-        // should repeats be true?
         Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
             self.sendHeartbeats()
         }
@@ -144,17 +146,16 @@ class Sampler {
     // Calculate an accumulator's timeout based on the content length, to ensure we capture
     // all completion intervals.
     private func timeoutFromDuration(contentDuration: TimeInterval?) -> TimeInterval {
-        let timeoutDefault = baseHeartbeatInterval
-        if contentDuration != nil {
+        if contentDuration != nil && contentDuration! > 0 {
             let completionInterval = contentDuration! / Double(5)
-            if completionInterval < timeoutDefault / Double(2) {
-                return contentDuration! / 5
+            if completionInterval < baseHeartbeatInterval / Double(2) {
+                return max(contentDuration! / 5, MIN_TIME_BETWEEN_HEARTBEATS)
             }
-            if completionInterval < timeoutDefault {
-                return timeoutDefault / Double(2)
+            if completionInterval < baseHeartbeatInterval {
+                return max(baseHeartbeatInterval / Double(2), MIN_TIME_BETWEEN_HEARTBEATS)
             }
         }
-        return timeoutDefault
+        return baseHeartbeatInterval
     }
 
     // copies of accumulators passed into methods do not update the shared accumulator[id] copy
