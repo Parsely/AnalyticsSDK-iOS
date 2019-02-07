@@ -25,6 +25,7 @@ class Track {
         // generic helper function, sends the event as-is
         self.pixel.beacon(additionalParams: event, shouldNotSetLastRequest: shouldNotSetLastRequest)
         os_log("Sending an event from Track")
+        dump(event)
 
     }
 
