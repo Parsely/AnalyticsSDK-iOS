@@ -35,7 +35,7 @@ class EngagedTime: Sampler {
             "tt": totalMs,
             "url": data.eventArgs!["url"]
         ])
-        for (k, v) in data.eventArgs! {
+        for (k, v) in data.eventArgs! {  // XXX replace with merging()
             if !event.originalData.keys.contains(k) {
                 event.originalData[k] = v;
             }
