@@ -27,22 +27,18 @@ class VideoTests: XCTestCase {
                   "Parsely.sharedInstance.accumulators should be empty before calling trackPlay")
 
         // call trackPlay
-        self.parselyTrackerInstance.trackPlay(videoID: "videoId", metadata: [:], urlOverride: "")
+        self.parselyTrackerInstance.trackPlay(url: "testurl", videoID: "videoId", metadata: [:])
 
         // post-track state
-        XCTAssert(parselyTrackerInstance.videoPlaying == true,
-                  "trackPlay should set the global videoPlaying flag")
         XCTAssert(videoManager.accumulators.count == 1,
                   "trackPlay should populate Parsely.sharedInstance.accumulators with one object")
 
         // call trackPause
-        self.parselyTrackerInstance.trackPause(videoID: "videoId", metadata: [:], urlOverride: "")
+        self.parselyTrackerInstance.trackPause(url: "testurl", videoID: "videoId", metadata: [:])
 
         // post-pause state
         XCTAssert(videoManager.accumulators.count == 1,
                   "trackPause should not remove an accumulator from Parsely.sharedInstance.accumulators")
-        XCTAssert(parselyTrackerInstance.videoPlaying == false,
-                  "trackPause should register no videos are currently playing")
         
     }
 }
