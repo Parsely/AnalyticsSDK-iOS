@@ -29,7 +29,6 @@ class EngagedTime: Sampler {
         let totalMs: Int = Int(data.totalMs * 1000)
 
         let event = Event(params: [
-            "date": Date().timeIntervalSince1970,
             "action": "heartbeat",
             "inc": roundedSecs,
             "tt": totalMs,
@@ -40,6 +39,9 @@ class EngagedTime: Sampler {
                 event.originalData[k] = v;
             }
         }
+        var extraData: [String: Any] = event.originalData["data"] as? [String: Any] ?? [String: Any]()
+        extraData["ts"] = Date().timeIntervalSince1970 * 1000
+        event.originalData["data"] = extraData
         Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
         os_log("Sent heartbeat for:")
         dump(data)
