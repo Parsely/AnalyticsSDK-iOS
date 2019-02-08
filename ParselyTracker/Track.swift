@@ -32,30 +32,32 @@ class Track {
     func pageview(url: String, params: [String: Any], shouldNotSetLastRequest: Bool) {
         let data: [String: Any] = [
             "action": "pageview",
-            "url": url,
-            "ts": Date().timeIntervalSince1970,
+            "url": url
             ]
         let updatedData = data.merging(
             params, uniquingKeysWith: { (old, _new) in old }
         )
 
         let event_ = Event(params: updatedData)
+        var extraData: [String: Any] = event_.originalData["data"] as? [String: Any] ?? [String: Any]()
+        extraData["ts"] = Date().timeIntervalSince1970 * 1000
+        event_.originalData["data"] = extraData
         os_log("Sending a pageview from Track")
         event(event: event_, shouldNotSetLastRequest: shouldNotSetLastRequest)
     }
 
-    func videoStart(url: String, vId: String, metadata: Dictionary<String, Any?>) {
-        videoManager.trackPlay(url: url, vId: vId, metadata: metadata)
+    func videoStart(url: String, vId: String, eventArgs: Dictionary<String, Any>?) {
+        videoManager.trackPlay(url: url, vId: vId, eventArgs: eventArgs)
         os_log("Tracked videoStart from Track")
     }
 
-    func videoPause(url: String, vId: String, metadata: Dictionary<String, Any?>) {
-        videoManager.trackPause(url: url, vId: vId, metadata: metadata)
+    func videoPause(url: String, vId: String, eventArgs: Dictionary<String, Any>?) {
+        videoManager.trackPause(url: url, vId: vId, eventArgs: eventArgs)
         os_log("Tracked videoPause from Track")
     }
 
-    func startEngagement(url: String) {
-        self.engagedTime.startInteraction(url: url)
+    func startEngagement(url: String, eventArgs:Dictionary<String, Any>?) {
+        self.engagedTime.startInteraction(url: url, eventArgs: eventArgs)
         os_log("track start engagement from Track")
     }
 

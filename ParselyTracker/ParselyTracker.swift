@@ -53,19 +53,19 @@ public class Parsely {
         self.track.pageview(url: url, params: params, shouldNotSetLastRequest: true)
     }
 
-    public func startEngagement(url: String) {
-        track.startEngagement(url: url)
+    public func startEngagement(url: String, qsargs:[String: Any]? = nil) {
+        track.startEngagement(url: url, eventArgs:qsargs)
     }
 
     public func stopEngagement(url: String) {
         track.stopEngagement(url: url)
     }
 
-    public func trackPlay(url: String, videoID: String, metadata:[String: Any]) {
-        track.videoStart(url: url, vId: videoID, metadata: metadata)
+    public func trackPlay(url: String, videoID: String, qsargs:[String: Any]? = nil) {
+        track.videoStart(url: url, vId: videoID, eventArgs: qsargs)
     }
 
-    public func trackPause(url: String, videoID: String, metadata:[String: Any]) {
-        track.videoPause(url: url, vId: videoID, metadata: metadata)
+    public func trackPause(url: String, videoID: String, qsargs:[String: Any]? = nil) {
+        track.videoPause(url: url, vId: videoID, eventArgs: qsargs)
     }
 }
