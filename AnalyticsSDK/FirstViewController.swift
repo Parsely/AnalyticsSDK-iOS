@@ -38,7 +38,7 @@ class FirstViewController: UIViewController {
     }
     @IBAction func didStartVideo(_ sender: Any) {
         os_log("didStartVideo", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", videoID: "videoOne", qsargs: ["metadata": ["section": "testsection"]])
+        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", videoID: "videoOne", qsargs: ["metadata": ["section": "testsection", "duration": 420], "urlref": "not-a-real-urlref"])
     }
     @IBAction func didPauseVideo(_ sender: Any) {
         os_log("didStopVideo", log: OSLog.default, type: .debug)
