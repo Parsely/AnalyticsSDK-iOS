@@ -18,6 +18,8 @@ public class Parsely {
     var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
     private var session: Session = Session()
+    private var flushTimer: Timer?
+    private var flushInterval: TimeInterval = 30
     public var secondsBetweenHeartbeats: TimeInterval? {
         get {
             if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! Int? {
@@ -67,5 +69,34 @@ public class Parsely {
 
     public func trackPause(url: String, videoID: String, qsargs:[String: Any]? = nil) {
         track.videoPause(url: url, vId: videoID, eventArgs: qsargs)
+    }
+    
+    @objc
+    private func flush() {
+        if self.eventQueue.length == 0 {
+            self.stopFlushTimer()
+        }
+        if !self.isReachable() {
+            return
+        }
+        let request = self.requestBuilder.build(self.eventQueue.get(count:self.eventQueue.length))
+        self.httpClient.send(request)
+        if self.eventQueue.length == 0 {
+            self.stopFlushTimer()
+        }
+    }
+    
+    private func startFlushTimer() {
+        if self.flushTimer == nil {
+            self.flushTimer = Timer.scheduledTimer(timeInterval: self.flushInterval, target: self, selector: #selector(self.flush), userInfo: nil, repeats: true)
+        }
+    }
+    
+    private func stopFlushTimer() {
+        self.flushTimer!.invalidate()
+    }
+    
+    private func isReachable() -> Bool {
+        return true
     }
 }
