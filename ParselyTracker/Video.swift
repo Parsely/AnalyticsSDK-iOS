@@ -35,17 +35,20 @@ class VideoManager: Sampler {
         if enableHeartbeats != true {
             return
         }
-        let roundedSecs: Int = Int(data.ms)
-        let totalMs: Int = Int(data.totalMs * 1000)
+//        let roundedSecs: Int = Int(data.ms)
+//        let totalMs: Int = Int(data.totalMs * 1000)
+        // TODO implement video stuff
         // get metadata for this video, too
         var curVideo = trackedVideos[data.key]
         // TODO: fix video events (need url, vid)
-        let event = Event(params: [
-            "action": "vheartbeat",
-            "inc": roundedSecs,
-            "url": curVideo!.url,
-            "tt": totalMs
-        ])
+        let event = Event(
+            "vheartbeat",
+            url: curVideo!.url,
+            urlref: nil,
+            data: nil
+//            inc: roundedSecs,
+//            tt: totalMs
+        )
         for (k, v) in curVideo!.eventArgs {
             if !event.originalData.keys.contains(k) {
                 event.originalData[k] = v;
@@ -64,10 +67,12 @@ class VideoManager: Sampler {
         var curVideo = self.updateVideoData(vId: vId, url: url, eventArgs: eventArgs)
         if (curVideo.hasStartedPlaying != true) {
             curVideo.hasStartedPlaying = true
-            let event = Event(params:[
-                "action": "videostart",
-                "url": url
-            ])
+            let event = Event(
+                "videostart",
+                url: url,
+                urlref: nil,
+                data: nil
+            )
             for (k, v) in curVideo.eventArgs {
                 if !event.originalData.keys.contains(k) {
                     event.originalData[k] = v;

@@ -12,17 +12,31 @@ class Event {
     // underlying object behind pageview, heartbeat, videostart, vheartbeat, custom events
     // takes a Dictionary<String: Any?>.
     var originalData: [String: Any?]
+    var ts: Date
+    var action: String
+    var url: String
+    var urlref: String
+    var idsite: String
+    var data: Dictionary<String, Any?>
     
-    
-    init(action: String, url: String, ts: TimeInterval, urlref: String?, extra_data: Dictionary<String, Any?>?) {
+    init(_ action: String, url: String,urlref: String?, data: Dictionary<String, Any?>?) {
+        let ts: Date = Date() // TODO: convert to unix ts
+        // set instance properties
+        self.ts = ts
+        self.action = action
+        self.url = url
+        self.urlref = urlref ?? ""
+        self.data = data ?? [:]
+        self.idsite = Parsely.sharedInstance.apikey
+        // preserve original data as dict
         let params: Dictionary<String, Any?> = [
             "ts": ts,
             "parsely_site_uuid": "", // todo: Implement
             "url": url,
-            "urlref": urlref!,
-            "idsite": Parsely.sharedInstance.apikey,
+            "urlref": self.urlref,
+            "idsite": self.idsite,
             "action": action,
-            "data": extra_data!
+            "data": self.data
             
         ]
         self.originalData = params

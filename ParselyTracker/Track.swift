@@ -37,8 +37,13 @@ class Track {
         let updatedData = data.merging(
             params, uniquingKeysWith: { (old, _new) in old }
         )
-
-        let event_ = Event(params: updatedData)
+        // TODO clean up
+        let event_ = Event(
+            "pageview",
+            url: updatedData["url"] as! String,
+            urlref: nil,
+            data: updatedData
+        )
         var extraData: [String: Any] = event_.originalData["data"] as? [String: Any] ?? [String: Any]()
         extraData["ts"] = Date().timeIntervalSince1970 * 1000
         event_.originalData["data"] = extraData

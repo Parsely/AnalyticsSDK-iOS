@@ -25,15 +25,17 @@ class EngagedTime: Sampler {
         if enableHeartbeats != true {
             return
         }
-        let roundedSecs: Int = Int(data.ms)
-        let totalMs: Int = Int(data.totalMs * 1000)
+//        let roundedSecs: Int = Int(data.ms)
+//        let totalMs: Int = Int(data.totalMs * 1000)
 
-        let event = Event(params: [
-            "action": "heartbeat",
-            "inc": roundedSecs,
-            "tt": totalMs,
-            "url": data.eventArgs!["url"]
-        ])
+        let event = Event(
+            "heartbeat",
+//            "inc": roundedSecs,
+//            "tt": totalMs,
+            url: data.eventArgs!["url"] as! String,
+            urlref: nil,
+            data: nil
+        )
         for (k, v) in data.eventArgs! {  // XXX replace with merging()
             if !event.originalData.keys.contains(k) {
                 event.originalData[k] = v;
