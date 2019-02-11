@@ -15,7 +15,6 @@ class Event {
     var action: String
     var url: String
     var urlref: String
-    var idsite: String
     var data: Dictionary<String, Any>
     
     init(_ action: String, url: String, urlref: String?, data: Dictionary<String, Any>?) {
@@ -24,13 +23,10 @@ class Event {
         self.url = url
         self.urlref = urlref ?? ""
         self.data = data ?? [:]
-        self.idsite = Parsely.sharedInstance.apikey
         // preserve original data as dict
         let params: Dictionary<String, Any> = [
-            "parsely_site_uuid": "", // todo: Implement
             "url": url,
             "urlref": self.urlref,
-            "idsite": self.idsite,
             "action": action,
             "data": self.data
             
