@@ -13,6 +13,7 @@
 		2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F0DF37B68B0886A0E6848 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2CD51D282237110A80CD252A /* Pods_AnalyticsSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */; };
+		AAEDC3272212161F00769350 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEDC3262212161F00769350 /* HttpClient.swift */; };
 		B205889D220CB67500476E27 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889C220CB67500476E27 /* RequestBuilder.swift */; };
 		B205889F220CB72A00476E27 /* RequestBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889E220CB72A00476E27 /* RequestBuilderTests.swift */; };
 		B2BC46FB2208D60A000B937A /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BC46FA2208D60A000B937A /* Track.swift */; };
@@ -105,6 +106,7 @@
 		6D623D570B7F71EFD9E46D24 /* Pods-ParselyTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTracker/Pods-ParselyTracker.release.xcconfig"; sourceTree = "<group>"; };
 		9CD753A4903488F9E572497D /* Pods-AnalyticsSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDKTests/Pods-AnalyticsSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A07DD8B365F9DFAC828E58C2 /* Pods-ParselyTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		AAEDC3262212161F00769350 /* HttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
 		AB009DED9C4184290AB524B3 /* Pods-ParselyTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTracker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTracker/Pods-ParselyTracker.debug.xcconfig"; sourceTree = "<group>"; };
 		B205889C220CB67500476E27 /* RequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = "<group>"; };
 		B205889E220CB72A00476E27 /* RequestBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilderTests.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 		F433338F20F0087E004BB6F5 /* ParselyTracker */ = {
 			isa = PBXGroup;
 			children = (
+				AAEDC3262212161F00769350 /* HttpClient.swift */,
 				F43333B220F008EF004BB6F5 /* EngagedTime.swift */,
 				F43333B120F008EE004BB6F5 /* EventQueue.swift */,
 				F43333B520F008EF004BB6F5 /* Event.swift */,
@@ -637,6 +640,7 @@
 				F43333AC20F008B7004BB6F5 /* ParselyTracker.swift in Sources */,
 				F43333BE20F008EF004BB6F5 /* Event.swift in Sources */,
 				F43333B720F008EF004BB6F5 /* Video.swift in Sources */,
+				AAEDC3272212161F00769350 /* HttpClient.swift in Sources */,
 				F43333BA20F008EF004BB6F5 /* EventQueue.swift in Sources */,
 				F43333BB20F008EF004BB6F5 /* EngagedTime.swift in Sources */,
 				F43333B920F008EF004BB6F5 /* Sampler.swift in Sources */,
