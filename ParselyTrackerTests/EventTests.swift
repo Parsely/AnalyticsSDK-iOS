@@ -43,9 +43,10 @@ class EventTests: XCTestCase {
 //        XCTAssert(evJSON == jsonString,
 //                  "event.toJSON should produce valid JSON with nested data")
 //    }
-    func testVideo() {
-        return
-//        let event = Event("vheartbeat", urlref: nil, data: nil, tt: 1234567, inc: 5)
+    func testHeartbeatEvents() {
+        let event = Heartbeat("vheartbeat", url: "http://test.com", urlref: nil,  inc: 5, tt: 1234567, data: nil)
+        XCTAssert(event.url == "http://test.com",
+                  "Heartbeat events should handle inc and tt.")
     }
     
     func testValidity() {
