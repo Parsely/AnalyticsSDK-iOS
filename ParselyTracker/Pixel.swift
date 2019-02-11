@@ -47,7 +47,7 @@ class Pixel {
             data["action"] as! String,
             url: additionalParams.url,
             urlref: additionalParams.urlref,
-            data: data)
+            data: data as Dictionary<String, Any>)
         Parsely.sharedInstance.eventQueue.push(event)
     }
 }
