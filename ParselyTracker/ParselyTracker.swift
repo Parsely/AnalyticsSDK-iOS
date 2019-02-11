@@ -29,7 +29,7 @@ public class Parsely {
         }
     }
     public static let sharedInstance = Parsely()
-    var visitorManager: VisitorManager?
+    lazy var visitorManager = VisitorManager()
     
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.default, type: .info)
@@ -45,8 +45,6 @@ public class Parsely {
         self.config = self.default_config.merging(
                 options, uniquingKeysWith: { (_old, new) in new }
         )
-        self.visitorManager = VisitorManager()
-
         self.configured = true
     }
     

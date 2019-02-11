@@ -21,8 +21,9 @@ class Pixel {
         // add in the event toDict itself
         data = data.merging(event.toDict(), uniquingKeysWith: { (old, _new) in old })
         // visitor info
-        let visitorInfo = Parsely.sharedInstance.visitorManager?.getVisitorInfo(shouldExtendExisting: true)
-
+        let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
+        data["parsely_uuid"] = visitorInfo["id"]
+        // TODO parsely_site_uuid??
         if (shouldNotSetLastRequest) {
             Parsely.sharedInstance.lastRequest = data
         }
