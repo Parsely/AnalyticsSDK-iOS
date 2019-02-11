@@ -12,14 +12,14 @@ import os.log
 
 class Pixel {
     
-    func beacon(additionalParams: Event, shouldNotSetLastRequest: Bool) {
+    func beacon(event: Event, shouldNotSetLastRequest: Bool) {
         os_log("Fired beacon", log: OSLog.default, type: .debug)
         let session = Session().get(extendSession: true)
         let rand = Date().millisecondsSince1970
         var data: Dictionary<String,Any?> = ["idsite": Parsely.sharedInstance.apikey, "data": ["ts": rand]]
         data = data.merging(session, uniquingKeysWith: { (old, _new) in old })
         // add in the event toDict itself
-        data = data.merging(additionalParams.toDict(), uniquingKeysWith: { (old, _new) in old })
+        data = data.merging(event.toDict(), uniquingKeysWith: { (old, _new) in old })
         // visitor info
         let visitorInfo = Parsely.sharedInstance.visitorManager?.getVisitorInfo(shouldExtendExisting: true)
 
@@ -29,8 +29,8 @@ class Pixel {
         // TODO: update to enqueue a modified event
         let event = Event(
             data["action"] as! String,
-            url: additionalParams.url,
-            urlref: additionalParams.urlref,
+            url: event.url,
+            urlref: event.urlref,
             data: data as Dictionary<String, Any>)
         Parsely.sharedInstance.eventQueue.push(event)
     }
