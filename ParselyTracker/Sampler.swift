@@ -119,7 +119,7 @@ class Sampler {
 
     private func sendHeartbeat(key: String) -> Void {
         var trackedData = accumulators[key]
-        let incSecs: TimeInterval = TimeInterval(trackedData!.heartbeatCandidateSampledTime / 1000)
+        let incSecs: TimeInterval = trackedData!.heartbeatCandidateSampledTime
         if incSecs > 0 && incSecs <= (baseHeartbeatInterval + 0.25) {
             os_log("Sending heartbeat for %s", key)
             heartbeatFn(data: trackedData!, enableHeartbeats: true)
