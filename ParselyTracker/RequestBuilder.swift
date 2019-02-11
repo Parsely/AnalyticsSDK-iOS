@@ -26,10 +26,6 @@ class RequestBuilder {
     static func getUserAgent() -> String {
         return userAgent
     }
-
-    static func getUserIP() -> String {
-        return "0.0.0.0" // TODO: FIX
-    }
     
     static func buildRequest(events: Array<Event>) -> ParselyRequest? {
         dump(getDeviceInfo())
@@ -55,8 +51,7 @@ class RequestBuilder {
     static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, Any?> {
         // return headers as a Dictionary
         let userAgent: String = getUserAgent()
-        let userIP: String = getUserIP()
-        return [userAgent: userAgent, userIP: userIP]
+        return [userAgent: userAgent]
     }
 
     static func buildParamsDict(events: Array<Event>) -> Dictionary<String, Any?> {
