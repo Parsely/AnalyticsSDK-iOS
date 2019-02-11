@@ -19,7 +19,7 @@ class Event {
     var idsite: String
     var data: Dictionary<String, Any?>
     
-    init(_ action: String, url: String,urlref: String?, data: Dictionary<String, Any?>?) {
+    init(_ action: String, url: String, urlref: String?, data: Dictionary<String, Any?>?) {
         let ts: Date = Date() // TODO: convert to unix ts
         // set instance properties
         self.ts = ts
@@ -51,4 +51,17 @@ class Event {
         return ""
     }
 
+}
+
+class Heartbeat: Event {
+    var tt: Int
+    var inc: Int
+
+    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, data: Dictionary<String, Any?>?) {
+        self.tt = tt
+        self.inc = inc
+        super.init(action, url: url, urlref: urlref, data: data)
+        self.originalData["tt"] = self.tt
+        self.originalData["inc"] = self.inc
+    }
 }

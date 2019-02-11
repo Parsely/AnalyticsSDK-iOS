@@ -35,19 +35,17 @@ class VideoManager: Sampler {
         if enableHeartbeats != true {
             return
         }
-//        let roundedSecs: Int = Int(data.ms)
-//        let totalMs: Int = Int(data.totalMs * 1000)
-        // TODO implement video stuff
+        let roundedSecs: Int = Int(data.ms)
+        let totalMs: Int = Int(data.totalMs * 1000)
         // get metadata for this video, too
         var curVideo = trackedVideos[data.key]
-        // TODO: fix video events (need url, vid)
-        let event = Event(
+        let event = Heartbeat(
             "vheartbeat",
             url: curVideo!.url,
             urlref: nil,
+            inc: roundedSecs,
+            tt: totalMs,
             data: nil
-//            inc: roundedSecs,
-//            tt: totalMs
         )
         for (k, v) in curVideo!.eventArgs {
             if !event.originalData.keys.contains(k) {
