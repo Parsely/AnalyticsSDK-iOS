@@ -51,7 +51,7 @@ class RequestBuilder {
     static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, Any?> {
         // return headers as a Dictionary
         let userAgent: String = getUserAgent()
-        return [userAgent: userAgent]
+        return ["User-Agent": userAgent]
     }
 
     static func buildParamsDict(events: Array<Event>) -> Dictionary<String, Any?> {
