@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import os.log
 
 struct ParselyRequest {
     var url: String
@@ -28,12 +29,14 @@ class RequestBuilder {
     }
     
     static func buildRequest(events: Array<Event>) -> ParselyRequest? {
-        dump(getDeviceInfo())
-        return ParselyRequest.init(
+        let request = ParselyRequest.init(
             url: buildPixelEndpoint(now: nil),
             headers: buildHeadersDict(events: events),
             params: buildParamsDict(events: events)
         )
+        os_log("Built request")
+        dump(request)
+        return request
     }
 
     static func buildPixelEndpoint(now: Date?) -> String {

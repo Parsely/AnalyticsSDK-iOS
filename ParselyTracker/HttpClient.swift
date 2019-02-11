@@ -14,7 +14,7 @@ import SwiftHTTP
 class HttpClient {
     static func sendRequest(request: ParselyRequest) {
         os_log("Sending request to %s", request.url)
-        HTTP.POST(request.url, parameters: request.params, headers:request.headers as? [String: String]) { response in
+        HTTP.POST(request.url, parameters: request.params, headers:request.headers as? [String: String], requestSerializer: JSONParameterSerializer()) { response in
             if let err = response.error {
                 os_log("Request failed: %s", err.localizedDescription)
             } else {
