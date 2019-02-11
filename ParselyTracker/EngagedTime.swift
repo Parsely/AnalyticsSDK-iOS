@@ -10,8 +10,6 @@ import Foundation
 import os.log
 
 class EngagedTime: Sampler {
-    let ENGAGED_TIME_SAMPLER_KEY = "engagedTime"
-
     override init() {
         super.init()
     }
