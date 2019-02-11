@@ -81,8 +81,8 @@ public class Parsely {
         os_log("Flushing event queue")
         let events = self.eventQueue.get()
         os_log("Got %s events", String(describing: events.count))
-        //let request = self.requestBuilder.build(events)
-        //self.httpClient.send(request)
+        let request = RequestBuilder.buildRequest(events: events)
+        HttpClient.sendRequest(request: request!)
     }
     
     internal func startFlushTimer() {

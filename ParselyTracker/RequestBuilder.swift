@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import os.log
 
 struct ParselyRequest {
     var url: String
@@ -28,12 +29,14 @@ class RequestBuilder {
     }
     
     static func buildRequest(events: Array<Event>) -> ParselyRequest? {
-        dump(getDeviceInfo())
-        return ParselyRequest.init(
+        let request = ParselyRequest.init(
             url: buildPixelEndpoint(now: nil),
             headers: buildHeadersDict(events: events),
             params: buildParamsDict(events: events)
         )
+        os_log("Built request")
+        dump(request)
+        return request
     }
 
     static func buildPixelEndpoint(now: Date?) -> String {
@@ -43,7 +46,7 @@ class RequestBuilder {
             dateFormatter.dateFormat = "yyyy-MM-dd-HH"
             dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
             let dateString = dateFormatter.string(from: now)
-            self._baseURL = "https://srv-\(dateString).pixel.parsely.com/mobileproxy/"
+            self._baseURL = "https://srv-\(dateString).pixel.parsely.com/mobileproxy"
         }
         return self._baseURL!
     }
