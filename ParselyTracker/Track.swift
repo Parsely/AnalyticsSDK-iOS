@@ -22,6 +22,7 @@ class Track {
     }
 
     func event(event: Event, shouldNotSetLastRequest: Bool) {
+        Parsely.sharedInstance.startFlushTimer();
         // generic helper function, sends the event as-is
         self.pixel.beacon(additionalParams: event, shouldNotSetLastRequest: shouldNotSetLastRequest)
         os_log("Sending an event from Track")
@@ -44,9 +45,7 @@ class Track {
             urlref: nil,
             data: updatedData
         )
-        var extraData: [String: Any] = event_.originalData["data"] as? [String: Any] ?? [String: Any]()
-        extraData["ts"] = Date().timeIntervalSince1970 * 1000
-        event_.originalData["data"] = extraData
+
         os_log("Sending a pageview from Track")
         event(event: event_, shouldNotSetLastRequest: shouldNotSetLastRequest)
     }

@@ -52,9 +52,6 @@ class VideoManager: Sampler {
                 event.originalData[k] = v;
             }
         }
-        var extraData: [String: Any] = event.originalData["data"] as? [String: Any] ?? [String: Any]()
-        extraData["ts"] = Date().timeIntervalSince1970 * 1000
-        event.originalData["data"] = extraData
         Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
         os_log("Sent vheartbeat for video %s", data.key)
         curVideo?._heartbeatsSent += 1
