@@ -40,9 +40,6 @@ class Track {
         )
 
         let event_ = Event(params: updatedData)
-        var extraData: [String: Any] = event_.originalData["data"] as? [String: Any] ?? [String: Any]()
-        extraData["ts"] = Date().timeIntervalSince1970 * 1000
-        event_.originalData["data"] = extraData
         os_log("Sending a pageview from Track")
         event(event: event_, shouldNotSetLastRequest: shouldNotSetLastRequest)
     }
