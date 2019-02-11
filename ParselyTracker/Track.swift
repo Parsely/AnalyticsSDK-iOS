@@ -22,6 +22,7 @@ class Track {
     }
 
     func event(event: Event, shouldNotSetLastRequest: Bool) {
+        Parsely.sharedInstance.startFlushTimer();
         // generic helper function, sends the event as-is
         self.pixel.beacon(additionalParams: event, shouldNotSetLastRequest: shouldNotSetLastRequest)
         os_log("Sending an event from Track")

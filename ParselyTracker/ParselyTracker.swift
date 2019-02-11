@@ -82,7 +82,7 @@ public class Parsely {
         self.httpClient.send(request)
     }
     
-    private func startFlushTimer() {
+    internal func startFlushTimer() {
         if self.flushTimer == nil {
             self.flushTimer = Timer.scheduledTimer(timeInterval: self.flushInterval, target: self, selector: #selector(self.flush), userInfo: nil, repeats: true)
         }
