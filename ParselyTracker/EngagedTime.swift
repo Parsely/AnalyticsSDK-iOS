@@ -25,8 +25,8 @@ class EngagedTime: Sampler {
         if enableHeartbeats != true {
             return
         }
-        let roundedSecs: Int = Int(data.ms)
-        let totalMs: Int = Int(data.totalMs * 1000)
+        let roundedSecs: Int = Int(data.heartbeatCandidateSampledTime)
+        let totalMs: Int = Int(data.totalSampledTime * 1000)
 
         let event = Event(params: [
             "action": "heartbeat",
