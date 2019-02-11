@@ -79,7 +79,7 @@ public class Parsely {
             return
         }
         os_log("Flushing event queue")
-        let events = self.eventQueue.get(count:self.eventQueue.length())
+        let events = self.eventQueue.get()
         os_log("Got %s events", String(describing: events.count))
         //let request = self.requestBuilder.build(events)
         //self.httpClient.send(request)
