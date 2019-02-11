@@ -25,28 +25,6 @@ class Session {
     init() {
         
     }
-    
-    private func getDeviceInfo() -> Dictionary<String, Any> {
-        var deviceInfo: [String: Any] = [:]
-        let mainBundle = Bundle.main
-        if let bundleName = mainBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") {
-            deviceInfo["appname"] = bundleName
-        } else if let bundleName = mainBundle.object(forInfoDictionaryKey: "CFBundleName") {
-            deviceInfo["appname"] = bundleName
-        } else {
-            deviceInfo["appname"] = ""
-        }
-
-        deviceInfo["manufacturer"] = "Apple"
-
-        let currentDevice = UIDevice.current
-
-        deviceInfo["os"] = currentDevice.systemName
-        deviceInfo["os_version"] = currentDevice.systemVersion
-        deviceInfo["model"] = currentDevice.model
-
-        return deviceInfo
-    }
 
     public func get(extendSession: Bool = false) -> Dictionary<String, Any?> {
         if !self.session.isEmpty {
