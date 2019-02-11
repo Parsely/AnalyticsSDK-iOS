@@ -100,16 +100,14 @@ class Sampler {
     // Sampler loop. Started on first trackKey call. Adds accumulated time to each
     // Accumulator that is eligible.
     @objc private func sample() -> Void {
-        // removed: backoff_threshold, _currentTime (For testing? why was this here?)
         let currentTime = Date()
-        var shouldCountSample: Bool, increment: TimeInterval, _lastSampleTime: Date
+        var shouldCountSample: Bool, increment: TimeInterval
         
         for var (_, trackedData) in accumulators {
-            _lastSampleTime = trackedData.lastSampleTime!
-            increment = currentTime.timeIntervalSince(_lastSampleTime)
-
             shouldCountSample = sampleFn(key: trackedData.key)
             if shouldCountSample {
+                // update relevant accumulator
+                increment = currentTime.timeIntervalSince(trackedData.lastSampleTime!)
                 trackedData.heartbeatCandidateSampledTime += increment
                 trackedData.totalSampledTime += increment
                 trackedData.lastSampleTime = currentTime
