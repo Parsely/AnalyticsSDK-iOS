@@ -11,7 +11,7 @@ import Foundation
 class Event {
     // underlying object behind pageview, heartbeat, videostart, vheartbeat, custom events
     // takes a Dictionary<String: Any?>.
-    var originalData: [String: Any?]
+    var originalData: [String: Any]
     var ts: Date
     var action: String
     var url: String

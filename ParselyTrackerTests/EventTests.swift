@@ -47,6 +47,8 @@ class EventTests: XCTestCase {
         let event = Heartbeat("vheartbeat", url: "http://test.com", urlref: nil,  inc: 5, tt: 1234567, data: nil)
         XCTAssert(event.url == "http://test.com",
                   "Heartbeat events should handle inc and tt.")
+        XCTAssert(event.inc == 5,
+                  "Should initialize and preserve subclass parameters.")
     }
     
     func testValidity() {

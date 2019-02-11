@@ -42,9 +42,7 @@ class Pixel {
         if (shouldNotSetLastRequest) {
             Parsely.sharedInstance.lastRequest = data
         }
-        // make a new event?
-        // session and visitor stuff can be added to the dict directly
-        // alternately, we could just enqueue dicts?
+        // TODO: update to enqueue a modified event
         let event = Event(
             data["action"] as! String,
             url: additionalParams.url,
