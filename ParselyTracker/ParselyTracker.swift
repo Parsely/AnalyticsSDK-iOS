@@ -71,19 +71,15 @@ public class Parsely {
         track.videoPause(url: url, vId: videoID, eventArgs: qsargs)
     }
     
-    @objc
-    private func flush() {
+    @objc private func flush() {
         if self.eventQueue.length == 0 {
-            self.stopFlushTimer()
+            return
         }
         if !self.isReachable() {
             return
         }
         let request = self.requestBuilder.build(self.eventQueue.get(count:self.eventQueue.length))
         self.httpClient.send(request)
-        if self.eventQueue.length == 0 {
-            self.stopFlushTimer()
-        }
     }
     
     private func startFlushTimer() {
@@ -92,11 +88,7 @@ public class Parsely {
         }
     }
     
-    private func stopFlushTimer() {
-        self.flushTimer!.invalidate()
-    }
-    
     private func isReachable() -> Bool {
-        return true
+        return true  // TODO
     }
 }
