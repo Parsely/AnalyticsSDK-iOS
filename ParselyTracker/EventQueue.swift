@@ -52,4 +52,8 @@ struct EventQueue<T> {
         os_log("Got %zd events from queue", log: OSLog.default, type: .info, count)
         return list.take(count)
     }
+    
+    public func length() -> Int {
+        return list.count
+    }
 }

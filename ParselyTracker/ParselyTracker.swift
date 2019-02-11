@@ -72,7 +72,7 @@ public class Parsely {
     }
     
     @objc private func flush() {
-        if self.eventQueue.length == 0 {
+        if self.eventQueue.length() == 0 {
             return
         }
         if !self.isReachable() {
