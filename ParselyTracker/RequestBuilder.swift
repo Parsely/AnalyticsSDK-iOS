@@ -43,7 +43,7 @@ class RequestBuilder {
             dateFormatter.dateFormat = "yyyy-MM-dd-HH"
             dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
             let dateString = dateFormatter.string(from: now)
-            self._baseURL = "https://srv-\(dateString).pixel.parsely.com/mobileproxy/"
+            self._baseURL = "https://srv-\(dateString).pixel.parsely.com/mobileproxy"
         }
         return self._baseURL!
     }
