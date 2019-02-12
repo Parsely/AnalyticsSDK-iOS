@@ -39,6 +39,7 @@ class VideoManager: Sampler {
         let totalMs: Int = Int(data.totalMs * 1000)
         // get metadata for this video, too
         var curVideo = trackedVideos[data.key]
+        // todo: Grab urlref from eventArgs here
         let event = Heartbeat(
             "vheartbeat",
             url: curVideo!.url,
@@ -47,6 +48,7 @@ class VideoManager: Sampler {
             tt: totalMs,
             metadata: nil
         )
+        // todo: correct event data handling here
         for (k, v) in curVideo!.eventArgs {
             if !event.originalData.keys.contains(k) {
                 event.originalData[k] = v;
@@ -58,14 +60,15 @@ class VideoManager: Sampler {
         updateVideo(video: curVideo!)
     }
     
-    func trackPlay(url: String, vId: String, eventArgs: Dictionary<String, Any>?) -> Void {
+    func trackPlay(url: String, urlref: String, vId: String, eventArgs: Dictionary<String, Any>?) -> Void {
+        // todo handle urlref in the eventArgs
         var curVideo = self.updateVideoData(vId: vId, url: url, eventArgs: eventArgs)
         if (curVideo.hasStartedPlaying != true) {
             curVideo.hasStartedPlaying = true
             let event = Event(
                 "videostart",
                 url: url,
-                urlref: nil,
+                urlref: urlref,
                 metadata: nil
             )
             for (k, v) in curVideo.eventArgs {
