@@ -41,7 +41,7 @@ class EngagedTime: Sampler {
                 event.originalData[k] = v;
             }
         }
-        Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
+        Parsely.sharedInstance.track.event(event: event)
         os_log("Sent heartbeat for:")
         dump(data)
     }

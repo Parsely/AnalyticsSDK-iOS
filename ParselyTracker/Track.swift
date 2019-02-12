@@ -21,25 +21,25 @@ class Track {
         self.pixel = Pixel()
     }
 
-    func event(event: Event, shouldNotSetLastRequest: Bool) {
+    func event(event: Event) {
         Parsely.sharedInstance.startFlushTimer();
         // generic helper function, sends the event as-is
-        self.pixel.beacon(event: event, shouldNotSetLastRequest: shouldNotSetLastRequest)
+        self.pixel.beacon(event: event, shouldNotSetLastRequest: true)
         os_log("Sending an event from Track")
         dump(event)
 
     }
 
-    func pageview(url: String, urlref: String, shouldNotSetLastRequest: Bool) {
+    func pageview(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:]) {
         let event_ = Event(
             "pageview",
             url: url,
             urlref: urlref,
-            metadata: [:]
+            metadata: metadata
         )
 
         os_log("Sending a pageview from Track")
-        event(event: event_, shouldNotSetLastRequest: shouldNotSetLastRequest)
+        event(event: event_)
     }
 
     func videoStart(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?) {

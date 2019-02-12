@@ -46,7 +46,7 @@ class VideoManager: Sampler {
             tt: totalMs,
             metadata: curVideo?.eventArgs["metadata"] as? Dictionary<String, Any>
         )
-        Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
+        Parsely.sharedInstance.track.event(event: event)
         os_log("Sent vheartbeat for video %s", data.key)
         curVideo?._heartbeatsSent += 1
         updateVideo(video: curVideo!)
@@ -63,7 +63,7 @@ class VideoManager: Sampler {
                 urlref: urlref,
                 metadata: eventArgs["metadata"] as? Dictionary<String, Any>
             )
-            Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
+            Parsely.sharedInstance.track.event(event: event)
             curVideo.isPlaying = true
             updateVideo(video: curVideo)
         }
