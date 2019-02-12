@@ -46,8 +46,9 @@ class EngagedTime: Sampler {
         dump(data)
     }
     
-    func startInteraction(url: String, metadata: Dictionary<String, Any>?) {
+    func startInteraction(url: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
         os_log("Starting Interaction", log: OSLog.default, type: .debug)
+        // todo move event args to the sampler module, not video
         var _eventArgs: [String: Any] = ["url": url]
         // update eventArgs with metadata
         // TODO: separate into it's own key?

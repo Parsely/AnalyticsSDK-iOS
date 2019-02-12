@@ -57,8 +57,8 @@ public class Parsely {
 
     // Engagement functions
 
-    public func startEngagement(url: String, metadata:[String: Any]? = nil) {
-        track.startEngagement(url: url, metadata:metadata)
+    public func startEngagement(url: String, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:]) {
+        track.startEngagement(url: url, metadata:metadata, extra_data: extra_data)
     }
 
     public func stopEngagement(url: String) {
