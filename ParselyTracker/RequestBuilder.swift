@@ -23,8 +23,20 @@ class RequestBuilder {
     // TODO: should refresh every few hours to avoid sending events
     // to an out-of-date pixel server
     // TODO: implement correct user agent string
+    
+    static func getHardwareString() -> String {
+        // https://www.cocoawithlove.com/blog/2016/03/08/swift-wrapper-for-sysctl.html
+        return ""
+    }
 
     static func getUserAgent() -> String {
+        var appDescriptor: String = ""
+        if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String, let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            appDescriptor = String(format: "%s/%s", appName, appVersion)
+        }
+        let osDescriptor = String(format: "iOS/%s", UIDevice.current.systemVersion)
+        let hardwareString = getHardwareString()
+        userAgent = String(format: "%s %s (%s)", appDescriptor, osDescriptor, hardwareString)
         return userAgent
     }
     
