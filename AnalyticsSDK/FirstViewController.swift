@@ -24,7 +24,7 @@ class FirstViewController: UIViewController {
     }
     @IBAction func didTouchButton(_ sender: Any) {
         os_log("didTouchButton", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPageView(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", params: ["action": "pageview"])
+        delegate.parsely.trackPageView(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup")
     }
     
     @IBAction func didStartEngagement(_ sender: Any) {

@@ -47,11 +47,15 @@ public class Parsely {
         )
         self.configured = true
     }
+
+    // Pageview functions
     
-    public func trackPageView(url: String, params: [String: Any]) {
+    public func trackPageView(url: String) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
-        self.track.pageview(url: url, params: params, shouldNotSetLastRequest: true)
+        self.track.pageview(url: url, shouldNotSetLastRequest: true)
     }
+
+    // Engagement functions
 
     public func startEngagement(url: String, qsargs:[String: Any]? = nil) {
         track.startEngagement(url: url, eventArgs:qsargs)
@@ -60,6 +64,8 @@ public class Parsely {
     public func stopEngagement(url: String) {
         track.stopEngagement(url: url)
     }
+
+    // Video functions
 
     public func trackPlay(url: String, videoID: String, qsargs:[String: Any]? = nil) {
         track.videoStart(url: url, vId: videoID, eventArgs: qsargs)
