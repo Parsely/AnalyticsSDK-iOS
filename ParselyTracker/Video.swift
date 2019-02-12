@@ -35,8 +35,9 @@ class VideoManager: Sampler {
         if enableHeartbeats != true {
             return
         }
-        let roundedSecs: Int = Int(data.ms)
-        let totalMs: Int = Int(data.totalMs * 1000)
+        let roundedSecs: Int = Int(data.accumulatedTime)
+        let totalMs: Int = Int(data.totalTime.milliseconds())
+        // get metadata for this video, too
         var curVideo = trackedVideos[data.key]
         let event = Heartbeat(
             "vheartbeat",

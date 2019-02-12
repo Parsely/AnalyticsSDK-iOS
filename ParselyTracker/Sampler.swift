@@ -9,15 +9,15 @@
 import Foundation
 import os.log
 
-let SAMPLE_RATE = 100.0
+let SAMPLE_RATE = TimeInterval(0.1)
 let MIN_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(1)
 let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(15)
 let BACKOFF_THRESHOLD = 60
 
 struct Accumulator {
     var key: String
-    var ms: TimeInterval = TimeInterval(0)
-    var totalMs: TimeInterval = TimeInterval(0)
+    var accumulatedTime: TimeInterval = TimeInterval(0)
+    var totalTime: TimeInterval = TimeInterval(0)
     var lastSampleTime: Date?
     var lastPositiveSampleTime: Date?
     var heartbeatTimeout: TimeInterval?
@@ -65,8 +65,8 @@ class Sampler {
         if accumulators.index(forKey: key) == nil {
             let newTrackedData = Accumulator.init(
                   key: key,
-                  ms: TimeInterval(0),
-                  totalMs: TimeInterval(0),
+                  accumulatedTime: TimeInterval(0),
+                  totalTime: TimeInterval(0),
                   lastSampleTime: Date(),
                   lastPositiveSampleTime: nil,
                   heartbeatTimeout: timeoutFromDuration(contentDuration: contentDuration),
@@ -85,7 +85,7 @@ class Sampler {
             guard samplerTimer == nil else { print("OOPS"); return }
             guard heartbeatsTimer == nil else { print("OOPS HB"); return }
 
-            self.samplerTimer = Timer.scheduledTimer(timeInterval: TimeInterval(SAMPLE_RATE / 1000), target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
+            self.samplerTimer = Timer.scheduledTimer(timeInterval: SAMPLE_RATE, target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
             self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: TimeInterval(self.heartbeatInterval), target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
         }
     }
@@ -107,33 +107,31 @@ class Sampler {
     // Sampler loop. Started on first trackKey call. Adds accumulated time to each
     // Accumulator that is eligible.
     @objc private func sample() -> Void {
-        // removed: backoff_threshold, _currentTime (For testing? why was this here?)
         let currentTime = Date()
-        var shouldCountSample: Bool, increment: TimeInterval, _lastSampleTime: Date
+        var shouldCountSample: Bool, increment: TimeInterval
         
         for var (_, trackedData) in accumulators {
-            _lastSampleTime = trackedData.lastSampleTime!
-            increment = currentTime.timeIntervalSince(_lastSampleTime)
-
             shouldCountSample = sampleFn(key: trackedData.key)
             if shouldCountSample {
-                trackedData.ms += increment
-                trackedData.totalMs += increment
+                // update relevant accumulator
+                increment = currentTime.timeIntervalSince(trackedData.lastSampleTime!)
+                trackedData.accumulatedTime += increment
+                trackedData.totalTime += increment
                 trackedData.lastSampleTime = currentTime
                 updateAccumulator(acc: trackedData)
             }
         }
-        Timer.scheduledTimer(withTimeInterval: TimeInterval(SAMPLE_RATE / 1000), repeats: false) { timer in self.sample() }
+        Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
     }
 
     private func sendHeartbeat(key: String) -> Void {
         var trackedData = accumulators[key]
-        let incSecs: TimeInterval = TimeInterval(trackedData!.ms / 1000)
+        let incSecs: TimeInterval = trackedData!.accumulatedTime
         if incSecs > 0 && incSecs <= (baseHeartbeatInterval + 0.25) {
             os_log("Sending heartbeat for %s", key)
             heartbeatFn(data: trackedData!, enableHeartbeats: true)
         }
-        trackedData!.ms = 0
+        trackedData!.accumulatedTime = 0
         updateAccumulator(acc: trackedData!)
     }
 
@@ -143,7 +141,7 @@ class Sampler {
         for (key, trackedData) in accumulators {
             let sendThreshold = trackedData.heartbeatTimeout! - heartbeatInterval
 
-            if Double(trackedData.ms) >= sendThreshold {
+            if Double(trackedData.accumulatedTime) >= sendThreshold {
                 sendHeartbeat(key: key)
             }
         }
