@@ -25,18 +25,27 @@ class RequestBuilder {
     // TODO: implement correct user agent string
     
     static func getHardwareString() -> String {
-        // https://www.cocoawithlove.com/blog/2016/03/08/swift-wrapper-for-sysctl.html
-        return ""
+        var mib  = [CTL_HW, HW_MACHINE]
+        var len: size_t = 0
+        sysctl(&mib, 2, nil, &len, nil, 0)
+        let machine = UnsafeMutablePointer<Int8>.allocate(capacity:len)
+        sysctl(&mib, 2, machine, &len, nil, 0)
+        let platform: String = String(cString:machine, encoding:String.Encoding.ascii) ?? ""
+        machine.deallocate()
+        return platform
     }
 
     static func getUserAgent() -> String {
         var appDescriptor: String = ""
-        if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String, let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-            appDescriptor = String(format: "%s/%s", appName, appVersion)
+        if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
+            if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+                appDescriptor = String(format: "%@/%@", appName, appVersion)
+            }
         }
-        let osDescriptor = String(format: "iOS/%s", UIDevice.current.systemVersion)
+        let osDescriptor = String(format: "iOS/%@", UIDevice.current.systemVersion)
         let hardwareString = getHardwareString()
-        userAgent = String(format: "%s %s (%s)", appDescriptor, osDescriptor, hardwareString)
+        userAgent = String(format: "%@ %@ (%@)", appDescriptor, osDescriptor, hardwareString)
+        os_log("%s", userAgent)
         return userAgent
     }
     
