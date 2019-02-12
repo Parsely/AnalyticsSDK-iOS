@@ -37,8 +37,6 @@ class Event {
         self.metadata = metadata
         self.extra_data = extra_data
 
-        // todo handle extra_data
-
         // preserve original data as dict
         var params: Dictionary<String, Any> = [
             "url": url,
