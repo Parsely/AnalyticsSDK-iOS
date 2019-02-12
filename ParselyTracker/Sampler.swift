@@ -9,7 +9,7 @@
 import Foundation
 import os.log
 
-let SAMPLE_RATE_MS = 100.0
+let SAMPLE_RATE = TimeInterval(0.1)
 let MIN_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(1)
 let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(15)
 let BACKOFF_THRESHOLD = 60
@@ -85,7 +85,7 @@ class Sampler {
             guard samplerTimer == nil else { print("OOPS"); return }
             guard heartbeatsTimer == nil else { print("OOPS HB"); return }
 
-            self.samplerTimer = Timer.scheduledTimer(timeInterval: TimeInterval(SAMPLE_RATE_MS / 1000), target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
+            self.samplerTimer = Timer.scheduledTimer(timeInterval: SAMPLE_RATE, target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
             self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: TimeInterval(self.heartbeatInterval), target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
         }
     }
@@ -114,7 +114,7 @@ class Sampler {
                 updateAccumulator(acc: trackedData)
             }
         }
-        Timer.scheduledTimer(withTimeInterval: TimeInterval(SAMPLE_RATE_MS / 1000), repeats: false) { timer in self.sample() }
+        Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
     }
 
     private func sendHeartbeat(key: String) -> Void {
