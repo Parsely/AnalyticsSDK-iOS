@@ -42,13 +42,13 @@ class Track {
         event(event: event_, shouldNotSetLastRequest: shouldNotSetLastRequest)
     }
 
-    func videoStart(url: String, urlref: String, vId: String, eventArgs: Dictionary<String, Any>?) {
-        videoManager.trackPlay(url: url, urlref: urlref, vId: vId, eventArgs: eventArgs)
+    func videoStart(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?) {
+        videoManager.trackPlay(url: url, urlref: urlref, vId: vId, metadata: metadata)
         os_log("Tracked videoStart from Track")
     }
 
-    func videoPause(url: String, urlref: String, vId: String, eventArgs: Dictionary<String, Any>?) {
-        videoManager.trackPause(url: url, urlref: urlref, vId: vId, eventArgs: eventArgs)
+    func videoPause(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?) {
+        videoManager.trackPause(url: url, urlref: urlref, vId: vId, metadata: metadata)
         os_log("Tracked videoPause from Track")
     }
 

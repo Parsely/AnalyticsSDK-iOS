@@ -71,12 +71,12 @@ public class Parsely {
 
     // Video functions
 
-    public func trackPlay(url: String, urlref: String, videoID: String, qsargs:[String: Any]? = nil) {
-        track.videoStart(url: url, urlref: urlref, vId: videoID, eventArgs: qsargs)
+    public func trackPlay(url: String, urlref: String, videoID: String, metadata:[String: Any]? = nil) {
+        track.videoStart(url: url, urlref: urlref, vId: videoID, metadata: metadata)
     }
 
-    public func trackPause(url: String, urlref: String, videoID: String, qsargs:[String: Any]? = nil) {
-        track.videoPause(url: url, urlref: urlref, vId: videoID, eventArgs: qsargs)
+    public func trackPause(url: String, urlref: String, videoID: String, metadata:[String: Any]? = nil) {
+        track.videoPause(url: url, urlref: urlref, vId: videoID, metadata: metadata)
     }
     
     @objc private func flush() {
