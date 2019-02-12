@@ -36,16 +36,17 @@ class RequestBuilder {
     }
 
     static func getUserAgent() -> String {
-        var appDescriptor: String = ""
-        if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
-            if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-                appDescriptor = String(format: "%@/%@", appName, appVersion)
+        if userAgent == "" {
+            var appDescriptor: String = ""
+            if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
+                if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+                    appDescriptor = String(format: "%@/%@", appName, appVersion)
+                }
             }
+            let osDescriptor = String(format: "iOS/%@", UIDevice.current.systemVersion)
+            let hardwareString = getHardwareString()
+            userAgent = String(format: "%@ %@ (%@)", appDescriptor, osDescriptor, hardwareString)
         }
-        let osDescriptor = String(format: "iOS/%@", UIDevice.current.systemVersion)
-        let hardwareString = getHardwareString()
-        userAgent = String(format: "%@ %@ (%@)", appDescriptor, osDescriptor, hardwareString)
-        os_log("%s", userAgent)
         return userAgent
     }
     
