@@ -31,16 +31,12 @@ class EngagedTime: Sampler {
         let event = Heartbeat(
             "heartbeat",
             url: data.eventArgs!["url"] as! String,
-            urlref: nil,
+            urlref: data.eventArgs!["urlref"] as? String,
             inc: roundedSecs,
             tt: totalMs,
-            metadata: nil
+            metadata: data.eventArgs!["metadata"] as? Dictionary<String, Any>
         )
-        for (k, v) in data.eventArgs! {  // XXX replace with merging()
-            if !event.originalData.keys.contains(k) {
-                event.originalData[k] = v;
-            }
-        }
+
         Parsely.sharedInstance.track.event(event: event)
         os_log("Sent heartbeat for:")
         dump(data)
