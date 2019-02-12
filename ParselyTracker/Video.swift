@@ -44,7 +44,8 @@ class VideoManager: Sampler {
             urlref: curVideo?.eventArgs["urlref"] as? String,
             inc: roundedSecs,
             tt: totalMs,
-            metadata: curVideo?.eventArgs["metadata"] as? Dictionary<String, Any>
+            metadata: curVideo?.eventArgs["metadata"] as? Dictionary<String, Any>,
+            extra_data: (curVideo?.eventArgs["extra_data"] as? Dictionary<String, Any>)!
         )
         Parsely.sharedInstance.track.event(event: event)
         os_log("Sent vheartbeat for video %s", data.key)
@@ -53,7 +54,7 @@ class VideoManager: Sampler {
     }
     
     func trackPlay(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>) -> Void {
-        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata)
+        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
         var curVideo = self.updateVideoData(vId: vId, url: url, eventArgs: eventArgs)
         if (curVideo.hasStartedPlaying != true) {
             curVideo.hasStartedPlaying = true
@@ -61,7 +62,8 @@ class VideoManager: Sampler {
                 "videostart",
                 url: url,
                 urlref: urlref,
-                metadata: eventArgs["metadata"] as? Dictionary<String, Any>
+                metadata: eventArgs["metadata"] as? Dictionary<String, Any>,
+                extra_data: (eventArgs["extra_data"] as? Dictionary<String, Any>)!
             )
             Parsely.sharedInstance.track.event(event: event)
             curVideo.isPlaying = true
@@ -70,7 +72,7 @@ class VideoManager: Sampler {
     }
     
     func trackPause(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>) -> Void {
-        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata)
+        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
         var curVideo = self.updateVideoData(vId: vId, url: url, eventArgs: eventArgs)
         curVideo.isPlaying = false
         updateVideo(video: curVideo)
