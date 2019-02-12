@@ -76,13 +76,6 @@ class VideoManager: Sampler {
         updateVideo(video: curVideo)
     }
 
-    private func generateEventArgs(urlref: String, metadata: Dictionary<String, Any>?) -> Dictionary<String, Any> {
-        // eventArgs: urlref for heartbeats, metadata for heartbeats
-        let metadata_ = metadata ?? [:]
-        let eventArgs = ["urlref": urlref, "metadata": metadata_] as [String : Any]
-        return eventArgs
-    }
-
     private func updateVideoData(vId: String, url: String, eventArgs: Dictionary<String, Any>?) -> TrackedVideo {
         var _eventArgs: [String: Any] = eventArgs ?? [String: Any]()
         var metadata = _eventArgs["metadata"] as? Dictionary<String, Any> ?? [String: Any]()
