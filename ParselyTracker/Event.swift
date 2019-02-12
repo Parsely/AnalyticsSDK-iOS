@@ -15,8 +15,19 @@ class Event {
     var action: String
     var url: String
     var urlref: String
-    var data: Dictionary<String, Any>
+    var data: Dictionary<String, Any> = [:] {
+        willSet(updatedData) {
+            print("UPDOOT DATA")
+            self.originalData["data"] = updatedData
+        }
+    }
     var metadata: Dictionary<String, Any>?
+    var idsite: String = "" {
+        willSet(newIdsite) {
+            print("UPDOOT IDISTE")
+            self.originalData["idsite"] = newIdsite
+        }
+    }
     
     init(_ action: String, url: String, urlref: String?, metadata: Dictionary<String, Any>?) {
         // set instance properties
