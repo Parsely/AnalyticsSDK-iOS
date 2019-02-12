@@ -30,16 +30,18 @@ class Track {
 
     }
 
-    func pageview(url: String, params: [String: Any], shouldNotSetLastRequest: Bool) {
-        let data: [String: Any] = [
+    func pageview(url: String, params: [String: Any]?, shouldNotSetLastRequest: Bool) {
+        var data: [String: Any] = [
             "action": "pageview",
             "url": url
-            ]
-        let updatedData = data.merging(
-            params, uniquingKeysWith: { (old, _new) in old }
-        )
-
-        let event_ = Event(params: updatedData)
+        ]
+        if params != nil {
+            data = data.merging(
+                params!, uniquingKeysWith: { (old, _new) in old }
+            )
+        }
+        
+        let event_ = Event(params: data)
         os_log("Sending a pageview from Track")
         event(event: event_, shouldNotSetLastRequest: shouldNotSetLastRequest)
     }
