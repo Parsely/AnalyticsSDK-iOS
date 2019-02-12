@@ -63,8 +63,8 @@ class VideoManager: Sampler {
                 "videostart",
                 url: url,
                 urlref: urlref,
-                metadata: eventArgs["metadata"] as? Dictionary<String, Any>,
-                extra_data: (eventArgs["extra_data"] as? Dictionary<String, Any>)!
+                metadata: curVideo.eventArgs["metadata"] as? Dictionary<String, Any>,
+                extra_data: (curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>)!
             )
             Parsely.sharedInstance.track.event(event: event)
             curVideo.isPlaying = true
