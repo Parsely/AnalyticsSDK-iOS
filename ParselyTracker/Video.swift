@@ -53,7 +53,7 @@ class VideoManager: Sampler {
     }
     
     func trackPlay(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?) -> Void {
-        let eventArgs = generateEventArgs(urlref: urlref, metadata: metadata)
+        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata)
         var curVideo = self.updateVideoData(vId: vId, url: url, eventArgs: eventArgs)
         if (curVideo.hasStartedPlaying != true) {
             curVideo.hasStartedPlaying = true
@@ -70,7 +70,7 @@ class VideoManager: Sampler {
     }
     
     func trackPause(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?) -> Void {
-        let eventArgs = generateEventArgs(urlref: urlref, metadata: metadata)
+        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata)
         var curVideo = self.updateVideoData(vId: vId, url: url, eventArgs: eventArgs)
         curVideo.isPlaying = false
         updateVideo(video: curVideo)
