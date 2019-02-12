@@ -30,11 +30,11 @@ class Track {
 
     }
 
-    func pageview(url: String, shouldNotSetLastRequest: Bool) {
+    func pageview(url: String, urlref: String, shouldNotSetLastRequest: Bool) {
         let event_ = Event(
             "pageview",
             url: url,
-            urlref: nil,
+            urlref: urlref,
             data: [:]
         )
 

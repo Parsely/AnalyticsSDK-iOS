@@ -51,8 +51,12 @@ public class Parsely {
     // Pageview functions
     
     public func trackPageView(url: String) {
+        trackPageView(url: url, urlref: "")
+    }
+
+    public func trackPageView(url: String, urlref: String) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
-        self.track.pageview(url: url, shouldNotSetLastRequest: true)
+        self.track.pageview(url: url, urlref: urlref, shouldNotSetLastRequest: true)
     }
 
     // Engagement functions
