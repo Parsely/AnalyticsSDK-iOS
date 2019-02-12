@@ -46,11 +46,13 @@ class EngagedTime: Sampler {
         dump(data)
     }
     
-    func startInteraction(url: String, eventArgs: Dictionary<String, Any>?) {
+    func startInteraction(url: String, metadata: Dictionary<String, Any>?) {
         os_log("Starting Interaction", log: OSLog.default, type: .debug)
         var _eventArgs: [String: Any] = ["url": url]
-        if eventArgs != nil {
-            for (k, v) in eventArgs! {
+        // update eventArgs with metadata
+        // TODO: separate into it's own key?
+        if metadata != nil {
+            for (k, v) in metadata! {
                 _eventArgs[k] = v
             }
         }
