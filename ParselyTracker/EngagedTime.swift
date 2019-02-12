@@ -34,7 +34,7 @@ class EngagedTime: Sampler {
             urlref: nil,
             inc: roundedSecs,
             tt: totalMs,
-            data: nil
+            metadata: nil
         )
         for (k, v) in data.eventArgs! {  // XXX replace with merging()
             if !event.originalData.keys.contains(k) {

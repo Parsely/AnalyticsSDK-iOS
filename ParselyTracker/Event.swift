@@ -16,21 +16,29 @@ class Event {
     var url: String
     var urlref: String
     var data: Dictionary<String, Any>
+    var metadata: Dictionary<String, Any>?
     
-    init(_ action: String, url: String, urlref: String?, data: Dictionary<String, Any>?) {
+    init(_ action: String, url: String, urlref: String?, metadata: Dictionary<String, Any>?) {
         // set instance properties
         self.action = action
         self.url = url
         self.urlref = urlref ?? ""
-        self.data = data ?? [:]
+        self.data = [:]
+        self.metadata = metadata
+
+        // todo handle extra_data
+
         // preserve original data as dict
-        let params: Dictionary<String, Any> = [
+        var params: Dictionary<String, Any> = [
             "url": url,
             "urlref": self.urlref,
             "action": action,
             "data": self.data
-            
         ]
+        // add metadata at top level if present
+        if let metas = self.metadata {
+            params["metadata"] = metas
+        }
         self.originalData = params
     }
     
@@ -49,10 +57,10 @@ class Heartbeat: Event {
     var tt: Int
     var inc: Int
 
-    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, data: Dictionary<String, Any>?) {
+    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, metadata: Dictionary<String, Any>?) {
         self.tt = tt
         self.inc = inc
-        super.init(action, url: url, urlref: urlref, data: data)
+        super.init(action, url: url, urlref: urlref, metadata: metadata)
         self.originalData["tt"] = self.tt
         self.originalData["inc"] = self.inc
     }

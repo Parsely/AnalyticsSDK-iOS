@@ -45,7 +45,7 @@ class VideoManager: Sampler {
             urlref: nil,
             inc: roundedSecs,
             tt: totalMs,
-            data: nil
+            metadata: nil
         )
         for (k, v) in curVideo!.eventArgs {
             if !event.originalData.keys.contains(k) {
@@ -66,7 +66,7 @@ class VideoManager: Sampler {
                 "videostart",
                 url: url,
                 urlref: nil,
-                data: nil
+                metadata: nil
             )
             for (k, v) in curVideo.eventArgs {
                 if !event.originalData.keys.contains(k) {

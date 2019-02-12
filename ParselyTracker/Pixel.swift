@@ -21,7 +21,7 @@ class Pixel {
         let session = Session().get(extendSession: true)
         data = data.merging(session, uniquingKeysWith: { (old, _new) in old })
         // add in the event toDict itself
-        data = data.merging(event.toDict(), uniquingKeysWith: { (old, _new) in old })
+//        data = data.merging(event.toDict(), uniquingKeysWith: { (old, _new) in old })
         // visitor info
         let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
         data["parsely_uuid"] = visitorInfo["id"]
@@ -30,11 +30,14 @@ class Pixel {
             Parsely.sharedInstance.lastRequest = data
         }
         // TODO: should we just enqueue dicts? this has a duplicate of the event inside data.
-        let event = Event(
-            data["action"] as! String,
-            url: event.url,
-            urlref: event.urlref,
-            data: data as Dictionary<String, Any>)
+//        let event = Event(
+//            data["action"] as! String,
+//            url: event.url,
+//            urlref: event.urlref,
+//            data: data as Dictionary<String, Any>)
+        event.data = data as Dictionary<String, Any> // assign updated values
+        // TODO: get around the problem that we enrich events here
+        // todo: handle idsite appropriately at top-level
         Parsely.sharedInstance.eventQueue.push(event)
     }
 }

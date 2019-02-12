@@ -35,7 +35,7 @@ class Track {
             "pageview",
             url: url,
             urlref: urlref,
-            data: [:]
+            metadata: [:]
         )
 
         os_log("Sending a pageview from Track")
