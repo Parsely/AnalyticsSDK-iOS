@@ -70,10 +70,10 @@ class Heartbeat: Event {
     var tt: Int
     var inc: Int
 
-    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, metadata: Dictionary<String, Any>?) {
+    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
         self.tt = tt
         self.inc = inc
-        super.init(action, url: url, urlref: urlref, metadata: metadata)
+        super.init(action, url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
         self.originalData["tt"] = self.tt
         self.originalData["inc"] = self.inc
     }

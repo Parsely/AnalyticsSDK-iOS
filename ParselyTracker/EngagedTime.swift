@@ -34,7 +34,8 @@ class EngagedTime: Sampler {
             urlref: data.eventArgs!["urlref"] as? String,
             inc: roundedSecs,
             tt: totalMs,
-            metadata: data.eventArgs!["metadata"] as? Dictionary<String, Any>
+            metadata: data.eventArgs!["metadata"] as? Dictionary<String, Any>,
+            extra_data: (data.eventArgs!["extra_data"] as? Dictionary<String, Any>)!
         )
 
         Parsely.sharedInstance.track.event(event: event)
@@ -44,7 +45,7 @@ class EngagedTime: Sampler {
     
     func startInteraction(url: String, urlref: String = "", metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
         os_log("Starting Interaction", log: OSLog.default, type: .debug)
-        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata)
+        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
         trackKey(key: url, contentDuration: nil, eventArgs: eventArgs);
         accumulators[url]!.isEngaged = true
     }
