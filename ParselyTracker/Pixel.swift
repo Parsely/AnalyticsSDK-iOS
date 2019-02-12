@@ -12,7 +12,7 @@ import os.log
 
 class Pixel {
     
-    func beacon(event: Event, shouldNotSetLastRequest: Bool) {
+    func beacon(event: Event) {
         os_log("Fired beacon", log: OSLog.default, type: .debug)
         // start forming dictionary
         let rand = Date().millisecondsSince1970
@@ -24,11 +24,9 @@ class Pixel {
         // visitor info
         let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
         data["parsely_uuid"] = visitorInfo["id"]
-        // TODO: extra_data goes into the data dictionary key-by-key
+
         // TODO parsely_site_uuid??
-        if (shouldNotSetLastRequest) {
-            Parsely.sharedInstance.lastRequest = data
-        }
+        
         // merge with the extra_data provided by the customer
         data = data.merging(event.extra_data, uniquingKeysWith: { (old, _new) in old })
         // update event values as needed
