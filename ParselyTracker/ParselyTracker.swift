@@ -50,9 +50,9 @@ public class Parsely {
 
     // Pageview functions
 
-    public func trackPageView(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:]) {
+    public func trackPageView(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:]) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
-        self.track.pageview(url: url, urlref: urlref, metadata: metadata)
+        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
     }
 
     // Engagement functions

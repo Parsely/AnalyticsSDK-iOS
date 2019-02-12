@@ -30,12 +30,13 @@ class Track {
 
     }
 
-    func pageview(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:]) {
+    func pageview(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:]) {
         let event_ = Event(
             "pageview",
             url: url,
             urlref: urlref,
-            metadata: metadata
+            metadata: metadata,
+            extra_data: extra_data
         )
 
         os_log("Sending a pageview from Track")

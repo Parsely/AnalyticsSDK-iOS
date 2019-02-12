@@ -19,6 +19,7 @@ class Pixel {
         var data: Dictionary<String,Any?> = ["ts": rand]
         // add session data
         let session = Session().get(extendSession: true)
+        // TODO: validate these are going to the right level of the event.
         data = data.merging(session, uniquingKeysWith: { (old, _new) in old })
         // visitor info
         let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
@@ -28,9 +29,10 @@ class Pixel {
         if (shouldNotSetLastRequest) {
             Parsely.sharedInstance.lastRequest = data
         }
+        // merge with the extra_data provided by the customer
+        data = data.merging(event.extra_data, uniquingKeysWith: { (old, _new) in old })
         // update event values as needed
         event.data = data as Dictionary<String, Any>
-        // todo this doesn't update
         event.idsite = Parsely.sharedInstance.apikey
         Parsely.sharedInstance.eventQueue.push(event)
     }

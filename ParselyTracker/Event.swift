@@ -28,14 +28,16 @@ class Event {
             self.originalData["idsite"] = newIdsite
         }
     }
+    var extra_data: Dictionary<String, Any>
     
-    init(_ action: String, url: String, urlref: String?, metadata: Dictionary<String, Any>?) {
+    init(_ action: String, url: String, urlref: String?, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
         // set instance properties
         self.action = action
         self.url = url
         self.urlref = urlref ?? ""
         self.data = [:]
         self.metadata = metadata
+        self.extra_data = extra_data
 
         // todo handle extra_data
 
