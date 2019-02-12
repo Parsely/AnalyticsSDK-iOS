@@ -21,41 +21,40 @@ class Track {
         self.pixel = Pixel()
     }
 
-    func event(event: Event, shouldNotSetLastRequest: Bool) {
+    func event(event: Event) {
         Parsely.sharedInstance.startFlushTimer();
         // generic helper function, sends the event as-is
-        self.pixel.beacon(additionalParams: event, shouldNotSetLastRequest: shouldNotSetLastRequest)
+        self.pixel.beacon(event: event)
         os_log("Sending an event from Track")
         dump(event)
 
     }
 
-    func pageview(url: String, params: [String: Any], shouldNotSetLastRequest: Bool) {
-        let data: [String: Any] = [
-            "action": "pageview",
-            "url": url
-            ]
-        let updatedData = data.merging(
-            params, uniquingKeysWith: { (old, _new) in old }
+    func pageview(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:]) {
+        let event_ = Event(
+            "pageview",
+            url: url,
+            urlref: urlref,
+            metadata: metadata,
+            extra_data: extra_data
         )
 
-        let event_ = Event(params: updatedData)
         os_log("Sending a pageview from Track")
-        event(event: event_, shouldNotSetLastRequest: shouldNotSetLastRequest)
+        event(event: event_)
     }
 
-    func videoStart(url: String, vId: String, eventArgs: Dictionary<String, Any>?) {
-        videoManager.trackPlay(url: url, vId: vId, eventArgs: eventArgs)
+    func videoStart(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
+        videoManager.trackPlay(url: url, urlref: urlref, vId: vId, metadata: metadata, extra_data: extra_data)
         os_log("Tracked videoStart from Track")
     }
 
-    func videoPause(url: String, vId: String, eventArgs: Dictionary<String, Any>?) {
-        videoManager.trackPause(url: url, vId: vId, eventArgs: eventArgs)
+    func videoPause(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
+        videoManager.trackPause(url: url, urlref: urlref, vId: vId, metadata: metadata, extra_data: extra_data)
         os_log("Tracked videoPause from Track")
     }
 
-    func startEngagement(url: String, eventArgs:Dictionary<String, Any>?) {
-        self.engagedTime.startInteraction(url: url, eventArgs: eventArgs)
+    func startEngagement(url: String, urlref: String = "", metadata:Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
+        self.engagedTime.startInteraction(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
         os_log("track start engagement from Track")
     }
 

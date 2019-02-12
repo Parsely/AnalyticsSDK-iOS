@@ -26,31 +26,25 @@ class EngagedTime: Sampler {
         let roundedSecs: Int = Int(data.accumulatedTime)
         let totalMs: Int = Int(data.totalTime.milliseconds())
 
-        let event = Event(params: [
-            "action": "heartbeat",
-            "inc": roundedSecs,
-            "tt": totalMs,
-            "url": data.eventArgs!["url"]
-        ])
-        for (k, v) in data.eventArgs! {  // XXX replace with merging()
-            if !event.originalData.keys.contains(k) {
-                event.originalData[k] = v;
-            }
-        }
-        Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
+        let event = Heartbeat(
+            "heartbeat",
+            url: data.eventArgs!["url"] as! String,
+            urlref: data.eventArgs!["urlref"] as? String,
+            inc: roundedSecs,
+            tt: totalMs,
+            metadata: data.eventArgs!["metadata"] as? Dictionary<String, Any>,
+            extra_data: (data.eventArgs!["extra_data"] as? Dictionary<String, Any>)!
+        )
+
+        Parsely.sharedInstance.track.event(event: event)
         os_log("Sent heartbeat for:")
         dump(data)
     }
     
-    func startInteraction(url: String, eventArgs: Dictionary<String, Any>?) {
+    func startInteraction(url: String, urlref: String = "", metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
         os_log("Starting Interaction", log: OSLog.default, type: .debug)
-        var _eventArgs: [String: Any] = ["url": url]
-        if eventArgs != nil {
-            for (k, v) in eventArgs! {
-                _eventArgs[k] = v
-            }
-        }
-        trackKey(key: url, contentDuration: nil, eventArgs: _eventArgs);
+        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
+        trackKey(key: url, contentDuration: nil, eventArgs: eventArgs);
         accumulators[url]!.isEngaged = true
     }
     

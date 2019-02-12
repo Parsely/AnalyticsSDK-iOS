@@ -29,7 +29,7 @@ public class Parsely {
         }
     }
     public static let sharedInstance = Parsely()
-    var visitorManager: VisitorManager?
+    lazy var visitorManager = VisitorManager()
     
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.default, type: .info)
@@ -45,30 +45,34 @@ public class Parsely {
         self.config = self.default_config.merging(
                 options, uniquingKeysWith: { (_old, new) in new }
         )
-        self.visitorManager = VisitorManager()
-
         self.configured = true
     }
-    
-    public func trackPageView(url: String, params: [String: Any]) {
+
+    // Pageview functions
+
+    public func trackPageView(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:]) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
-        self.track.pageview(url: url, params: params, shouldNotSetLastRequest: true)
+        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
     }
 
-    public func startEngagement(url: String, qsargs:[String: Any]? = nil) {
-        track.startEngagement(url: url, eventArgs:qsargs)
+    // Engagement functions
+
+    public func startEngagement(url: String, urlref: String = "", metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:]) {
+        track.startEngagement(url: url, urlref: urlref, metadata:metadata, extra_data: extra_data)
     }
 
     public func stopEngagement(url: String) {
         track.stopEngagement(url: url)
     }
 
-    public func trackPlay(url: String, videoID: String, qsargs:[String: Any]? = nil) {
-        track.videoStart(url: url, vId: videoID, eventArgs: qsargs)
+    // Video functions
+
+    public func trackPlay(url: String, urlref: String = "", videoID: String, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:]) {
+        track.videoStart(url: url, urlref: urlref, vId: videoID, metadata: metadata, extra_data: extra_data)
     }
 
-    public func trackPause(url: String, videoID: String, qsargs:[String: Any]? = nil) {
-        track.videoPause(url: url, vId: videoID, eventArgs: qsargs)
+    public func trackPause(url: String, urlref: String = "", videoID: String, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:]) {
+        track.videoPause(url: url, urlref: urlref, vId: videoID, metadata: metadata, extra_data: extra_data)
     }
     
     @objc private func flush() {

@@ -39,47 +39,41 @@ class VideoManager: Sampler {
         let totalMs: Int = Int(data.totalTime.milliseconds())
         // get metadata for this video, too
         var curVideo = trackedVideos[data.key]
-        // TODO: fix video events (need url, vid)
-        let event = Event(params: [
-            "action": "vheartbeat",
-            "inc": roundedSecs,
-            "url": curVideo!.url,
-            "tt": totalMs
-        ])
-        for (k, v) in curVideo!.eventArgs {
-            if !event.originalData.keys.contains(k) {
-                event.originalData[k] = v;
-            }
-        }
-        Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
+        let event = Heartbeat(
+            "vheartbeat",
+            url: curVideo!.url,
+            urlref: curVideo?.eventArgs["urlref"] as? String,
+            inc: roundedSecs,
+            tt: totalMs,
+            metadata: curVideo?.eventArgs["metadata"] as? Dictionary<String, Any>,
+            extra_data: (curVideo?.eventArgs["extra_data"] as? Dictionary<String, Any>)!
+        )
+        Parsely.sharedInstance.track.event(event: event)
         os_log("Sent vheartbeat for video %s", data.key)
         curVideo?._heartbeatsSent += 1
         updateVideo(video: curVideo!)
     }
     
-    func trackPlay(url: String, vId: String, eventArgs: Dictionary<String, Any>?) -> Void {
+    func trackPlay(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>) -> Void {
+        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
         var curVideo = self.updateVideoData(vId: vId, url: url, eventArgs: eventArgs)
         if (curVideo.hasStartedPlaying != true) {
             curVideo.hasStartedPlaying = true
-            let event = Event(params:[
-                "action": "videostart",
-                "url": url
-            ])
-            for (k, v) in curVideo.eventArgs {
-                if !event.originalData.keys.contains(k) {
-                    event.originalData[k] = v;
-                }
-            }
-            var extraData: [String: Any] = event.originalData["data"] as? [String: Any] ?? [String: Any]()
-            extraData["ts"] = Date().timeIntervalSince1970 * 1000
-            event.originalData["data"] = extraData
-            Parsely.sharedInstance.track.event(event: event, shouldNotSetLastRequest: false)
+            let event = Event(
+                "videostart",
+                url: url,
+                urlref: urlref,
+                metadata: eventArgs["metadata"] as? Dictionary<String, Any>,
+                extra_data: (eventArgs["extra_data"] as? Dictionary<String, Any>)!
+            )
+            Parsely.sharedInstance.track.event(event: event)
             curVideo.isPlaying = true
             updateVideo(video: curVideo)
         }
     }
     
-    func trackPause(url: String, vId: String, eventArgs: Dictionary<String, Any>?) -> Void {
+    func trackPause(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>) -> Void {
+        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
         var curVideo = self.updateVideoData(vId: vId, url: url, eventArgs: eventArgs)
         curVideo.isPlaying = false
         updateVideo(video: curVideo)

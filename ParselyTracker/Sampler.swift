@@ -97,6 +97,13 @@ class Sampler {
         accumulators.removeValue(forKey: key)
     }
 
+    public func generateEventArgs(url: String, urlref: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) -> Dictionary<String, Any> {
+        // eventArgs: url, urlref, metadata for heartbeats
+        let metadata_ = metadata ?? [:]
+        let eventArgs = ["urlref": urlref, "url": url, "metadata": metadata_, "extra_data": extra_data] as [String : Any]
+        return eventArgs
+    }
+
     // Sampler loop. Started on first trackKey call. Adds accumulated time to each
     // Accumulator that is eligible.
     @objc private func sample() -> Void {

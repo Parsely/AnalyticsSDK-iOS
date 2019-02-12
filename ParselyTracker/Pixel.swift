@@ -12,18 +12,26 @@ import os.log
 
 class Pixel {
     
-    func beacon(additionalParams: Event, shouldNotSetLastRequest: Bool) {
+    func beacon(event: Event) {
         os_log("Fired beacon", log: OSLog.default, type: .debug)
-        let session = Session().get(extendSession: true)
+        // start forming dictionary
         let rand = Date().millisecondsSince1970
-        var data: Dictionary<String,Any?> = ["idsite": Parsely.sharedInstance.apikey, "data": ["ts": rand]]
+        var data: Dictionary<String,Any?> = ["ts": rand]
+        // add session data
+        let session = Session().get(extendSession: true)
+        // TODO: validate these are going to the right level of the event.
         data = data.merging(session, uniquingKeysWith: { (old, _new) in old })
-        data = data.merging(additionalParams.toDict(), uniquingKeysWith: { (old, _new) in old })
-        let visitorInfo = Parsely.sharedInstance.visitorManager?.getVisitorInfo(shouldExtendExisting: true)
-        if (shouldNotSetLastRequest) {
-            Parsely.sharedInstance.lastRequest = data
-        }
-        Parsely.sharedInstance.config["uuid"] = visitorInfo?["id"]!
-        Parsely.sharedInstance.eventQueue.push(Event(params: data))
+        // visitor info
+        let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
+        data["parsely_uuid"] = visitorInfo["id"]
+
+        // TODO parsely_site_uuid??
+        
+        // merge with the extra_data provided by the customer
+        data = data.merging(event.extra_data, uniquingKeysWith: { (old, _new) in old })
+        // update event values as needed
+        event.data = data as Dictionary<String, Any>
+        event.idsite = Parsely.sharedInstance.apikey
+        Parsely.sharedInstance.eventQueue.push(event)
     }
 }

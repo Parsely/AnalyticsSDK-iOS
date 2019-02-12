@@ -24,7 +24,7 @@ class SamplerTests: XCTestCase {
         let initialHbValue = sampler.heartbeatInterval
         XCTAssert(initialHbValue == TimeInterval(floatLiteral: 10.5))
 
-        sampler.trackKey(key: "testKey", contentDuration: TimeInterval(floatLiteral: 10.0))
+        sampler.trackKey(key: "testKey", contentDuration: TimeInterval(floatLiteral: 10.0), eventArgs: [:])
         let newHbValue = sampler.heartbeatInterval
         XCTAssert(newHbValue != initialHbValue, "A shorter content duration should decrease the global timeout.")
         XCTAssert(newHbValue == TimeInterval(floatLiteral: 2.0), "10s content duration should account for all completion intervals.")
@@ -35,8 +35,8 @@ class SamplerTests: XCTestCase {
         let sampler1 = Sampler()
         let sampler2 = Sampler()
         // track the same key, but for different reasons
-        sampler1.trackKey(key: "thing", contentDuration: TimeInterval(floatLiteral: 30))
-        sampler2.trackKey(key: "thing", contentDuration: TimeInterval(floatLiteral: 30))
+        sampler1.trackKey(key: "thing", contentDuration: TimeInterval(floatLiteral: 30), eventArgs: [:])
+        sampler2.trackKey(key: "thing", contentDuration: TimeInterval(floatLiteral: 30), eventArgs: [:])
         // dropping a key shouldn't affect the other sampler
         sampler1.dropKey(key: "thing")
         XCTAssert(sampler2.accumulators["thing"] != nil,
