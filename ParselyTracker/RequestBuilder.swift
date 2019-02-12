@@ -19,13 +19,35 @@ struct ParselyRequest {
 class RequestBuilder {
     
     static var _baseURL: String? = nil
-    static var userAgent: String = "parsely-analytics-ios/3.0.0"
+    static var userAgent: String? = nil
     // TODO: should refresh every few hours to avoid sending events
     // to an out-of-date pixel server
     // TODO: implement correct user agent string
+    
+    static func getHardwareString() -> String {
+        var mib  = [CTL_HW, HW_MACHINE]
+        var len: size_t = 0
+        sysctl(&mib, 2, nil, &len, nil, 0)
+        let machine = UnsafeMutablePointer<Int8>.allocate(capacity:len)
+        sysctl(&mib, 2, machine, &len, nil, 0)
+        let platform: String = String(cString:machine, encoding:String.Encoding.ascii) ?? ""
+        machine.deallocate()
+        return platform
+    }
 
     static func getUserAgent() -> String {
-        return userAgent
+        if userAgent == nil {
+            var appDescriptor: String = ""
+            if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
+                if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+                    appDescriptor = String(format: "%@/%@", appName, appVersion)
+                }
+            }
+            let osDescriptor = String(format: "iOS/%@", UIDevice.current.systemVersion)
+            let hardwareString = getHardwareString()
+            userAgent = String(format: "%@ %@ (%@)", appDescriptor, osDescriptor, hardwareString)
+        }
+        return userAgent!
     }
     
     static func buildRequest(events: Array<Event>) -> ParselyRequest? {
