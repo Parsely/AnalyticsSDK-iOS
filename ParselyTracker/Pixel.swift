@@ -23,9 +23,7 @@ class Pixel {
         data = data.merging(session, uniquingKeysWith: { (old, _new) in old })
         // visitor info
         let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
-        data["parsely_uuid"] = visitorInfo["id"]
-
-        // TODO parsely_site_uuid??
+        data["parsely_site_uuid"] = visitorInfo["id"]
         
         // merge with the extra_data provided by the customer
         data = data.merging(event.extra_data, uniquingKeysWith: { (old, _new) in old })
