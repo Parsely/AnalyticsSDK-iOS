@@ -10,8 +10,6 @@ import Foundation
 import os.log
 
 class EngagedTime: Sampler {
-    let ENGAGED_TIME_SAMPLER_KEY = "engagedTime"
-
     override init() {
         super.init()
     }
@@ -25,8 +23,8 @@ class EngagedTime: Sampler {
         if enableHeartbeats != true {
             return
         }
-        let roundedSecs: Int = Int(data.ms)
-        let totalMs: Int = Int(data.totalMs * 1000)
+        let roundedSecs: Int = Int(data.accumulatedTime)
+        let totalMs: Int = Int(data.totalTime.milliseconds())
 
         let event = Event(params: [
             "action": "heartbeat",
