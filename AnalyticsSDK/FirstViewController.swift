@@ -29,7 +29,7 @@ class FirstViewController: UIViewController {
     
     @IBAction func didStartEngagement(_ sender: Any) {
         os_log("didStartEngagement", log: OSLog.default, type: .debug)
-        delegate.parsely.startEngagement(url: "parsely-page")
+        delegate.parsely.startEngagement(url: "parsely-page", metadata: ["Author":"Yogi Berra"])
     }
     
     @IBAction func didStopEngagement(_ sender: Any) {
