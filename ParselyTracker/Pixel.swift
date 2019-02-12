@@ -29,7 +29,6 @@ class Pixel {
         data = data.merging(event.extra_data, uniquingKeysWith: { (old, _new) in old })
         // update event values as needed
         event.data = data as Dictionary<String, Any>
-        event.idsite = Parsely.sharedInstance.apikey
         Parsely.sharedInstance.eventQueue.push(event)
     }
 }
