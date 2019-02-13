@@ -161,6 +161,11 @@ class Sampler {
             if completionInterval < baseHeartbeatInterval {
                 return max(baseHeartbeatInterval / Double(2), MIN_TIME_BETWEEN_HEARTBEATS)
             }
+            if completionInterval > baseHeartbeatInterval * Double(2) {
+                // double the heartbeat interval for long durations to avoid flooding with heartbeats
+                // don't check MAX_TIME_BETWEEN_HEARTBEATS here since we know what we're doing
+                return baseHeartbeatInterval * Double(2)
+            }
         }
         return baseHeartbeatInterval
     }
