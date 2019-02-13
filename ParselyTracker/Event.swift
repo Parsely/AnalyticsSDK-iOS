@@ -21,18 +21,15 @@ class Event {
         }
     }
     var metadata: Dictionary<String, Any>?
-    var idsite: String = "" {
-        willSet(newIdsite) {
-            self.originalData["idsite"] = newIdsite
-        }
-    }
+    var idsite: String
     var extra_data: Dictionary<String, Any>
     
-    init(_ action: String, url: String, urlref: String?, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
+    init(_ action: String, url: String, urlref: String?, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
         // set instance properties
         self.action = action
         self.url = url
         self.urlref = urlref ?? ""
+        self.idsite = idsite
         self.data = [:]
         self.metadata = metadata
         self.extra_data = extra_data
@@ -41,7 +38,8 @@ class Event {
         var params: Dictionary<String, Any> = [
             "url": url,
             "urlref": self.urlref,
-            "action": action,
+            "action": self.action,
+            "idsite": self.idsite,
             "data": self.data
         ]
         // add metadata at top level if present
@@ -66,10 +64,10 @@ class Heartbeat: Event {
     var tt: Int
     var inc: Int
 
-    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
+    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
         self.tt = tt
         self.inc = inc
-        super.init(action, url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
+        super.init(action, url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
         self.originalData["tt"] = self.tt
         self.originalData["inc"] = self.inc
     }

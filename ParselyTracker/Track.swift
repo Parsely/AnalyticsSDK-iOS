@@ -30,21 +30,22 @@ class Track {
 
     }
 
-    func pageview(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:]) {
+    func pageview(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:], idsite: String) {
         let event_ = Event(
             "pageview",
             url: url,
             urlref: urlref,
             metadata: metadata,
-            extra_data: extra_data
+            extra_data: extra_data,
+            idsite: idsite
         )
 
         os_log("Sending a pageview from Track")
         event(event: event_)
     }
 
-    func videoStart(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
-        videoManager.trackPlay(url: url, urlref: urlref, vId: vId, duration: duration, metadata: metadata, extra_data: extra_data)
+    func videoStart(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String) {
+        videoManager.trackPlay(url: url, urlref: urlref, vId: vId, duration: duration, metadata: metadata, extra_data: extra_data, idsite: idsite)
         os_log("Tracked videoStart from Track")
     }
 
@@ -57,8 +58,8 @@ class Track {
         videoManager.reset(url:url, vId:vId)
     }
 
-    func startEngagement(url: String, urlref: String = "", metadata:Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
-        self.engagedTime.startInteraction(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
+    func startEngagement(url: String, urlref: String = "", metadata:Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String) {
+        self.engagedTime.startInteraction(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
         os_log("track start engagement from Track")
     }
 

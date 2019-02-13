@@ -10,7 +10,7 @@ import Foundation
 import os.log
 
 public class Parsely {
-    var apikey = ""
+    public var apikey = ""
     var config: [String: Any] = [:]
     private var default_config = [String: Any]()
     let track = Track()
@@ -50,15 +50,15 @@ public class Parsely {
 
     // Pageview functions
 
-    public func trackPageView(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:]) {
+    public func trackPageView(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
-        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
+        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
 
     // Engagement functions
 
-    public func startEngagement(url: String, urlref: String = "", metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:]) {
-        track.startEngagement(url: url, urlref: urlref, metadata:metadata, extra_data: extra_data)
+    public func startEngagement(url: String, urlref: String = "", metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
+        track.startEngagement(url: url, urlref: urlref, metadata:metadata, extra_data: extra_data, idsite: idsite)
     }
 
     public func stopEngagement() {
@@ -66,9 +66,8 @@ public class Parsely {
     }
 
     // Video functions
-
-    public func trackPlay(url: String, urlref: String = "", videoID: String, duration: TimeInterval, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:]) {
-        track.videoStart(url: url, urlref: urlref, vId: videoID, duration: duration, metadata: metadata, extra_data: extra_data)
+    public func trackPlay(url: String, urlref: String = "", videoID: String, duration: TimeInterval, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
+        track.videoStart(url: url, urlref: urlref, vId: videoID, duration: duration, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
 
     public func trackPause() {
