@@ -17,11 +17,8 @@ class Pixel {
         // start forming dictionary
         let rand = Date().millisecondsSince1970
         var data: Dictionary<String,Any?> = ["ts": rand]
-        // add session data
-        let session = Session().get(extendSession: true)
-        // TODO: validate these are going to the right level of the event.
-        data = data.merging(session, uniquingKeysWith: { (old, _new) in old })
-        // visitor info
+        let session: Dictionary<String, Any?> = Session().get()
+        event.setSessionInfo(session: session)
         let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
         data["parsely_site_uuid"] = visitorInfo["id"]
         
