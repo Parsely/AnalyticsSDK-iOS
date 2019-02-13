@@ -39,8 +39,7 @@ public class Parsely {
         os_log("Configuring ParselyTracker", log: OSLog.default, type: .info)
         self.apikey = apikey
         self.default_config = [
-            "interval": 10,
-            "track_ip_addresses": true
+            "secondsBetweenHeartbeats": 10
         ]
         self.config = self.default_config.merging(
                 options, uniquingKeysWith: { (_old, new) in new }
