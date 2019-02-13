@@ -18,13 +18,10 @@ class VisitorManager {
         self.storage = Storage()
     }
     
-    func getVisitorInfo(shouldExtendExisting: Bool) -> Dictionary<String, Any?> {
+    func getVisitorInfo(shouldExtendExisting: Bool = false) -> Dictionary<String, Any?> {
         var visitorInfo = self.storage.get(key: self.visitorKey) ?? [:]
         if (visitorInfo.isEmpty) {
-            visitorInfo = self.initVisitor(visitorId: visitorKey) as [String : Any]
-            // if the visitorInfo doesn't exist create a UUID-4 with swift dumbass
-            let uuidString = UUID().uuidString
-            visitorInfo = self.initVisitor(visitorId: uuidString)
+            visitorInfo = self.initVisitor(visitorId: UUID().uuidString)
         } else if (shouldExtendExisting) {
             self.extendVisitorExpiry()
         }
