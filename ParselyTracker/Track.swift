@@ -22,12 +22,15 @@ class Track {
     }
 
     func event(event: Event) {
+        if event.idsite.isEmpty {
+            os_log("idsite not specified. Use ParselyTracker.configure or specify it as an argument to tracking functions.")
+            return
+        }
         Parsely.sharedInstance.startFlushTimer();
         // generic helper function, sends the event as-is
         self.pixel.beacon(event: event)
         os_log("Sending an event from Track")
         dump(event)
-
     }
 
     func pageview(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:], idsite: String) {
