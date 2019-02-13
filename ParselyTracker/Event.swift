@@ -23,8 +23,24 @@ class Event {
     var metadata: Dictionary<String, Any>?
     var idsite: String
     var extra_data: Dictionary<String, Any>
+    var session_id: Int?
+    var session_timestamp: Int?
+    var session_url: String?
+    var session_referrer: String?
+    var last_session_timestamp: Int?
     
-    init(_ action: String, url: String, urlref: String?, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
+    init(_ action: String,
+         url: String,
+         urlref: String?,
+         metadata: Dictionary<String, Any>?,
+         extra_data: Dictionary<String, Any> = [:],
+         idsite: String = Parsely.sharedInstance.apikey,
+         session_id: Int? = nil,
+         session_timestamp: Int? = nil,
+         session_url: String? = nil,
+         session_referrer: String? = nil,
+         last_session_timestamp: Int? = nil
+    ) {
         // set instance properties
         self.action = action
         self.url = url
@@ -33,6 +49,11 @@ class Event {
         self.data = [:]
         self.metadata = metadata
         self.extra_data = extra_data
+        self.session_id = session_id
+        self.session_timestamp = session_timestamp
+        self.session_url = session_url
+        self.session_referrer = session_referrer
+        self.last_session_timestamp = last_session_timestamp
 
         // preserve original data as dict
         var params: Dictionary<String, Any> = [
@@ -46,7 +67,29 @@ class Event {
         if let metas = self.metadata {
             params["metadata"] = metas
         }
+        if self.session_id != nil {
+            params["sid"] = self.session_id
+            params["sts"] = self.session_timestamp
+            params["surl"] = self.session_url
+            params["sref"] = self.session_referrer
+            params["slts"] = self.last_session_timestamp
+        }
         self.originalData = params
+    }
+    
+    func setSessionInfo(session: Dictionary<String, Any?>) {
+        dump(session)
+        self.session_id = session["session_id"] as? Int ?? 0
+        self.session_timestamp = session["session_ts"] as? Int ?? 0
+        self.session_url = session["session_url"] as? String ?? ""
+        self.session_referrer = session["session_referrer"] as? String ?? ""
+        self.last_session_timestamp = session["last_session_ts"] as? Int ?? 0
+        
+        self.originalData["sid"] = self.session_id
+        self.originalData["sts"] = self.session_timestamp
+        self.originalData["surl"] = self.session_url
+        self.originalData["sref"] = self.session_referrer
+        self.originalData["slts"] = self.last_session_timestamp
     }
     
     func toDict() -> Dictionary<String,Any> {
