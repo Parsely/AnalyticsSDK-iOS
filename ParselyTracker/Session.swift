@@ -26,7 +26,7 @@ class Session {
         
     }
 
-    public func get() -> Dictionary<String, Any?> {
+    public func get(url: String, urlref: String) -> Dictionary<String, Any?> {
         if !self.session.isEmpty {
            return self.session
         }
@@ -36,8 +36,8 @@ class Session {
         if session.isEmpty {
             session = [:]
             session["session_id"] = 1
-            session["session_url"] = nil  // XXX this should be set somehow via tracking calls, maybe?
-            session["session_referrer"] = nil  // XXX this should be set somehow via tracking calls, maybe?
+            session["session_url"] = url
+            session["session_referrer"] = urlref
             session["session_ts"] = Int(Date().timeIntervalSince1970)
             session["last_session_ts"] = 0
             self.storage.set(key: self.sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT))
