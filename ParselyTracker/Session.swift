@@ -26,7 +26,7 @@ class Session {
         
     }
 
-    public func get(url: String, urlref: String) -> Dictionary<String, Any?> {
+    public func get(url: String, urlref: String, shouldExtendExisting: Bool = false) -> Dictionary<String, Any?> {
         if !self.session.isEmpty {
            return self.session
         }
@@ -34,15 +34,28 @@ class Session {
         var session = self.storage.get(key: self.sessionKey) ?? [:]
 
         if session.isEmpty {
+            let visitorManager = VisitorManager()
+            var visitorInfo = visitorManager.getVisitorInfo()
+            visitorInfo["session_count"] = visitorInfo["session_count"] as! Int + 1
+            
             session = [:]
-            session["session_id"] = 1
+            session["session_id"] = visitorInfo["session_count"]
             session["session_url"] = url
             session["session_referrer"] = urlref
             session["session_ts"] = Int(Date().timeIntervalSince1970)
-            session["last_session_ts"] = 0
+            session["last_session_ts"] = visitorInfo["last_session_ts"]
             self.storage.set(key: self.sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT))
+            
+            visitorInfo["last_session_ts"] = session["session_ts"]
+            visitorManager.setVisitorInfo(visitorInfo: visitorInfo)
+        } else if shouldExtendExisting {
+            self.extendSessionExpiry()
         }
         self.session = session
         return self.session
+    }
+    
+    public func extendSessionExpiry() {
+        self.storage.extendExpiry(key: self.sessionKey, expires: Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT))
     }
 }

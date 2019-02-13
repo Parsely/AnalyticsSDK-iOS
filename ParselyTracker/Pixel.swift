@@ -17,7 +17,8 @@ class Pixel {
         // start forming dictionary
         let rand = Date().millisecondsSince1970
         var data: Dictionary<String,Any?> = ["ts": rand]
-        let session: Dictionary<String, Any?> = Session().get(url: event.url, urlref: event.urlref)
+        let session: Dictionary<String, Any?> = Session().get(url: event.url, urlref: event.urlref,
+                                                              shouldExtendExisting: true)
         event.setSessionInfo(session: session)
         let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
         data["parsely_site_uuid"] = visitorInfo["id"]
