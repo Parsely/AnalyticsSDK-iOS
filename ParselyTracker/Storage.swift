@@ -28,7 +28,6 @@ class Storage {
                     self.defaults.removeObject(forKey: key)
                     return nil
                 }
-                data.removeValue(forKey: self.expiryDateKey)
             }
             return data
         }
