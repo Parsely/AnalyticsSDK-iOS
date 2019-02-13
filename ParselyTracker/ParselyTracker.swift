@@ -61,18 +61,17 @@ public class Parsely {
         track.startEngagement(url: url, urlref: urlref, metadata:metadata, extra_data: extra_data, idsite: idsite)
     }
 
-    public func stopEngagement(url: String) {
-        track.stopEngagement(url: url)
+    public func stopEngagement() {
+        track.stopEngagement()
     }
 
     // Video functions
-    // todo: don't need to include all of these things for pause/stop engagement
-    public func trackPlay(url: String, urlref: String = "", videoID: String, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
-        track.videoStart(url: url, urlref: urlref, vId: videoID, metadata: metadata, extra_data: extra_data, idsite: idsite)
+    public func trackPlay(url: String, urlref: String = "", videoID: String, duration: TimeInterval, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
+        track.videoStart(url: url, urlref: urlref, vId: videoID, duration: duration, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
 
-    public func trackPause(url: String, urlref: String = "", videoID: String, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
-        track.videoPause(url: url, urlref: urlref, vId: videoID, metadata: metadata, extra_data: extra_data, idsite: idsite)
+    public func trackPause() {
+        track.videoPause()
     }
     
     @objc private func flush() {
