@@ -26,22 +26,23 @@ class Session {
         
     }
 
-    public func get(extendSession: Bool = false) -> Dictionary<String, Any?> {
+    public func get(url: String, urlref: String) -> Dictionary<String, Any?> {
         if !self.session.isEmpty {
            return self.session
         }
-        // check storage for a session
-        let session = self.storage.get(key: self.sessionKey) ?? [:]
-        self.session = session
 
-        if self.session.isEmpty {
-            var session: Dictionary<String, Any?> = [:]
-            session["id"] = UUID().uuidString.lowercased()
-            session["session_count"] = 0
+        var session = self.storage.get(key: self.sessionKey) ?? [:]
+
+        if session.isEmpty {
+            session = [:]
+            session["session_id"] = 1
+            session["session_url"] = url
+            session["session_referrer"] = urlref
+            session["session_ts"] = Int(Date().timeIntervalSince1970)
             session["last_session_ts"] = 0
             self.storage.set(key: self.sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT))
-            self.session = session
         }
+        self.session = session
         return self.session
     }
 }
