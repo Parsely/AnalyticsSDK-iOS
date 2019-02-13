@@ -52,13 +52,13 @@ public class Parsely {
 
     public func trackPageView(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
         os_log("Tracking PageView", log: OSLog.default, type: .info)
-        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
+        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
 
     // Engagement functions
 
     public func startEngagement(url: String, urlref: String = "", metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
-        track.startEngagement(url: url, urlref: urlref, metadata:metadata, extra_data: extra_data)
+        track.startEngagement(url: url, urlref: urlref, metadata:metadata, extra_data: extra_data, idsite: idsite)
     }
 
     public func stopEngagement(url: String) {
@@ -66,13 +66,13 @@ public class Parsely {
     }
 
     // Video functions
-
+    // todo: don't need to include all of these things for pause/stop engagement
     public func trackPlay(url: String, urlref: String = "", videoID: String, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
-        track.videoStart(url: url, urlref: urlref, vId: videoID, metadata: metadata, extra_data: extra_data)
+        track.videoStart(url: url, urlref: urlref, vId: videoID, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
 
-    public func trackPause(url: String, urlref: String = "", videoID: String, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:]) {
-        track.videoPause(url: url, urlref: urlref, vId: videoID, metadata: metadata, extra_data: extra_data)
+    public func trackPause(url: String, urlref: String = "", videoID: String, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
+        track.videoPause(url: url, urlref: urlref, vId: videoID, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
     
     @objc private func flush() {

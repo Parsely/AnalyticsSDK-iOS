@@ -29,7 +29,7 @@ class FirstViewController: UIViewController {
     
     @IBAction func didStartEngagement(_ sender: Any) {
         os_log("didStartEngagement", log: OSLog.default, type: .debug)
-        delegate.parsely.startEngagement(url: "parsely-page", metadata: ["Author":"Yogi Berra"], extra_data: ["product-id": "12345"])
+        delegate.parsely.startEngagement(url: "parsely-page", metadata: ["Author":"Yogi Berra"], extra_data: ["product-id": "12345"], idsite: "engaged.parsely-test.com")
     }
     
     @IBAction func didStopEngagement(_ sender: Any) {
@@ -38,7 +38,7 @@ class FirstViewController: UIViewController {
     }
     @IBAction func didStartVideo(_ sender: Any) {
         os_log("didStartVideo", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", urlref: "not-a-real-urlref", videoID: "videoOne", metadata: ["section": "testsection", "duration": 420], extra_data: ["product-id": "12345"])
+        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", urlref: "not-a-real-urlref", videoID: "videoOne", metadata: ["section": "testsection", "duration": 420], extra_data: ["product-id": "12345"], idsite: "video.parsely-test.com")
     }
     @IBAction func didPauseVideo(_ sender: Any) {
         os_log("didStopVideo", log: OSLog.default, type: .debug)
