@@ -51,10 +51,11 @@ class VideoManager: Sampler {
         Parsely.sharedInstance.track.event(event: event)
         os_log("Sent vheartbeat for video %s", data.key)
         curVideo?._heartbeatsSent += 1
-        updateVideo(video: curVideo!)
+        trackedVideos[curVideo!.key] = curVideo
     }
-    
+
     func trackPlay(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>) -> Void {
+        trackPause()
         let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
         var curVideo = self.updateVideoData(vId: vId, url: url, duration: duration, eventArgs: eventArgs)
         if (curVideo.hasStartedPlaying != true) {
@@ -67,16 +68,25 @@ class VideoManager: Sampler {
                 extra_data: (curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>)!
             )
             Parsely.sharedInstance.track.event(event: event)
-            curVideo.isPlaying = true
-            updateVideo(video: curVideo)
+        }
+        curVideo.isPlaying = true
+        trackedVideos[curVideo.key] = curVideo
+    }
+
+    func trackPause() -> Void {
+        os_log("Pausing all tracked videos")
+        for (key, _) in trackedVideos {
+            var curVideo = trackedVideos[key]
+            curVideo!.isPlaying = false
+            trackedVideos[curVideo!.key] = curVideo
         }
     }
     
-    func trackPause(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>) -> Void {
-        let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data)
-        var curVideo = self.updateVideoData(vId: vId, url: url, duration: duration, eventArgs: eventArgs)
-        curVideo.isPlaying = false
-        updateVideo(video: curVideo)
+    func reset(url: String, vId: String) {
+        os_log("Reset video accumulator for url %s and vId %s", url, vId)
+        trackPause()
+        let key: String = createVideoTrackingKey(vId: vId, url: url)
+        trackedVideos.removeValue(forKey:key)
     }
 
     private func updateVideoData(vId: String, url: String, duration: TimeInterval, eventArgs: Dictionary<String, Any>?) -> TrackedVideo {
@@ -107,11 +117,7 @@ class VideoManager: Sampler {
 
         return trackedVideos[key]!
     }
-
-    private func updateVideo(video: TrackedVideo) {
-        trackedVideos[video.key] = video
-    }
-
+    
     private func createVideoTrackingKey(vId: String, url: String) -> String {
         return url + "::" + vId
     }
