@@ -33,9 +33,9 @@ class Session {
 
         var session = self.storage.get(key: self.sessionKey) ?? [:]
 
-        if true || session.isEmpty {
+        if session.isEmpty {
             session = [:]
-            session["session_id"] = 0
+            session["session_id"] = 1
             session["session_url"] = nil  // XXX this should be set somehow via tracking calls, maybe?
             session["session_referrer"] = nil  // XXX this should be set somehow via tracking calls, maybe?
             session["session_ts"] = Int(Date().timeIntervalSince1970)
