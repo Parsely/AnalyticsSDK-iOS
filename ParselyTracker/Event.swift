@@ -38,7 +38,8 @@ class Event {
         var params: Dictionary<String, Any> = [
             "url": url,
             "urlref": self.urlref,
-            "action": action,
+            "action": self.action,
+            "idsite": self.idsite,
             "data": self.data
         ]
         // add metadata at top level if present
