@@ -48,9 +48,13 @@ class Track {
         os_log("Tracked videoStart from Track")
     }
 
-    func videoPause(url: String, urlref: String, vId: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
-        videoManager.trackPause(url: url, urlref: urlref, vId: vId, metadata: metadata, extra_data: extra_data)
+    func videoPause() {
+        videoManager.trackPause()
         os_log("Tracked videoPause from Track")
+    }
+    
+    func videoReset(url:String, vId:String) {
+        videoManager.reset(url:url, vId:vId)
     }
 
     func startEngagement(url: String, urlref: String = "", metadata:Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:]) {
@@ -58,8 +62,8 @@ class Track {
         os_log("track start engagement from Track")
     }
 
-    func stopEngagement(url: String) {
-        self.engagedTime.endInteraction(url: url)
+    func stopEngagement() {
+        self.engagedTime.endInteraction()
         os_log("track stop engagement from Track")
     }
 }

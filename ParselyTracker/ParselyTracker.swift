@@ -61,8 +61,8 @@ public class Parsely {
         track.startEngagement(url: url, urlref: urlref, metadata:metadata, extra_data: extra_data)
     }
 
-    public func stopEngagement(url: String) {
-        track.stopEngagement(url: url)
+    public func stopEngagement() {
+        track.stopEngagement()
     }
 
     // Video functions
@@ -71,8 +71,8 @@ public class Parsely {
         track.videoStart(url: url, urlref: urlref, vId: videoID, metadata: metadata, extra_data: extra_data)
     }
 
-    public func trackPause(url: String, urlref: String = "", videoID: String, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:]) {
-        track.videoPause(url: url, urlref: urlref, vId: videoID, metadata: metadata, extra_data: extra_data)
+    public func trackPause() {
+        track.videoPause()
     }
     
     @objc private func flush() {
