@@ -74,6 +74,10 @@ public class Parsely {
         track.videoPause()
     }
     
+    public func resetVideo(url:String, vId:String) {
+        track.videoReset(url: url, vId: vId)
+    }
+    
     @objc private func flush() {
         if self.eventQueue.length() == 0 {
             return
