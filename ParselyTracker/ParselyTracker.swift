@@ -17,7 +17,6 @@ public class Parsely {
     var lastRequest: Dictionary<String, Any?>? = [:]
     var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
-    private var session: Session = Session()
     private var flushTimer: Timer?
     private var flushInterval: TimeInterval = 30
     public var secondsBetweenHeartbeats: TimeInterval? {
