@@ -29,6 +29,7 @@ The iOS tracker SDK is distributed as a `.framework` file. How to build this fil
 ```
 pod 'SwiftyJSON', '~> 4.1.0'
 pod 'SwiftHTTP', '~> 3.0.1'
+pod 'ReachabilitySwift', '~> 4.3.0'
 ```
 
 ## Using the tracker

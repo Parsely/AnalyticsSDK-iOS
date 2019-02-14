@@ -9,6 +9,8 @@
 import Foundation
 import os.log
 
+import Reachability
+
 public class Parsely {
     public var apikey = ""
     var config: [String: Any] = [:]
@@ -19,6 +21,7 @@ public class Parsely {
     private var configured = false
     private var flushTimer: Timer?
     private var flushInterval: TimeInterval = 30
+    private let reachability: Reachability = Reachability()!
     public var secondsBetweenHeartbeats: TimeInterval? {
         get {
             if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! Int? {
@@ -80,7 +83,8 @@ public class Parsely {
         if self.eventQueue.length() == 0 {
             return
         }
-        if !self.isReachable() {
+        if reachability.connection == .none {
+            os_log("Network not reachable. Continuing", log:OSLog.tracker, type:.error)
             return
         }
         os_log("Flushing event queue", log: OSLog.tracker, type:.debug)
@@ -94,10 +98,6 @@ public class Parsely {
         if self.flushTimer == nil {
             self.flushTimer = Timer.scheduledTimer(timeInterval: self.flushInterval, target: self, selector: #selector(self.flush), userInfo: nil, repeats: true)
         }
-    }
-    
-    private func isReachable() -> Bool {
-        return true  // TODO
     }
 }
 
