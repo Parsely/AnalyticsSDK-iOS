@@ -8,3 +8,4 @@ xcuserdata/*
 *.xcuserdata
 xcshareddata
 xcshareddata/*
+*.xcworkspace/
