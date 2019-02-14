@@ -8,12 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		01520E457E678B18E060F1EE /* Pods_ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */; };
-		26C7BB402E28D8D1584D5DD5 /* Pods_ParselyDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */; };
 		2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F03819E4FAF1F979D5926 /* StorageTests.swift */; };
 		2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F0DF37B68B0886A0E6848 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
-		2CD51D282237110A80CD252A /* Pods_AnalyticsSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */; };
 		AAEDC3272212161F00769350 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEDC3262212161F00769350 /* HttpClient.swift */; };
 		AAEDC32922123DD300769350 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = AAEDC32822123DD300769350 /* README.md */; };
 		B205889D220CB67500476E27 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889C220CB67500476E27 /* RequestBuilder.swift */; };
@@ -33,7 +31,6 @@
 		F410D63121061D7800DB3EBE /* PixelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F410D63021061D7800DB3EBE /* PixelTests.swift */; };
 		F433339720F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F433338E20F0087E004BB6F5 /* ParselyTracker.framework */; };
 		F433339E20F0087E004BB6F5 /* ParselyTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F433339D20F0087E004BB6F5 /* ParselyTrackerTests.swift */; };
-		F43333A320F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F433338E20F0087E004BB6F5 /* ParselyTracker.framework */; };
 		F43333A420F0087E004BB6F5 /* ParselyTracker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F433338E20F0087E004BB6F5 /* ParselyTracker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F43333AC20F008B7004BB6F5 /* ParselyTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A8020EFFADD0030525E /* ParselyTracker.swift */; };
 		F43333B620F008EF004BB6F5 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333AD20F008EE004BB6F5 /* Session.swift */; };
@@ -169,9 +166,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F43333A320F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */,
-				2CD51D282237110A80CD252A /* Pods_AnalyticsSDK.framework in Frameworks */,
-				26C7BB402E28D8D1584D5DD5 /* Pods_ParselyDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
