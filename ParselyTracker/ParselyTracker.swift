@@ -22,6 +22,7 @@ public class Parsely {
     private var flushTimer: Timer?
     private var flushInterval: TimeInterval = 30
     private let reachability: Reachability = Reachability()!
+    private var backgroundFlushTask: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     public var secondsBetweenHeartbeats: TimeInterval? {
         get {
             if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! Int? {
@@ -100,6 +101,13 @@ public class Parsely {
         }
     }
     
+    internal func pauseFlushTimer() {
+        if flushTimer != nil {
+            flushTimer!.invalidate()
+            flushTimer = nil
+        }
+    }
+    
     private func addApplicationObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution), name: UIApplication.willEnterForegroundNotification, object: nil)
@@ -109,12 +117,28 @@ public class Parsely {
     }
 
     @objc private func resumeExecution() {
-        // resume all timers
+        startFlushTimer()
+        track.resume()
     }
     
     @objc private func suspendExecution() {
-        // pause all timers
-        // flush the queue to a request
+        pauseFlushTimer()
+        track.pause()
+        
+        DispatchQueue.global(qos: .userInitiated).async{
+            let _self = Parsely.sharedInstance
+            _self.backgroundFlushTask = UIApplication.shared.beginBackgroundTask(expirationHandler:{
+                _self.endBackgroundFlushTask()
+            })
+            _self.track.sendHeartbeats()
+            _self.flush()
+            _self.endBackgroundFlushTask()
+        }
+    }
+    
+    private func endBackgroundFlushTask() {
+        UIApplication.shared.endBackgroundTask(self.backgroundFlushTask)
+        self.backgroundFlushTask = UIBackgroundTaskIdentifier.invalid
     }
 }
 

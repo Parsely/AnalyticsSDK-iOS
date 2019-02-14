@@ -69,4 +69,19 @@ class Track {
         self.engagedTime.endInteraction()
         os_log("track stop engagement from Track", log: OSLog.tracker, type:.debug)
     }
+    
+    internal func pause() {
+        engagedTime.pause()
+        videoManager.pause()
+    }
+    
+    internal func resume() {
+        engagedTime.resume()
+        videoManager.resume()
+    }
+    
+    internal func sendHeartbeats() {
+        engagedTime.sendHeartbeats()
+        videoManager.sendHeartbeats()
+    }
 }
