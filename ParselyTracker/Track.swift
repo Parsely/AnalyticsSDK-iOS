@@ -71,16 +71,19 @@ class Track {
     }
     
     internal func pause() {
+        os_log("Pausing from track", log:OSLog.tracker, type:.debug)
         engagedTime.pause()
         videoManager.pause()
     }
     
     internal func resume() {
+        os_log("Resuming from track", log:OSLog.tracker, type:.debug)
         engagedTime.resume()
         videoManager.resume()
     }
     
     internal func sendHeartbeats() {
+        os_log("Sending heartbeats from track", log:OSLog.tracker, type:.debug)
         engagedTime.sendHeartbeats()
         videoManager.sendHeartbeats()
     }

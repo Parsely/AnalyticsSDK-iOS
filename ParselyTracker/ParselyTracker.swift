@@ -23,6 +23,7 @@ public class Parsely {
     private var flushInterval: TimeInterval = 30
     private let reachability: Reachability = Reachability()!
     private var backgroundFlushTask: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+    private var paused: Bool = false
     public var secondsBetweenHeartbeats: TimeInterval? {
         get {
             if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! Int? {
@@ -36,6 +37,7 @@ public class Parsely {
     
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
+        addApplicationObservers()
     }
     
     public func configure(apikey: String, options: [String: Any]) {
@@ -96,15 +98,19 @@ public class Parsely {
     }
     
     internal func startFlushTimer() {
-        if self.flushTimer == nil {
+        os_log("Flush timer starting", log: OSLog.tracker, type:.debug)
+        if self.flushTimer == nil && !self.paused {
             self.flushTimer = Timer.scheduledTimer(timeInterval: self.flushInterval, target: self, selector: #selector(self.flush), userInfo: nil, repeats: true)
+            os_log("Flush timer started", log: OSLog.tracker, type:.debug)
         }
     }
     
     internal func pauseFlushTimer() {
-        if flushTimer != nil {
-            flushTimer!.invalidate()
-            flushTimer = nil
+        os_log("Flush timer stopping", log: OSLog.tracker, type:.debug)
+        if self.flushTimer != nil && self.paused {
+            self.flushTimer!.invalidate()
+            self.flushTimer = nil
+            os_log("Flush timer stopped", log: OSLog.tracker, type:.debug)
         }
     }
     
@@ -117,11 +123,21 @@ public class Parsely {
     }
 
     @objc private func resumeExecution() {
+        if !paused {
+            return
+        }
+        self.paused = false
+        os_log("Resuming execution after foreground/active", log:OSLog.tracker, type:.info)
         startFlushTimer()
         track.resume()
     }
     
     @objc private func suspendExecution() {
+        if paused {
+            return
+        }
+        self.paused = true
+        os_log("Stopping execution before background/inactive/terminate", log:OSLog.tracker, type:.info)
         pauseFlushTimer()
         track.pause()
         
@@ -130,6 +146,7 @@ public class Parsely {
             _self.backgroundFlushTask = UIApplication.shared.beginBackgroundTask(expirationHandler:{
                 _self.endBackgroundFlushTask()
             })
+            os_log("Flushing queue in background", log:OSLog.tracker, type:.info)
             _self.track.sendHeartbeats()
             _self.flush()
             _self.endBackgroundFlushTask()

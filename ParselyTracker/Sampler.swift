@@ -83,8 +83,6 @@ class Sampler {
     }
     
     private func startTimers() {
-        guard samplerTimer == nil else { return }
-        guard heartbeatsTimer == nil else { return }
         self.samplerTimer = Timer.scheduledTimer(timeInterval: SAMPLE_RATE, target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
         self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: self.heartbeatInterval, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
     }
@@ -176,6 +174,7 @@ class Sampler {
     }
     
     internal func pause() {
+        os_log("Paused from Sampler", log:OSLog.tracker, type:.debug)
         if samplerTimer != nil {
             self.samplerTimer!.invalidate()
             self.samplerTimer = nil
@@ -187,6 +186,7 @@ class Sampler {
     }
     
     internal func resume() {
+        os_log("Resumed from Sampler", log:OSLog.tracker, type:.debug)
         // don't restart unless previously paused
         if hasStartedSampling {
             startTimers()
