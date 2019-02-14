@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Session {
+class SessionManager {
 
     private var session: Dictionary<String, Any?> = [:]
     private let SESSION_TIMEOUT: TimeInterval = 30 * 60.0 // 30 minutes

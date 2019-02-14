@@ -12,7 +12,7 @@ import os.log
 
 class Pixel {
     
-    lazy var sessionManager = Session()
+    lazy var sessionManager = SessionManager()
 
     func beacon(event: Event) {
         os_log("Fired beacon: action = %s", log: OSLog.tracker, type: .debug, event.action)
