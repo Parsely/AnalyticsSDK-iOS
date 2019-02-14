@@ -56,8 +56,7 @@ class RequestBuilder {
             headers: buildHeadersDict(events: events),
             params: buildParamsDict(events: events)
         )
-        os_log("Built request")
-        dump(request)
+        os_log("Built request", log: OSLog.tracker, type:.debug)
         return request
     }
 

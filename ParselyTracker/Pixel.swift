@@ -13,7 +13,7 @@ import os.log
 class Pixel {
     
     func beacon(event: Event) {
-        os_log("Fired beacon", log: OSLog.default, type: .debug)
+        os_log("Fired beacon: action = %s", log: OSLog.tracker, type: .debug, event.action)
         // start forming dictionary
         let rand = Date().millisecondsSince1970
         var data: Dictionary<String,Any?> = ["ts": rand]

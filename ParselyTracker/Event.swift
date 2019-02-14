@@ -78,7 +78,6 @@ class Event {
     }
     
     func setSessionInfo(session: Dictionary<String, Any?>) {
-        dump(session)
         self.session_id = session["session_id"] as? Int ?? 0
         self.session_timestamp = session["session_ts"] as? Int ?? 0
         self.session_url = session["session_url"] as? String ?? ""

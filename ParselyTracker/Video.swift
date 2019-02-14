@@ -50,7 +50,7 @@ class VideoManager: Sampler {
             idsite: curVideo?.eventArgs["idsite"] as! String
         )
         Parsely.sharedInstance.track.event(event: event)
-        os_log("Sent vheartbeat for video %s", data.key)
+        os_log("Sent vheartbeat for video %s", log: OSLog.tracker, type:.debug, data.key)
         curVideo?._heartbeatsSent += 1
         trackedVideos[curVideo!.key] = curVideo
     }
@@ -76,7 +76,7 @@ class VideoManager: Sampler {
     }
 
     func trackPause() -> Void {
-        os_log("Pausing all tracked videos")
+        os_log("Pausing all tracked videos", log: OSLog.tracker, type:.debug)
         for (key, _) in trackedVideos {
             var curVideo = trackedVideos[key]
             curVideo!.isPlaying = false
@@ -85,7 +85,7 @@ class VideoManager: Sampler {
     }
     
     func reset(url: String, vId: String) {
-        os_log("Reset video accumulator for url %s and vId %s", url, vId)
+        os_log("Reset video accumulator for url %s and vId %s", log: OSLog.tracker, type:.debug, url, vId)
         trackPause()
         let key: String = createVideoTrackingKey(vId: vId, url: url)
         trackedVideos.removeValue(forKey:key)

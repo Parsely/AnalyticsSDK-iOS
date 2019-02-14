@@ -32,11 +32,11 @@ public class Parsely {
     lazy var visitorManager = VisitorManager()
     
     private init() {
-        os_log("Initializing ParselyTracker", log: OSLog.default, type: .info)
+        os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
     }
     
     public func configure(apikey: String, options: [String: Any]) {
-        os_log("Configuring ParselyTracker", log: OSLog.default, type: .info)
+        os_log("Configuring ParselyTracker", log: OSLog.tracker, type: .debug)
         self.apikey = apikey
         self.default_config = [
             "secondsBetweenHeartbeats": 10
@@ -50,7 +50,7 @@ public class Parsely {
     // Pageview functions
 
     public func trackPageView(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
-        os_log("Tracking PageView", log: OSLog.default, type: .info)
+        os_log("Tracking PageView", log: OSLog.tracker, type: .debug)
         self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
 
@@ -84,9 +84,9 @@ public class Parsely {
         if !self.isReachable() {
             return
         }
-        os_log("Flushing event queue")
+        os_log("Flushing event queue", log: OSLog.tracker, type:.debug)
         let events = self.eventQueue.get()
-        os_log("Got %s events", String(describing: events.count))
+        os_log("Got %s events", log: OSLog.tracker, type:.debug, String(describing: events.count))
         let request = RequestBuilder.buildRequest(events: events)
         HttpClient.sendRequest(request: request!)
     }
@@ -100,4 +100,9 @@ public class Parsely {
     private func isReachable() -> Bool {
         return true  // TODO
     }
+}
+
+extension OSLog {
+    private static var logger = "ParselyTracker"
+    static let tracker = OSLog(subsystem: "ParselyTracker", category: "parsely_tracker")
 }

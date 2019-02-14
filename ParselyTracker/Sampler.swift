@@ -60,8 +60,7 @@ class Sampler {
 
     // Register a piece of content to be tracked.
     public func trackKey(key: String,  contentDuration: TimeInterval?, eventArgs: Dictionary<String, Any>?) -> Void {
-        os_log("Tracking Key: %s", log: OSLog.default, type: .debug, key)
-
+        os_log("Sampler tracked key: %s", log: OSLog.tracker, type: .debug, key)
         if accumulators.index(forKey: key) == nil {
             let newTrackedData = Accumulator.init(
                   key: key,
@@ -74,8 +73,6 @@ class Sampler {
                   isEngaged: false,
                   eventArgs: eventArgs
               )
-            os_log("Tracking key: %s, data", key)
-            dump(newTrackedData)
             accumulators[key] = newTrackedData
           }
 
@@ -92,7 +89,7 @@ class Sampler {
 
     // Stop tracking this item altogether.
     public func dropKey(key: String) -> Void {
-        os_log("Dropping key: %s", key)
+        os_log("Dropping Sampler key: %s", log: OSLog.tracker, type:.debug, key)
         sendHeartbeat(key: key)
         accumulators.removeValue(forKey: key)
     }
@@ -128,7 +125,7 @@ class Sampler {
         var trackedData = accumulators[key]
         let incSecs: TimeInterval = trackedData!.accumulatedTime
         if incSecs > 0 && incSecs <= (baseHeartbeatInterval + 0.25) {
-            os_log("Sending heartbeat for %s", key)
+            os_log("Sending heartbeat for %s", log: OSLog.tracker, type:.debug, key)
             heartbeatFn(data: trackedData!, enableHeartbeats: true)
         }
         trackedData!.accumulatedTime = 0
@@ -137,7 +134,7 @@ class Sampler {
 
     @objc private func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.
         // maybe just wrap it in a dictionary and set it to nil if the key isn't there.
-        os_log("called send heartbeats", log: OSLog.default, type: .debug)
+        os_log("called send heartbeats", log: OSLog.tracker, type: .debug)
         for (key, trackedData) in accumulators {
             let sendThreshold = trackedData.heartbeatTimeout! - heartbeatInterval
 
