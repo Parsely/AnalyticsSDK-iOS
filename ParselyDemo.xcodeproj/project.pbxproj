@@ -8,10 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		01520E457E678B18E060F1EE /* Pods_ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */; };
+		26C7BB402E28D8D1584D5DD5 /* Pods_ParselyDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */; };
 		2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F03819E4FAF1F979D5926 /* StorageTests.swift */; };
 		2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F0DF37B68B0886A0E6848 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
+		2CD51D282237110A80CD252A /* Pods_AnalyticsSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */; };
 		AAEDC3272212161F00769350 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEDC3262212161F00769350 /* HttpClient.swift */; };
 		AAEDC32922123DD300769350 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = AAEDC32822123DD300769350 /* README.md */; };
 		B205889D220CB67500476E27 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889C220CB67500476E27 /* RequestBuilder.swift */; };
@@ -168,6 +170,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F43333A320F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */,
+				2CD51D282237110A80CD252A /* Pods_AnalyticsSDK.framework in Frameworks */,
+				26C7BB402E28D8D1584D5DD5 /* Pods_ParselyDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
