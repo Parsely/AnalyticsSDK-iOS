@@ -118,7 +118,7 @@ class Sampler {
                 updateAccumulator(acc: trackedData)
             }
         }
-        Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
+        self.samplerTimer = Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
     }
 
     private func sendHeartbeat(key: String) -> Void {
