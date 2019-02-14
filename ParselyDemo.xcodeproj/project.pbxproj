@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		01520E457E678B18E060F1EE /* Pods_ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */; };
+		26C7BB402E28D8D1584D5DD5 /* Pods_ParselyDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */; };
 		2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F03819E4FAF1F979D5926 /* StorageTests.swift */; };
 		2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
@@ -19,6 +20,7 @@
 		B205889F220CB72A00476E27 /* RequestBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889E220CB72A00476E27 /* RequestBuilderTests.swift */; };
 		B2BC46FB2208D60A000B937A /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BC46FA2208D60A000B937A /* Track.swift */; };
 		B2C84B66220A03610018BC7B /* SamplerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C84B65220A03610018BC7B /* SamplerTests.swift */; };
+		C26CD66D2E7BC7C6843FD36F /* Pods_ParselyDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526EF9377EAE8B4DC8CC0AA1 /* Pods_ParselyDemoTests.framework */; };
 		DD6DF0DF715E6AF4166BA1CA /* Pods_AnalyticsSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B0C6D4E730AEFB429AD06BB /* Pods_AnalyticsSDKTests.framework */; };
 		DFD7BB483E787F03E5494A20 /* Pods_ParselyTrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */; };
 		F40D9A5E20EFF74F0030525E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A5D20EFF74F0030525E /* AppDelegate.swift */; };
@@ -102,15 +104,21 @@
 		2A1F03819E4FAF1F979D5926 /* StorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
 		2A1F0F92460A849C17B26338 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyTrackerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3ADAC2F93CE241A29B434DCE /* Pods-ParselyDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemoTests/Pods-ParselyDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnalyticsSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		526EF9377EAE8B4DC8CC0AA1 /* Pods_ParselyDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B0C6D4E730AEFB429AD06BB /* Pods_AnalyticsSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnalyticsSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60544B2E0BE096AC23166210 /* Pods-ParselyDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemoTests/Pods-ParselyDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		6D623D570B7F71EFD9E46D24 /* Pods-ParselyTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTracker/Pods-ParselyTracker.release.xcconfig"; sourceTree = "<group>"; };
+		8E611964813255DB16F1B8D3 /* Pods-ParselyDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo.release.xcconfig"; sourceTree = "<group>"; };
+		906991F0294DF786C982D060 /* Pods-ParselyDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		9CD753A4903488F9E572497D /* Pods-AnalyticsSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDKTests/Pods-AnalyticsSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A07DD8B365F9DFAC828E58C2 /* Pods-ParselyTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AAEDC3262212161F00769350 /* HttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
 		AAEDC32822123DD300769350 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AAEDC32A2212407700769350 /* ParselyTracker.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParselyTracker.framework; path = ../../../Downloads/ParselyTracker.framework; sourceTree = "<group>"; };
 		AB009DED9C4184290AB524B3 /* Pods-ParselyTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTracker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTracker/Pods-ParselyTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B205889C220CB67500476E27 /* RequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = "<group>"; };
 		B205889E220CB72A00476E27 /* RequestBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilderTests.swift; sourceTree = "<group>"; };
 		B2BC46FA2208D60A000B937A /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
@@ -163,6 +171,7 @@
 			files = (
 				F43333A320F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */,
 				2CD51D282237110A80CD252A /* Pods_AnalyticsSDK.framework in Frameworks */,
+				26C7BB402E28D8D1584D5DD5 /* Pods_ParselyDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,6 +180,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD6DF0DF715E6AF4166BA1CA /* Pods_AnalyticsSDKTests.framework in Frameworks */,
+				C26CD66D2E7BC7C6843FD36F /* Pods_ParselyDemoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +215,10 @@
 				6D623D570B7F71EFD9E46D24 /* Pods-ParselyTracker.release.xcconfig */,
 				A07DD8B365F9DFAC828E58C2 /* Pods-ParselyTrackerTests.debug.xcconfig */,
 				F641C3C76F714CE598D03837 /* Pods-ParselyTrackerTests.release.xcconfig */,
+				906991F0294DF786C982D060 /* Pods-ParselyDemo.debug.xcconfig */,
+				8E611964813255DB16F1B8D3 /* Pods-ParselyDemo.release.xcconfig */,
+				3ADAC2F93CE241A29B434DCE /* Pods-ParselyDemoTests.debug.xcconfig */,
+				60544B2E0BE096AC23166210 /* Pods-ParselyDemoTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -217,6 +231,8 @@
 				5B0C6D4E730AEFB429AD06BB /* Pods_AnalyticsSDKTests.framework */,
 				EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */,
 				3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */,
+				AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */,
+				526EF9377EAE8B4DC8CC0AA1 /* Pods_ParselyDemoTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -512,7 +528,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AnalyticsSDKTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ParselyDemoTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -525,7 +541,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsSDK/Pods-AnalyticsSDK-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/SwiftHTTP/SwiftHTTP.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
@@ -536,7 +552,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AnalyticsSDK/Pods-AnalyticsSDK-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AAF24F042465B46CC0D7A05C /* [CP] Check Pods Manifest.lock */ = {
@@ -568,7 +584,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AnalyticsSDK-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ParselyDemo-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -833,7 +849,7 @@
 		};
 		F40D9A7A20EFF7500030525E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0512C3C37D1324FAF6BE71AD /* Pods-AnalyticsSDK.debug.xcconfig */;
+			baseConfigurationReference = 906991F0294DF786C982D060 /* Pods-ParselyDemo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -850,7 +866,7 @@
 		};
 		F40D9A7B20EFF7500030525E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F32771E2DD5F1A6A68B29BB2 /* Pods-AnalyticsSDK.release.xcconfig */;
+			baseConfigurationReference = 8E611964813255DB16F1B8D3 /* Pods-ParselyDemo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -867,7 +883,7 @@
 		};
 		F40D9A7D20EFF7500030525E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9CD753A4903488F9E572497D /* Pods-AnalyticsSDKTests.debug.xcconfig */;
+			baseConfigurationReference = 3ADAC2F93CE241A29B434DCE /* Pods-ParselyDemoTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -885,7 +901,7 @@
 		};
 		F40D9A7E20EFF7500030525E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C809B31A3D785C1DD2A05C4E /* Pods-AnalyticsSDKTests.release.xcconfig */;
+			baseConfigurationReference = 60544B2E0BE096AC23166210 /* Pods-ParselyDemoTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

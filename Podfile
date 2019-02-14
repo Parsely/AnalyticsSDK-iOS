@@ -7,7 +7,7 @@ target 'ParselyDemo' do
 
   pod 'SwiftyJSON', '~> 4.1.0'
   pod 'SwiftHTTP', '~> 3.0.1'
-  target 'AnalyticsSDKTests' do
+  target 'ParselyDemoTests' do
     inherit! :search_paths
 
     # Pods for testing
