@@ -99,6 +99,23 @@ public class Parsely {
             self.flushTimer = Timer.scheduledTimer(timeInterval: self.flushInterval, target: self, selector: #selector(self.flush), userInfo: nil, repeats: true)
         }
     }
+    
+    private func addApplicationObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIApplication.willTerminateNotification, object: nil)
+    }
+
+    @objc private func resumeExecution() {
+        // resume all timers
+    }
+    
+    @objc private func suspendExecution() {
+        // pause all timers
+        // flush the queue to a request
+    }
 }
 
 extension OSLog {
