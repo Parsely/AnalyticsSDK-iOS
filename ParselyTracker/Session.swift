@@ -9,12 +9,13 @@
 import Foundation
 import UIKit
 
-class Session {
+class SessionManager {
 
     private var session: Dictionary<String, Any?> = [:]
     private let SESSION_TIMEOUT: TimeInterval = 30 * 60.0 // 30 minutes
     private let storage: Storage = Storage()
     private let sessionKey = "_parsely_session"
+    private let visitorManager = Parsely.sharedInstance.visitorManager
     // knows how to start, stop, store, and restore a session
     // struct should represent datatype
     // - sid — session ID == session_count
@@ -34,7 +35,6 @@ class Session {
         var session = self.storage.get(key: self.sessionKey) ?? [:]
 
         if session.isEmpty {
-            let visitorManager = VisitorManager()
             var visitorInfo = visitorManager.getVisitorInfo()
             visitorInfo["session_count"] = visitorInfo["session_count"] as! Int + 1
             
