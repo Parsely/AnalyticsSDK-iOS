@@ -32,7 +32,7 @@ class Track {
         os_log("Sending an event from Track", log: OSLog.tracker, type:.debug)
     }
 
-    func pageview(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:], idsite: String) {
+    func pageview(url: String, urlref: String = "", metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String) {
         let event_ = Event(
             "pageview",
             url: url,
@@ -44,6 +44,7 @@ class Track {
 
         os_log("Sending a pageview from Track", log: OSLog.tracker, type:.debug)
         event(event: event_)
+        dump(event_.toDict())
     }
 
     func videoStart(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String) {
