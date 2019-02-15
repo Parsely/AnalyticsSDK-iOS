@@ -15,6 +15,7 @@
 		57E211E09EB0BEF46691064D /* Pods_ParselyDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */; };
 		AAEDC3272212161F00769350 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEDC3262212161F00769350 /* HttpClient.swift */; };
 		AAEDC32922123DD300769350 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = AAEDC32822123DD300769350 /* README.md */; };
+		AAF629792216382800F59789 /* ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAEDC32A2212407700769350 /* ParselyTracker.framework */; };
 		B205889D220CB67500476E27 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889C220CB67500476E27 /* RequestBuilder.swift */; };
 		B205889F220CB72A00476E27 /* RequestBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889E220CB72A00476E27 /* RequestBuilderTests.swift */; };
 		B2BC46FB2208D60A000B937A /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BC46FA2208D60A000B937A /* Track.swift */; };
@@ -168,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57E211E09EB0BEF46691064D /* Pods_ParselyDemo.framework in Frameworks */,
+				AAF629792216382800F59789 /* ParselyTracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
