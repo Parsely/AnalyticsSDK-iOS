@@ -10,8 +10,6 @@ import Foundation
 
 class Event {
     // underlying object behind pageview, heartbeat, videostart, vheartbeat, custom events
-    // takes a Dictionary<String: Any>.
-    var originalData: [String: Any]
     var action: String
     var url: String
     var urlref: String
@@ -51,15 +49,27 @@ class Event {
         self.session_referrer = session_referrer
         self.last_session_timestamp = last_session_timestamp
 
-        // preserve original data as dict
+    }
+
+    func setSessionInfo(session: Dictionary<String, Any?>) {
+        self.session_id = session["session_id"] as? Int ?? 0
+        self.session_timestamp = session["session_ts"] as? Int ?? 0
+        self.session_url = session["session_url"] as? String ?? ""
+        self.session_referrer = session["session_referrer"] as? String ?? ""
+        self.last_session_timestamp = session["last_session_ts"] as? Int ?? 0
+    }
+
+    func toDict() -> Dictionary<String,Any> {
+        // eventually this should validate the contents
         var params: Dictionary<String, Any> = [
-            "url": url,
+            "url": self.url,
             "urlref": self.urlref,
             "action": self.action,
             "idsite": self.idsite,
-        ]
+            ]
         // add a timestamp
         // note that data is goign to be updated more later
+        // todo Move to init
         let rand = Date().millisecondsSince1970
         params["data"] = ["ts": rand]
 
@@ -74,26 +84,8 @@ class Event {
             params["sref"] = self.session_referrer
             params["slts"] = self.last_session_timestamp
         }
-        self.originalData = params
-    }
-    
-    func setSessionInfo(session: Dictionary<String, Any?>) {
-        self.session_id = session["session_id"] as? Int ?? 0
-        self.session_timestamp = session["session_ts"] as? Int ?? 0
-        self.session_url = session["session_url"] as? String ?? ""
-        self.session_referrer = session["session_referrer"] as? String ?? ""
-        self.last_session_timestamp = session["last_session_ts"] as? Int ?? 0
         
-        self.originalData["sid"] = self.session_id
-        self.originalData["sts"] = self.session_timestamp
-        self.originalData["surl"] = self.session_url
-        self.originalData["sref"] = self.session_referrer
-        self.originalData["slts"] = self.last_session_timestamp
-    }
-    
-    func toDict() -> Dictionary<String,Any> {
-        // eventually this should validate the contents
-        return self.originalData
+        return params
     }
 
     func toJSON() -> String {
@@ -110,7 +102,12 @@ class Heartbeat: Event {
         self.tt = tt
         self.inc = inc
         super.init(action, url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
-        self.originalData["tt"] = self.tt
-        self.originalData["inc"] = self.inc
+    }
+
+    override func toDict() -> Dictionary<String, Any> {
+        var base = super.toDict()
+        base["tt"] = self.tt
+        base["inc"] = self.inc
+        return base
     }
 }
