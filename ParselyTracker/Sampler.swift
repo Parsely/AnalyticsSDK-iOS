@@ -78,13 +78,13 @@ class Sampler {
 
         if hasStartedSampling == false {
             hasStartedSampling = true
-            // start the sampler and heartbeat timer loops
-            guard samplerTimer == nil else { print("OOPS"); return }
-            guard heartbeatsTimer == nil else { print("OOPS HB"); return }
-
-            self.samplerTimer = Timer.scheduledTimer(timeInterval: SAMPLE_RATE, target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
-            self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: TimeInterval(self.heartbeatInterval), target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
+            startTimers()
         }
+    }
+    
+    private func startTimers() {
+        self.samplerTimer = Timer.scheduledTimer(timeInterval: SAMPLE_RATE, target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
+        self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: self.heartbeatInterval, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
     }
 
     // Stop tracking this item altogether.
@@ -118,7 +118,7 @@ class Sampler {
                 updateAccumulator(acc: trackedData)
             }
         }
-        Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
+        self.samplerTimer = Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
     }
 
     private func sendHeartbeat(key: String) -> Void {
@@ -132,7 +132,7 @@ class Sampler {
         updateAccumulator(acc: trackedData!)
     }
 
-    @objc private func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.
+    @objc internal func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.
         // maybe just wrap it in a dictionary and set it to nil if the key isn't there.
         os_log("called send heartbeats", log: OSLog.tracker, type: .debug)
         for (key, trackedData) in accumulators {
@@ -142,7 +142,7 @@ class Sampler {
                 sendHeartbeat(key: key)
             }
         }
-        Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
+        self.heartbeatsTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
             self.sendHeartbeats()
         }
     }
@@ -171,6 +171,26 @@ class Sampler {
     private func updateAccumulator(acc: Accumulator) -> Void {
         // gross, dude
         accumulators[acc.key] = acc
+    }
+    
+    internal func pause() {
+        os_log("Paused from Sampler", log:OSLog.tracker, type:.debug)
+        if samplerTimer != nil {
+            self.samplerTimer!.invalidate()
+            self.samplerTimer = nil
+        }
+        if heartbeatsTimer != nil {
+            self.heartbeatsTimer!.invalidate()
+            self.heartbeatsTimer = nil
+        }
+    }
+    
+    internal func resume() {
+        os_log("Resumed from Sampler", log:OSLog.tracker, type:.debug)
+        // don't restart unless previously paused
+        if hasStartedSampling {
+            startTimers()
+        }
     }
     
 }

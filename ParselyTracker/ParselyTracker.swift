@@ -22,6 +22,8 @@ public class Parsely {
     private var flushTimer: Timer?
     private var flushInterval: TimeInterval = 30
     private let reachability: Reachability = Reachability()!
+    private var backgroundFlushTask: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+    private var active: Bool = true
     public var secondsBetweenHeartbeats: TimeInterval? {
         get {
             if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! Int? {
@@ -35,6 +37,7 @@ public class Parsely {
     
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
+        addApplicationObservers()
     }
     
     public func configure(apikey: String, options: [String: Any]) {
@@ -95,9 +98,64 @@ public class Parsely {
     }
     
     internal func startFlushTimer() {
-        if self.flushTimer == nil {
+        os_log("Flush timer starting", log: OSLog.tracker, type:.debug)
+        if self.flushTimer == nil && self.active {
             self.flushTimer = Timer.scheduledTimer(timeInterval: self.flushInterval, target: self, selector: #selector(self.flush), userInfo: nil, repeats: true)
+            os_log("Flush timer started", log: OSLog.tracker, type:.debug)
         }
+    }
+    
+    internal func pauseFlushTimer() {
+        os_log("Flush timer stopping", log: OSLog.tracker, type:.debug)
+        if self.flushTimer != nil && !self.active {
+            self.flushTimer!.invalidate()
+            self.flushTimer = nil
+            os_log("Flush timer stopped", log: OSLog.tracker, type:.debug)
+        }
+    }
+    
+    private func addApplicationObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIApplication.willTerminateNotification, object: nil)
+    }
+
+    @objc private func resumeExecution() {
+        if active {
+            return
+        }
+        self.active = true
+        os_log("Resuming execution after foreground/active", log:OSLog.tracker, type:.info)
+        startFlushTimer()
+        track.resume()
+    }
+    
+    @objc private func suspendExecution() {
+        if !active {
+            return
+        }
+        self.active = false
+        os_log("Stopping execution before background/inactive/terminate", log:OSLog.tracker, type:.info)
+        pauseFlushTimer()
+        track.pause()
+        
+        DispatchQueue.global(qos: .userInitiated).async{
+            let _self = Parsely.sharedInstance
+            _self.backgroundFlushTask = UIApplication.shared.beginBackgroundTask(expirationHandler:{
+                _self.endBackgroundFlushTask()
+            })
+            os_log("Flushing queue in background", log:OSLog.tracker, type:.info)
+            _self.track.sendHeartbeats()
+            _self.flush()
+            _self.endBackgroundFlushTask()
+        }
+    }
+    
+    private func endBackgroundFlushTask() {
+        UIApplication.shared.endBackgroundTask(self.backgroundFlushTask)
+        self.backgroundFlushTask = UIBackgroundTaskIdentifier.invalid
     }
 }
 
