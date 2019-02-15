@@ -52,8 +52,15 @@ public class Parsely {
         self.configured = true
     }
 
-    // Pageview functions
-
+    /**
+     Track a pageview event
+     
+     - Parameter url: The url of the page that was viewed
+     - Parameter urlref: The url of the page that linked to the viewed page
+     - Parameter metadata: A dictionary of metadata for the viewed page
+     - Parameter extra_data: A dictionary of additional information to send with the generated pageview event
+     - Parameter idsite: The Parsely public API key for which the pageview event should be counted
+     */
     public func trackPageView(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
         os_log("Tracking PageView", log: OSLog.tracker, type: .debug)
         self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
