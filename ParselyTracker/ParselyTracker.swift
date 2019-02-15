@@ -61,7 +61,7 @@ public class Parsely {
 
     // Engagement functions
 
-    public func startEngagement(url: String, urlref: String = "", metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
+    public func startEngagement(url: String, urlref: String = "", metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
         track.startEngagement(url: url, urlref: urlref, metadata:metadata, extra_data: extra_data, idsite: idsite)
     }
 
@@ -70,7 +70,7 @@ public class Parsely {
     }
 
     // Video functions
-    public func trackPlay(url: String, urlref: String = "", videoID: String, duration: TimeInterval, metadata: Dictionary<String, Any> = [:], extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
+    public func trackPlay(url: String, urlref: String = "", videoID: String, duration: TimeInterval, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
         track.videoStart(url: url, urlref: urlref, vId: videoID, duration: duration, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
 

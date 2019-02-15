@@ -40,7 +40,7 @@ class EngagedTime: Sampler {
         Parsely.sharedInstance.track.event(event: event)
     }
     
-    func startInteraction(url: String, urlref: String = "", metadata: Dictionary<String, Any>, extra_data: Dictionary<String, Any> = [:], idsite: String) {
+    func startInteraction(url: String, urlref: String = "", metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String) {
         endInteraction()
         os_log("Starting Interaction", log: OSLog.tracker, type: .debug)
         let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
