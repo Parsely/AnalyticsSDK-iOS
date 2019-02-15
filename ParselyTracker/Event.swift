@@ -22,6 +22,7 @@ class Event {
     var session_url: String?
     var session_referrer: String?
     var last_session_timestamp: Int?
+    var parsley_site_uuid: String?
     var rand: Int!
     
     init(_ action: String,
@@ -61,17 +62,28 @@ class Event {
         self.last_session_timestamp = session["last_session_ts"] as? Int ?? 0
     }
 
+    func setVisitorInfo(visitorInfo: Dictionary<String, Any>?) {
+        if let visitor = visitorInfo {
+            self.parsley_site_uuid = (visitor["id"] as! String)
+        }
+    }
+
     func toDict() -> Dictionary<String,Any> {
-        // eventually this should validate the contents
         var params: Dictionary<String, Any> = [
             "url": self.url,
             "urlref": self.urlref,
             "action": self.action,
             "idsite": self.idsite,
-            ]
+        ]
         // add a timestamp
-        // note that data is goign to be updated more later
-        params["data"] = ["ts": self.rand]
+        data = extra_data
+        data["ts"] = self.rand
+        // add visitor information if needed
+        if parsley_site_uuid != nil {
+            data["parsley_site_uuid"] = parsley_site_uuid!
+        }
+        // merge with extra_data
+        params["data"] = data
 
         // add metadata at top level if present
         if let metas = self.metadata {
@@ -84,7 +96,7 @@ class Event {
             params["sref"] = self.session_referrer
             params["slts"] = self.last_session_timestamp
         }
-        
+
         return params
     }
 
