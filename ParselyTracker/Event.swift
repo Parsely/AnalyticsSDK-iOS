@@ -16,7 +16,7 @@ class Event {
     var data: Dictionary<String, Any>!
     var metadata: Dictionary<String, Any>?
     var idsite: String
-    var extra_data: Dictionary<String, Any>
+    var extra_data: Dictionary<String, Any>?
     var session_id: Int?
     var session_timestamp: Int?
     var session_url: String?
@@ -29,7 +29,7 @@ class Event {
          url: String,
          urlref: String?,
          metadata: Dictionary<String, Any>?,
-         extra_data: Dictionary<String, Any> = [:],
+         extra_data: Dictionary<String, Any>?,
          idsite: String = Parsely.sharedInstance.apikey,
          session_id: Int? = nil,
          session_timestamp: Int? = nil,
@@ -42,7 +42,6 @@ class Event {
         self.url = url
         self.urlref = urlref ?? ""
         self.idsite = idsite
-        self.data = [:]
         self.metadata = metadata
         self.extra_data = extra_data
         self.session_id = session_id
@@ -76,7 +75,7 @@ class Event {
             "idsite": self.idsite,
         ]
         // add a timestamp
-        data = extra_data
+        data = extra_data ?? [:]
         data["ts"] = self.rand
         // add visitor information if needed
         if parsley_site_uuid != nil {

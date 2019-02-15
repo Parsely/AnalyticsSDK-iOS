@@ -55,7 +55,7 @@ class VideoManager: Sampler {
         trackedVideos[curVideo.key] = curVideo
     }
     
-    func trackPlay(url: String, urlref: String, vId: String, duration:TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>, idsite: String) -> Void {
+    func trackPlay(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>, idsite: String) -> Void {
         trackPause()
         let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
         var curVideo = self.updateVideoData(vId: vId, url: url, duration: duration, eventArgs: eventArgs)

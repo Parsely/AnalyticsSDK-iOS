@@ -54,7 +54,7 @@ public class Parsely {
 
     // Pageview functions
 
-    public func trackPageView(url: String, urlref: String = "", metadata: Dictionary<String, Any>? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
+    public func trackPageView(url: String, urlref: String = "", metadata: Dictionary<String, Any>? = nil, extra_data: Dictionary<String, Any>? = nil, idsite: String = Parsely.sharedInstance.apikey) {
         os_log("Tracking PageView", log: OSLog.tracker, type: .debug)
         self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
