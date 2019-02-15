@@ -15,11 +15,7 @@ class Event {
     var action: String
     var url: String
     var urlref: String
-    var data: Dictionary<String, Any> = [:] {
-        willSet(updatedData) {
-            self.originalData["data"] = updatedData
-        }
-    }
+    var data: Dictionary<String, Any>!
     var metadata: Dictionary<String, Any>?
     var idsite: String
     var extra_data: Dictionary<String, Any>
@@ -61,8 +57,12 @@ class Event {
             "urlref": self.urlref,
             "action": self.action,
             "idsite": self.idsite,
-            "data": self.data
         ]
+        // add a timestamp
+        // note that data is goign to be updated more later
+        let rand = Date().millisecondsSince1970
+        params["data"] = ["ts": rand]
+
         // add metadata at top level if present
         if let metas = self.metadata {
             params["metadata"] = metas
