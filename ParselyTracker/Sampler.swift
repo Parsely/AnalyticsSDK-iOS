@@ -96,8 +96,10 @@ class Sampler {
 
     public func generateEventArgs(url: String, urlref: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String) -> Dictionary<String, Any> {
         // eventArgs: url, urlref, metadata for heartbeats
-        let metadata_ = metadata ?? [:]
-        let eventArgs = ["urlref": urlref, "url": url, "metadata": metadata_, "extra_data": extra_data, "idsite": idsite] as [String : Any]
+        var eventArgs: [String: Any] = ["urlref": urlref, "url": url, "extra_data": extra_data, "idsite": idsite]
+        if (metadata != nil) {
+            eventArgs["metadata"] = metadata
+        }
         return eventArgs
     }
 
@@ -122,14 +124,14 @@ class Sampler {
     }
 
     private func sendHeartbeat(key: String) -> Void {
-        var trackedData = accumulators[key]
-        let incSecs: TimeInterval = trackedData!.accumulatedTime
+        var trackedData = accumulators[key]!
+        let incSecs: TimeInterval = trackedData.accumulatedTime
         if incSecs > 0 && incSecs <= (baseHeartbeatInterval + 0.25) {
             os_log("Sending heartbeat for %s", log: OSLog.tracker, type:.debug, key)
-            heartbeatFn(data: trackedData!, enableHeartbeats: true)
+            heartbeatFn(data: trackedData, enableHeartbeats: true)
         }
-        trackedData!.accumulatedTime = 0
-        updateAccumulator(acc: trackedData!)
+        trackedData.accumulatedTime = 0
+        updateAccumulator(acc: trackedData)
     }
 
     @objc internal func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.

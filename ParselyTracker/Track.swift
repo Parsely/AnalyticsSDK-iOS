@@ -30,6 +30,7 @@ class Track {
         // generic helper function, sends the event as-is
         self.pixel.beacon(event: event)
         os_log("Sending an event from Track", log: OSLog.tracker, type:.debug)
+        dump(event.toDict())
     }
 
     func pageview(url: String, urlref: String = "", metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String) {
@@ -44,7 +45,6 @@ class Track {
 
         os_log("Sending a pageview from Track", log: OSLog.tracker, type:.debug)
         event(event: event_)
-        dump(event_.toDict())
     }
 
     func videoStart(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any> = [:], idsite: String) {
