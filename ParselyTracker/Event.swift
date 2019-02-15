@@ -22,6 +22,7 @@ class Event {
     var session_url: String?
     var session_referrer: String?
     var last_session_timestamp: Int?
+    var rand: Int!
     
     init(_ action: String,
          url: String,
@@ -48,6 +49,7 @@ class Event {
         self.session_url = session_url
         self.session_referrer = session_referrer
         self.last_session_timestamp = last_session_timestamp
+        self.rand = Date().millisecondsSince1970
 
     }
 
@@ -69,9 +71,7 @@ class Event {
             ]
         // add a timestamp
         // note that data is goign to be updated more later
-        // todo Move to init
-        let rand = Date().millisecondsSince1970
-        params["data"] = ["ts": rand]
+        params["data"] = ["ts": self.rand]
 
         // add metadata at top level if present
         if let metas = self.metadata {
