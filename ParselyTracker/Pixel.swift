@@ -16,19 +16,12 @@ class Pixel {
 
     func beacon(event: Event) {
         os_log("Fired beacon: action = %s", log: OSLog.tracker, type: .debug, event.action)
-        // start forming dictionary
-        let rand = Date().millisecondsSince1970
-        var data: Dictionary<String,Any?> = ["ts": rand]
         let session: Dictionary<String, Any?> = sessionManager.get(url: event.url, urlref: event.urlref,
                                                               shouldExtendExisting: true)
         event.setSessionInfo(session: session)
         let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
-        data["parsely_site_uuid"] = visitorInfo["id"]
+        event.setVisitorInfo(visitorInfo: visitorInfo)
         
-        // merge with the extra_data provided by the customer
-        data = data.merging(event.extra_data, uniquingKeysWith: { (old, _new) in old })
-        // update event values as needed
-        event.data = data as Dictionary<String, Any>
         Parsely.sharedInstance.eventQueue.push(event)
     }
 }
