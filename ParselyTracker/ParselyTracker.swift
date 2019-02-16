@@ -66,25 +66,61 @@ public class Parsely {
         self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
 
-    // Engagement functions
-
+    /**
+     Start tracking engaged time for a given url. Once called, heartbeat events will be sent periodically for this url
+     until engaged time tracking is stopped. Stops tracking engaged time for any urls currently being tracked for engaged
+     time.
+     
+     - Parameter url: The url of the page being engaged with
+     - Parameter urlref: The url of the page that linked to the page being engaged with
+     - Parameter metadata: A dictionary of Parsely-formatted metadata for the page being engaged with
+     - Parameter extra_data: A dictionary of additional information to send with generated heartbeat events
+     - Parameter idsite: The Parsely public API key for which the heartbeat events should be counted
+     */
     public func startEngagement(url: String, urlref: String = "", metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
         track.startEngagement(url: url, urlref: urlref, metadata:metadata, extra_data: extra_data, idsite: idsite)
     }
 
+    /**
+     Stop tracking engaged time for any currently engaged urls. Once called, one additional heartbeat event may be sent per
+     previously-engaged url, after which heartbeat events will stop being sent.
+     */
     public func stopEngagement() {
         track.stopEngagement()
     }
 
-    // Video functions
+    /**
+     Start tracking view time for a given video being viewed at a given url. Sends a videostart event for the given
+     url/video combination. Once called, vheartbeat events will be sent periodically for this url/video combination until video
+     view tracking is stopped. Stops tracking view time for any url/video combinattions currently being tracked for view time.
+     
+     - Parameter url: The url at which the video is being viewed. Equivalent to the url of the page on which the video is embedded
+     - Parameter urlref: The url of the page that linked to the page on which the video is being viewed
+     - Parameter videoID: A string uniquely identifying the video within your Parsely account
+     - Parameter duration: The duration of the video
+     - Parameter metadata: A dictionary of Parsely-formatted metadata for the video being viewed
+     - Parameter extra_data: A dictionary of additional information to send with generated vheartbeat events
+     - Parameter idsite: The Parsely public API key for which the vheartbeat events should be counted
+     */
     public func trackPlay(url: String, urlref: String = "", videoID: String, duration: TimeInterval, metadata:[String: Any]? = nil, extra_data: Dictionary<String, Any> = [:], idsite: String = Parsely.sharedInstance.apikey) {
         track.videoStart(url: url, urlref: urlref, vId: videoID, duration: duration, metadata: metadata, extra_data: extra_data, idsite: idsite)
     }
 
+    /**
+     Stop tracking video view time for any currently viewing url/video combinations. Once called, one additional vheartbeat
+     event may be sent per previously-viewed url/video combination, after which vheartbeat events will stop being sent.
+     */
     public func trackPause() {
         track.videoPause()
     }
     
+    /**
+     Unset tracking data for the given url/video combination. The next time trackPlay is called for that combination, it will
+     behave as if it had never been tracked before during this run of the app.
+     
+     - Parameter url: The url at which the video wss being viewed. Equivalent to the url of the page on which the video is embedded
+     - Parameter vId: The video ID string for the video being reset
+     */
     public func resetVideo(url:String, vId:String) {
         track.videoReset(url: url, vId: vId)
     }
