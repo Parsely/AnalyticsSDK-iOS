@@ -34,12 +34,21 @@ public class Parsely {
     }
     public static let sharedInstance = Parsely()
     lazy var visitorManager = VisitorManager()
-    
+
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
         addApplicationObservers()
     }
-    
+
+    /**
+     Configure the Parsely tracking SDK. Should be called once per application load, before other Parsely SDK functions
+     are called
+     
+     Parameter apikey: The Parsely public API key for which the pageview event should be counted
+     Parameter options: A dictionary of settings with which to configure the SDK.
+                        Supported keys: secondsBetweenHeartbeats: TimeInterval representing how often heartbeat events should
+                                                                  be tracked
+     */
     public func configure(apikey: String, options: [String: Any]) {
         os_log("Configuring ParselyTracker", log: OSLog.tracker, type: .debug)
         self.apikey = apikey
