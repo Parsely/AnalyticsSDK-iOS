@@ -10,9 +10,7 @@ import Foundation
 import UIKit
 
 class SessionManager {
-    // consolidate to the version in Storage, not just here
     // use a struct, not a dictionary
-    private var session: Dictionary<String, Any?> = [:]
     private let SESSION_TIMEOUT: TimeInterval = 30 * 60.0 // 30 minutes
     // should use shared Storage instance, since each one instantiates access to the user defaults
     private let storage: Storage = Storage()
@@ -31,13 +29,11 @@ class SessionManager {
     }
 
     public func get(url: String, urlref: String, shouldExtendExisting: Bool = false) -> Dictionary<String, Any?> {
-        if !self.session.isEmpty {
-           return self.session
-        }
         // todo: think through referrers logic. What should happen if we try to get a session for a url/ref?
         var session = self.storage.get(key: self.sessionKey) ?? [:]
 
         if session.isEmpty {
+            print("SESSION EMPTY GETTING ANOTHER YAR")
             var visitorInfo = visitorManager.getVisitorInfo()
             visitorInfo["session_count"] = visitorInfo["session_count"] as! Int + 1
             
@@ -53,13 +49,16 @@ class SessionManager {
             visitorInfo["last_session_ts"] = session["session_ts"]
             visitorManager.setVisitorInfo(visitorInfo: visitorInfo)
         } else if shouldExtendExisting {
+            print("EXTENDING SESSION")
             self.extendSessionExpiry()
         }
-        self.session = session
-        return self.session
+        return session
     }
     
     public func extendSessionExpiry() {
-        self.storage.extendExpiry(key: self.sessionKey, expires: Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT))
+        let expiry = Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT)
+        print("EXTENDING TO:")
+        print(expiry)
+        self.storage.extendExpiry(key: self.sessionKey, expires: expiry)
     }
 }
