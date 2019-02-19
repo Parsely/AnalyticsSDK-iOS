@@ -34,17 +34,20 @@ class Storage {
         return nil
     }
 
-    func set(key: String, value: Dictionary<String, Any?>, expires: Date?) {
+    func set(key: String, value: Dictionary<String, Any?>, expires: Date?) -> Dictionary<String, Any?> {
         var data = value
         if expires != nil {
            data[self.expiryDateKey] = expires
         }
         self.defaults.set(data, forKey: key)
+        return data
     }
 
-    func extendExpiry(key: String, expires: Date) {
+    func extendExpiry(key: String, expires: Date) -> Dictionary<String, Any?>? {
         if let data = self.get(key: key) {
-            self.set(key: key, value: data, expires: expires)
+            return set(key: key, value: data, expires: expires)
+        } else {
+            return nil
         }
     }
 
