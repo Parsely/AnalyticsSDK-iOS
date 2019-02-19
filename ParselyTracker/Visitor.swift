@@ -24,7 +24,7 @@ class VisitorManager {
         if (visitorInfo.isEmpty) {
             visitorInfo = self.initVisitor(visitorId: UUID().uuidString)
         } else if (shouldExtendExisting) {
-            self.extendVisitorExpiry()
+            visitorInfo = extendVisitorExpiry()
         }
         return visitorInfo
     }
@@ -38,11 +38,10 @@ class VisitorManager {
     }
     
     func setVisitorInfo(visitorInfo: Dictionary<String, Any?>) -> Dictionary<String, Any?> {
-        self.storage.set(key: visitorKey, value: visitorInfo, expires: Date.init(timeIntervalSinceNow: self.VISITOR_TIMEOUT))
-        return visitorInfo
+        return storage.set(key: visitorKey, value: visitorInfo, expires: Date.init(timeIntervalSinceNow: self.VISITOR_TIMEOUT))
     }
     
-    func extendVisitorExpiry() {
-        self.storage.extendExpiry(key: visitorKey, expires: Date.init(timeIntervalSinceNow: self.VISITOR_TIMEOUT))
+    func extendVisitorExpiry() -> Dictionary<String, Any?> {
+        return storage.extendExpiry(key: visitorKey, expires: Date.init(timeIntervalSinceNow: self.VISITOR_TIMEOUT)) ?? [:]
     }
 }
