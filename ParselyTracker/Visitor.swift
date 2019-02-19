@@ -11,13 +11,9 @@ import Foundation
 class VisitorManager {
     // represents a visitor
     private let VISITOR_TIMEOUT: TimeInterval = 60 * 60 * 24 * 365  / 12 * 13 // 13 months
-    let storage: Storage
+    private let storage = Parsely.sharedStorage
     let visitorKey = "_parsely_visitor_uuid"
-    
-    init () {
-        self.storage = Storage()
-    }
-    
+
     func getVisitorInfo(shouldExtendExisting: Bool = false) -> Dictionary<String, Any?> {
         var visitorInfo = self.storage.get(key: self.visitorKey) ?? [:]
         if (visitorInfo.isEmpty) {

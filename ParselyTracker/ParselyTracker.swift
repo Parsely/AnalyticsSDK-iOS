@@ -33,6 +33,7 @@ public class Parsely {
         }
     }
     public static let sharedInstance = Parsely()
+    internal static let sharedStorage = Storage()
     lazy var visitorManager = VisitorManager()
 
     private init() {

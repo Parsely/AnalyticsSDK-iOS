@@ -12,8 +12,7 @@ import UIKit
 class SessionManager {
     // use a struct, not a dictionary
     private let SESSION_TIMEOUT: TimeInterval = 30 * 60.0 // 30 minutes
-    // should use shared Storage instance, since each one instantiates access to the user defaults
-    private let storage: Storage = Storage()
+    private let storage = Parsely.sharedStorage
     private let sessionKey = "_parsely_session_identifier"
     private let visitorManager = Parsely.sharedInstance.visitorManager
     // knows how to start, stop, store, and restore a session
