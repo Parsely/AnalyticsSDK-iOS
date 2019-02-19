@@ -88,6 +88,7 @@ class Event {
         if let metas = self.metadata {
             params["metadata"] = metas
         }
+        // session could be a struct, easier to check presence/absence
         if self.session_id != nil {
             params["sid"] = self.session_id
             params["sts"] = self.session_timestamp

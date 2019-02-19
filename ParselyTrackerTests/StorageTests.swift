@@ -25,7 +25,7 @@ class StorageTests: XCTestCase {
 
     func testSetGetWithoutExpires() {
         let data: Dictionary<String, Any> = ["foo": "bar"]
-        storage.set(key: "baz", value: data, expires: nil)
+        _ = storage.set(key: "baz", value: data, expires: nil)
         _ = storage.get(key: "baz") ?? [:]
         _ = "stuff"
     }
@@ -34,16 +34,18 @@ class StorageTests: XCTestCase {
         let data: Dictionary<String, Any?> = ["foo": "bar"]
         let fifteenMinutes = Double(1000 * 15 * 60)
         let expires = Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes))
-        storage.set(key: "baz", value: data, expires: expires)
+        _ = storage.set(key: "baz", value: data, expires: expires)
         let retrievedData = storage.get(key: "baz") ?? [:]
-        XCTAssertEqual(data as NSObject, retrievedData as NSObject)
+        var expected = data
+        expected["expires"] = expires
+        XCTAssertEqual(expected as NSObject, retrievedData as NSObject)
     }
 
     func testGetSetWithNegativeExpires() {
         let data: Dictionary<String, Any?> = ["foo": "bar"]
         let fifteenMinutes = Double(1000 * 15 * 60) * -1.0
         let expires = Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes))
-        storage.set(key: "baz", value: data, expires: expires)
+        _ = storage.set(key: "baz", value: data, expires: expires)
         let retrievedData = storage.get(key: "baz") ?? [:]
         XCTAssert(retrievedData.isEmpty)
     }
@@ -58,19 +60,37 @@ class StorageTests: XCTestCase {
         ]
         let fifteenMinutes = Double(1000 * 15 * 60)
         let expires = Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes))
-        storage.set(key: "bzz", value: data, expires: expires)
+        _ = storage.set(key: "bzz", value: data, expires: expires)
         let retrievedData = storage.get(key: "bzz") ?? [:]
-        XCTAssertEqual(data as NSObject, retrievedData as NSObject)
+        var expected = data
+        expected["expires"] = expires
+        XCTAssertEqual(expected as NSObject, retrievedData as NSObject)
     }
 
     func testExtendExpiry() {
-        XCTAssert(false,
-                  "TODO: test storage.extendExpiry()")
+        // storage should be able to update the expiry on an item.
+        let data = ["test": "stuff"]
+        let fifteenMinutes = 15 * 60
+        let expires = Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes))
+        _ = storage.set(key: "shouldextend", value: data, expires: expires)
+        let capturedExpiryOne: Date = storage.get(key: "shouldextend")!["expires"] as! Date
+        // update expiry to 30 mins from now
+        _ = storage.extendExpiry(key: "shouldextend", expires: Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes * 2)))
+        let capturedExpiryTwo: Date = storage.get(key: "shouldextend")!["expires"] as! Date
+        XCTAssert(capturedExpiryOne < capturedExpiryTwo,
+                  "Should update expiry times when requested.")
+
     }
 
     func testExpire() {
-        XCTAssert(false,
-                  "TODO: test storage.expire()")
+        // should correctly delete an item when it has expired
+        let data = ["test": "stuff"]
+        let expires = Date(timeIntervalSinceNow: TimeInterval(1))
+        _ = storage.set(key: "shouldextend", value: data, expires: expires)
+        sleep(3)
+        let actual = storage.get(key: "shouldextend") ?? [:]
+        XCTAssert(actual.isEmpty,
+                  "Should return nothing if the value has expired.")
     }
 
 }

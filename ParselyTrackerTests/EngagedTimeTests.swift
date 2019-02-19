@@ -26,11 +26,11 @@ class EngagedTimeTests: XCTestCase {
         // accumulators should be able to increase time
         parsely.startEngagement(url: "sampler-test")
         sleep(4)
-        parsely.stopEngagement(url: "sampler-test")
+        parsely.stopEngagement()
         dump(parsely.track.engagedTime.accumulators["sampler-test"])
-        XCTAssert(parsely.track.engagedTime.accumulators["sampler-test"]!.totalMs > 0,
+        XCTAssert(parsely.track.engagedTime.accumulators["sampler-test"]!.totalTime > 0,
                   "The sampler should run as soon as an item is tracked.")
-        XCTAssert(parsely.track.engagedTime.accumulators["sampler-test"]!.totalMs >= 3.8 * 1000,
+        XCTAssert(parsely.track.engagedTime.accumulators["sampler-test"]!.totalTime >= 3.8 * 1000,
                   "The sampler should collect information as long as the item is engaged.")
     }
     func testHeartbeatFn() {}
@@ -43,14 +43,14 @@ class EngagedTimeTests: XCTestCase {
         parsely.startEngagement(url: itemTwo)
         // stop one after 2 seconds
         sleep(2)
-        parsely.stopEngagement(url: itemOne)
+        parsely.stopEngagement()
         sleep(2)
-        parsely.stopEngagement(url: itemTwo)
+        parsely.stopEngagement()
         // they should be tracked separately
         dump(parsely.track.engagedTime.accumulators)
         XCTAssert(parsely.track.engagedTime.accumulators[itemOne]!.key != parsely.track.engagedTime.accumulators[itemTwo]!.key,
                   "The two items should not be tracked in the same Accumulator")
-        XCTAssert(parsely.track.engagedTime.accumulators[itemOne]!.ms < parsely.track.engagedTime.accumulators[itemTwo]!.ms,
+        XCTAssert(parsely.track.engagedTime.accumulators[itemOne]!.accumulatedTime < parsely.track.engagedTime.accumulators[itemTwo]!.accumulatedTime,
                   "Waiting for the second item should not add time to the first")
     }
     func testEndInteraction() {}

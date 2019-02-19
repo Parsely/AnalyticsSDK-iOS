@@ -10,14 +10,12 @@ import Foundation
 import UIKit
 
 class SessionManager {
-
-    private var session: Dictionary<String, Any?> = [:]
+    // TODO: use a struct, not a dictionary
     private let SESSION_TIMEOUT: TimeInterval = 30 * 60.0 // 30 minutes
-    private let storage: Storage = Storage()
-    private let sessionKey = "_parsely_session"
+    private let storage = Parsely.sharedStorage
+    private let sessionKey = "_parsely_session_identifier"
     private let visitorManager = Parsely.sharedInstance.visitorManager
     // knows how to start, stop, store, and restore a session
-    // struct should represent datatype
     // - sid — session ID == session_count
     // - surl  — initial URL (postID?) of the session
     // - sref — initial referrer of the session
@@ -28,10 +26,6 @@ class SessionManager {
     }
 
     public func get(url: String, urlref: String, shouldExtendExisting: Bool = false) -> Dictionary<String, Any?> {
-        if !self.session.isEmpty {
-           return self.session
-        }
-
         var session = self.storage.get(key: self.sessionKey) ?? [:]
 
         if session.isEmpty {
@@ -44,18 +38,18 @@ class SessionManager {
             session["session_referrer"] = urlref
             session["session_ts"] = Int(Date().timeIntervalSince1970)
             session["last_session_ts"] = visitorInfo["last_session_ts"]
-            self.storage.set(key: self.sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT))
             
             visitorInfo["last_session_ts"] = session["session_ts"]
-            visitorManager.setVisitorInfo(visitorInfo: visitorInfo)
+            let _ = visitorManager.setVisitorInfo(visitorInfo: visitorInfo)
+            session = storage.set(key: sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: SESSION_TIMEOUT))
         } else if shouldExtendExisting {
-            self.extendSessionExpiry()
+            session = extendSessionExpiry()
         }
-        self.session = session
-        return self.session
+        return session
     }
     
-    public func extendSessionExpiry() {
-        self.storage.extendExpiry(key: self.sessionKey, expires: Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT))
+    public func extendSessionExpiry() -> Dictionary<String, Any> {
+        let expiry = Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT)
+        return storage.extendExpiry(key: self.sessionKey, expires: expiry) ?? [:]
     }
 }

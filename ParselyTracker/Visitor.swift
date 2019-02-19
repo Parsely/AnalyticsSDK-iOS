@@ -9,25 +9,21 @@
 import Foundation
 
 class VisitorManager {
-    // represents a visitor
+    // TODO: Use visitor struct instead of dictionaries
     private let VISITOR_TIMEOUT: TimeInterval = 60 * 60 * 24 * 365  / 12 * 13 // 13 months
-    let storage: Storage
-    let visitorKey = "parsely_uuid"
-    
-    init () {
-        self.storage = Storage()
-    }
-    
+    private let storage = Parsely.sharedStorage
+    let visitorKey = "_parsely_visitor_uuid"
+
     func getVisitorInfo(shouldExtendExisting: Bool = false) -> Dictionary<String, Any?> {
         var visitorInfo = self.storage.get(key: self.visitorKey) ?? [:]
         if (visitorInfo.isEmpty) {
             visitorInfo = self.initVisitor(visitorId: UUID().uuidString)
         } else if (shouldExtendExisting) {
-            self.extendVisitorExpiry()
+            visitorInfo = extendVisitorExpiry()
         }
         return visitorInfo
     }
-    
+
     func initVisitor(visitorId: String) -> Dictionary<String, Any?> {
        return self.setVisitorInfo(visitorInfo: [
         "id": visitorId,
@@ -37,11 +33,10 @@ class VisitorManager {
     }
     
     func setVisitorInfo(visitorInfo: Dictionary<String, Any?>) -> Dictionary<String, Any?> {
-        self.storage.set(key: visitorKey, value: visitorInfo, expires: Date.init(timeIntervalSinceNow: self.VISITOR_TIMEOUT))
-        return visitorInfo
+        return storage.set(key: visitorKey, value: visitorInfo, expires: Date.init(timeIntervalSinceNow: self.VISITOR_TIMEOUT))
     }
     
-    func extendVisitorExpiry() {
-        self.storage.extendExpiry(key: visitorKey, expires: Date.init(timeIntervalSinceNow: self.VISITOR_TIMEOUT))
+    func extendVisitorExpiry() -> Dictionary<String, Any?> {
+        return storage.extendExpiry(key: visitorKey, expires: Date.init(timeIntervalSinceNow: self.VISITOR_TIMEOUT)) ?? [:]
     }
 }

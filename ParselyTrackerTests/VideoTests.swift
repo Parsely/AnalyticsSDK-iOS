@@ -27,14 +27,14 @@ class VideoTests: XCTestCase {
                   "Parsely.sharedInstance.accumulators should be empty before calling trackPlay")
 
         // call trackPlay
-        self.parselyTrackerInstance.trackPlay(url: "testurl", videoID: "videoId")
+        self.parselyTrackerInstance.trackPlay(url: "testurl", videoID: "videoId", duration: TimeInterval(0))
 
         // post-track state
         XCTAssert(videoManager.accumulators.count == 1,
                   "trackPlay should populate Parsely.sharedInstance.accumulators with one object")
 
         // call trackPause
-        self.parselyTrackerInstance.trackPause(url: "testurl", videoID: "videoId")
+        self.parselyTrackerInstance.trackPause()
 
         // post-pause state
         XCTAssert(videoManager.accumulators.count == 1,

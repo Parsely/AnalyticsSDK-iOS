@@ -44,16 +44,27 @@ class EventTests: XCTestCase {
 //                  "event.toJSON should produce valid JSON with nested data")
 //    }
     func testHeartbeatEvents() {
-        let event = Heartbeat("vheartbeat", url: "http://test.com", urlref: nil,  inc: 5, tt: 1234567, data: nil)
+        var event = Heartbeat(
+            "heartbeat",
+            url: "http://test.com",
+            urlref: nil,
+            inc: 5,
+            tt: 15,
+            metadata: nil,
+            extra_data: nil,
+            idsite: "parsely-test.com"
+        )
         XCTAssert(event.url == "http://test.com",
                   "Heartbeat events should handle inc and tt.")
         XCTAssert(event.inc == 5,
+                  "Should initialize and preserve subclass parameters.")
+        XCTAssert(event.idsite == "parsely-test.com",
                   "Should initialize and preserve subclass parameters.")
     }
     
     func testValidity() {
         // make an Event
-        let event = Event("pageview", url: "http://test.com", urlref: nil, data: nil)
+        var event = Event("pageview", url: "http://test.com", urlref: nil, metadata: nil, extra_data: nil)
         XCTAssert(event.idsite == "parsely.com", "Events should automatically know which apikey to use.")
     }
 }

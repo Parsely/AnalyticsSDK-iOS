@@ -11,7 +11,7 @@ import XCTest
 import Foundation
 
 
-class VisitorTest: XCTestCase {
+class VisitorTests: XCTestCase {
     override func setUp() {
         super.setUp()
     }
@@ -20,10 +20,23 @@ class VisitorTest: XCTestCase {
         super.tearDown()
     }
 
-    let visitorManager: VisitorManager = VisitorManager()
+    let visitors: VisitorManager = VisitorManager()
 
-    func testGetVisitorInfo() {}
-    func testInitVisitor() {}
-    func testSetVisitorInfo() {}
-    func testExtendVisitorExpiry() {}
+    func testGetVisitorInfo() {
+        // should make a new visitor if none exists
+        let visitor = visitors.getVisitorInfo()
+        XCTAssertFalse(visitor.isEmpty,
+                       "Should create a visitor if there is none.")
+        let subsequentVisitor = visitors.getVisitorInfo()
+        XCTAssertEqual(visitor["id"] as! String, subsequentVisitor["id"] as! String,
+                       "Should use same sid for continued browsing")
+    }
+    func testExtendVisitorExpiry() {
+        let visitor = visitors.getVisitorInfo()
+        let capturedExpiryOne = visitor["expires"] as! Date
+        let subsequentVisitor = visitors.getVisitorInfo(shouldExtendExisting: true)
+        let capturedExpiryTwo = subsequentVisitor["expires"] as! Date
+        XCTAssert(capturedExpiryOne < capturedExpiryTwo,
+                       "Should use same sid for continued browsing")
+    }
 }
