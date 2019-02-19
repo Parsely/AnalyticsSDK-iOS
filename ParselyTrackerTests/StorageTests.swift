@@ -36,7 +36,9 @@ class StorageTests: XCTestCase {
         let expires = Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes))
         storage.set(key: "baz", value: data, expires: expires)
         let retrievedData = storage.get(key: "baz") ?? [:]
-        XCTAssertEqual(data as NSObject, retrievedData as NSObject)
+        var expected = data
+        expected["expires"] = expires
+        XCTAssertEqual(expected as NSObject, retrievedData as NSObject)
     }
 
     func testGetSetWithNegativeExpires() {
@@ -60,7 +62,9 @@ class StorageTests: XCTestCase {
         let expires = Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes))
         storage.set(key: "bzz", value: data, expires: expires)
         let retrievedData = storage.get(key: "bzz") ?? [:]
-        XCTAssertEqual(data as NSObject, retrievedData as NSObject)
+        var expected = data
+        expected["expires"] = expires
+        XCTAssertEqual(expected as NSObject, retrievedData as NSObject)
     }
 
     func testExtendExpiry() {
