@@ -10,10 +10,13 @@ import Foundation
 import UIKit
 
 class SessionManager {
-
+    // consolidate to the version in Storage, not just here
+    // use a struct, not a dictionary
     private var session: Dictionary<String, Any?> = [:]
     private let SESSION_TIMEOUT: TimeInterval = 30 * 60.0 // 30 minutes
+    // should use shared Storage instance, since each one instantiates access to the user defaults
     private let storage: Storage = Storage()
+    // make this longer and more random
     private let sessionKey = "_parsely_session"
     private let visitorManager = Parsely.sharedInstance.visitorManager
     // knows how to start, stop, store, and restore a session
@@ -31,7 +34,7 @@ class SessionManager {
         if !self.session.isEmpty {
            return self.session
         }
-
+        // todo: think through referrers logic. What should happen if we try to get a session for a url/ref?
         var session = self.storage.get(key: self.sessionKey) ?? [:]
 
         if session.isEmpty {
@@ -44,6 +47,7 @@ class SessionManager {
             session["session_referrer"] = urlref
             session["session_ts"] = Int(Date().timeIntervalSince1970)
             session["last_session_ts"] = visitorInfo["last_session_ts"]
+            // this should be extracted into separate method
             self.storage.set(key: self.sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT))
             
             visitorInfo["last_session_ts"] = session["session_ts"]

@@ -12,6 +12,7 @@ class VisitorManager {
     // represents a visitor
     private let VISITOR_TIMEOUT: TimeInterval = 60 * 60 * 24 * 365  / 12 * 13 // 13 months
     let storage: Storage
+    // make this longer and random-er
     let visitorKey = "parsely_uuid"
     
     init () {
@@ -27,7 +28,7 @@ class VisitorManager {
         }
         return visitorInfo
     }
-    
+    // use a visitor struct; avoids need for <String, Any?> type checking
     func initVisitor(visitorId: String) -> Dictionary<String, Any?> {
        return self.setVisitorInfo(visitorInfo: [
         "id": visitorId,
