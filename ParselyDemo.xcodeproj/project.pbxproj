@@ -20,6 +20,8 @@
 		B205889F220CB72A00476E27 /* RequestBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889E220CB72A00476E27 /* RequestBuilderTests.swift */; };
 		B2BC46FB2208D60A000B937A /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BC46FA2208D60A000B937A /* Track.swift */; };
 		B2C84B66220A03610018BC7B /* SamplerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C84B65220A03610018BC7B /* SamplerTests.swift */; };
+		B2FC40BE221CC42300C70806 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FC40BD221CC42300C70806 /* Metadata.swift */; };
+		B2FC40C0221CC43200C70806 /* MetadataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FC40BF221CC43200C70806 /* MetadataTests.swift */; };
 		C26CD66D2E7BC7C6843FD36F /* Pods_ParselyDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526EF9377EAE8B4DC8CC0AA1 /* Pods_ParselyDemoTests.framework */; };
 		DD6DF0DF715E6AF4166BA1CA /* Pods_AnalyticsSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B0C6D4E730AEFB429AD06BB /* Pods_AnalyticsSDKTests.framework */; };
 		DFD7BB483E787F03E5494A20 /* Pods_ParselyTrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */; };
@@ -122,6 +124,8 @@
 		B205889E220CB72A00476E27 /* RequestBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilderTests.swift; sourceTree = "<group>"; };
 		B2BC46FA2208D60A000B937A /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		B2C84B65220A03610018BC7B /* SamplerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplerTests.swift; sourceTree = "<group>"; };
+		B2FC40BD221CC42300C70806 /* Metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
+		B2FC40BF221CC43200C70806 /* MetadataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataTests.swift; sourceTree = "<group>"; };
 		C809B31A3D785C1DD2A05C4E /* Pods-AnalyticsSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDKTests/Pods-AnalyticsSDKTests.release.xcconfig"; sourceTree = "<group>"; };
 		EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F32771E2DD5F1A6A68B29BB2 /* Pods-AnalyticsSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDK/Pods-AnalyticsSDK.release.xcconfig"; sourceTree = "<group>"; };
@@ -302,6 +306,7 @@
 				2A1F0F92460A849C17B26338 /* Storage.swift */,
 				B2BC46FA2208D60A000B937A /* Track.swift */,
 				B205889C220CB67500476E27 /* RequestBuilder.swift */,
+				B2FC40BD221CC42300C70806 /* Metadata.swift */,
 			);
 			path = ParselyTracker;
 			sourceTree = "<group>";
@@ -322,6 +327,7 @@
 				F4BF866F2190DB5A00BD3867 /* VisitorTests.swift */,
 				B2C84B65220A03610018BC7B /* SamplerTests.swift */,
 				B205889E220CB72A00476E27 /* RequestBuilderTests.swift */,
+				B2FC40BF221CC43200C70806 /* MetadataTests.swift */,
 			);
 			path = ParselyTrackerTests;
 			sourceTree = "<group>";
@@ -657,6 +663,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2FC40BE221CC42300C70806 /* Metadata.swift in Sources */,
 				F43333BD20F008EF004BB6F5 /* Visitor.swift in Sources */,
 				F43333BC20F008EF004BB6F5 /* Pixel.swift in Sources */,
 				F43333B620F008EF004BB6F5 /* Session.swift in Sources */,
@@ -677,6 +684,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2FC40C0221CC43200C70806 /* MetadataTests.swift in Sources */,
 				F410D63121061D7800DB3EBE /* PixelTests.swift in Sources */,
 				F4BF866E2190DB4A00BD3867 /* VideoTests.swift in Sources */,
 				F441A55C20F3B8BF009B556E /* EventQueueTests.swift in Sources */,
