@@ -9,7 +9,7 @@
 import Foundation
 
 class VisitorManager {
-    // represents a visitor
+    // TODO: Use visitor struct instead of dictionaries
     private let VISITOR_TIMEOUT: TimeInterval = 60 * 60 * 24 * 365  / 12 * 13 // 13 months
     private let storage = Parsely.sharedStorage
     let visitorKey = "_parsely_visitor_uuid"
@@ -23,7 +23,7 @@ class VisitorManager {
         }
         return visitorInfo
     }
-    // use a visitor struct; avoids need for <String, Any?> type checking
+
     func initVisitor(visitorId: String) -> Dictionary<String, Any?> {
        return self.setVisitorInfo(visitorInfo: [
         "id": visitorId,
