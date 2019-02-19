@@ -12,8 +12,7 @@ class VisitorManager {
     // represents a visitor
     private let VISITOR_TIMEOUT: TimeInterval = 60 * 60 * 24 * 365  / 12 * 13 // 13 months
     let storage: Storage
-    // make this longer and random-er
-    let visitorKey = "parsely_uuid"
+    let visitorKey = "_parsely_visitor_uuid"
     
     init () {
         self.storage = Storage()
