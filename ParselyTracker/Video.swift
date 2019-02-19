@@ -38,24 +38,24 @@ class VideoManager: Sampler {
         let roundedSecs: Int = Int(data.accumulatedTime)
         let totalMs: Int = Int(data.totalTime.milliseconds())
         // get metadata for this video, too
-        var curVideo = trackedVideos[data.key]
+        var curVideo = trackedVideos[data.key]!
         let event = Heartbeat(
             "vheartbeat",
-            url: curVideo!.url,
-            urlref: curVideo?.eventArgs["urlref"] as? String,
+            url: curVideo.url,
+            urlref: curVideo.eventArgs["urlref"] as? String,
             inc: roundedSecs,
             tt: totalMs,
-            metadata: curVideo?.eventArgs["metadata"] as? Dictionary<String, Any>,
-            extra_data: (curVideo?.eventArgs["extra_data"] as? Dictionary<String, Any>)!,
-            idsite: curVideo?.eventArgs["idsite"] as! String
+            metadata: curVideo.eventArgs["metadata"] as? Dictionary<String, Any>,
+            extra_data: curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>,
+            idsite: curVideo.eventArgs["idsite"] as! String
         )
         Parsely.sharedInstance.track.event(event: event)
         os_log("Sent vheartbeat for video %s", log: OSLog.tracker, type:.debug, data.key)
-        curVideo?._heartbeatsSent += 1
-        trackedVideos[curVideo!.key] = curVideo
+        curVideo._heartbeatsSent += 1
+        trackedVideos[curVideo.key] = curVideo
     }
     
-    func trackPlay(url: String, urlref: String, vId: String, duration:TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>, idsite: String) -> Void {
+    func trackPlay(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>?, idsite: String) -> Void {
         trackPause()
         let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
         var curVideo = self.updateVideoData(vId: vId, url: url, duration: duration, eventArgs: eventArgs)
@@ -66,7 +66,7 @@ class VideoManager: Sampler {
                 url: url,
                 urlref: urlref,
                 metadata: curVideo.eventArgs["metadata"] as? Dictionary<String, Any>,
-                extra_data: (curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>)!,
+                extra_data: curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>,
                 idsite: idsite
             )
             Parsely.sharedInstance.track.event(event: event)
