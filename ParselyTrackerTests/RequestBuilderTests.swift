@@ -25,7 +25,8 @@ class RequestBuilderTests: XCTestCase {
             "pageview",
             url: "http://test.com",
             urlref: nil,
-            data: nil
+            metadata: nil, 
+            extra_data: nil
             )]
     }
     
