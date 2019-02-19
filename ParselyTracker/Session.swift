@@ -33,7 +33,6 @@ class SessionManager {
         var session = self.storage.get(key: self.sessionKey) ?? [:]
 
         if session.isEmpty {
-            print("SESSION EMPTY GETTING ANOTHER YAR")
             var visitorInfo = visitorManager.getVisitorInfo()
             visitorInfo["session_count"] = visitorInfo["session_count"] as! Int + 1
             
@@ -44,21 +43,18 @@ class SessionManager {
             session["session_ts"] = Int(Date().timeIntervalSince1970)
             session["last_session_ts"] = visitorInfo["last_session_ts"]
             // this should be extracted into separate method
-            self.storage.set(key: self.sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT))
             
             visitorInfo["last_session_ts"] = session["session_ts"]
-            visitorManager.setVisitorInfo(visitorInfo: visitorInfo)
+            let _ = visitorManager.setVisitorInfo(visitorInfo: visitorInfo)
+            session = storage.set(key: sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: SESSION_TIMEOUT))
         } else if shouldExtendExisting {
-            print("EXTENDING SESSION")
-            self.extendSessionExpiry()
+            session = extendSessionExpiry()
         }
         return session
     }
     
-    public func extendSessionExpiry() {
+    public func extendSessionExpiry() -> Dictionary<String, Any> {
         let expiry = Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT)
-        print("EXTENDING TO:")
-        print(expiry)
-        self.storage.extendExpiry(key: self.sessionKey, expires: expiry)
+        return storage.extendExpiry(key: self.sessionKey, expires: expiry) ?? [:]
     }
 }
