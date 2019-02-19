@@ -24,12 +24,12 @@ class FirstViewController: UIViewController {
     }
     @IBAction func didTouchButton(_ sender: Any) {
         os_log("didTouchButton", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPageView(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", metadata: ["Author": "Yogi Berra"], extra_data: ["product-id": "12345"], idsite: "subdomain.parsely-test.com")
+        delegate.parsely.trackPageView(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", metadata: ["Author": "Yogi Berra"], extraData: ["product-id": "12345"], apikey: "subdomain.parsely-test.com")
     }
     
     @IBAction func didStartEngagement(_ sender: Any) {
         os_log("didStartEngagement", log: OSLog.default, type: .debug)
-        delegate.parsely.startEngagement(url: "http://parsely.com/very-not-real", urlref:"http://parsely.com/not-real", metadata: ["Author":"Yogi Berra"], extra_data: ["product-id": "12345"], idsite: "engaged.parsely-test.com")
+        delegate.parsely.startEngagement(url: "http://parsely.com/very-not-real", urlref:"http://parsely.com/not-real", metadata: ["Author":"Yogi Berra"], extraData: ["product-id": "12345"], apikey: "engaged.parsely-test.com")
     }
     
     @IBAction func didStopEngagement(_ sender: Any) {
@@ -38,7 +38,7 @@ class FirstViewController: UIViewController {
     }
     @IBAction func didStartVideo(_ sender: Any) {
         os_log("didStartVideo", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", urlref: "not-a-real-urlref", videoID: "videoOne", duration: TimeInterval(60), metadata: ["section": "testsection"], extra_data: ["product-id": "12345", "ts": "should be overwritten"])
+        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", urlref: "not-a-real-urlref", videoID: "videoOne", duration: TimeInterval(60), metadata: ["section": "testsection"], extraData: ["product-id": "12345", "ts": "should be overwritten"])
     }
     @IBAction func didPauseVideo(_ sender: Any) {
         os_log("didStopVideo", log: OSLog.default, type: .debug)
