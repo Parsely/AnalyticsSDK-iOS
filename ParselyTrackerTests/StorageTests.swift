@@ -68,8 +68,18 @@ class StorageTests: XCTestCase {
     }
 
     func testExtendExpiry() {
-        XCTAssert(false,
-                  "TODO: test storage.extendExpiry()")
+        // storage should be able to update the expiry on an item.
+        let data = ["test": "stuff"]
+        let fifteenMinutes = 15 * 60
+        let expires = Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes))
+        storage.set(key: "shouldextend", value: data, expires: expires)
+        let capturedExpiryOne: Date = storage.get(key: "shouldextend")!["expires"] as! Date
+        // update expiry to 30 mins from now
+        storage.extendExpiry(key: "shouldextend", expires: Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes * 2)))
+        let capturedExpiryTwo: Date = storage.get(key: "shouldextend")!["expires"] as! Date
+        XCTAssert(capturedExpiryOne < capturedExpiryTwo,
+                  "Should update expiry times when requested.")
+
     }
 
     func testExpire() {

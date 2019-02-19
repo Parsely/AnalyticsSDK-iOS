@@ -29,17 +29,20 @@ class SessionTests: XCTestCase {
         let session = sessions.get(url: url1, urlref: "") // will not extend by default
         XCTAssertFalse(session.isEmpty,
                   "Should create a session if there is none.")
-        sleep(3)
-        let anotherSession = sessions.get(url: url2, urlref: url1, shouldExtendExisting: true)
-        XCTAssertEqual(session as NSObject, anotherSession as NSObject,
-                          "Should use same session for continued browsing")
-        dump(session)
-        dump(anotherSession)
-        XCTAssert(anotherSession["expires"] as! Date > session["expires"] as! Date,
+        let subsequentSession = sessions.get(url: url2, urlref: url1, shouldExtendExisting: true)
+        XCTAssertEqual(session["session_id"] as! Int, subsequentSession["session_id"] as! Int,
+                          "Should use same sid for continued browsing")
+    }
+
+    func testExpiry() {
+        // should be able to extend expiry on a session for each use
+        let url1 = "http://parsely-test.com/123"
+        let session = sessions.get(url: url1, urlref: "") // will not extend by default
+        let subsequentSession = sessions.get(url: url1, urlref: "", shouldExtendExisting: true)
+        XCTAssertEqual(session["session_id"] as! Int, subsequentSession["session_id"] as! Int,
+                       "Should use same sid for continued browsing")
+        XCTAssert(subsequentSession["expires"] as! Date > session["expires"] as! Date,
                   "Should extend the expiration each time the session is accessed.")
 
     }
-
-    func testExpiry() {}
-
 }
