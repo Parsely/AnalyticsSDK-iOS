@@ -67,17 +67,17 @@ public class Parsely {
      - Parameter url: The url of the page that was viewed
      - Parameter urlref: The url of the page that linked to the viewed page
      - Parameter metadata: A dictionary of metadata for the viewed page
-     - Parameter extra_data: A dictionary of additional information to send with the generated pageview event
+     - Parameter extraData: A dictionary of additional information to send with the generated pageview event
      - Parameter apikey: The Parsely public API key for which the pageview event should be counted
      */
     public func trackPageView(url: String,
                               urlref: String = "",
                               metadata: Dictionary<String, Any>? = nil,
-                              extra_data: Dictionary<String, Any>? = nil,
+                              extraData: Dictionary<String, Any>? = nil,
                               apikey: String = Parsely.sharedInstance.apikey)
     {
         os_log("Tracking PageView", log: OSLog.tracker, type: .debug)
-        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: apikey)
+        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extraData, idsite: apikey)
     }
 
     /**
@@ -88,16 +88,16 @@ public class Parsely {
      - Parameter url: The url of the page being engaged with
      - Parameter urlref: The url of the page that linked to the page being engaged with
      - Parameter metadata: A dictionary of Parsely-formatted metadata for the page being engaged with
-     - Parameter extra_data: A dictionary of additional information to send with generated heartbeat events
+     - Parameter extraData: A dictionary of additional information to send with generated heartbeat events
      - Parameter apikey: The Parsely public API key for which the heartbeat events should be counted
      */
     public func startEngagement(url: String,
                                 urlref: String = "",
                                 metadata: Dictionary<String, Any>? = nil,
-                                extra_data: Dictionary<String, Any>? = nil,
+                                extraData: Dictionary<String, Any>? = nil,
                                 apikey: String = Parsely.sharedInstance.apikey)
     {
-        track.startEngagement(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: apikey)
+        track.startEngagement(url: url, urlref: urlref, metadata: metadata, extra_data: extraData, idsite: apikey)
     }
 
     /**
@@ -118,7 +118,7 @@ public class Parsely {
      - Parameter videoID: A string uniquely identifying the video within your Parsely account
      - Parameter duration: The duration of the video
      - Parameter metadata: A dictionary of Parsely-formatted metadata for the video being viewed
-     - Parameter extra_data: A dictionary of additional information to send with generated vheartbeat events
+     - Parameter extraData: A dictionary of additional information to send with generated vheartbeat events
      - Parameter apikey: The Parsely public API key for which the vheartbeat events should be counted
      */
     public func trackPlay(url: String,
@@ -126,10 +126,10 @@ public class Parsely {
                           videoID: String,
                           duration: TimeInterval,
                           metadata:[String: Any]? = nil,
-                          extra_data: Dictionary<String, Any>? = nil,
+                          extraData: Dictionary<String, Any>? = nil,
                           apikey: String = Parsely.sharedInstance.apikey)
     {
-        track.videoStart(url: url, urlref: urlref, vId: videoID, duration: duration, metadata: metadata, extra_data: extra_data, idsite: apikey)
+        track.videoStart(url: url, urlref: urlref, vId: videoID, duration: duration, metadata: metadata, extra_data: extraData, idsite: apikey)
     }
 
     /**
