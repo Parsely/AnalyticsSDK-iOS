@@ -94,7 +94,7 @@ class Sampler {
         accumulators.removeValue(forKey: key)
     }
 
-    public func generateEventArgs(url: String, urlref: String, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>?, idsite: String) -> Dictionary<String, Any> {
+    public func generateEventArgs(url: String, urlref: String, metadata: Dictionary<String, Any>? = nil, extra_data: Dictionary<String, Any>?, idsite: String) -> Dictionary<String, Any> {
         // eventArgs: url, urlref, metadata for heartbeats
         var eventArgs: [String: Any] = ["urlref": urlref, "url": url, "idsite": idsite]
         if (metadata != nil) {

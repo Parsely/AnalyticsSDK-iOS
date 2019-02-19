@@ -87,17 +87,15 @@ public class Parsely {
      
      - Parameter url: The url of the page being engaged with
      - Parameter urlref: The url of the page that linked to the page being engaged with
-     - Parameter metadata: A dictionary of Parsely-formatted metadata for the page being engaged with
      - Parameter extraData: A dictionary of additional information to send with generated heartbeat events
      - Parameter apikey: The Parsely public API key for which the heartbeat events should be counted
      */
     public func startEngagement(url: String,
                                 urlref: String = "",
-                                metadata: Dictionary<String, Any>? = nil,
                                 extraData: Dictionary<String, Any>? = nil,
                                 apikey: String = Parsely.sharedInstance.apikey)
     {
-        track.startEngagement(url: url, urlref: urlref, metadata: metadata, extra_data: extraData, idsite: apikey)
+        track.startEngagement(url: url, urlref: urlref, extra_data: extraData, idsite: apikey)
     }
 
     /**
