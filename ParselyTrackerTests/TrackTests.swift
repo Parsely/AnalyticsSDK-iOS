@@ -10,8 +10,7 @@ import XCTest
 import Foundation
 
 class TrackTests: XCTestCase {
-    let parselyTrackerInstance: Parsely = Parsely.sharedInstance
-    let track: Track = Track()
+    let parsely: Parsely = Parsely.sharedInstance
     
     override func setUp() {
         super.setUp()
@@ -21,10 +20,17 @@ class TrackTests: XCTestCase {
         super.tearDown()
     }
     
-    func testTrackPageView() {
-        // TODO: test side effects of this function?
-        // parselyBeacon.trackPageView(params: [:], shouldNotSetLastRequest: true)
-        XCTAssert(true)
+    func testTrackEvent() {
+        // TODO: Test that events make it into the event queue.
+        let eventQueue = parsely.eventQueue
+        XCTAssertEqual(eventQueue.length(), 0,
+                       "Event queue should be empty before creating events.")
+        let event = Event("pageview", url: "http://parsely-stuff.com", urlref: "", metadata: nil, extra_data: nil)
+        _ = parsely.track.event(event: event)
+        // FIXME: This seems to work in smoke testing; it's unclear how threads or the testing environment
+        // might affect things not being added to the queue.
+        XCTAssertEqual(eventQueue.length(), 1,
+                       "Track should add an event into the eventQueue.")
     }
 }
 
