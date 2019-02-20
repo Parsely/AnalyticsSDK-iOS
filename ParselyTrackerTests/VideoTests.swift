@@ -20,6 +20,9 @@ class VideoTests: XCTestCase {
         super.tearDown()
     }
     
+    // TODO: Video should test handling of duration, and storing of video metas (updateVideo)
+    // should test reset() method
+    
     func testTrackVideo() {
         // pre-track state
         let videoManager = parselyTrackerInstance.track.videoManager

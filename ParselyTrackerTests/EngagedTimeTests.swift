@@ -22,36 +22,11 @@ class EngagedTimeTests: XCTestCase {
         super.tearDown()
     }
     
-    func testSampleFn() {
-        // accumulators should be able to increase time
-        parsely.startEngagement(url: "sampler-test")
-        sleep(4)
-        parsely.stopEngagement()
-        dump(parsely.track.engagedTime.accumulators["sampler-test"])
-        XCTAssert(parsely.track.engagedTime.accumulators["sampler-test"]!.totalTime > 0,
-                  "The sampler should run as soon as an item is tracked.")
-        XCTAssert(parsely.track.engagedTime.accumulators["sampler-test"]!.totalTime >= 3.8 * 1000,
-                  "The sampler should collect information as long as the item is engaged.")
-    }
+    // TODO: implement better ET tests.
+    // SamplerTests tests the underlying accumulators/sampler class
+    // ET should test the results of the heartbeatFn, samplerFn, calling its internal public API
+
     func testHeartbeatFn() {}
     func testStartInteraction() {}
-    func testMultipleTrackedItems() {
-        // should track engagement for different items, separately
-        let itemOne: String = "itemOne"
-        let itemTwo: String = "itemTwo"
-        parsely.startEngagement(url: itemOne)
-        parsely.startEngagement(url: itemTwo)
-        // stop one after 2 seconds
-        sleep(2)
-        parsely.stopEngagement()
-        sleep(2)
-        parsely.stopEngagement()
-        // they should be tracked separately
-        dump(parsely.track.engagedTime.accumulators)
-        XCTAssert(parsely.track.engagedTime.accumulators[itemOne]!.key != parsely.track.engagedTime.accumulators[itemTwo]!.key,
-                  "The two items should not be tracked in the same Accumulator")
-        XCTAssert(parsely.track.engagedTime.accumulators[itemOne]!.accumulatedTime < parsely.track.engagedTime.accumulators[itemTwo]!.accumulatedTime,
-                  "Waiting for the second item should not add time to the first")
-    }
     func testEndInteraction() {}
 }
