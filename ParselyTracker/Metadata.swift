@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A class to manage and re-use metadata. Metadata contained in an instance of this class will conform to Parsely's schema. See logs for any failures.
 public class ParselyMetadata {
     var canonical_url: String?
     var pub_date: Date?
