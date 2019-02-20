@@ -38,27 +38,23 @@ public class Parsely {
 
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
-        addApplicationObservers()
     }
 
     /**
      Configure the Parsely tracking SDK. Should be called once per application load, before other Parsely SDK functions
      are called
      
-     Parameter apikey: The Parsely public API key for which the pageview event should be counted
-     Parameter options: A dictionary of settings with which to configure the SDK.
-                        Supported keys: secondsBetweenHeartbeats: TimeInterval representing how often heartbeat events should
-                                                                  be tracked
+     - Parameter apikey: The Parsely public API key for which the pageview event should be counted
+     - Parameter secondsBetweenHeartbeats: TimeInterval representing how often heartbeat events should be tracked
+     - Parameter handleLifecycle: If true, set up listeners to handle tracking across application lifecycle events
      */
-    public func configure(apikey: String, options: [String: Any]) {
+    public func configure(apikey: String, secondsBetweenHeartbeats: TimeInterval = 10, handleLifecycle: Bool = true) {
         os_log("Configuring ParselyTracker", log: OSLog.tracker, type: .debug)
         self.apikey = apikey
-        self.default_config = [
-            "secondsBetweenHeartbeats": 10
-        ]
-        self.config = self.default_config.merging(
-                options, uniquingKeysWith: { (_old, new) in new }
-        )
+        self.config = ["secondsBetweenHeartbeats": secondsBetweenHeartbeats]
+        if handleLifecycle {
+            addApplicationObservers()
+        }
         self.configured = true
     }
 
