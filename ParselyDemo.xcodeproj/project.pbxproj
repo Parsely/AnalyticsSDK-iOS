@@ -31,7 +31,6 @@
 		F40D9A6520EFF74F0030525E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F40D9A6320EFF74F0030525E /* Main.storyboard */; };
 		F40D9A6720EFF74F0030525E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F40D9A6620EFF74F0030525E /* Assets.xcassets */; };
 		F40D9A6A20EFF74F0030525E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F40D9A6820EFF74F0030525E /* LaunchScreen.storyboard */; };
-		F40D9A7520EFF7500030525E /* AnalyticsSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A7420EFF7500030525E /* AnalyticsSDKTests.swift */; };
 		F410D63121061D7800DB3EBE /* PixelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F410D63021061D7800DB3EBE /* PixelTests.swift */; };
 		F433339720F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F433338E20F0087E004BB6F5 /* ParselyTracker.framework */; };
 		F433339E20F0087E004BB6F5 /* ParselyTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F433339D20F0087E004BB6F5 /* ParselyTrackerTests.swift */; };
@@ -655,7 +654,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F40D9A7520EFF7500030525E /* AnalyticsSDKTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
