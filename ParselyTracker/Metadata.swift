@@ -60,7 +60,7 @@ public class ParselyMetadata {
         var metas: Dictionary<String, Any> = [:]
         // build metadata dictionary conditionally
         if canonical_url != nil {
-            metas["canonical_url"] = canonical_url!
+            metas["link"] = canonical_url!
         }
         if pub_date != nil {
             metas["pub_date"] = pub_date!
