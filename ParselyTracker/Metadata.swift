@@ -22,6 +22,8 @@ public class ParselyMetadata {
     // network_canonical
     // network_id
     // share_urls
+    // not public
+    var link: String?
     
     /**
      A class to manage and re-use metadata. Metadata contained in an instance of this
@@ -35,9 +37,9 @@ public class ParselyMetadata {
      - Parameter thumb_url: A thumbnail image, if applicable.
      - Parameter section: Same as section for website integration.
      - Parameter tags: Up to 20 tags on an event are allowed.
-     - Parameter duration: Durations given here take precedence over any provided to video tracking functions, in terms of what is included in the event metadata.
+     - Parameter duration: Durations passed explicitly to trackVideoStart take precedence over any in metadata.
     */
-    init(canonical_url: String? = nil,
+    public init(canonical_url: String? = nil,
          pub_date: Date? = nil,
          title: String? = nil,
          authors: Array<String>? = nil,
@@ -87,6 +89,9 @@ public class ParselyMetadata {
         if duration != nil {
             // todo: should convert to an int?
             metas["duration"] = duration!
+        }
+        if link != nil {
+            metas["link"] = link
         }
         
         return metas
