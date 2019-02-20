@@ -108,7 +108,7 @@ public class Parsely {
     /**
      Start tracking view time for a given video being viewed at a given url. Sends a videostart event for the given
      url/video combination. Once called, vheartbeat events will be sent periodically for this url/video combination until video
-     view tracking is stopped. Stops tracking view time for any url/video combinattions currently being tracked for view time.
+     view tracking is stopped. Stops tracking view time for any url/video combinations currently being tracked for view time.
      
      - Parameter url: The url at which the video is being viewed. Equivalent to the url of the page on which the video is embedded
      - Parameter urlref: The url of the page that linked to the page on which the video is being viewed
