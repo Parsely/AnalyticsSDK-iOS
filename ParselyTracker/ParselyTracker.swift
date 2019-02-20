@@ -142,10 +142,10 @@ public class Parsely {
      behave as if it had never been tracked before during this run of the app.
      
      - Parameter url: The url at which the video wss being viewed. Equivalent to the url of the page on which the video is embedded
-     - Parameter vId: The video ID string for the video being reset
+     - Parameter videoId: The video ID string for the video being reset
      */
-    public func resetVideo(url:String, vId:String) {
-        track.videoReset(url: url, vId: vId)
+    public func resetVideo(url:String, videoID:String) {
+        track.videoReset(url: url, vId: videoID)
     }
     
     @objc private func flush() {
