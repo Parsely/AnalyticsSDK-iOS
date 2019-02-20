@@ -65,13 +65,13 @@ public class Parsely {
      
      - Parameter url: The url of the page that was viewed
      - Parameter urlref: The url of the page that linked to the viewed page
-     - Parameter metadata: A dictionary of metadata for the viewed page
+     - Parameter metadata: Metadata for the viewed page
      - Parameter extraData: A dictionary of additional information to send with the generated pageview event
      - Parameter apikey: The Parsely public API key for which the pageview event should be counted
      */
     public func trackPageView(url: String,
                               urlref: String = "",
-                              metadata: Dictionary<String, Any>? = nil,
+                              metadata: ParselyMetadata? = nil,
                               extraData: Dictionary<String, Any>? = nil,
                               apikey: String = Parsely.sharedInstance.apikey)
     {
@@ -114,7 +114,7 @@ public class Parsely {
      - Parameter urlref: The url of the page that linked to the page on which the video is being viewed
      - Parameter videoID: A string uniquely identifying the video within your Parsely account
      - Parameter duration: The duration of the video
-     - Parameter metadata: A dictionary of Parsely-formatted metadata for the video being viewed
+     - Parameter metadata: ParselyMetadata for the video being viewed
      - Parameter extraData: A dictionary of additional information to send with generated vheartbeat events
      - Parameter apikey: The Parsely public API key for which the vheartbeat events should be counted
      */
@@ -122,7 +122,7 @@ public class Parsely {
                           urlref: String = "",
                           videoID: String,
                           duration: TimeInterval,
-                          metadata:[String: Any]? = nil,
+                          metadata: ParselyMetadata? = nil,
                           extraData: Dictionary<String, Any>? = nil,
                           apikey: String = Parsely.sharedInstance.apikey)
     {

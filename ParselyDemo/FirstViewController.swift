@@ -8,6 +8,7 @@
 
 import UIKit
 import os.log
+import ParselyTracker
 
 class FirstViewController: UIViewController {
     @IBOutlet weak var trackPVButton: UIButton!
@@ -24,7 +25,8 @@ class FirstViewController: UIViewController {
     }
     @IBAction func didTouchButton(_ sender: Any) {
         os_log("didTouchButton", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPageView(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", metadata: ["Author": "Yogi Berra"], extraData: ["product-id": "12345"], apikey: "subdomain.parsely-test.com")
+        let demoMetas = ParselyMetadata(authors: ["Yogi Berr"])
+        delegate.parsely.trackPageView(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", metadata: demoMetas, extraData: ["product-id": "12345"], apikey: "subdomain.parsely-test.com")
     }
     
     @IBAction func didStartEngagement(_ sender: Any) {
@@ -38,7 +40,8 @@ class FirstViewController: UIViewController {
     }
     @IBAction func didStartVideo(_ sender: Any) {
         os_log("didStartVideo", log: OSLog.default, type: .debug)
-        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", urlref: "not-a-real-urlref", videoID: "videoOne", duration: TimeInterval(60), metadata: ["section": "testsection"], extraData: ["product-id": "12345", "ts": "should be overwritten"])
+        let demoMetas = ParselyMetadata(authors: ["Yogi Berr"], duration: TimeInterval(10))
+        delegate.parsely.trackPlay(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", urlref: "not-a-real-urlref", videoID: "videoOne", duration: TimeInterval(60), metadata: demoMetas, extraData: ["product-id": "12345", "ts": "should be overwritten"])
     }
     @IBAction func didPauseVideo(_ sender: Any) {
         os_log("didStopVideo", log: OSLog.default, type: .debug)
