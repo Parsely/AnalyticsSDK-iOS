@@ -26,8 +26,8 @@ public class Parsely {
     private var active: Bool = true
     public var secondsBetweenHeartbeats: TimeInterval? {
         get {
-            if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! Int? {
-                return TimeInterval(secondsBtwnHeartbeats)
+            if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! TimeInterval? {
+                return secondsBtwnHeartbeats
             }
             return nil
         }
