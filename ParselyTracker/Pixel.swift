@@ -15,6 +15,11 @@ class Pixel {
     lazy var sessionManager = SessionManager()
 
     func beacon(event: Event) {
+        if event.idsite == "" {
+            os_log("apikey not configured. call Parsely.configure before using tracking methods", log: OSLog.tracker,
+                   type: .error)
+            return
+        }
         os_log("Fired beacon: action = %s", log: OSLog.tracker, type: .debug, event.action)
         let session: Dictionary<String, Any?> = sessionManager.get(url: event.url, urlref: event.urlref,
                                                               shouldExtendExisting: true)
