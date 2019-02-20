@@ -15,7 +15,6 @@ public class ParselyMetadata {
     var title: String?
     var authors: Array<String>?
     var image_url: String?
-    var thumb_url: String?
     var section: String?
     var tags: Array<String>?
     var duration: TimeInterval?
@@ -33,7 +32,6 @@ public class ParselyMetadata {
      - Parameter title: Title of the content.
      - Parameter authors: Up to 10 authors are accepted.
      - Parameter image_url: Where the main image for this post is hosted.
-     - Parameter thumb_url: A thumbnail image, if applicable.
      - Parameter section: Same as section for website integration.
      - Parameter tags: Up to 20 tags on an event are allowed.
      - Parameter duration: Durations passed explicitly to trackVideoStart take precedence over any in metadata.
@@ -43,7 +41,6 @@ public class ParselyMetadata {
          title: String? = nil,
          authors: Array<String>? = nil,
          image_url: String? = nil,
-         thumb_url: String? = nil,
          section: String? = nil,
          tags: Array<String>? = nil,
          duration: TimeInterval? = nil) {
@@ -53,7 +50,6 @@ public class ParselyMetadata {
         self.title = title
         self.authors = authors
         self.image_url = image_url
-        self.thumb_url = thumb_url
         self.section = section
         self.tags = tags
         self.duration = duration
