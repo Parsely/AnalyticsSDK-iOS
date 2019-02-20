@@ -14,7 +14,7 @@ class Event {
     var url: String
     var urlref: String
     var data: Dictionary<String, Any>!
-    var metadata: Dictionary<String, Any>?
+    var metadata: ParselyMetadata?
     var idsite: String
     var extra_data: Dictionary<String, Any>?
     var session_id: Int?
@@ -28,7 +28,7 @@ class Event {
     init(_ action: String,
          url: String,
          urlref: String?,
-         metadata: Dictionary<String, Any>?,
+         metadata: ParselyMetadata?,
          extra_data: Dictionary<String, Any>?,
          idsite: String = Parsely.sharedInstance.apikey,
          session_id: Int? = nil,
@@ -86,7 +86,10 @@ class Event {
 
         // add metadata at top level if present
         if let metas = self.metadata {
-            params["metadata"] = metas
+            let metasDict = metas.toDict()
+            if !metasDict.isEmpty {
+                params["metadata"] = metasDict
+            }
         }
         // session could be a struct, easier to check presence/absence
         if self.session_id != nil {
@@ -110,7 +113,7 @@ class Heartbeat: Event {
     var tt: Int
     var inc: Int
 
-    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>?, idsite: String = Parsely.sharedInstance.apikey) {
+    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, metadata: ParselyMetadata?, extra_data: Dictionary<String, Any>?, idsite: String = Parsely.sharedInstance.apikey) {
         self.tt = tt
         self.inc = inc
         super.init(action, url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
