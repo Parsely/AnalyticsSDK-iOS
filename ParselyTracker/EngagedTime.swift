@@ -33,7 +33,7 @@ class EngagedTime: Sampler {
             urlref: eventArgs["urlref"] as? String,
             inc: roundedSecs,
             tt: totalMs,
-            metadata: eventArgs["metadata"] as? Dictionary<String, Any>,
+            metadata: eventArgs["metadata"] as? ParselyMetadata,
             extra_data: eventArgs["extra_data"] as? Dictionary<String, Any>,
             idsite: (eventArgs["idsite"] as! String)
         )
