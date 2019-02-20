@@ -44,7 +44,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 ```
 Once you've done this, you can call tracking methods on `self.parsely`:
 ```
-self.parsely.trackPageView("http://mysite.com/story1")
-self.parsely.startEngagement("http://mysite.com/story2")
-self.parsely.stopEngagement("http://mysite.com/story2")
+self.parsely.trackPageView(url: "http://mysite.com/story1")
+self.parsely.startEngagement(url: "http://mysite.com/story2")
+self.parsely.stopEngagement()
 ```
