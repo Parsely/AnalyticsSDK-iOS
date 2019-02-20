@@ -45,7 +45,7 @@ class VideoManager: Sampler {
             urlref: curVideo.eventArgs["urlref"] as? String,
             inc: roundedSecs,
             tt: totalMs,
-            metadata: curVideo.eventArgs["metadata"] as? Dictionary<String, Any>,
+            metadata: curVideo.eventArgs["metadata"] as? ParselyMetadata,
             extra_data: curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>,
             idsite: curVideo.eventArgs["idsite"] as! String
         )
@@ -55,7 +55,7 @@ class VideoManager: Sampler {
         trackedVideos[curVideo.key] = curVideo
     }
     
-    func trackPlay(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>?, idsite: String) -> Void {
+    func trackPlay(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: ParselyMetadata?, extra_data: Dictionary<String, Any>?, idsite: String) -> Void {
         trackPause()
         let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
         var curVideo = self.updateVideoData(vId: vId, url: url, duration: duration, eventArgs: eventArgs)
@@ -65,7 +65,7 @@ class VideoManager: Sampler {
                 "videostart",
                 url: url,
                 urlref: urlref,
-                metadata: curVideo.eventArgs["metadata"] as? Dictionary<String, Any>,
+                metadata: curVideo.eventArgs["metadata"] as? ParselyMetadata,
                 extra_data: curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>,
                 idsite: idsite
             )
@@ -93,11 +93,12 @@ class VideoManager: Sampler {
 
     private func updateVideoData(vId: String, url: String, duration: TimeInterval, eventArgs: Dictionary<String, Any>?) -> TrackedVideo {
         var _eventArgs: [String: Any] = eventArgs ?? [String: Any]()
-        var metadata = _eventArgs["metadata"] as? Dictionary<String, Any> ?? [String: Any]()
-        if metadata["link"] == nil {
-            metadata["link"] = vId
+        var metadata = _eventArgs["metadata"] as? ParselyMetadata
+        // Override a few values where necessary
+        if metadata != nil {
+            metadata!.link = vId
+            metadata!.duration = duration
         }
-        metadata["duration"] = Int(duration)
         _eventArgs["metadata"] = metadata
         let key: String = createVideoTrackingKey(vId: vId, url: url)
         // is this video key already tracked?

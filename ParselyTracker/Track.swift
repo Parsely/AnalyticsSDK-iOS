@@ -47,7 +47,7 @@ class Track {
         event(event: event_)
     }
 
-    func videoStart(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: Dictionary<String, Any>?, extra_data: Dictionary<String, Any>?, idsite: String) {
+    func videoStart(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: ParselyMetadata?, extra_data: Dictionary<String, Any>?, idsite: String) {
         videoManager.trackPlay(url: url, urlref: urlref, vId: vId, duration: duration, metadata: metadata, extra_data: extra_data, idsite: idsite)
         os_log("Tracked videoStart from Track", log: OSLog.tracker, type:.debug)
     }
