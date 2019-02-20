@@ -23,14 +23,12 @@ public class ParselyMetadata {
     // network_canonical
     // network_id
     // share_urls
-    // not public
-    var link: String?
     
     /**
      A class to manage and re-use metadata. Metadata contained in an instance of this
      class will conform to Parsely's schema. See logs for any failures.
      
-     - Parameter canonical_url: A post's canonical url.
+     - Parameter canonical_url: A post's canonical url. For videos, it is overridden with the vId and thus can be omitted.
      - Parameter pub_date: Date this piece of content was published.
      - Parameter title: Title of the content.
      - Parameter authors: Up to 10 authors are accepted.
@@ -90,9 +88,6 @@ public class ParselyMetadata {
         if duration != nil {
             // todo: should convert to an int?
             metas["duration"] = duration!
-        }
-        if link != nil {
-            metas["link"] = link
         }
         
         return metas

@@ -96,7 +96,7 @@ class VideoManager: Sampler {
         var metadata = _eventArgs["metadata"] as? ParselyMetadata
         // Override a few values where necessary
         if metadata != nil {
-            metadata!.link = vId
+            metadata!.canonical_url = vId
             metadata!.duration = duration
         }
         _eventArgs["metadata"] = metadata
