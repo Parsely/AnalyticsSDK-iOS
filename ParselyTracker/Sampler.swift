@@ -61,14 +61,16 @@ class Sampler {
     // Register a piece of content to be tracked.
     public func trackKey(key: String,  contentDuration: TimeInterval?, eventArgs: Dictionary<String, Any>?) -> Void {
         os_log("Sampler tracked key: %s", log: OSLog.tracker, type: .debug, key)
-        if accumulators.index(forKey: key) == nil {
+        let isNew: Bool = accumulators.index(forKey: key) == nil
+        if isNew {
+            self.heartbeatInterval = baseHeartbeatInterval
             let newTrackedData = Accumulator.init(
                   key: key,
                   accumulatedTime: TimeInterval(0),
                   totalTime: TimeInterval(0),
                   lastSampleTime: Date(),
                   lastPositiveSampleTime: nil,
-                  heartbeatTimeout: baseHeartbeatInterval,
+                  heartbeatTimeout: heartbeatInterval,
                   contentDuration: contentDuration,
                   isEngaged: false,
                   eventArgs: eventArgs
@@ -76,14 +78,20 @@ class Sampler {
             accumulators[key] = newTrackedData
         }
         
-        if hasStartedSampling == false {
+        if hasStartedSampling == false || !isNew {
             hasStartedSampling = true
             startTimers()
         }
     }
     
     private func startTimers() {
+        if self.samplerTimer != nil {
+            self.samplerTimer!.invalidate()
+        }
         self.samplerTimer = Timer.scheduledTimer(timeInterval: SAMPLE_RATE, target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
+        if self.heartbeatsTimer != nil {
+            self.heartbeatsTimer!.invalidate()
+        }
         self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: self.heartbeatInterval, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
     }
 
@@ -136,13 +144,14 @@ class Sampler {
         trackedData.accumulatedTime = 0
         trackedData.heartbeatTimeout = TimeInterval(min(900000, trackedData.heartbeatTimeout! * 1.25))
         updateAccumulator(acc: trackedData)
+        self.heartbeatInterval = trackedData.heartbeatTimeout!
     }
 
     @objc internal func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.
         // maybe just wrap it in a dictionary and set it to nil if the key isn't there.
         os_log("called send heartbeats", log: OSLog.tracker, type: .debug)
         for (key, trackedData) in accumulators {
-            if Double(trackedData.accumulatedTime) >= trackedData.heartbeatTimeout! {
+            if Double(trackedData.accumulatedTime) >= trackedData.heartbeatTimeout! - 1.25 {
                 sendHeartbeat(key: key)
             }
         }
