@@ -155,9 +155,7 @@ class Sampler {
         // maybe just wrap it in a dictionary and set it to nil if the key isn't there.
         os_log("called send heartbeats", log: OSLog.tracker, type: .debug)
         for (key, trackedData) in accumulators {
-            if Double(trackedData.accumulatedTime) >= trackedData.heartbeatTimeout! - 1.25 {
-                sendHeartbeat(key: key)
-            }
+            sendHeartbeat(key: key)
         }
         self.heartbeatsTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
             self.sendHeartbeats()
