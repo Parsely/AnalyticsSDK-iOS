@@ -61,7 +61,6 @@ class Sampler {
     // Register a piece of content to be tracked.
     public func trackKey(key: String,  contentDuration: TimeInterval?, eventArgs: Dictionary<String, Any>?) -> Void {
         os_log("Sampler tracked key: %s", log: OSLog.tracker, type: .debug, key)
-        let timeout = timeoutFromDuration(contentDuration: contentDuration)
         if accumulators.index(forKey: key) == nil {
             let newTrackedData = Accumulator.init(
                   key: key,
@@ -69,15 +68,13 @@ class Sampler {
                   totalTime: TimeInterval(0),
                   lastSampleTime: Date(),
                   lastPositiveSampleTime: nil,
-                  heartbeatTimeout: timeout,
+                  heartbeatTimeout: baseHeartbeatInterval,
                   contentDuration: contentDuration,
                   isEngaged: false,
                   eventArgs: eventArgs
               )
             accumulators[key] = newTrackedData
         }
-
-        self.heartbeatInterval = min(heartbeatInterval, timeout)
         
         if hasStartedSampling == false {
             hasStartedSampling = true
@@ -137,6 +134,7 @@ class Sampler {
             heartbeatFn(data: trackedData, enableHeartbeats: true)
         }
         trackedData.accumulatedTime = 0
+        trackedData.heartbeatTimeout = TimeInterval(min(900000, trackedData.heartbeatTimeout! * 1.25))
         updateAccumulator(acc: trackedData)
     }
 
@@ -151,26 +149,6 @@ class Sampler {
         self.heartbeatsTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
             self.sendHeartbeats()
         }
-    }
-    
-    // Calculate an accumulator's timeout based on the content length, to ensure we capture
-    // all completion intervals.
-    private func timeoutFromDuration(contentDuration: TimeInterval?) -> TimeInterval {
-        if contentDuration != nil && contentDuration! > 0 {
-            let completionInterval = contentDuration! / Double(5)
-            if completionInterval < baseHeartbeatInterval / Double(2) {
-                return max(contentDuration! / 5, MIN_TIME_BETWEEN_HEARTBEATS)
-            }
-            if completionInterval < baseHeartbeatInterval {
-                return max(baseHeartbeatInterval / Double(2), MIN_TIME_BETWEEN_HEARTBEATS)
-            }
-            if completionInterval > baseHeartbeatInterval * Double(2) {
-                // double the heartbeat interval for long durations to avoid flooding with heartbeats
-                // don't check MAX_TIME_BETWEEN_HEARTBEATS here since we know what we're doing
-                return baseHeartbeatInterval * Double(2)
-            }
-        }
-        return baseHeartbeatInterval
     }
 
     // copies of accumulators passed into methods do not update the shared accumulator[id] copy
