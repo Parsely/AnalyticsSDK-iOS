@@ -65,7 +65,8 @@ class Sampler {
                          resetOnExisting: Bool = false) -> Void {
         os_log("Sampler tracked key: %s", log: OSLog.tracker, type: .debug, key)
         let isNew: Bool = accumulators.index(forKey: key) == nil
-        if isNew || resetOnExisting {
+        let shouldReset: Bool = !isNew && resetOnExisting
+        if isNew || shouldReset {
             self.heartbeatInterval = baseHeartbeatInterval
             let newTrackedData = Accumulator.init(
                   key: key,
@@ -81,7 +82,7 @@ class Sampler {
             accumulators[key] = newTrackedData
         }
         
-        if hasStartedSampling == false || (!isNew && resetOnExisting) {
+        if hasStartedSampling == false || shouldReset {
             hasStartedSampling = true
             startTimers()
         }
