@@ -52,7 +52,7 @@ public class Parsely {
     public func configure(siteId: String, handleLifecycle: Bool = true) {
         os_log("Configuring ParselyTracker", log: OSLog.tracker, type: .debug)
         self.apikey = siteId
-        self.config = ["secondsBetweenHeartbeats": 10]
+        self.config = ["secondsBetweenHeartbeats": TimeInterval(10)]
         if handleLifecycle {
             addApplicationObservers()
         }
