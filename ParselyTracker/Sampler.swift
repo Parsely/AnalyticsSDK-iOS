@@ -11,7 +11,7 @@ import os.log
 
 let SAMPLE_RATE = TimeInterval(0.1)
 let MIN_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(1)
-let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(15)
+let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(900000)
 let BACKOFF_THRESHOLD = 60
 
 struct Accumulator {
@@ -59,31 +59,43 @@ class Sampler {
     func sampleFn(key: String) -> Bool { return false }
 
     // Register a piece of content to be tracked.
-    public func trackKey(key: String, contentDuration: TimeInterval?, eventArgs: Dictionary<String, Any>?) -> Void {
+    public func trackKey(key: String,
+                         contentDuration: TimeInterval?,
+                         eventArgs: Dictionary<String, Any>?,
+                         resetOnExisting: Bool = false) -> Void {
         os_log("Sampler tracked key: %s", log: OSLog.tracker, type: .debug, key)
-        if accumulators.index(forKey: key) == nil {
+        let isNew: Bool = accumulators.index(forKey: key) == nil
+        let shouldReset: Bool = !isNew && resetOnExisting
+        if isNew || shouldReset {
+            self.heartbeatInterval = baseHeartbeatInterval
             let newTrackedData = Accumulator.init(
                   key: key,
                   accumulatedTime: TimeInterval(0),
                   totalTime: TimeInterval(0),
                   lastSampleTime: Date(),
                   lastPositiveSampleTime: nil,
-                  heartbeatTimeout: timeoutFromDuration(contentDuration: contentDuration),
+                  heartbeatTimeout: heartbeatInterval,
                   contentDuration: contentDuration,
                   isEngaged: false,
                   eventArgs: eventArgs
               )
             accumulators[key] = newTrackedData
-          }
+        }
 
-        if hasStartedSampling == false {
+        if hasStartedSampling == false || shouldReset {
             hasStartedSampling = true
-            startTimers()
+            restartTimers()
         }
     }
     
-    private func startTimers() {
+    private func restartTimers() {
+        if self.samplerTimer != nil {
+            self.samplerTimer!.invalidate()
+        }
         self.samplerTimer = Timer.scheduledTimer(timeInterval: SAMPLE_RATE, target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
+        if self.heartbeatsTimer != nil {
+            self.heartbeatsTimer!.invalidate()
+        }
         self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: self.heartbeatInterval, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
     }
 
@@ -129,47 +141,25 @@ class Sampler {
     private func sendHeartbeat(key: String) -> Void {
         var trackedData = accumulators[key]!
         let incSecs: TimeInterval = trackedData.accumulatedTime
-        if incSecs > 0 && incSecs <= (baseHeartbeatInterval + 0.25) {
+        if incSecs > 0 {
             os_log("Sending heartbeat for %s", log: OSLog.tracker, type:.debug, key)
             heartbeatFn(data: trackedData, enableHeartbeats: true)
         }
         trackedData.accumulatedTime = 0
+        trackedData.heartbeatTimeout = TimeInterval(min(MAX_TIME_BETWEEN_HEARTBEATS, trackedData.heartbeatTimeout! * 1.25))
         updateAccumulator(acc: trackedData)
+        self.heartbeatInterval = trackedData.heartbeatTimeout!
     }
 
     @objc internal func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.
         // maybe just wrap it in a dictionary and set it to nil if the key isn't there.
         os_log("called send heartbeats", log: OSLog.tracker, type: .debug)
         for (key, trackedData) in accumulators {
-            let sendThreshold = trackedData.heartbeatTimeout! - heartbeatInterval
-
-            if Double(trackedData.accumulatedTime) >= sendThreshold {
-                sendHeartbeat(key: key)
-            }
+            sendHeartbeat(key: key)
         }
         self.heartbeatsTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
             self.sendHeartbeats()
         }
-    }
-    
-    // Calculate an accumulator's timeout based on the content length, to ensure we capture
-    // all completion intervals.
-    private func timeoutFromDuration(contentDuration: TimeInterval?) -> TimeInterval {
-        if contentDuration != nil && contentDuration! > 0 {
-            let completionInterval = contentDuration! / Double(5)
-            if completionInterval < baseHeartbeatInterval / Double(2) {
-                return max(contentDuration! / 5, MIN_TIME_BETWEEN_HEARTBEATS)
-            }
-            if completionInterval < baseHeartbeatInterval {
-                return max(baseHeartbeatInterval / Double(2), MIN_TIME_BETWEEN_HEARTBEATS)
-            }
-            if completionInterval > baseHeartbeatInterval * Double(2) {
-                // double the heartbeat interval for long durations to avoid flooding with heartbeats
-                // don't check MAX_TIME_BETWEEN_HEARTBEATS here since we know what we're doing
-                return baseHeartbeatInterval * Double(2)
-            }
-        }
-        return baseHeartbeatInterval
     }
 
     // copies of accumulators passed into methods do not update the shared accumulator[id] copy
@@ -194,7 +184,7 @@ class Sampler {
         os_log("Resumed from Sampler", log:OSLog.tracker, type:.debug)
         // don't restart unless previously paused
         if hasStartedSampling {
-            startTimers()
+            restartTimers()
         }
     }
     
