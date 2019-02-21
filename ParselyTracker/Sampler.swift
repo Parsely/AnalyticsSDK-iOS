@@ -84,11 +84,11 @@ class Sampler {
 
         if hasStartedSampling == false || shouldReset {
             hasStartedSampling = true
-            startTimers()
+            restartTimers()
         }
     }
     
-    private func startTimers() {
+    private func restartTimers() {
         if self.samplerTimer != nil {
             self.samplerTimer!.invalidate()
         }
@@ -184,7 +184,7 @@ class Sampler {
         os_log("Resumed from Sampler", log:OSLog.tracker, type:.debug)
         // don't restart unless previously paused
         if hasStartedSampling {
-            startTimers()
+            restartTimers()
         }
     }
     
