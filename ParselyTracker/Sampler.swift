@@ -131,9 +131,9 @@ class Sampler {
                 increment = currentTime.timeIntervalSince(trackedData.lastSampleTime!)
                 trackedData.accumulatedTime += increment
                 trackedData.totalTime += increment
-                trackedData.lastSampleTime = currentTime
-                updateAccumulator(acc: trackedData)
             }
+            trackedData.lastSampleTime = currentTime
+            updateAccumulator(acc: trackedData)
         }
         self.samplerTimer = Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
     }
