@@ -45,7 +45,7 @@ class EngagedTime: Sampler {
         endInteraction()
         os_log("Starting Interaction", log: OSLog.tracker, type: .debug)
         let eventArgs = generateEventArgs(url: url, urlref: urlref, extra_data: extra_data, idsite: idsite)
-        trackKey(key: url, contentDuration: nil, eventArgs: eventArgs, resetIntervalOnExisting: true);
+        trackKey(key: url, contentDuration: nil, eventArgs: eventArgs, resetOnExisting: true);
         accumulators[url]!.isEngaged = true
     }
     
