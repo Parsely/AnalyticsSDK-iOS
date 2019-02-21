@@ -61,6 +61,7 @@ class Sampler {
     // Register a piece of content to be tracked.
     public func trackKey(key: String,  contentDuration: TimeInterval?, eventArgs: Dictionary<String, Any>?) -> Void {
         os_log("Sampler tracked key: %s", log: OSLog.tracker, type: .debug, key)
+        let timeout = timeoutFromDuration(contentDuration: contentDuration)
         if accumulators.index(forKey: key) == nil {
             let newTrackedData = Accumulator.init(
                   key: key,
@@ -68,14 +69,16 @@ class Sampler {
                   totalTime: TimeInterval(0),
                   lastSampleTime: Date(),
                   lastPositiveSampleTime: nil,
-                  heartbeatTimeout: timeoutFromDuration(contentDuration: contentDuration),
+                  heartbeatTimeout: timeout,
                   contentDuration: contentDuration,
                   isEngaged: false,
                   eventArgs: eventArgs
               )
             accumulators[key] = newTrackedData
-          }
+        }
 
+        self.heartbeatInterval = min(heartbeatInterval, timeout)
+        
         if hasStartedSampling == false {
             hasStartedSampling = true
             startTimers()
@@ -129,7 +132,7 @@ class Sampler {
     private func sendHeartbeat(key: String) -> Void {
         var trackedData = accumulators[key]!
         let incSecs: TimeInterval = trackedData.accumulatedTime
-        if incSecs > 0 && incSecs <= (baseHeartbeatInterval + 0.25) {
+        if incSecs > 0 {
             os_log("Sending heartbeat for %s", log: OSLog.tracker, type:.debug, key)
             heartbeatFn(data: trackedData, enableHeartbeats: true)
         }
@@ -141,9 +144,7 @@ class Sampler {
         // maybe just wrap it in a dictionary and set it to nil if the key isn't there.
         os_log("called send heartbeats", log: OSLog.tracker, type: .debug)
         for (key, trackedData) in accumulators {
-            let sendThreshold = trackedData.heartbeatTimeout! - heartbeatInterval
-
-            if Double(trackedData.accumulatedTime) >= sendThreshold {
+            if Double(trackedData.accumulatedTime) >= trackedData.heartbeatTimeout! {
                 sendHeartbeat(key: key)
             }
         }
