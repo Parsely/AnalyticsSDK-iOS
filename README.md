@@ -17,7 +17,7 @@ The iOS tracker SDK is distributed as a `.framework` file. How to build this fil
 * Click the play button to build the framework
 * Click the XCode menu, then Preferences, then Locations
 * Note the path labeled "Derived Data", navigate to this path in Finder
-* Find the directory whose name includes `AnalyticsSDK`, navigate to `Build/Products/Debug-iphoneos` therein
+* Find the directory whose name includes `ParselyDemo`, navigate to `Build/Products/Debug-iphoneos` therein
 * Find the `ParselyTracker.framework` file
 
 ## Including the framework in a project
