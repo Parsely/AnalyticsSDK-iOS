@@ -37,7 +37,7 @@ class RequestBuilderTests: XCTestCase {
     }
     
     func testDatedEndpoint() {
-        var expected: String = "https://srv-2019-01-01-12.pixel.parsely.com/mobileproxy/"
+        var expected: String = "https://srv-2019-01-01-12.pixel.parsely.com/mobileproxy"
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone(abbreviation: "UTC")
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
@@ -46,19 +46,19 @@ class RequestBuilderTests: XCTestCase {
         XCTAssert(actual == expected,
                   "Should build the correct pixel endpoint.")
         now = formatter.date(from: "2019/01/10 12:31")
-        expected = "https://srv-2019-01-10-12.pixel.parsely.com/mobileproxy/"
+        expected = "https://srv-2019-01-10-12.pixel.parsely.com/mobileproxy"
         actual = RequestBuilder.buildPixelEndpoint(now: now!)
         XCTAssert(actual == expected,
                   "Should always prefer a passed-in date.")
     }
     
-//    func testHeaders() {
-//        let events: Array<Event> = makeEvents()
-//        let actual: Dictionary<String, Any?> = RequestBuilder.buildHeadersDict(events: events)
-//        dump(actual)
-//        XCTAssertEqual(actual, ["User-Agent": "parsely-analytics-ios/3.0.0"],
-//                       "User Agents should be correct.")
-//    }
+    func testHeaders() {
+        let events: Array<Event> = makeEvents()
+        let actual: Dictionary<String, Any?> = RequestBuilder.buildHeadersDict(events: events)
+        dump(actual)
+        XCTAssert(actual["User-Agent"] != nil,
+                  "Should create a User Agent in headers")
+    }
 
     func testRequests() {
         let events = makeEvents()

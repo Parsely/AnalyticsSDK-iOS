@@ -22,6 +22,9 @@ class ParselyTrackerTests: XCTestCase {
     }
     
     let parselyTracker: Parsely = Parsely.sharedInstance
+    
+    // TODO: implement complete public API testing here, not in the demo app
+    // TODO: separate the library into a separate xcode project from the demo app
 
     func testConfigure() {}
     func testTrackPageView() {}

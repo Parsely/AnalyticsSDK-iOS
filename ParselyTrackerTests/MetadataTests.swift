@@ -28,5 +28,10 @@ class MetadataTests: XCTestCase {
         let actual = metas.toDict()
         XCTAssertEqual(expected as NSObject, actual as NSObject,
                        "Should handle scant arguments with no issues")
+        metas = ParselyMetadata(
+            canonical_url: "http://parsely-test.com", pub_date: Date.init(), title: "a title.", authors: ["Yogi Berra"], image_url: "http://parsely-test.com/image2", thumb_url: "http://parsely-test.com/thumb1", section: "Things my mother says", tags: ["tag1", "tag2"], duration: TimeInterval(100)
+        )
+        XCTAssertFalse(metas.toDict().isEmpty,
+            "Should handle all arguments.")
     }
 }
