@@ -46,14 +46,13 @@ public class Parsely {
      
      - Parameter siteId: The Parsely site ID for which the pageview event should be counted. Can be overridden
                          on individual tracking method calls.
-     - Parameter secondsBetweenHeartbeats: TimeInterval representing how often heartbeat events should be tracked
      - Parameter handleLifecycle: If true, set up listeners to handle tracking across application lifecycle events.
                                   Defaults to true.
      */
-    public func configure(siteId: String, secondsBetweenHeartbeats: TimeInterval = 10, handleLifecycle: Bool = true) {
+    public func configure(siteId: String, handleLifecycle: Bool = true) {
         os_log("Configuring ParselyTracker", log: OSLog.tracker, type: .debug)
         self.apikey = siteId
-        self.config = ["secondsBetweenHeartbeats": secondsBetweenHeartbeats]
+        self.config = ["secondsBetweenHeartbeats": 10]
         if handleLifecycle {
             addApplicationObservers()
         }
