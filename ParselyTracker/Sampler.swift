@@ -59,7 +59,7 @@ class Sampler {
     func sampleFn(key: String) -> Bool { return false }
 
     // Register a piece of content to be tracked.
-    public func trackKey(key: String,  contentDuration: TimeInterval?, eventArgs: Dictionary<String, Any>?) -> Void {
+    public func trackKey(key: String, contentDuration: TimeInterval?, eventArgs: Dictionary<String, Any>?) -> Void {
         os_log("Sampler tracked key: %s", log: OSLog.tracker, type: .debug, key)
         if accumulators.index(forKey: key) == nil {
             let newTrackedData = Accumulator.init(

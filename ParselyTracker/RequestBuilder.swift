@@ -51,8 +51,9 @@ class RequestBuilder {
     }
     
     static func buildRequest(events: Array<Event>) -> ParselyRequest? {
+        let now = Date()
         let request = ParselyRequest.init(
-            url: buildPixelEndpoint(now: nil),
+            url: buildPixelEndpoint(now: now),
             headers: buildHeadersDict(events: events),
             params: buildParamsDict(events: events)
         )

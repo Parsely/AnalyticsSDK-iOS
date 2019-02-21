@@ -27,6 +27,11 @@ class VisitorTests: XCTestCase {
         let visitor = visitors.getVisitorInfo()
         XCTAssertFalse(visitor.isEmpty,
                        "Should create a visitor if there is none.")
+        // FIXME: Visitor should have a way to expire visitors, at least for testing. Otherwise the first
+        // visitor created in the tests persists.
+//        let thirtyDaysFromNow = Date.init(timeIntervalSinceNow: (60 * 60 * 24 * 365  / 12) * 13)
+//        XCTAssertEqual(visitor["expires"] as? Date, thirtyDaysFromNow,
+//                       "Should expire thirty days from now.")
         let subsequentVisitor = visitors.getVisitorInfo()
         XCTAssertEqual(visitor["id"] as! String, subsequentVisitor["id"] as! String,
                        "Should use same sid for continued browsing")

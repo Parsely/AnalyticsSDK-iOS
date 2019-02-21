@@ -19,9 +19,8 @@ class PixelTests: XCTestCase {
         super.tearDown()
     }
 
-    let parselyTracker: Parsely = Parsely.sharedInstance
-
-    func testBuildPixelURL() {}
-    func testBeacon() {}
+    func testBeacon() {
+        // Adding things to the event queue is sort of tested in Track.
+    }
 
 }

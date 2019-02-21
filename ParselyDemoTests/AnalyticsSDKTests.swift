@@ -7,9 +7,8 @@
 //
 
 import XCTest
-@testable import AnalyticsSDK
 
-class AnalyticsSDKTests: XCTestCase {
+class ParselyDemoTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
