@@ -11,7 +11,7 @@ import os.log
 
 let SAMPLE_RATE = TimeInterval(0.1)
 let MIN_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(1)
-let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(15)
+let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(900000)
 let BACKOFF_THRESHOLD = 60
 
 struct Accumulator {
@@ -81,7 +81,7 @@ class Sampler {
               )
             accumulators[key] = newTrackedData
         }
-        
+
         if hasStartedSampling == false || shouldReset {
             hasStartedSampling = true
             startTimers()
@@ -146,7 +146,7 @@ class Sampler {
             heartbeatFn(data: trackedData, enableHeartbeats: true)
         }
         trackedData.accumulatedTime = 0
-        trackedData.heartbeatTimeout = TimeInterval(min(900000, trackedData.heartbeatTimeout! * 1.25))
+        trackedData.heartbeatTimeout = TimeInterval(min(MAX_TIME_BETWEEN_HEARTBEATS, trackedData.heartbeatTimeout! * 1.25))
         updateAccumulator(acc: trackedData)
         self.heartbeatInterval = trackedData.heartbeatTimeout!
     }
