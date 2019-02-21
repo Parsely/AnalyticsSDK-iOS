@@ -59,11 +59,17 @@ class Sampler {
     func sampleFn(key: String) -> Bool { return false }
 
     // Register a piece of content to be tracked.
-    public func trackKey(key: String,  contentDuration: TimeInterval?, eventArgs: Dictionary<String, Any>?) -> Void {
+    public func trackKey(key: String,
+                         contentDuration: TimeInterval?,
+                         eventArgs: Dictionary<String, Any>?,
+                         resetIntervalOnExisting: Bool = false) -> Void {
         os_log("Sampler tracked key: %s", log: OSLog.tracker, type: .debug, key)
         let isNew: Bool = accumulators.index(forKey: key) == nil
-        if isNew {
+        let resetExisting: Bool = !isNew && resetIntervalOnExisting
+        if resetExisting {
             self.heartbeatInterval = baseHeartbeatInterval
+        }
+        if isNew {
             let newTrackedData = Accumulator.init(
                   key: key,
                   accumulatedTime: TimeInterval(0),
@@ -78,7 +84,7 @@ class Sampler {
             accumulators[key] = newTrackedData
         }
         
-        if hasStartedSampling == false || !isNew {
+        if hasStartedSampling == false || resetExisting {
             hasStartedSampling = true
             startTimers()
         }
