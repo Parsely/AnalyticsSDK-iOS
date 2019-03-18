@@ -32,16 +32,22 @@ class SamplerTests: XCTestCase {
     }
 
     func testSampleFn() {
-        // accumulators should be able to increase time
-        let sampler = Sampler()
-        // FIXME: The tests for Sampler do not run because the test environment never starts the sampling thread.
-        // This has something to do with run loops and threads... but it is very unclear exactly how to make it work.
-        // The fix would be finding a way to make sure the testing process has the ability to start the sampler threads
-        // for video and engaged time, and also for a directly-created Sampler.
-        sampler.trackKey(key: "sampler-test", contentDuration: TimeInterval(30), eventArgs: [:])
-        XCTAssert(sampler.accumulators["sampler-test"]!.totalTime > 0,
+        let samplerUnderTest = Sampler()
+        let assertionTimeout:TimeInterval = TimeInterval(3)
+        let acceptableDifference:TimeInterval = TimeInterval(0.2)
+        
+        samplerUnderTest.trackKey(key: "sampler-test", contentDuration: TimeInterval(30), eventArgs: [:])
+        
+        let expectation = self.expectation(description: "Sampling")
+        Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
+        
+        let accumulatedTime:TimeInterval = samplerUnderTest.accumulators["sampler-test"]!.totalTime
+        XCTAssert(accumulatedTime > 0,
                   "The sampler should run as soon as an item is tracked.")
-        XCTAssert(sampler.accumulators["sampler-test"]!.totalTime >= 3.8 * 1000,
+        XCTAssert(accumulatedTime >= assertionTimeout - acceptableDifference,
                   "The sampler should collect information as long as the item is engaged.")
     }
 
