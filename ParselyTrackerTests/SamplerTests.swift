@@ -45,10 +45,8 @@ class SamplerTests: XCTestCase {
         waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
         
         let accumulatedTime:TimeInterval = samplerUnderTest.accumulators["sampler-test"]!.totalTime
-        XCTAssert(accumulatedTime > 0,
-                  "The sampler should run as soon as an item is tracked.")
         XCTAssert(accumulatedTime >= assertionTimeout - acceptableDifference,
-                  "The sampler should collect information as long as the item is engaged.")
+                  "The sampler should accumulate time constantly after a call to trackKey")
     }
 
     func testUpdateGlobalHeartbeatInterval() {
