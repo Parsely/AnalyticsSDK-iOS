@@ -49,13 +49,6 @@ class SamplerTests: XCTestCase {
         // tracking a new key should result in changing the global heartbeat interval
         let sampler = Sampler()
         let initialHbValue = sampler.heartbeatInterval
-        // FIXME: This repo is structured as a workspace, which can contain many projects, but all of our
-        // code is inside one project. This means that the ParselyTracker library, although it is separate from
-        // the DemoApp, still uses the same project file and thus uses the AppDelegate to run tests.
-        // Because our AppDelegate configures the tracker to have 8 seconds instead of the default, that's what
-        // we should expect here.
-        // Fix: Separate the SDK code into a completely separate project, then link it as a dependency to the demo app.
-        XCTAssert(initialHbValue == TimeInterval(floatLiteral: 8.0))
 
         // Borken: The heartbeat interval does NOT update with duration changes. This needs to be fixed.
         sampler.trackKey(key: "testKey", contentDuration: TimeInterval(10), eventArgs: [:])
