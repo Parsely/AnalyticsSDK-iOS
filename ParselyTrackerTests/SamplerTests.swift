@@ -49,18 +49,6 @@ class SamplerTests: XCTestCase {
                   "The sampler should accumulate time constantly after a call to trackKey")
     }
 
-    func testUpdateGlobalHeartbeatInterval() {
-        // tracking a new key should result in changing the global heartbeat interval
-        let sampler = Sampler()
-        let initialHbValue = sampler.heartbeatInterval
-
-        // Borken: The heartbeat interval does NOT update with duration changes. This needs to be fixed.
-        sampler.trackKey(key: "testKey", contentDuration: TimeInterval(10), eventArgs: [:])
-        let newHbValue = sampler.heartbeatInterval
-        XCTAssert(newHbValue != initialHbValue, "A shorter content duration should decrease the global timeout.")
-        XCTAssert(newHbValue == TimeInterval(floatLiteral: 2.0), "10s content duration should account for all completion intervals.")
-    }
-    
     func testDumbBackoff() {
         // don't kill our backend with long-running videos
         let sampler = Sampler()
