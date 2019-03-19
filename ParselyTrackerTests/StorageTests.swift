@@ -15,19 +15,18 @@ class StorageTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
 
     func testSetGetWithoutExpires() {
-        let data: Dictionary<String, Any> = ["foo": "bar"]
-        _ = storage.set(key: "baz", value: data, expires: nil)
-        _ = storage.get(key: "baz") ?? [:]
-        _ = "stuff"
+        let expected = ["foo": "bar"]
+        _ = storage.set(key: "baz", value: expected, expires: nil)
+        let actual = storage.get(key: "baz")!
+        XCTAssertEqual(expected, actual as! [String: String],
+                       "Sequential calls to Storage.set and Storage.get should preserve the stored object")
     }
 
     func testSetGetWithExpires() {
@@ -35,10 +34,12 @@ class StorageTests: XCTestCase {
         let fifteenMinutes = Double(1000 * 15 * 60)
         let expires = Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes))
         _ = storage.set(key: "baz", value: data, expires: expires)
-        let retrievedData = storage.get(key: "baz") ?? [:]
+        let retrievedData = storage.get(key: "baz")
         var expected = data
         expected["expires"] = expires
-        XCTAssertEqual(expected as NSObject, retrievedData as NSObject)
+        XCTAssertEqual(expected as NSObject, retrievedData! as NSObject,
+                       "Sequential calls to Storage.set and Storage.get should preserve the stored object and its " +
+                       "expiry information")
     }
 
     func testGetSetWithNegativeExpires() {
@@ -47,7 +48,9 @@ class StorageTests: XCTestCase {
         let expires = Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes))
         _ = storage.set(key: "baz", value: data, expires: expires)
         let retrievedData = storage.get(key: "baz") ?? [:]
-        XCTAssert(retrievedData.isEmpty)
+        XCTAssert(retrievedData.isEmpty,
+                  "After a call to Storage.set with a negative expires argument, calls to Storage.get for the set key " +
+                  "should return nil")
     }
 
     func testDataTypes() {
@@ -64,33 +67,30 @@ class StorageTests: XCTestCase {
         let retrievedData = storage.get(key: "bzz") ?? [:]
         var expected = data
         expected["expires"] = expires
-        XCTAssertEqual(expected as NSObject, retrievedData as NSObject)
+        XCTAssertEqual(expected as NSObject, retrievedData as NSObject,
+                       "Sequential calls to Storage.set and Storage.get storing and retrieving varied datatypes should " +
+                       "preserve the stored object and its expiry information")
     }
 
     func testExtendExpiry() {
-        // storage should be able to update the expiry on an item.
         let data = ["test": "stuff"]
         let fifteenMinutes = 15 * 60
         let expires = Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes))
         _ = storage.set(key: "shouldextend", value: data, expires: expires)
         let capturedExpiryOne: Date = storage.get(key: "shouldextend")!["expires"] as! Date
-        // update expiry to 30 mins from now
         _ = storage.extendExpiry(key: "shouldextend", expires: Date(timeIntervalSinceNow: TimeInterval(fifteenMinutes * 2)))
         let capturedExpiryTwo: Date = storage.get(key: "shouldextend")!["expires"] as! Date
         XCTAssert(capturedExpiryOne < capturedExpiryTwo,
-                  "Should update expiry times when requested.")
+                  "Storage.extendExpiry should correctly set the expiry of a stored object")
 
     }
 
     func testExpire() {
-        // should correctly delete an item when it has expired
         let data = ["test": "stuff"]
         let expires = Date(timeIntervalSinceNow: TimeInterval(1))
         _ = storage.set(key: "shouldextend", value: data, expires: expires)
-        sleep(3)
+        sleep(2)
         let actual = storage.get(key: "shouldextend") ?? [:]
-        XCTAssert(actual.isEmpty,
-                  "Should return nothing if the value has expired.")
+        XCTAssert(actual.isEmpty, "Calls to Storage.get requesting expired keys should return empty objects")
     }
-
 }

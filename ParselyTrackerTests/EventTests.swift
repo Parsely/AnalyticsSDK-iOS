@@ -38,7 +38,6 @@ class EventTests: XCTestCase {
     }
     
     func testValidity() {
-        // make an Event
         let event = Event("pageview", url: "http://test.com", urlref: nil, metadata: nil, extra_data: nil)
         XCTAssert(event.idsite == "parsely-configured-default.com", "Events should automatically know which apikey to use.")
     }

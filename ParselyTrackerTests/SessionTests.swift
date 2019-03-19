@@ -11,6 +11,10 @@ import XCTest
 import Foundation
 
 class SessionTests: XCTestCase {
+    let sessionExtensionMessage:String = "Sequential calls to SessionManager.get within the session timeout that have " +
+        "shouldExtendExisting:true should return a session object with the same session ID as the " +
+    "preexisting session object"
+    
     override func setUp() {
         super.setUp()
     }
@@ -23,26 +27,25 @@ class SessionTests: XCTestCase {
     let emptyDict: [String: Any?] = [:]
 
     func testGet() {
-        // should be able to create a session if there is none
         let url1 = "http://parsely-test.com/123"
         let url2 = "http://parsely-test.com/"
-        let session = sessions.get(url: url1, urlref: "") // will not extend by default
-        XCTAssertFalse(session.isEmpty,
-                  "Should create a session if there is none.")
+        let session = sessions.get(url: url1, urlref: "")
+        XCTAssertFalse(session.isEmpty, "The first call to SessionManager.get should create a session object")
         let subsequentSession = sessions.get(url: url2, urlref: url1, shouldExtendExisting: true)
         XCTAssertEqual(session["session_id"] as! Int, subsequentSession["session_id"] as! Int,
-                          "Should use same sid for continued browsing")
+                       "Sequential calls to SessionManager.get within the session timeout that have " +
+                       "shouldExtendExisting:true should return a session object with the same session ID as the " +
+                       "preexisting session object")
     }
 
     func testExpiry() {
-        // should be able to extend expiry on a session for each use
         let url1 = "http://parsely-test.com/123"
-        let session = sessions.get(url: url1, urlref: "") // will not extend by default
+        let session = sessions.get(url: url1, urlref: "")
         let subsequentSession = sessions.get(url: url1, urlref: "", shouldExtendExisting: true)
-        XCTAssertEqual(session["session_id"] as! Int, subsequentSession["session_id"] as! Int,
-                       "Should use same sid for continued browsing")
         XCTAssert(subsequentSession["expires"] as! Date > session["expires"] as! Date,
-                  "Should extend the expiration each time the session is accessed.")
+                  "Sequential calls to SessionManager.get within the session timeout that have " +
+                  "shouldExtendExisting:true should return a session object with an extended expiry value " +
+                  "compared to the original expiry of the session")
 
     }
 }

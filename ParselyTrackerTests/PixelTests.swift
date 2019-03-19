@@ -19,8 +19,6 @@ class PixelTests: XCTestCase {
         super.tearDown()
     }
 
-    func testBeacon() {
-        // Adding things to the event queue is sort of tested in Track.
-    }
+    func testBeacon() { XCTAssert(false, "not implemented") }
 
 }

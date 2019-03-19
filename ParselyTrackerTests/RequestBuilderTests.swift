@@ -32,8 +32,7 @@ class RequestBuilderTests: XCTestCase {
     
     func testEndpoint() {
         let endpoint = RequestBuilder.buildPixelEndpoint(now: nil)
-        XCTAssert(endpoint != "",
-                  "Should return a pixel endpoint.")
+        XCTAssert(endpoint != "", "buildPixelEndpoint should return a non-empty string")
     }
     
     func testDatedEndpoint() {
@@ -43,29 +42,24 @@ class RequestBuilderTests: XCTestCase {
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         var now = formatter.date(from: "2019/01/01 12:31")
         var actual = RequestBuilder.buildPixelEndpoint(now: now)
-        XCTAssert(actual == expected,
-                  "Should build the correct pixel endpoint.")
+        XCTAssert(actual == expected, "buildPixelEndpoint should return the correct URL for the given date")
         now = formatter.date(from: "2019/01/10 12:31")
         expected = "https://srv-2019-01-10-12.pixel.parsely.com/mobileproxy"
         actual = RequestBuilder.buildPixelEndpoint(now: now!)
-        XCTAssert(actual == expected,
-                  "Should always prefer a passed-in date.")
+        XCTAssert(actual == expected, "buildPixelEndpoint should return the correct URL for the given date")
     }
     
     func testHeaders() {
         let events: Array<Event> = makeEvents()
         let actual: Dictionary<String, Any?> = RequestBuilder.buildHeadersDict(events: events)
-        dump(actual)
-        XCTAssert(actual["User-Agent"] != nil,
-                  "Should create a User Agent in headers")
+        XCTAssert(actual["User-Agent"] != nil, "buildHeadersDict should return a dictionary containing a non-nil " +
+                  "user agent string")
     }
 
     func testRequests() {
         let events = makeEvents()
-        // the builder should make a request
         let request = RequestBuilder.buildRequest(events: events)
-        dump(request)
-        XCTAssertNotNil(request, "Builder should build a request")
+        XCTAssertNotNil(request, "buildRequest should return a non-nil value")
         
     }
 }

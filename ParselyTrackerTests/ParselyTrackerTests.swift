@@ -13,31 +13,20 @@ class ParselyTrackerTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
     let parselyTracker: Parsely = Parsely.sharedInstance
     
     // TODO: implement complete public API testing here, not in the demo app
-    // TODO: separate the library into a separate xcode project from the demo app
 
-    func testConfigure() {}
-    func testTrackPageView() {}
-    func testStartEngagement() {}
-    func testStopEngagement() {}
-    func testTrackPlay() {}
-    func testTrackPause() {}
-    
-    func testPerformanceExample() {
-        // TODO
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
+    func testConfigure() { XCTAssert(false, "not implemented") }
+    func testTrackPageView() { XCTAssert(false, "not implemented") }
+    func testStartEngagement() { XCTAssert(false, "not implemented") }
+    func testStopEngagement() { XCTAssert(false, "not implemented") }
+    func testTrackPlay() { XCTAssert(false, "not implemented") }
+    func testTrackPause() { XCTAssert(false, "not implemented") }
 }

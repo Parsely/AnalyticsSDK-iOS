@@ -21,12 +21,11 @@ class TrackTests: XCTestCase {
     }
     
     func testTrackEvent() {
-        XCTAssertEqual(parsely.eventQueue.length(), 0,
-                       "Event queue should be empty before creating events.")
+        XCTAssertEqual(parsely.eventQueue.length(), 0, "eventQueue should be empty immediately after initialization")
         let dummyEvent = Event("pageview", url: "http://parsely-stuff.com", urlref: "", metadata: nil, extra_data: nil)
         parsely.track.event(event: dummyEvent)
         XCTAssertEqual(parsely.eventQueue.length(), 1,
-                       "Track should add an event into the eventQueue.")
+                       "A call to Parsely.track.event should add an event to eventQueue")
     }
 }
 

@@ -18,20 +18,18 @@ class MetadataTests: XCTestCase {
     }
     
     func testMetadataValidation() {
-        // valid metas
         var metas = ParselyMetadata()
-        // should be able to create nothing, if you want
-        XCTAssert(metas.toDict().isEmpty,
-                  "Empty metadata is just fine")
+        XCTAssert(metas.toDict().isEmpty, "Creating a ParselyMetadata object with no parameters results in an empty object")
         metas = ParselyMetadata(canonical_url: "http://test.com")
         let expected = ["link": "http://test.com"]
         let actual = metas.toDict()
         XCTAssertEqual(expected as NSObject, actual as NSObject,
-                       "Should handle scant arguments with no issues")
+            "Creating a ParselyMetadata object with one parameter results in a valid object containing a representation " +
+            "of that parameter")
         metas = ParselyMetadata(
             canonical_url: "http://parsely-test.com", pub_date: Date.init(), title: "a title.", authors: ["Yogi Berra"], image_url: "http://parsely-test.com/image2", section: "Things my mother says", tags: ["tag1", "tag2"], duration: TimeInterval(100)
         )
-        XCTAssertFalse(metas.toDict().isEmpty,
-            "Should handle all arguments.")
+        XCTAssertFalse(metas.toDict().isEmpty, "Creating a ParselyMetadataobject with many parameters results in a " +
+                       "non-empty object")
     }
 }

@@ -19,16 +19,14 @@ class SamplerTests: XCTestCase {
     }
 
     func testMultipleTrackedItemsInOneSampler() {
-        // should track engagement for different items, separately
         let itemOne: String = "itemOne"
         let itemTwo: String = "itemTwo"
-        let sampler = Sampler()
-        sampler.trackKey(key: itemOne, contentDuration: TimeInterval(30), eventArgs: [:])
-        sampler.trackKey(key: itemTwo, contentDuration: TimeInterval(30), eventArgs: [:])
+        let samplerUnderTest = Sampler()
+        samplerUnderTest.trackKey(key: itemOne, contentDuration: nil, eventArgs: [:])
+        samplerUnderTest.trackKey(key: itemTwo, contentDuration: nil, eventArgs: [:])
 
-        // they should be tracked separately
-        XCTAssert(sampler.accumulators[itemOne]!.key != sampler.accumulators[itemTwo]!.key,
-                  "The two items should not be tracked in the same Accumulator")
+        XCTAssert(samplerUnderTest.accumulators[itemOne]!.key != samplerUnderTest.accumulators[itemTwo]!.key,
+                  "Sequential calls to trackKey with different keys should not clobber each other's accumulator data")
     }
 
     func testSampleFn() {
@@ -70,15 +68,12 @@ class SamplerTests: XCTestCase {
     }
 
     func testDistinctTrackedItems() {
-        // each sampler should handle it's own tracked items
         let sampler1 = Sampler()
         let sampler2 = Sampler()
-        // track the same key, but for different reasons
-        sampler1.trackKey(key: "thing", contentDuration: TimeInterval(floatLiteral: 30), eventArgs: [:])
-        sampler2.trackKey(key: "thing", contentDuration: TimeInterval(floatLiteral: 30), eventArgs: [:])
-        // dropping a key shouldn't affect the other sampler
+        sampler1.trackKey(key: "thing", contentDuration: nil, eventArgs: [:])
+        sampler2.trackKey(key: "thing", contentDuration: nil, eventArgs: [:])
         sampler1.dropKey(key: "thing")
         XCTAssert(sampler2.accumulators["thing"] != nil,
-                  "Dropping a key in one sampler shouldn't drop it in the other.")
+                  "A Sampler instance should not be affected by dropKey calls on another Sampler instance")
     }
 }

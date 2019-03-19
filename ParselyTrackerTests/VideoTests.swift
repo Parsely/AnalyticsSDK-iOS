@@ -21,27 +21,22 @@ class VideoTests: XCTestCase {
     }
     
     // TODO: Video should test handling of duration, and storing of video metas (updateVideo)
-    // should test reset() method
+    // TODO: should test reset() method
     
     func testTrackVideo() {
-        // pre-track state
         let videoManager = parselyTrackerInstance.track.videoManager
         XCTAssert(videoManager.accumulators.count == 0,
-                  "Parsely.sharedInstance.accumulators should be empty before calling trackPlay")
+                  "videoManager.accumulators should be empty before calling trackPlay")
 
-        // call trackPlay
         self.parselyTrackerInstance.trackPlay(url: "testurl", videoID: "videoId", duration: TimeInterval(0))
 
-        // post-track state
         XCTAssert(videoManager.accumulators.count == 1,
-                  "trackPlay should populate Parsely.sharedInstance.accumulators with one object")
+                  "A call to trackPlay should populate videoManager.accumulators with one object")
 
-        // call trackPause
         self.parselyTrackerInstance.trackPause()
 
-        // post-pause state
         XCTAssert(videoManager.accumulators.count == 1,
-                  "trackPause should not remove an accumulator from Parsely.sharedInstance.accumulators")
+                  "A call to trackPause should not remove an accumulator from videoManager.accumulators")
         
     }
 }

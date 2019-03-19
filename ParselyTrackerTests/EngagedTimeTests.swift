@@ -26,7 +26,7 @@ class EngagedTimeTests: XCTestCase {
     // SamplerTests tests the underlying accumulators/sampler class
     // ET should test the results of the heartbeatFn, samplerFn, calling its internal public API
 
-    func testHeartbeatFn() {}
-    func testStartInteraction() {}
-    func testEndInteraction() {}
+    func testHeartbeatFn() { XCTAssert(false, "not implemented") }
+    func testStartInteraction() { XCTAssert(false, "not implemented") }
+    func testEndInteraction() { XCTAssert(false, "not implemented") }
 }
