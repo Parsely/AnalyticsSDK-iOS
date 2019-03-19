@@ -36,7 +36,7 @@ class SamplerTests: XCTestCase {
         let assertionTimeout:TimeInterval = TimeInterval(3)
         let acceptableDifference:TimeInterval = TimeInterval(0.2)
         
-        samplerUnderTest.trackKey(key: "sampler-test", contentDuration: TimeInterval(30), eventArgs: [:])
+        samplerUnderTest.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
         
         let expectation = self.expectation(description: "Sampling")
         Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
