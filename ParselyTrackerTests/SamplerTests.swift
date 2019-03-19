@@ -54,7 +54,7 @@ class SamplerTests: XCTestCase {
         let initialInterval = samplerUnderTest.heartbeatInterval
         let expectedBackoffMultiplier = 1.25
         let expectedUpdatedInterval = initialInterval * expectedBackoffMultiplier
-        let assertionTimeout:TimeInterval = initialInterval + TimeInterval(1)
+        let assertionTimeout:TimeInterval = initialInterval + TimeInterval(2)
         
         samplerUnderTest.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
         
