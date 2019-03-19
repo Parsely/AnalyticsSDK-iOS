@@ -49,19 +49,24 @@ class SamplerTests: XCTestCase {
                   "The sampler should accumulate time constantly after a call to trackKey")
     }
 
-    func testDumbBackoff() {
-        // don't kill our backend with long-running videos
-        let sampler = Sampler()
-        let initialHbValue = sampler.heartbeatInterval
-        // very long videos should have longer intervals
-        sampler.trackKey(key: "longVideo", contentDuration: TimeInterval(1000), eventArgs: [:])
-        let updatedHbValue = sampler.heartbeatInterval
-        // Borken: The heartbeat interval does not update with duration changes, as it should
-        // FIXME:
-        XCTAssertNotEqual(initialHbValue, updatedHbValue,
-                  "Should lengthen the base heartbeat for longer videos.")
-        XCTAssertEqual(updatedHbValue, initialHbValue * 2,
-                       "Should double the heartbeat interval for very long videos.")
+    func testBackoff() {
+        let samplerUnderTest = Sampler()
+        let initialInterval = samplerUnderTest.heartbeatInterval
+        let expectedBackoffMultiplier = 1.25
+        let expectedUpdatedInterval = initialInterval * expectedBackoffMultiplier
+        let assertionTimeout:TimeInterval = initialInterval + TimeInterval(1)
+        
+        samplerUnderTest.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
+        
+        let expectation = self.expectation(description: "Wait for heartbeat")
+        Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: assertionTimeout, handler: nil)
+        
+        let actualUpdatedInterval = samplerUnderTest.heartbeatInterval
+        XCTAssertEqual(actualUpdatedInterval, expectedUpdatedInterval,
+                  "Heartbeat interval should increase by the expected amount after a single heartbeat")
     }
 
     func testDistinctTrackedItems() {
