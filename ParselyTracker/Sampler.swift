@@ -52,7 +52,7 @@ class Sampler {
     // Child classes should override each stub:
     // heartbeatFn is called every time an Accumulator is eligible to send a heartbeat.
     // Typical actions: send an event
-    func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void { fatalError("Subclasses need to implement heartbeatFn") }
+    func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void { }
     // sampleFn is called to determine if an Accumulator is eligible to be sampled.
     // if true, the sample() loop will accumulate time for that item.
     // e.g. "isPlaying" or "isEngaged" -> true/false
