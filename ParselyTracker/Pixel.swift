@@ -11,12 +11,12 @@ import SwiftHTTP
 import os.log
 
 class Pixel {
-    
-    lazy var sessionManager = SessionManager()
-    var parselyTracker: Parsely
+    var sessionManager: SessionManager
+    private let parselyTracker: Parsely
     
     public init(trackerInstance: Parsely) {
         parselyTracker = trackerInstance
+        sessionManager = SessionManager(trackerInstance: parselyTracker)
     }
 
     func beacon(event: Event) {

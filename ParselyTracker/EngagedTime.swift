@@ -10,10 +10,6 @@ import Foundation
 import os.log
 
 class EngagedTime: Sampler {
-    override init() {
-        super.init()
-    }
-    
     override func sampleFn(key : String) -> Bool {
         let trackedData: Accumulator = accumulators[key]!
         return trackedData.isEngaged // TODO: consider video playing
@@ -38,7 +34,7 @@ class EngagedTime: Sampler {
             idsite: (eventArgs["idsite"] as! String)
         )
 
-        Parsely.sharedInstance.track.event(event: event)
+        parselyTracker.track.event(event: event)
     }
     
     func startInteraction(url: String, urlref: String = "", extra_data: Dictionary<String, Any>?, idsite: String) {

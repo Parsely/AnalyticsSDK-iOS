@@ -12,7 +12,7 @@ class SamplerTests: ParselyTestCase {
     func testMultipleTrackedItemsInOneSampler() {
         let itemOne: String = "itemOne"
         let itemTwo: String = "itemTwo"
-        let samplerUnderTest = Sampler()
+        let samplerUnderTest = Sampler(trackerInstance: parselyTestTracker)
         samplerUnderTest.trackKey(key: itemOne, contentDuration: nil, eventArgs: [:])
         samplerUnderTest.trackKey(key: itemTwo, contentDuration: nil, eventArgs: [:])
 
@@ -21,7 +21,7 @@ class SamplerTests: ParselyTestCase {
     }
 
     func testSampleFn() {
-        let samplerUnderTest = Sampler()
+        let samplerUnderTest = Sampler(trackerInstance: parselyTestTracker)
         let assertionTimeout:TimeInterval = TimeInterval(3)
         let acceptableDifference:TimeInterval = TimeInterval(0.2)
         
@@ -39,7 +39,7 @@ class SamplerTests: ParselyTestCase {
     }
 
     func testBackoff() {
-        let samplerUnderTest = Sampler()
+        let samplerUnderTest = Sampler(trackerInstance: parselyTestTracker)
         let initialInterval = samplerUnderTest.heartbeatInterval
         let expectedBackoffMultiplier = 1.25
         let expectedUpdatedInterval = initialInterval * expectedBackoffMultiplier
@@ -59,8 +59,8 @@ class SamplerTests: ParselyTestCase {
     }
 
     func testDistinctTrackedItems() {
-        let sampler1 = Sampler()
-        let sampler2 = Sampler()
+        let sampler1 = Sampler(trackerInstance: parselyTestTracker)
+        let sampler2 = Sampler(trackerInstance: parselyTestTracker)
         sampler1.trackKey(key: "thing", contentDuration: nil, eventArgs: [:])
         sampler2.trackKey(key: "thing", contentDuration: nil, eventArgs: [:])
         sampler1.dropKey(key: "thing")

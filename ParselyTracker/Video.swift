@@ -23,10 +23,6 @@ class VideoManager: Sampler {
     
     var trackedVideos: Dictionary<String, TrackedVideo> = [:]
     
-    override init() {
-        super.init()
-    }
-    
     override func sampleFn(key: String) -> Bool {
         return (trackedVideos[key]?.isPlaying)!
     }
@@ -49,7 +45,7 @@ class VideoManager: Sampler {
             extra_data: curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>,
             idsite: curVideo.eventArgs["idsite"] as! String
         )
-        Parsely.sharedInstance.track.event(event: event)
+        parselyTracker.track.event(event: event)
         os_log("Sent vheartbeat for video %s", log: OSLog.tracker, type:.debug, data.key)
         curVideo._heartbeatsSent += 1
         trackedVideos[curVideo.key] = curVideo
@@ -69,7 +65,7 @@ class VideoManager: Sampler {
                 extra_data: curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>,
                 idsite: idsite
             )
-            Parsely.sharedInstance.track.event(event: event)
+            parselyTracker.track.event(event: event)
         }
         curVideo.isPlaying = true
         trackedVideos[curVideo.key] = curVideo

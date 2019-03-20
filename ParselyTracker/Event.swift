@@ -30,7 +30,7 @@ class Event {
          urlref: String?,
          metadata: ParselyMetadata?,
          extra_data: Dictionary<String, Any>?,
-         idsite: String = Parsely.sharedInstance.apikey,
+         idsite: String = "",
          session_id: Int? = nil,
          session_timestamp: Int? = nil,
          session_url: String? = nil,
@@ -113,7 +113,7 @@ class Heartbeat: Event {
     var tt: Int
     var inc: Int
 
-    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, metadata: ParselyMetadata?, extra_data: Dictionary<String, Any>?, idsite: String = Parsely.sharedInstance.apikey) {
+    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, metadata: ParselyMetadata?, extra_data: Dictionary<String, Any>?, idsite: String = "") {
         self.tt = tt
         self.inc = inc
         super.init(action, url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)

@@ -14,13 +14,15 @@ class Track {
     // and enqueue them to be sent
 
     let pixel: Pixel
-    lazy var videoManager = VideoManager()
-    lazy var engagedTime = EngagedTime()
-    var parselyTracker: Parsely
+    let videoManager: VideoManager
+    let engagedTime: EngagedTime
+    private let parselyTracker: Parsely
 
     init(trackerInstance: Parsely) {
         parselyTracker = trackerInstance
         self.pixel = Pixel(trackerInstance: parselyTracker)
+        videoManager = VideoManager(trackerInstance: parselyTracker)
+        engagedTime = EngagedTime(trackerInstance: parselyTracker)
     }
 
     func event(event: Event) {
@@ -28,7 +30,7 @@ class Track {
             os_log("idsite not specified. Use ParselyTracker.configure or specify it as an argument to tracking functions.", log: OSLog.tracker, type:.error)
             return
         }
-        Parsely.sharedInstance.startFlushTimer();
+        parselyTracker.startFlushTimer();
         // generic helper function, sends the event as-is
         self.pixel.beacon(event: event)
         os_log("Sending an event from Track", log: OSLog.tracker, type:.debug)

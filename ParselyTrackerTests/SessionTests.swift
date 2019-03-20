@@ -14,8 +14,13 @@ class SessionTests: ParselyTestCase {
         "shouldExtendExisting:true should return a session object with the same session ID as the " +
     "preexisting session object"
 
-    let sessions = SessionManager()
+    var sessions: SessionManager!
     let emptyDict: [String: Any?] = [:]
+    
+    override func setUp() {
+        super.setUp()
+        sessions = SessionManager(trackerInstance: parselyTestTracker)
+    }
 
     func testGet() {
         let url1 = "http://parsely-test.com/123"
