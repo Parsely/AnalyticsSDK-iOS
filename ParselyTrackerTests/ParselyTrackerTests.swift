@@ -12,6 +12,7 @@ import XCTest
 class ParselyTrackerTests: ParselyTestCase {
     let testApikey: String = "examplesite.com"
     let testUrl = "http://example.com/testurl"
+    let testVideoId = "12345"
     
     override func setUp() {
         super.setUp()
@@ -49,6 +50,15 @@ class ParselyTrackerTests: ParselyTestCase {
                   "After a call to Parsely.startEngagement followed by a call to Parsely.stopEngagement, the internal " +
                   "accumulator for the engaged url should exist and its isEngaged flag should be unset")
     }
-    func testTrackPlay() { XCTAssert(false, "not implemented") }
+    func testTrackPlay() {
+        parselyTestTracker.trackPlay(url: testUrl, videoID: testVideoId, duration: TimeInterval(10))
+        let videoManager: VideoManager = parselyTestTracker.track.videoManager
+        let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
+        XCTAssertEqual(trackedVideos.count, 1,
+                       "After a call to parsely.trackPlay, there should be exactly one video being tracked")
+        let testVideo: TrackedVideo = trackedVideos.values.first!
+        XCTAssert(testVideo.isPlaying,
+                  "After a call to Parsely.trackPlay, the tracked video should have its isPlaying flag set")
+    }
     func testTrackPause() { XCTAssert(false, "not implemented") }
 }
