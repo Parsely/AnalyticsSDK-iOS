@@ -8,20 +8,11 @@
 
 import XCTest
 @testable import ParselyTracker
-import Foundation
 
-class SessionTests: XCTestCase {
+class SessionTests: ParselyTestCase {
     let sessionExtensionMessage:String = "Sequential calls to SessionManager.get within the session timeout that have " +
         "shouldExtendExisting:true should return a session object with the same session ID as the " +
     "preexisting session object"
-    
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
 
     let sessions = SessionManager()
     let emptyDict: [String: Any?] = [:]

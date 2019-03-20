@@ -10,13 +10,7 @@ import Foundation
 @testable import ParselyTracker
 import XCTest
 
-class MetadataTests: XCTestCase {
-    override func setUp() {
-    }
-    
-    override func tearDown() {
-    }
-    
+class MetadataTests: ParselyTestCase {
     func testMetadataValidation() {
         var metas = ParselyMetadata()
         XCTAssert(metas.toDict().isEmpty, "Creating a ParselyMetadata object with no parameters results in an empty object")

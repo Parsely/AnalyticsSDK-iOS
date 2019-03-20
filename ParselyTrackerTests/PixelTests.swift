@@ -10,15 +10,6 @@ import XCTest
 @testable import ParselyTracker
 import Foundation
 
-class PixelTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
+class PixelTests: ParselyTestCase {
     func testBeacon() { XCTAssert(false, "not implemented") }
-
 }

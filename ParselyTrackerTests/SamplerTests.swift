@@ -7,17 +7,8 @@
 //
 import XCTest
 @testable import ParselyTracker
-import Foundation
 
-class SamplerTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
+class SamplerTests: ParselyTestCase {
     func testMultipleTrackedItemsInOneSampler() {
         let itemOne: String = "itemOne"
         let itemTwo: String = "itemTwo"

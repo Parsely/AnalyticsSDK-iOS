@@ -16,7 +16,7 @@
 import XCTest
 @testable import ParselyTracker
 
-class EventQueueTests: XCTestCase {
+class EventQueueTests: ParselyTestCase {
     var queue = ParselyTracker.EventQueue<Int>()
     
     override func setUp() {

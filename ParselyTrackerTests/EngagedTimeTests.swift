@@ -8,20 +8,8 @@
 
 import XCTest
 @testable import ParselyTracker
-import Foundation
 
-class EngagedTimeTests: XCTestCase {
-    
-    let parsely: Parsely = Parsely.sharedInstance
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
+class EngagedTimeTests: ParselyTestCase {
     // TODO: implement better ET tests.
     // SamplerTests tests the underlying accumulators/sampler class
     // ET should test the results of the heartbeatFn, samplerFn, calling its internal public API

@@ -9,15 +9,7 @@
 import XCTest
 @testable import ParselyTracker
 
-class EventTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-
+class EventTests: ParselyTestCase {
     func testHeartbeatEvents() {
         let event = Heartbeat(
             "heartbeat",

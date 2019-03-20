@@ -9,17 +9,8 @@
 import XCTest
 @testable import ParselyTracker
 
-class StorageTests: XCTestCase {
+class StorageTests: ParselyTestCase {
     var storage = Storage()
-
-
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
 
     func testSetGetWithoutExpires() {
         let expected = ["foo": "bar"]

@@ -8,18 +8,8 @@
 
 import XCTest
 @testable import ParselyTracker
-import Foundation
 
-
-class VisitorTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
+class VisitorTests: ParselyTestCase {
     let visitors: VisitorManager = VisitorManager()
 
     func testGetVisitorInfo() {

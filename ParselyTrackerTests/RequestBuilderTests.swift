@@ -5,21 +5,10 @@
 //  Created by Ashley Drake on 2/7/19.
 //  Copyright © 2019 Parse.ly. All rights reserved.
 //
-
-import Foundation
 @testable import ParselyTracker
 import XCTest
 
-class RequestBuilderTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
+class RequestBuilderTests: ParselyTestCase {
     private func makeEvents() -> Array<Event> {
         return [Event(
             "pageview",
@@ -60,6 +49,5 @@ class RequestBuilderTests: XCTestCase {
         let events = makeEvents()
         let request = RequestBuilder.buildRequest(events: events)
         XCTAssertNotNil(request, "buildRequest should return a non-nil value")
-        
     }
 }
