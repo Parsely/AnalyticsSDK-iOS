@@ -10,9 +10,6 @@ import XCTest
 @testable import ParselyTracker
 
 class VideoTests: ParselyTestCase {
-    // TODO: Video should test handling of duration, and storing of video metas (updateVideo)
-    // TODO: should test reset() method
-    
     func testTrackVideo() {
         let videoManager = parselyTestTracker.track.videoManager
         XCTAssert(videoManager.accumulators.count == 0,
@@ -28,4 +25,7 @@ class VideoTests: ParselyTestCase {
         XCTAssert(videoManager.accumulators.count == 1,
                   "A call to trackPause should not remove an accumulator from videoManager.accumulators")
     }
+    
+    func testReset() { XCTAssert(false, "not implemented") }
+    func testUpdateVideoMetadata() { XCTAssert(false, "not implemented") }
 }
