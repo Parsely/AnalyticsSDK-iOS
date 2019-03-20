@@ -16,6 +16,6 @@ class PixelTests: ParselyTestCase {
                                idsite: testApikey)
         parselyTestTracker.track.pixel.beacon(event: dummyEvent)
         XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
-                       "A call to Parsely.track.event should add an event to eventQueue")
+                       "A call to Parsely.track.pixel.beacon should add an event to eventQueue")
     }
 }
