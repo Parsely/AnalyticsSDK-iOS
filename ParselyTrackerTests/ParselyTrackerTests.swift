@@ -31,7 +31,15 @@ class ParselyTrackerTests: ParselyTestCase {
                        "A call to Parsely.trackPageView should add an event to eventQueue")
     }
     
-    func testStartEngagement() { XCTAssert(false, "not implemented") }
+    func testStartEngagement() {
+        let testUrl = "http://example.com/testurl"
+        parselyTestTracker.startEngagement(url: "http://example.com/testurl")
+        let internalAccumulators:Dictionary<String, Accumulator> = parselyTestTracker.track.engagedTime.accumulators
+        let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
+        XCTAssert(testUrlAccumulator.isEngaged,
+                  "After a call to Parsely.startEngagement, the internal accumulator for the engaged url should exist " +
+                  "and its isEngaged flag should be set")
+    }
     func testStopEngagement() { XCTAssert(false, "not implemented") }
     func testTrackPlay() { XCTAssert(false, "not implemented") }
     func testTrackPause() { XCTAssert(false, "not implemented") }
