@@ -39,6 +39,10 @@ public class Parsely {
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
     }
+    
+    internal static func getInstance() -> Parsely {
+        return Parsely()
+    }
 
     /**
      Configure the Parsely tracking SDK. Should be called once per application load, before other Parsely SDK functions
