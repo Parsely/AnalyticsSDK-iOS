@@ -51,7 +51,7 @@ class SamplerTests: ParselyTestCase {
         Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
             expectation.fulfill()
         }
-        waitForExpectations(timeout: assertionTimeout, handler: nil)
+        waitForExpectations(timeout: assertionTimeout + 1, handler: nil)
         
         let actualUpdatedInterval = samplerUnderTest.heartbeatInterval
         XCTAssertEqual(actualUpdatedInterval, expectedUpdatedInterval,
