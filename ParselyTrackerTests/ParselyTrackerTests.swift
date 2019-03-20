@@ -23,7 +23,16 @@ class ParselyTrackerTests: ParselyTestCase {
                        "siteId argument")
     }
     
-    func testTrackPageView() { XCTAssert(false, "not implemented") }
+    func testTrackPageView() {
+        let testApikey = "example.com"
+        parselyTestTracker.configure(siteId: testApikey)
+        XCTAssertEqual(parselyTestTracker.eventQueue.length(), 0, "eventQueue should be empty immediately after initialization")
+        parselyTestTracker.trackPageView(url: "http://example.com/testurl", urlref: "http://example.com/testurl",
+                                         metadata: nil, extraData: nil)
+        XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
+                       "A call to Parsely.trackPageView should add an event to eventQueue")
+    }
+    
     func testStartEngagement() { XCTAssert(false, "not implemented") }
     func testStopEngagement() { XCTAssert(false, "not implemented") }
     func testTrackPlay() { XCTAssert(false, "not implemented") }
