@@ -41,7 +41,13 @@ class ParselyTrackerTests: ParselyTestCase {
                   "and its isEngaged flag should be set")
     }
     func testStopEngagement() {
-        
+        parselyTestTracker.startEngagement(url: testUrl)
+        parselyTestTracker.stopEngagement()
+        let internalAccumulators:Dictionary<String, Accumulator> = parselyTestTracker.track.engagedTime.accumulators
+        let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
+        XCTAssertFalse(testUrlAccumulator.isEngaged,
+                  "After a call to Parsely.startEngagement followed by a call to Parsely.stopEngagement, the internal " +
+                  "accumulator for the engaged url should exist and its isEngaged flag should be unset")
     }
     func testTrackPlay() { XCTAssert(false, "not implemented") }
     func testTrackPause() { XCTAssert(false, "not implemented") }
