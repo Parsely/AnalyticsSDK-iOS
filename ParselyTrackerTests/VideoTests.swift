@@ -10,21 +10,23 @@ import XCTest
 @testable import ParselyTracker
 
 class VideoTests: ParselyTestCase {
+    let testVideoId: String = "videoId"
+    let testUrl: String = "testurl"
+    
     func testTrackVideo() {
         let videoManager = parselyTestTracker.track.videoManager
-        XCTAssert(videoManager.accumulators.count == 0,
+        XCTAssertEqual(videoManager.trackedVideos.count, 0,
                   "videoManager.accumulators should be empty before calling trackPlay")
-        parselyTestTracker.trackPlay(url: "testurl", videoID: "videoId", duration: TimeInterval(0))
-        XCTAssert(videoManager.accumulators.count == 1,
+        videoManager.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
+                               metadata: nil, extra_data: nil, idsite: testApikey)
+        XCTAssertEqual(videoManager.trackedVideos.count, 1,
                   "A call to trackPlay should populate videoManager.accumulators with one object")
-        parselyTestTracker.trackPause()
-        XCTAssert(videoManager.accumulators.count == 1,
+        videoManager.trackPause()
+        XCTAssertEqual(videoManager.trackedVideos.count, 1,
                   "A call to trackPause should not remove an accumulator from videoManager.accumulators")
     }
     
     func testReset() {
-        let testUrl: String = "testurl"
-        let testVideoId: String = "videoId"
         let videoManager = parselyTestTracker.track.videoManager
         videoManager.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
                                metadata: nil, extra_data: nil, idsite: testApikey)
