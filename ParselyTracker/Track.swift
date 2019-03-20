@@ -16,9 +16,11 @@ class Track {
     let pixel: Pixel
     lazy var videoManager = VideoManager()
     lazy var engagedTime = EngagedTime()
+    var parselyTracker: Parsely
 
-    init() {
-        self.pixel = Pixel()
+    init(trackerInstance: Parsely) {
+        parselyTracker = trackerInstance
+        self.pixel = Pixel(trackerInstance: parselyTracker)
     }
 
     func event(event: Event) {

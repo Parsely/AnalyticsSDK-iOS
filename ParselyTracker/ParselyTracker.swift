@@ -15,7 +15,10 @@ public class Parsely {
     public var apikey = ""
     var config: [String: Any] = [:]
     private var default_config = [String: Any]()
-    let track = Track()
+    private var _track: Track!
+    var track: Track {
+        return _track
+    }
     var lastRequest: Dictionary<String, Any?>? = [:]
     var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
@@ -38,6 +41,7 @@ public class Parsely {
 
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
+        _track = Track(trackerInstance: self)
     }
     
     internal static func getInstance() -> Parsely {

@@ -13,6 +13,11 @@ import os.log
 class Pixel {
     
     lazy var sessionManager = SessionManager()
+    var parselyTracker: Parsely
+    
+    public init(trackerInstance: Parsely) {
+        parselyTracker = trackerInstance
+    }
 
     func beacon(event: Event) {
         if event.idsite == "" {
@@ -24,9 +29,9 @@ class Pixel {
         let session: Dictionary<String, Any?> = sessionManager.get(url: event.url, urlref: event.urlref,
                                                               shouldExtendExisting: true)
         event.setSessionInfo(session: session)
-        let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
+        let visitorInfo = parselyTracker.visitorManager.getVisitorInfo(shouldExtendExisting: true)
         event.setVisitorInfo(visitorInfo: visitorInfo)
-        
-        Parsely.sharedInstance.eventQueue.push(event)
+        // XXX this should use a specific instance instead of a piece of global state
+        parselyTracker.eventQueue.push(event)
     }
 }
