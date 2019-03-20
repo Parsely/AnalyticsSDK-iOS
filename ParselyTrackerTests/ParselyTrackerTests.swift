@@ -10,7 +10,6 @@ import XCTest
 @testable import ParselyTracker
 
 class ParselyTrackerTests: ParselyTestCase {
-    let testApikey: String = "examplesite.com"
     let testUrl = "http://example.com/testurl"
     let testVideoId = "12345"
     

@@ -9,7 +9,6 @@ import XCTest
 @testable import ParselyTracker
 
 class TrackTests: ParselyTestCase {
-    let testApikey: String = "examplesite.com"
     override func setUp() {
         super.setUp()
         parselyTestTracker.configure(siteId: testApikey)
