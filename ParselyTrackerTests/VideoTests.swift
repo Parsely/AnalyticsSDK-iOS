@@ -34,5 +34,5 @@ class VideoTests: ParselyTestCase {
         XCTAssertEqual(videoManager.trackedVideos.count, 0,
                   "A call to Parsely.track.videoManager.reset should remove an accumulator from videoManager.accumulators")
     }
-    func testUpdateVideoMetadata() { XCTAssert(false, "not implemented") }
+    func testUpdateVideoEventArgs() { XCTAssert(false, "not implemented") }
 }
