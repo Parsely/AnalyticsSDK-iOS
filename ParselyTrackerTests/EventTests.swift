@@ -28,10 +28,4 @@ class EventTests: ParselyTestCase {
         XCTAssert(event.idsite == "parsely-test.com",
                   "Should initialize and preserve subclass parameters.")
     }
-    
-    func testValidity() {
-        let event = Event("pageview", url: "http://test.com", urlref: nil, metadata: nil, extra_data: nil)
-        XCTAssert(event.idsite == "parsely-configured-default.com", "Events should automatically know which apikey to use.")
-    }
 }
-
