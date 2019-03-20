@@ -17,6 +17,7 @@ class ParselyTestCase: XCTestCase {
     }
     
     override func tearDown() {
+        parselyTestTracker.hardShutdown()
         super.tearDown()
     }
 }
