@@ -60,5 +60,16 @@ class ParselyTrackerTests: ParselyTestCase {
         XCTAssert(testVideo.isPlaying,
                   "After a call to Parsely.trackPlay, the tracked video should have its isPlaying flag set")
     }
-    func testTrackPause() { XCTAssert(false, "not implemented") }
+    func testTrackPause() {
+        parselyTestTracker.trackPlay(url: testUrl, videoID: testVideoId, duration: TimeInterval(10))
+        parselyTestTracker.trackPause()
+        let videoManager: VideoManager = parselyTestTracker.track.videoManager
+        let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
+        XCTAssertEqual(trackedVideos.count, 1,
+                       "After a call to parsely.trackPlay followed by a call to parsely.trackPause, there should be " +
+                       "exactly one video being tracked")
+        let testVideo: TrackedVideo = trackedVideos.values.first!
+        XCTAssertFalse(testVideo.isPlaying,
+                  "After a call to Parsely.trackPlay, the tracked video should have its isPlaying flag unset")
+    }
 }
