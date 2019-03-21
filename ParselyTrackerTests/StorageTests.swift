@@ -1,11 +1,3 @@
-//
-//  StorageTests.swift
-//  StorageTests
-//
-//  Created by Chris Wisecarver on 7/6/18.
-//  Copyright © 2018 Parse.ly. All rights reserved.
-//
-
 import XCTest
 @testable import ParselyTracker
 

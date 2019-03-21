@@ -1,10 +1,3 @@
-//
-//  RequestBuilderTests.swift
-//  ParselyTrackerTests
-//
-//  Created by Ashley Drake on 2/7/19.
-//  Copyright © 2019 Parse.ly. All rights reserved.
-//
 @testable import ParselyTracker
 import XCTest
 
