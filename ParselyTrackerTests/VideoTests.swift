@@ -5,7 +5,7 @@ class VideoTests: ParselyTestCase {
     let testVideoId: String = "videoId"
     let testUrl: String = "testurl"
     
-    func testTrackVideo() {
+    func testTrackPlay() {
         let videoManager = parselyTestTracker.track.videoManager
         XCTAssertEqual(videoManager.trackedVideos.count, 0,
                   "videoManager.accumulators should be empty before calling trackPlay")
@@ -24,7 +24,7 @@ class VideoTests: ParselyTestCase {
                                metadata: nil, extra_data: nil, idsite: testApikey)
         videoManager.reset(url: testUrl, vId: testVideoId)
         XCTAssertEqual(videoManager.trackedVideos.count, 0,
-                  "A call to Parsely.track.videoManager.reset should remove an accumulator from videoManager.accumulators")
+                  "A call to Parsely.track.videoManager.reset should remove a video from videoManager.trackedVideos")
     }
     func testUpdateVideoEventArgs() {
         let videoManager = parselyTestTracker.track.videoManager

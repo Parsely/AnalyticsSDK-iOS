@@ -17,7 +17,7 @@ class RequestBuilderTests: ParselyTestCase {
         XCTAssert(endpoint != "", "buildPixelEndpoint should return a non-empty string")
     }
     
-    func testDatedEndpoint() {
+    func testBuildPixelEndpoint() {
         var expected: String = "https://srv-2019-01-01-12.pixel.parsely.com/mobileproxy"
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone(abbreviation: "UTC")

@@ -20,9 +20,6 @@ class RequestBuilder {
     
     static var _baseURL: String? = nil
     static var userAgent: String? = nil
-    // TODO: should refresh every few hours to avoid sending events
-    // to an out-of-date pixel server
-    // TODO: implement correct user agent string
     
     static func getHardwareString() -> String {
         var mib  = [CTL_HW, HW_MACHINE]
