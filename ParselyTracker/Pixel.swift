@@ -30,8 +30,8 @@ class Pixel {
                                                               shouldExtendExisting: true)
         event.setSessionInfo(session: session)
         let visitorInfo = parselyTracker.visitorManager.getVisitorInfo(shouldExtendExisting: true)
-        event.setVisitorInfo(visitorInfo: visitorInfo)
-        // XXX this should use a specific instance instead of a piece of global state
+        event.setVisitorInfo(visitorInfo: visitorInfo as Dictionary<String, Any>)
         parselyTracker.eventQueue.push(event)
+
     }
 }
