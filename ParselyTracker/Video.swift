@@ -89,9 +89,9 @@ class VideoManager: Sampler {
 
     private func updateVideoData(vId: String, url: String, duration: TimeInterval, eventArgs: Dictionary<String, Any>?) -> TrackedVideo {
         var _eventArgs: [String: Any] = eventArgs ?? [String: Any]()
-        var metadata = _eventArgs["metadata"] as? ParselyMetadata
+        let metadata = _eventArgs["metadata"] as? ParselyMetadata
         // Override a few values where necessary
-        if metadata != nil {
+        if (metadata != nil) {
             metadata!.canonical_url = vId
             metadata!.duration = duration
         }
