@@ -50,6 +50,7 @@ class SessionManager {
     
     public func extendSessionExpiry() -> Dictionary<String, Any> {
         let expiry = Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT)
-        return storage.extendExpiry(key: self.sessionKey, expires: expiry) ?? [:]
+        let result = storage.extendExpiry(key: self.sessionKey, expires: expiry) ?? [:]
+        return result as Dictionary<String, Any>
     }
 }
