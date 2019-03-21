@@ -77,5 +77,5 @@ class StorageTests: ParselyTestCase {
         XCTAssert(actual.isEmpty, "Calls to Storage.get requesting expired keys should return empty objects")
     }
     
-    func testStoredDataPersistsAcrossStorageInstances { XCTAssert(false, "not implemented") }
+    func testStoredDataPersistsAcrossStorageInstances() { XCTAssert(false, "not implemented") }
 }
