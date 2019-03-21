@@ -15,6 +15,7 @@ class VisitorTests: ParselyTestCase {
         XCTAssertEqual(visitor["id"] as! String, subsequentVisitor["id"] as! String,
                        "Sequential calls to VisitorManager.getVisitorInfo within the default expiry should return objects " +
                        "with the same visitor ID")
+        XCTAssert(false, "Other properties of the visitor object should be checked against expected values")
     }
     func testExtendVisitorExpiry() {
         let visitor = visitors.getVisitorInfo()

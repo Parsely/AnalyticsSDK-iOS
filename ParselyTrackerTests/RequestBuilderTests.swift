@@ -38,9 +38,13 @@ class RequestBuilderTests: ParselyTestCase {
                   "user agent string")
     }
 
-    func testRequests() {
+    func testBuildRequest() {
         let events = makeEvents()
         let request = RequestBuilder.buildRequest(events: events)
         XCTAssertNotNil(request, "buildRequest should return a non-nil value")
+        XCTAssert(false, "buildRequest should return a request object with valid attributes")
     }
+    
+    func testGetHardwareString() { XCTAssert(false, "not implemented") }
+    func testGetUserAgent() { XCTAssert(false, "not implemented") }
 }

@@ -16,5 +16,6 @@ class MetadataTests: ParselyTestCase {
         )
         XCTAssertFalse(metas.toDict().isEmpty, "Creating a ParselyMetadataobject with many parameters results in a " +
                        "non-empty object")
+        XCTAssert(false, "A metadata object should contain valid attributes after initialization")
     }
 }

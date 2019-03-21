@@ -60,4 +60,10 @@ class SamplerTests: ParselyTestCase {
         XCTAssert(sampler2.accumulators["thing"] != nil,
                   "A Sampler instance should not be affected by dropKey calls on another Sampler instance")
     }
+    
+    func testDropKey() { XCTAssert(false, "not implemented") }
+    func testGenerateEventArgs() { XCTAssert(false, "not implemented") }
+    func testSendHeartbeats() { XCTAssert(false, "not implemented") }
+    func testPause() { XCTAssert(false, "not implemented") }
+    func testResume() { XCTAssert(false, "not implemented") }
 }

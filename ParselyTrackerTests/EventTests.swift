@@ -20,4 +20,9 @@ class EventTests: ParselyTestCase {
         XCTAssert(event.idsite == "parsely-test.com",
                   "Should initialize and preserve subclass parameters.")
     }
+    
+    func testToDict() { XCTAssert(false, "not implemented") }
+    func testEvent() { XCTAssert(false, "not implemented") }
+    func testSetVisitorInfo() { XCTAssert(false, "not implemented") }
+    func testSetSessionInfo() { XCTAssert(false, "not implemented") }
 }

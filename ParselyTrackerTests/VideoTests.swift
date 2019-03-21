@@ -13,6 +13,7 @@ class VideoTests: ParselyTestCase {
                                metadata: nil, extra_data: nil, idsite: testApikey)
         XCTAssertEqual(videoManager.trackedVideos.count, 1,
                   "A call to trackPlay should populate videoManager.accumulators with one object")
+        XCTAssert(false, "trackPause should be tested in a separate test function")
         videoManager.trackPause()
         XCTAssertEqual(videoManager.trackedVideos.count, 1,
                   "A call to trackPause should not remove an accumulator from videoManager.accumulators")
@@ -51,4 +52,7 @@ class VideoTests: ParselyTestCase {
                        "The section metadata stored for a preexisting video after a call to parsely.track.videoManager.trackPlay " +
                        "should match the section metadata passed to that call.")
     }
+    
+    func testSampleFn() { XCTAssert(false, "not implemented") }
+    func testHeartbeatFn() { XCTAssert(false, "not implemented") }
 }
