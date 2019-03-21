@@ -61,6 +61,14 @@ class ParselyTrackerTests: ParselyTestCase {
                        "exactly one video being tracked")
         let testVideo: TrackedVideo = trackedVideos.values.first!
         XCTAssertFalse(testVideo.isPlaying,
-                  "After a call to Parsely.trackPlay, the tracked video should have its isPlaying flag unset")
+                       "After a call to Parsely.trackPlay, the tracked video should have its isPlaying flag unset")
+    }
+    func testResetVideo() {
+        parselyTestTracker.trackPlay(url: testUrl, videoID: testVideoId, duration: TimeInterval(10))
+        parselyTestTracker.resetVideo(url: testUrl, videoID: testVideoId)
+        let videoManager: VideoManager = parselyTestTracker.track.videoManager
+        let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
+        XCTAssertEqual(trackedVideos.count, 0,
+                       "A call to Parsely.resetVideo should remove an tracked video from the video manager")
     }
 }
