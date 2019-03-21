@@ -34,5 +34,29 @@ class VideoTests: ParselyTestCase {
         XCTAssertEqual(videoManager.trackedVideos.count, 0,
                   "A call to Parsely.track.videoManager.reset should remove an accumulator from videoManager.accumulators")
     }
-    func testUpdateVideoEventArgs() { XCTAssert(false, "not implemented") }
+    func testUpdateVideoEventArgs() {
+        let videoManager = parselyTestTracker.track.videoManager
+        let testSectionFirst: String = "sectionname"
+        let testSectionSecond: String = "adifferentsection"
+        let firstTestMetadata: ParselyMetadata = ParselyMetadata(canonical_url: testUrl, pub_date: Date(), title: "test",
+                                                                 authors: nil, image_url: nil, section: testSectionFirst,
+                                                                 tags: nil, duration: nil)
+        videoManager.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
+                               metadata: firstTestMetadata, extra_data: nil, idsite: testApikey)
+        let testTrackedVideo: TrackedVideo = videoManager.trackedVideos.values.first!
+        let actualMetadata: ParselyMetadata = testTrackedVideo.eventArgs["metadata"]! as! ParselyMetadata
+        XCTAssertEqual(actualMetadata.section, testSectionFirst,
+                       "The section metadata stored for a video after a call to parsely.track.videoManager.trackPlay " +
+                       "should match the section metadata passed to that call.")
+        let secondTestMetadata: ParselyMetadata = ParselyMetadata(canonical_url: testUrl, pub_date: Date(), title: "test",
+                                                                  authors: nil, image_url: nil, section: testSectionSecond,
+                                                                  tags: nil, duration: nil)
+        videoManager.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
+                               metadata: secondTestMetadata, extra_data: nil, idsite: testApikey)
+        let secondTestTrackedVideo: TrackedVideo = videoManager.trackedVideos.values.first!
+        let secondActualMetadata: ParselyMetadata = secondTestTrackedVideo.eventArgs["metadata"]! as! ParselyMetadata
+        XCTAssertEqual(secondActualMetadata.section, testSectionSecond,
+                       "The section metadata stored for a preexisting video after a call to parsely.track.videoManager.trackPlay " +
+                       "should match the section metadata passed to that call.")
+    }
 }
