@@ -13,10 +13,15 @@ class VideoTests: ParselyTestCase {
                                metadata: nil, extra_data: nil, idsite: testApikey)
         XCTAssertEqual(videoManager.trackedVideos.count, 1,
                   "A call to trackPlay should populate videoManager.accumulators with one object")
-        XCTAssert(false, "trackPause should be tested in a separate test function")
+    }
+    
+    func testTrackPause() {
+        let videoManager = parselyTestTracker.track.videoManager
+        videoManager.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
+                               metadata: nil, extra_data: nil, idsite: testApikey)
         videoManager.trackPause()
         XCTAssertEqual(videoManager.trackedVideos.count, 1,
-                  "A call to trackPause should not remove an accumulator from videoManager.accumulators")
+                       "A call to trackPause should not remove an accumulator from videoManager.accumulators")
     }
     
     func testReset() {
