@@ -15,7 +15,12 @@ class VisitorTests: ParselyTestCase {
         XCTAssertEqual(visitor["id"] as! String, subsequentVisitor["id"] as! String,
                        "Sequential calls to VisitorManager.getVisitorInfo within the default expiry should return objects " +
                        "with the same visitor ID")
-        XCTAssert(false, "Other properties of the visitor object should be checked against expected values")
+        XCTAssertEqual(visitor["session_count"] as! Int, subsequentVisitor["session_count"] as! Int,
+                       "Sequential calls to VisitorManager.getVisitorInfo within the default expiry should return objects " +
+                       "with the same session count")
+        XCTAssertEqual(visitor["last_session_ts"] as! Int, subsequentVisitor["last_session_ts"] as! Int,
+                       "Sequential calls to VisitorManager.getVisitorInfo within the default expiry should return objects " +
+                       "with the same last session timestamp")
     }
     func testExtendVisitorExpiry() {
         let visitor = visitors.getVisitorInfo()
