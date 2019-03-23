@@ -4,6 +4,7 @@ import XCTest
 class EventTests: ParselyTestCase {
     let testInc: Int = 5
     let testTT: Int = 15
+    let timestampInThePast: Int = 1553372504
     
     let expectedStrings: Dictionary<String, String> = [
         "action": "pageview",
@@ -93,6 +94,8 @@ class EventTests: ParselyTestCase {
                            "A visitor ID provided via Event.setVisitorInfo should be accessible in the result of " +
                            "Event.toDict as data[\"parsely_site_uuid\"]")
         }
+        XCTAssert((actual["rand"] as! Int) > timestampInThePast,
+                  "The rand field of the result of Event.toDict should be a non-ancient timestamp")
     }
     
     func testSetVisitorInfo() { XCTAssert(false, "not implemented") }
