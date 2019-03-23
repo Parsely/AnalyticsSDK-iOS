@@ -117,8 +117,8 @@ class EventTests: ParselyTestCase {
                            "A visitor ID provided via Event.setVisitorInfo should be accessible in the result of " +
                            "Event.toDict as data[\"parsely_site_uuid\"]")
         }
-        XCTAssert((actual["rand"] as! Int) > timestampInThePast,
-                  "The rand field of the result of Event.toDict should be a non-ancient timestamp")
+        XCTAssert((actualExtraData["ts"] as! Int) > timestampInThePast,
+                  "The data.ts field of the result of Event.toDict should be a non-ancient timestamp")
     }
     
     func testSetVisitorInfo() { XCTAssert(false, "not implemented") }
