@@ -6,7 +6,7 @@ class EngagedTimeTests: ParselyTestCase {
     
     func testHeartbeatFn() {
         let dummyEventArgs: Dictionary<String, Any> = parselyTestTracker.track.engagedTime.generateEventArgs(
-            url: testUrl, urlref: "", extra_data: nil, idsite: testApikey)
+            url: testUrl, urlref: "", extra_data: nil, idsite: ParselyTestCase.testApikey)
         let dummyAccumulator: Accumulator = Accumulator(key: "", accumulatedTime: 0, totalTime: 0,
                                                         lastSampleTime: Date(), lastPositiveSampleTime: Date(),
                                                         heartbeatTimeout: 0, contentDuration: 0, isEngaged: false,
@@ -17,7 +17,8 @@ class EngagedTimeTests: ParselyTestCase {
     }
     
     func testStartInteraction() {
-        parselyTestTracker.track.engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil, idsite: testApikey)
+        parselyTestTracker.track.engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil,
+                                                              idsite: ParselyTestCase.testApikey)
         let internalAccumulators:Dictionary<String, Accumulator> = parselyTestTracker.track.engagedTime.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssert(testUrlAccumulator.isEngaged,
@@ -26,7 +27,8 @@ class EngagedTimeTests: ParselyTestCase {
     }
     
     func testEndInteraction() {
-        parselyTestTracker.track.engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil, idsite: testApikey)
+        parselyTestTracker.track.engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil,
+                                                              idsite: ParselyTestCase.testApikey)
         parselyTestTracker.track.engagedTime.endInteraction()
         let internalAccumulators:Dictionary<String, Accumulator> = parselyTestTracker.track.engagedTime.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!

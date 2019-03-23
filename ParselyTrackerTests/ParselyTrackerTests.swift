@@ -7,11 +7,11 @@ class ParselyTrackerTests: ParselyTestCase {
     
     override func setUp() {
         super.setUp()
-        parselyTestTracker.configure(siteId: testApikey)
+        parselyTestTracker.configure(siteId: ParselyTestCase.testApikey)
     }
     
     func testConfigure() {
-        XCTAssertEqual(parselyTestTracker.apikey, testApikey,
+        XCTAssertEqual(parselyTestTracker.apikey, ParselyTestCase.testApikey,
                        "After a call to Parsely.configure, Parsely.apikey should be the value used in the call's " +
                        "siteId argument")
     }

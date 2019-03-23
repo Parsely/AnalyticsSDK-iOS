@@ -2,48 +2,62 @@ import XCTest
 @testable import ParselyTracker
 
 class EventTests: ParselyTestCase {
+    let testInc: Int = 5
+    let testTT: Int = 15
+    
+    let expectedStrings: Dictionary<String, String> = [
+        "action": "pageview",
+        "url": "http://parsely-stuff.com",
+        "urlref": "http://testt.com",
+        "idsite": testApikey,
+        "surl": "http://parsely-stuff.com",
+        "sref": "http://parsely-test.com",
+        ]
+    let expectedInts: Dictionary<String, Int> = [
+        "sid": 0,
+        "sts": 1553295726,
+        "slts": 1553295726
+    ]
+    let extraData: Dictionary<String, String> = [
+        "arbitraryParameter1": "testValue",
+        "arbitraryParameter2": "testValue2"
+    ]
+    let testMetadata: ParselyMetadata = ParselyMetadata(
+        canonical_url: "http://parsely-test.com", pub_date: Date.init(), title: "a title.", authors: ["Yogi Berra"],
+        image_url: "http://parsely-test.com/image2", section: "Things my mother says", tags: ["tag1", "tag2"],
+        duration: TimeInterval(100)
+    )
+    
+    func testEvent() {
+        let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
+                                   urlref: expectedStrings["urlref"], metadata: testMetadata,
+                                   extra_data: extraData, idsite: expectedStrings["idsite"]!,
+                                   session_id: expectedInts["sid"], session_timestamp: expectedInts["sts"],
+                                   session_url: expectedStrings["surl"], session_referrer: expectedStrings["sref"],
+                                   last_session_timestamp: expectedInts["slts"])
+        XCTAssert(false, "Fields used in Event initialization should be stored properly")
+    }
+    
     func testHeartbeatEvents() {
         let event = Heartbeat(
             "heartbeat",
-            url: "http://test.com",
+            url: expectedStrings["url"]!,
             urlref: nil,
-            inc: 5,
-            tt: 15,
+            inc: testInc,
+            tt: testTT,
             metadata: nil,
             extra_data: nil,
-            idsite: "parsely-test.com"
+            idsite: expectedStrings["idsite"]!
         )
-        XCTAssert(event.url == "http://test.com",
-                  "Heartbeat events should handle inc and tt.")
-        XCTAssert(event.inc == 5,
-                  "Should initialize and preserve subclass parameters.")
-        XCTAssert(event.idsite == "parsely-test.com",
-                  "Should initialize and preserve subclass parameters.")
+        XCTAssertEqual(event.tt, testTT, "The tt parameter used to initialize a heartbeat event should be stored properly")
+        XCTAssertEqual(event.url, expectedStrings["url"],
+                       "The url used to initialize a heartbeat event should be stored properly")
+        XCTAssertEqual(event.inc, testInc, "The inc parameter used to initialize a heartbeat event should be stored properly")
+        XCTAssertEqual(event.idsite, ParselyTestCase.testApikey,
+                       "The idsite parameter used to initialize a heartbeat event should be stored properly")
     }
     
     func testToDict() {
-        let expectedStrings: Dictionary<String, String> = [
-            "action": "pageview",
-            "url": "http://parsely-stuff.com",
-            "urlref": "http://testt.com",
-            "idsite": testApikey,
-            "surl": "http://parsely-stuff.com",
-            "sref": "http://parsely-test.com",
-        ]
-        let expectedInts: Dictionary<String, Int> = [
-            "sid": 0,
-            "sts": 1553295726,
-            "slts": 1553295726
-        ]
-        let extraData: Dictionary<String, String> = [
-            "arbitraryParameter1": "testValue",
-            "arbitraryParameter2": "testValue2"
-        ]
-        let testMetadata: ParselyMetadata = ParselyMetadata(
-            canonical_url: "http://parsely-test.com", pub_date: Date.init(), title: "a title.", authors: ["Yogi Berra"],
-            image_url: "http://parsely-test.com/image2", section: "Things my mother says", tags: ["tag1", "tag2"],
-            duration: TimeInterval(100)
-        )
         let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
                                    urlref: expectedStrings["urlref"], metadata: testMetadata,
                                    extra_data: extraData, idsite: expectedStrings["idsite"]!,
@@ -80,7 +94,7 @@ class EventTests: ParselyTestCase {
                            "Event.toDict as data[\"parsely_site_uuid\"]")
         }
     }
-    func testEvent() { XCTAssert(false, "not implemented") }
+    
     func testSetVisitorInfo() { XCTAssert(false, "not implemented") }
     func testSetSessionInfo() { XCTAssert(false, "not implemented") }
 }
