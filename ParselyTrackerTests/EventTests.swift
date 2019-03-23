@@ -36,7 +36,30 @@ class EventTests: ParselyTestCase {
                                    session_id: expectedInts["sid"], session_timestamp: expectedInts["sts"],
                                    session_url: expectedStrings["surl"], session_referrer: expectedStrings["sref"],
                                    last_session_timestamp: expectedInts["slts"])
-        XCTAssert(false, "Fields used in Event initialization should be stored properly")
+        XCTAssertEqual(eventUnderTest.action, expectedStrings["action"],
+                       "The action provided in Event initialization should be stored properly")
+        XCTAssertEqual(eventUnderTest.url, expectedStrings["url"],
+                       "The url provided in Event initialization should be stored properly")
+        XCTAssertEqual(eventUnderTest.urlref, expectedStrings["urlref"],
+                       "The urlref provided in Event initialization should be stored properly")
+        XCTAssertEqual(eventUnderTest.idsite, expectedStrings["idsite"],
+                       "The idsite provided in Event initialization should be stored properly")
+        XCTAssertEqual(eventUnderTest.session_id, expectedInts["sid"],
+                       "The sid provided in Event initialization should be stored properly")
+        XCTAssertEqual(eventUnderTest.session_timestamp, expectedInts["sts"],
+                       "The sts provided in Event initialization should be stored properly")
+        XCTAssertEqual(eventUnderTest.session_url, expectedStrings["surl"],
+                       "The surl provided in Event initialization should be stored properly")
+        XCTAssertEqual(eventUnderTest.session_referrer, expectedStrings["sref"],
+                       "The sref provided in Event initialization should be stored properly")
+        XCTAssertEqual(eventUnderTest.last_session_timestamp, expectedInts["slts"],
+                       "The slts provided in Event initialization should be stored properly")
+        XCTAssert(eventUnderTest.rand > timestampInThePast,
+                  "The rand of a newly-created Event should be a non-ancient timestamp")
+        XCTAssert(eventUnderTest.metadata! === testMetadata,
+                  "The metadata procided in Event initialization should be stored properly")
+        let extraDataIsEquivalent: Bool = NSDictionary(dictionary: eventUnderTest.extra_data!).isEqual(to: extraData)
+        XCTAssert(extraDataIsEquivalent, "The extra_data procided in Event initialization should be stored properly")
     }
     
     func testHeartbeatEvents() {
