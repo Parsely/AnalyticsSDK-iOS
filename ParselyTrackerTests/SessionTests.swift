@@ -3,6 +3,7 @@ import XCTest
 
 class SessionTests: ParselyTestCase {
     var sessions: SessionManager!
+    let sessionStorageKey = "_parsely_session_identifier"
     let testInitialUrl = "http://parsely-test.com/123"
     let testSubsequentUrl = "http://parsely-test.com/"
     let epochTimeInThePast = 1553459222
@@ -10,6 +11,8 @@ class SessionTests: ParselyTestCase {
     override func setUp() {
         super.setUp()
         sessions = SessionManager(trackerInstance: parselyTestTracker)
+        // XXX slight hack, ideally this functionality should be a method on SessionManager
+        Storage().expire(key: sessionStorageKey)
     }
     
     func testGet() {
