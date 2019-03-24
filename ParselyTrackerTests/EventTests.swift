@@ -121,7 +121,7 @@ class EventTests: ParselyTestCase {
                   "The data.ts field of the result of Event.toDict should be a non-ancient timestamp")
     }
     
-    func testSetVisitorInfo() {
+    func testSetSessionInfo() {
         let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
                                    urlref: expectedStrings["urlref"], metadata: testMetadata,
                                    extra_data: extraData, idsite: expectedStrings["idsite"]!)
