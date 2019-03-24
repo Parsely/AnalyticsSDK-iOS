@@ -4,6 +4,7 @@ import XCTest
 class EventTests: ParselyTestCase {
     let testInc: Int = 5
     let testTT: Int = 15
+    let expectedVisitorID: String = "12345fdffff"
     let timestampInThePast: Int = 1553372504
     
     let expectedStrings: Dictionary<String, String> = [
@@ -88,7 +89,6 @@ class EventTests: ParselyTestCase {
                                    session_id: expectedInts["sid"], session_timestamp: expectedInts["sts"],
                                    session_url: expectedStrings["surl"], session_referrer: expectedStrings["sref"],
                                    last_session_timestamp: expectedInts["slts"])
-        let expectedVisitorID: String = "12345fdffff"
         eventUnderTest.setVisitorInfo(visitorInfo: ["id": expectedVisitorID])
         let actual: Dictionary<String, Any> = eventUnderTest.toDict()
         for (key, value) in expectedStrings {
