@@ -121,6 +121,27 @@ class EventTests: ParselyTestCase {
                   "The data.ts field of the result of Event.toDict should be a non-ancient timestamp")
     }
     
-    func testSetVisitorInfo() { XCTAssert(false, "not implemented") }
+    func testSetVisitorInfo() {
+        let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
+                                   urlref: expectedStrings["urlref"], metadata: testMetadata,
+                                   extra_data: extraData, idsite: expectedStrings["idsite"]!)
+        eventUnderTest.setSessionInfo(session:[
+            "session_id": expectedInts["sid"],
+            "session_ts": expectedInts["sts"],
+            "last_session_ts": expectedInts["slts"],
+            "session_referrer": expectedStrings["sref"],
+            "session_url": expectedStrings["surl"]
+        ])
+        XCTAssertEqual(eventUnderTest.session_id, expectedInts["sid"],
+                       "The sid set via setSessionInfo should be stored properly")
+        XCTAssertEqual(eventUnderTest.session_timestamp, expectedInts["sts"],
+                       "The sts set via setSessionInfo should be stored properly")
+        XCTAssertEqual(eventUnderTest.last_session_timestamp, expectedInts["slts"],
+                       "The slts set via setSessionInfo should be stored properly")
+        XCTAssertEqual(eventUnderTest.session_referrer, expectedStrings["sref"],
+                       "The sref set via setSessionInfo should be stored properly")
+        XCTAssertEqual(eventUnderTest.session_url, expectedStrings["surl"],
+                       "The surl set via setSessionInfo should be stored properly")
+    }
     func testSetSessionInfo() { XCTAssert(false, "not implemented") }
 }
