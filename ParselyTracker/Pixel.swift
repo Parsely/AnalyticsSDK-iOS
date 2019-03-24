@@ -32,6 +32,5 @@ class Pixel {
         let visitorInfo = parselyTracker.visitorManager.getVisitorInfo(shouldExtendExisting: true)
         event.setVisitorInfo(visitorInfo: visitorInfo as Dictionary<String, Any>)
         parselyTracker.eventQueue.push(event)
-
     }
 }
