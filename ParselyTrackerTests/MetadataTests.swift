@@ -17,12 +17,53 @@ class MetadataTests: ParselyTestCase {
     }
     
     func testToDictFields() {
+        let expected: Dictionary<String, Any> = [
+            "canonical_url": "http://parsely-test.com",
+            "pub_date": Date(),
+            "title": "a title.",
+            "authors": ["Yogi Berra"],
+            "image_url": "http://parsely-test.com/image2",
+            "section": "Things my mother says",
+            "tags": ["tag1", "tag2"],
+            "duration": TimeInterval(100)
+        ]
         let metas = ParselyMetadata(
-            canonical_url: "http://parsely-test.com", pub_date: Date.init(), title: "a title.", authors: ["Yogi Berra"], image_url: "http://parsely-test.com/image2", section: "Things my mother says", tags: ["tag1", "tag2"], duration: TimeInterval(100)
+            canonical_url: expected["canonical_url"] as? String,
+            pub_date: expected["pub_date"] as? Date,
+            title: expected["title"] as? String,
+            authors: expected["authors"] as? Array<String>,
+            image_url: expected["image_url"] as? String,
+            section: expected["section"] as? String,
+            tags: expected["tags"] as? Array<String>,
+            duration: expected["duration"] as? TimeInterval
         )
-        XCTAssertFalse(metas.toDict().isEmpty, "Creating a ParselyMetadataobject with many parameters results in a " +
-            "non-empty object")
-        XCTAssert(false, "A metadata object should contain valid attributes after initialization")
+        let actual: Dictionary<String, Any> = metas.toDict()
+        XCTAssertFalse(actual.isEmpty, "Creating a ParselyMetadataobject with many parameters results in a " +
+                       "non-empty object")
+        XCTAssertEqual(actual["link"]! as! String, expected["canonical_url"]! as! String,
+                       "The link field in the result of ParselyMetadata.toDict should match the canonical_url argument " +
+                       "used at initialization")
+        XCTAssertEqual(actual["pub_date"]! as! Date, expected["pub_date"]! as! Date,
+                       "The pub_date field in the result of ParselyMetadata.toDict should match the pub_date argument " +
+                       "used at initialization")
+        XCTAssertEqual(actual["title"]! as! String, expected["title"]! as! String,
+                       "The title field in the result of ParselyMetadata.toDict should match the title argument " +
+                       "used at initialization")
+        XCTAssertEqual(actual["authors"]! as! Array<String>, expected["authors"]! as! Array<String>,
+                       "The authors field in the result of ParselyMetadata.toDict should match the authors argument " +
+                       "used at initialization")
+        XCTAssertEqual(actual["image_url"]! as! String, expected["image_url"]! as! String,
+                       "The image_url field in the result of ParselyMetadata.toDict should match the image_url argument " +
+                       "used at initialization")
+        XCTAssertEqual(actual["section"]! as! String, expected["section"]! as! String,
+                       "The section field in the result of ParselyMetadata.toDict should match the section argument " +
+                       "used at initialization")
+        XCTAssertEqual(actual["tags"]! as! Array<String>, expected["tags"]! as! Array<String>,
+                       "The tags field in the result of ParselyMetadata.toDict should match the tags argument " +
+                       "used at initialization")
+        XCTAssertEqual(actual["duration"]! as! TimeInterval, expected["duration"]! as! TimeInterval,
+                       "The duration field in the result of ParselyMetadata.toDict should match the duration argument " +
+                       "used at initialization")
     }
     
     func testMetadata() {
