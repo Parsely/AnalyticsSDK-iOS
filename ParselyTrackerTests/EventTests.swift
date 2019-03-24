@@ -143,5 +143,12 @@ class EventTests: ParselyTestCase {
         XCTAssertEqual(eventUnderTest.session_url, expectedStrings["surl"],
                        "The surl set via setSessionInfo should be stored properly")
     }
-    func testSetSessionInfo() { XCTAssert(false, "not implemented") }
+    func testSetVisitorInfo() {
+        let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
+                                   urlref: expectedStrings["urlref"], metadata: testMetadata,
+                                   extra_data: extraData, idsite: expectedStrings["idsite"]!)
+        eventUnderTest.setVisitorInfo(visitorInfo: ["id": expectedVisitorID])
+        XCTAssertEqual(eventUnderTest.parsely_site_uuid, expectedVisitorID,
+                       "The parsely_site_uuid set via setVisitorInfo should be stored properly")
+    }
 }
