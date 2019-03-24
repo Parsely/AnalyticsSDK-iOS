@@ -46,7 +46,7 @@ class ParselyTrackerTests: ParselyTestCase {
         let videoManager: VideoManager = parselyTestTracker.track.videoManager
         let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
         XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
-                       "A call to Parsely.track.videoManager.trackPlay should add an event to eventQueue")
+                       "A call to Parsely.trackPlay should add an event to eventQueue")
         XCTAssertEqual(trackedVideos.count, 1,
                        "After a call to parsely.trackPlay, there should be exactly one video being tracked")
         let testVideo: TrackedVideo = trackedVideos.values.first!
