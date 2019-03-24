@@ -42,7 +42,18 @@ class SessionTests: ParselyTestCase {
     }
     
     func testGetCorrectlyMutatesVisitor() {
-        XCTAssert(false, "not implemented")
+        let visitorManager = VisitorManager()
+        let visitorInfo = visitorManager.getVisitorInfo()
+        let initialSessionCount: Int = visitorInfo["session_count"] as! Int
+        let session = sessions.get(url: testInitialUrl, urlref: testSubsequentUrl)
+        let mutatedVisitor = visitorManager.getVisitorInfo()
+        let expectedSessionCount = initialSessionCount + 1
+        let expectedLastSessionTs: Int = session["session_ts"] as! Int
+        XCTAssertEqual(mutatedVisitor["session_count"] as! Int, expectedSessionCount,
+                       "The visitor's session_count should have been incremented after a call to SessionManager.get")
+        XCTAssertEqual(mutatedVisitor["last_session_ts"] as! Int, expectedLastSessionTs,
+                       "The visitor's last_session_ts should have been set to the session's session_ts after a call to " +
+                       "SessionManager.get")
     }
 
     func testShouldExtendExisting() {
