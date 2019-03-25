@@ -25,7 +25,6 @@
 		B2FC40BE221CC42300C70806 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FC40BD221CC42300C70806 /* Metadata.swift */; };
 		B2FC40C0221CC43200C70806 /* MetadataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FC40BF221CC43200C70806 /* MetadataTests.swift */; };
 		C26CD66D2E7BC7C6843FD36F /* Pods_ParselyDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526EF9377EAE8B4DC8CC0AA1 /* Pods_ParselyDemoTests.framework */; };
-		DD6DF0DF715E6AF4166BA1CA /* Pods_AnalyticsSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B0C6D4E730AEFB429AD06BB /* Pods_AnalyticsSDKTests.framework */; };
 		DFD7BB483E787F03E5494A20 /* Pods_ParselyTrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */; };
 		F40D9A5E20EFF74F0030525E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A5D20EFF74F0030525E /* AppDelegate.swift */; };
 		F40D9A6020EFF74F0030525E /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A5F20EFF74F0030525E /* FirstViewController.swift */; };
@@ -109,7 +108,6 @@
 		3ADAC2F93CE241A29B434DCE /* Pods-ParselyDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemoTests/Pods-ParselyDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnalyticsSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		526EF9377EAE8B4DC8CC0AA1 /* Pods_ParselyDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B0C6D4E730AEFB429AD06BB /* Pods_AnalyticsSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnalyticsSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60544B2E0BE096AC23166210 /* Pods-ParselyDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemoTests/Pods-ParselyDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		6D623D570B7F71EFD9E46D24 /* Pods-ParselyTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTracker/Pods-ParselyTracker.release.xcconfig"; sourceTree = "<group>"; };
 		8E611964813255DB16F1B8D3 /* Pods-ParselyDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -182,7 +180,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD6DF0DF715E6AF4166BA1CA /* Pods_AnalyticsSDKTests.framework in Frameworks */,
 				C26CD66D2E7BC7C6843FD36F /* Pods_ParselyDemoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -231,7 +228,6 @@
 			children = (
 				AAEDC32A2212407700769350 /* ParselyTracker.framework */,
 				510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */,
-				5B0C6D4E730AEFB429AD06BB /* Pods_AnalyticsSDKTests.framework */,
 				EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */,
 				3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */,
 				AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */,
@@ -405,7 +401,6 @@
 				F433339220F0087E004BB6F5 /* Sources */,
 				F433339320F0087E004BB6F5 /* Frameworks */,
 				F433339420F0087E004BB6F5 /* Resources */,
-				B3B18E4563793D9386615106 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -539,7 +534,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftHTTP/SwiftHTTP.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -552,7 +547,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AAF24F042465B46CC0D7A05C /* [CP] Check Pods Manifest.lock */ = {
@@ -589,28 +584,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B3B18E4563793D9386615106 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftHTTP/SwiftHTTP.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftHTTP.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DE28483D27F1BA2AA36E2A05 /* [CP] Check Pods Manifest.lock */ = {
