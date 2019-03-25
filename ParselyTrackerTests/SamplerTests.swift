@@ -69,16 +69,61 @@ class SamplerTests: ParselyTestCase {
     func testDistinctTrackedItems() {
         let sampler1 = Sampler(trackerInstance: parselyTestTracker)
         let sampler2 = Sampler(trackerInstance: parselyTestTracker)
-        sampler1.trackKey(key: "thing", contentDuration: nil, eventArgs: [:])
-        sampler2.trackKey(key: "thing", contentDuration: nil, eventArgs: [:])
-        sampler1.dropKey(key: "thing")
-        XCTAssert(sampler2.accumulators["thing"] != nil,
+        sampler1.trackKey(key: testKey, contentDuration: nil, eventArgs: [:])
+        sampler2.trackKey(key: testKey, contentDuration: nil, eventArgs: [:])
+        sampler1.dropKey(key: testKey)
+        XCTAssert(sampler2.accumulators[testKey] != nil,
                   "A Sampler instance should not be affected by dropKey calls on another Sampler instance")
     }
     
-    func testDropKey() { XCTAssert(false, "not implemented") }
-    func testGenerateEventArgs() { XCTAssert(false, "not implemented") }
-    func testSendHeartbeats() { XCTAssert(false, "not implemented") }
-    func testPause() { XCTAssert(false, "not implemented") }
-    func testResume() { XCTAssert(false, "not implemented") }
+    func testDropKey() {
+        samplerUnderTest!.trackKey(key: testKey, contentDuration: nil, eventArgs: [:])
+        samplerUnderTest!.dropKey(key: testKey)
+        XCTAssertNil(samplerUnderTest!.accumulators[testKey],
+                     "After a call to Sampler.dropKey, the accumulator for the droppesd key should not exist")
+    }
+    
+    func testGenerateEventArgs() {
+        let testUrl: String = "http://parselystuff.com"
+        let eventArgs: Dictionary<String, Any> = samplerUnderTest!.generateEventArgs(
+            url: testUrl, urlref: testUrl, metadata: testMetadata, extra_data: extraData,
+            idsite: ParselyTestCase.testApikey)
+        XCTAssertEqual(eventArgs["url"] as! String, testUrl, "The url returned in the result of Sampler.generateEventArgs " +
+                       "should match the one passed to the call")
+        XCTAssertEqual(eventArgs["urlref"] as! String, testUrl, "The urlref returned in the result of " +
+                       "Sampler.generateEventArgs should match the one passed to the call")
+        XCTAssertEqual(eventArgs["idsite"] as! String, ParselyTestCase.testApikey,
+                       "The idsite returned in the result of Sampler.generateEventArgs should match the one passed to the call")
+        let actualExtraData: Dictionary<String, Any> = eventArgs["extra_data"] as! Dictionary<String, Any>
+        for (key, value) in extraData {
+            XCTAssertEqual(actualExtraData[key]! as! String, value,
+                           "The result of Sampler.generateEventArgs should have correct values passed via extra_data")
+        }
+        let actualMetadata: ParselyMetadata = eventArgs["metadata"] as! ParselyMetadata
+        let expectedMetadata: Dictionary<String, Any> = testMetadata.toDict()
+        let result: Bool = NSDictionary(dictionary: actualMetadata.toDict()).isEqual(to: expectedMetadata)
+        XCTAssert(result, "The metadata field of the result of Sampler.generateEventArgs should be a dict representation " +
+                          "of the given metadata")
+    }
+    
+    func testPause() {
+        samplerUnderTest!.pause()
+        XCTAssertNil(samplerUnderTest!.samplerTimer,
+                     "After a call to Sampler.pause(), Sampler.samplerTimer should be nil")
+    }
+    
+    func testResume() {
+        samplerUnderTest!.pause()
+        samplerUnderTest!.resume()
+        XCTAssertNil(samplerUnderTest!.samplerTimer,
+                     "After a call to Sampler.resume() without sampling having started, Sampler.samplerTimer should be nil")
+    }
+    
+    func testResumeHasStartedSampling() {
+        samplerUnderTest!.pause()
+        samplerUnderTest!.hasStartedSampling = true
+        samplerUnderTest!.resume()
+        XCTAssertNotNil(samplerUnderTest!.samplerTimer,
+                        "After a call to Sampler.resume() without sampling having started, Sampler.samplerTimer should be nil")
+    }
 }
