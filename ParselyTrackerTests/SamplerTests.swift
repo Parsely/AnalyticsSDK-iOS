@@ -2,23 +2,39 @@ import XCTest
 @testable import ParselyTracker
 
 class SamplerTests: ParselyTestCase {
+    var samplerUnderTest: Sampler?
+    let testKey: String = "thing"
+    
+    let extraData: Dictionary<String, String> = [
+        "arbitraryParameter1": "testValue",
+        "arbitraryParameter2": "testValue2"
+    ]
+    let testMetadata: ParselyMetadata = ParselyMetadata(
+        canonical_url: "http://parsely-test.com", pub_date: Date.init(), title: "a title.", authors: ["Yogi Berra"],
+        image_url: "http://parsely-test.com/image2", section: "Things my mother says", tags: ["tag1", "tag2"],
+        duration: TimeInterval(100)
+    )
+    
+    override func setUp() {
+        super.setUp()
+        samplerUnderTest = Sampler(trackerInstance: parselyTestTracker)
+    }
+    
     func testMultipleTrackedItemsInOneSampler() {
         let itemOne: String = "itemOne"
         let itemTwo: String = "itemTwo"
-        let samplerUnderTest = Sampler(trackerInstance: parselyTestTracker)
-        samplerUnderTest.trackKey(key: itemOne, contentDuration: nil, eventArgs: [:])
-        samplerUnderTest.trackKey(key: itemTwo, contentDuration: nil, eventArgs: [:])
+        samplerUnderTest!.trackKey(key: itemOne, contentDuration: nil, eventArgs: [:])
+        samplerUnderTest!.trackKey(key: itemTwo, contentDuration: nil, eventArgs: [:])
 
-        XCTAssert(samplerUnderTest.accumulators[itemOne]!.key != samplerUnderTest.accumulators[itemTwo]!.key,
+        XCTAssert(samplerUnderTest!.accumulators[itemOne]!.key != samplerUnderTest!.accumulators[itemTwo]!.key,
                   "Sequential calls to trackKey with different keys should not clobber each other's accumulator data")
     }
 
     func testSampleFn() {
-        let samplerUnderTest = Sampler(trackerInstance: parselyTestTracker)
         let assertionTimeout:TimeInterval = TimeInterval(3)
         let acceptableDifference:TimeInterval = TimeInterval(0.2)
         
-        samplerUnderTest.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
+        samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
         
         let expectation = self.expectation(description: "Sampling")
         Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
@@ -26,19 +42,18 @@ class SamplerTests: ParselyTestCase {
         }
         waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
         
-        let accumulatedTime:TimeInterval = samplerUnderTest.accumulators["sampler-test"]!.totalTime
+        let accumulatedTime:TimeInterval = samplerUnderTest!.accumulators["sampler-test"]!.totalTime
         XCTAssert(accumulatedTime >= assertionTimeout - acceptableDifference,
                   "The sampler should accumulate time constantly after a call to trackKey")
     }
 
     func testBackoff() {
-        let samplerUnderTest = Sampler(trackerInstance: parselyTestTracker)
-        let initialInterval = samplerUnderTest.heartbeatInterval
+        let initialInterval = samplerUnderTest!.heartbeatInterval
         let expectedBackoffMultiplier = 1.25
         let expectedUpdatedInterval = initialInterval * expectedBackoffMultiplier
         let assertionTimeout:TimeInterval = initialInterval + TimeInterval(2)
         
-        samplerUnderTest.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
+        samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
         
         let expectation = self.expectation(description: "Wait for heartbeat")
         Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
@@ -46,7 +61,7 @@ class SamplerTests: ParselyTestCase {
         }
         waitForExpectations(timeout: assertionTimeout + 1, handler: nil)
         
-        let actualUpdatedInterval = samplerUnderTest.heartbeatInterval
+        let actualUpdatedInterval = samplerUnderTest!.heartbeatInterval
         XCTAssertEqual(actualUpdatedInterval, expectedUpdatedInterval,
                   "Heartbeat interval should increase by the expected amount after a single heartbeat")
     }
