@@ -28,6 +28,9 @@ class VideoManager: Sampler {
     }
     
     override func sampleFn(key: String) -> Bool {
+        if trackedVideos[key] == nil {
+            return false
+        }
         return (trackedVideos[key]?.isPlaying)!
     }
     
