@@ -117,5 +117,25 @@ class TrackTests: ParselyTestCase {
                         "After a call to Track.resume() with timers running, Track.videoManager.samplerTimer should be non-nil")
     }
     
-    func testSendHeartbeats() { XCTAssert(false, "not implemented") }
+    func testSendHeartbeats() {
+        track!.videoStart(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10), metadata: nil,
+                          extra_data: nil, idsite: ParselyTestCase.testApikey)
+        track!.startEngagement(url: testUrl, urlref: testUrl, extra_data: nil, idsite: ParselyTestCase.testApikey)
+        
+        let assertionTimeout = TimeInterval(2)
+        let acceptableDifference = TimeInterval(0.25)
+        let accumulationExpectation = self.expectation(description: "Heartbeat sending")
+        Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
+            accumulationExpectation.fulfill()
+        }
+        waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
+        
+        track!.sendHeartbeats()
+        
+        let expectedEngagedTimeEvents: Int = 1
+        let expectedVideoEvents: Int = 2
+        let expectedTotalEvents: Int = expectedEngagedTimeEvents + expectedVideoEvents
+        XCTAssertEqual(parselyTestTracker.eventQueue.length(), expectedTotalEvents,
+                       "A call to Track.sendHeartbeats should add the expected number of events to the event queue")
+    }
 }
