@@ -18,7 +18,7 @@ class SessionManager {
         visitorManager = parselyTracker.visitorManager
     }
 
-    public func get(url: String, urlref: String, shouldExtendExisting: Bool = false) -> Dictionary<String, Any?> {
+    internal func get(url: String, urlref: String, shouldExtendExisting: Bool = false) -> Dictionary<String, Any?> {
         var session = self.storage.get(key: self.sessionKey) ?? [:]
 
         if session.isEmpty {
@@ -36,12 +36,12 @@ class SessionManager {
             let _ = visitorManager.setVisitorInfo(visitorInfo: visitorInfo)
             session = storage.set(key: sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: SESSION_TIMEOUT))
         } else if shouldExtendExisting {
-            session = extendSessionExpiry()
+            session = extendExpiry()
         }
         return session
     }
     
-    public func extendSessionExpiry() -> Dictionary<String, Any> {
+    internal func extendExpiry() -> Dictionary<String, Any> {
         let expiry = Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT)
         let result = storage.extendExpiry(key: self.sessionKey, expires: expiry) ?? [:]
         return result as Dictionary<String, Any>

@@ -68,7 +68,7 @@ class SessionTests: ParselyTestCase {
     func testExtendExpiry() {
         let initialSession = sessions.get(url: testInitialUrl, urlref: "")
         let initialSessionExpiry: Date = initialSession["expires"] as! Date
-        let extendSessionExpiryResult = sessions.extendSessionExpiry()
+        let extendSessionExpiryResult = sessions.extendExpiry()
         let sessionUnderTest = sessions.get(url: testInitialUrl, urlref: "")
         XCTAssertGreaterThan(extendSessionExpiryResult["expires"] as! Date, initialSessionExpiry,
                              "A call to extendSessionExpiry after a call to SessionManager.get should extend the session's " +
