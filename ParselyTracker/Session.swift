@@ -14,15 +14,17 @@ class SessionManager {
     private let SESSION_TIMEOUT: TimeInterval = 30 * 60.0 // 30 minutes
     private let storage = Parsely.sharedStorage
     private let sessionKey = "_parsely_session_identifier"
-    private let visitorManager = Parsely.sharedInstance.visitorManager
+    private let visitorManager: VisitorManager
+    private let parselyTracker: Parsely
     // knows how to start, stop, store, and restore a session
     // - sid — session ID == session_count
     // - surl  — initial URL (postID?) of the session
     // - sref — initial referrer of the session
     // - sts — Unix timestamp (milis) of when the session was created
     // - slts — Unix timestamp (milis) of the last session the user had, 0 if this is the user’s first session
-    init() {
-        
+    init(trackerInstance: Parsely) {
+        parselyTracker = trackerInstance
+        visitorManager = parselyTracker.visitorManager
     }
 
     public func get(url: String, urlref: String, shouldExtendExisting: Bool = false) -> Dictionary<String, Any?> {

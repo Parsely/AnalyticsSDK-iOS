@@ -11,8 +11,13 @@ import SwiftHTTP
 import os.log
 
 class Pixel {
+    var sessionManager: SessionManager
+    private let parselyTracker: Parsely
     
-    lazy var sessionManager = SessionManager()
+    public init(trackerInstance: Parsely) {
+        parselyTracker = trackerInstance
+        sessionManager = SessionManager(trackerInstance: parselyTracker)
+    }
 
     func beacon(event: Event) {
         if event.idsite == "" {
@@ -24,9 +29,9 @@ class Pixel {
         let session: Dictionary<String, Any?> = sessionManager.get(url: event.url, urlref: event.urlref,
                                                               shouldExtendExisting: true)
         event.setSessionInfo(session: session)
-        let visitorInfo = Parsely.sharedInstance.visitorManager.getVisitorInfo(shouldExtendExisting: true)
+        let visitorInfo = parselyTracker.visitorManager.getVisitorInfo(shouldExtendExisting: true)
         event.setVisitorInfo(visitorInfo: visitorInfo as Dictionary<String, Any>)
-        
-        Parsely.sharedInstance.eventQueue.push(event)
+        parselyTracker.eventQueue.push(event)
+
     }
 }

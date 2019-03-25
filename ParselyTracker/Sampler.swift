@@ -39,9 +39,12 @@ class Sampler {
     var accumulators: Dictionary<String, Accumulator> = [:]
     var samplerTimer: Timer?
     var heartbeatsTimer: Timer?
+    internal let parselyTracker: Parsely
     
-    init() {
-        if let secondsBetweenHeartbeats: TimeInterval = Parsely.sharedInstance.secondsBetweenHeartbeats {
+    init(trackerInstance: Parsely) {
+        parselyTracker = trackerInstance
+        
+        if let secondsBetweenHeartbeats: TimeInterval = parselyTracker.secondsBetweenHeartbeats {
             if secondsBetweenHeartbeats >= MIN_TIME_BETWEEN_HEARTBEATS && secondsBetweenHeartbeats <= MAX_TIME_BETWEEN_HEARTBEATS {
                 baseHeartbeatInterval = secondsBetweenHeartbeats
             }

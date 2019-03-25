@@ -15,7 +15,10 @@ public class Parsely {
     public var apikey = ""
     var config: [String: Any] = [:]
     private var default_config = [String: Any]()
-    let track = Track()
+    private var _track: Track!
+    var track: Track {
+        return _track
+    }
     var lastRequest: Dictionary<String, Any?>? = [:]
     var eventQueue: EventQueue<Event> = EventQueue()
     private var configured = false
@@ -38,6 +41,7 @@ public class Parsely {
 
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
+        _track = Track(trackerInstance: self)
     }
     
     internal static func getInstance() -> Parsely {
@@ -76,10 +80,14 @@ public class Parsely {
                               urlref: String = "",
                               metadata: ParselyMetadata? = nil,
                               extraData: Dictionary<String, Any>? = nil,
-                              siteId: String = Parsely.sharedInstance.apikey)
+                              siteId: String = "")
     {
+        var _siteId = siteId
+        if (_siteId == "") {
+            _siteId = self.apikey
+        }
         os_log("Tracking PageView", log: OSLog.tracker, type: .debug)
-        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extraData, idsite: siteId)
+        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extraData, idsite: _siteId)
     }
 
     /**
@@ -95,9 +103,13 @@ public class Parsely {
     public func startEngagement(url: String,
                                 urlref: String = "",
                                 extraData: Dictionary<String, Any>? = nil,
-                                siteId: String = Parsely.sharedInstance.apikey)
+                                siteId: String = "")
     {
-        track.startEngagement(url: url, urlref: urlref, extra_data: extraData, idsite: siteId)
+        var _siteId = siteId
+        if (_siteId == "") {
+            _siteId = self.apikey
+        }
+        track.startEngagement(url: url, urlref: urlref, extra_data: extraData, idsite: _siteId)
     }
 
     /**
@@ -127,9 +139,13 @@ public class Parsely {
                           duration: TimeInterval,
                           metadata: ParselyMetadata? = nil,
                           extraData: Dictionary<String, Any>? = nil,
-                          siteId: String = Parsely.sharedInstance.apikey)
+                          siteId: String = "")
     {
-        track.videoStart(url: url, urlref: urlref, vId: videoID, duration: duration, metadata: metadata, extra_data: extraData, idsite: siteId)
+        var _siteId = siteId
+        if (_siteId == "") {
+            _siteId = self.apikey
+        }
+        track.videoStart(url: url, urlref: urlref, vId: videoID, duration: duration, metadata: metadata, extra_data: extraData, idsite: _siteId)
     }
 
     /**
@@ -211,7 +227,7 @@ public class Parsely {
         track.pause()
         
         DispatchQueue.global(qos: .userInitiated).async{
-            let _self = Parsely.sharedInstance
+            let _self = self
             _self.backgroundFlushTask = UIApplication.shared.beginBackgroundTask(expirationHandler:{
                 _self.endBackgroundFlushTask()
             })
