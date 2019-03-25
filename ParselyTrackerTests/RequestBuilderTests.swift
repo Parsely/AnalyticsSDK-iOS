@@ -64,5 +64,11 @@ class RequestBuilderTests: ParselyTestCase {
         )
     }
     
-    func testGetUserAgent() { XCTAssert(false, "not implemented") }
+    func testGetUserAgent() {
+        let result = RequestBuilder.getUserAgent()
+        let expectedSubstring = "ParselyDemo/1.0 iOS"
+        XCTAssert(result.contains(expectedSubstring),
+                       "The result of RequestBuilder.getUserAgent should accurately represent the simulator agent"
+        )
+    }
 }
