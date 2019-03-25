@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.com/Parsely/AnalyticsSDK-iOS.svg?branch=master
+:target: https://travis-ci.com/Parsely/AnalyticsSDK-iOS
+
 # Parsely Tracking on iOS
 
 This repository contains the code necessary to build and test the Parsely tracking framework for iOS. It also includes a basic sample iOS app that can be used to interactively experiment with Parsely tracking.
