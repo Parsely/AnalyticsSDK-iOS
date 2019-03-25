@@ -31,7 +31,7 @@ class VideoTests: ParselyTestCase {
     func testReset() {
         videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
                                 metadata: nil, extra_data: nil, idsite: ParselyTestCase.testApikey)
-        videoManager!.pause()
+        videoManager!.pause()  // XXX workaround for a crash caused by videoReset
         videoManager!.reset(url: testUrl, vId: testVideoId)
         XCTAssertNotNil(videoManager!.samplerTimer,
                         "videoReset should run successfully without the VideoManager instance being paused")
