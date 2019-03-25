@@ -21,7 +21,7 @@ class RequestBuilder {
     static var _baseURL: String? = nil
     static var userAgent: String? = nil
     
-    static func getHardwareString() -> String {
+    internal static func getHardwareString() -> String {
         var mib  = [CTL_HW, HW_MACHINE]
         var len: size_t = 0
         sysctl(&mib, 2, nil, &len, nil, 0)
@@ -32,7 +32,7 @@ class RequestBuilder {
         return platform
     }
 
-    static func getUserAgent() -> String {
+    internal static func getUserAgent() -> String {
         if userAgent == nil {
             var appDescriptor: String = ""
             if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
@@ -47,7 +47,7 @@ class RequestBuilder {
         return userAgent!
     }
     
-    static func buildRequest(events: Array<Event>) -> ParselyRequest? {
+    internal static func buildRequest(events: Array<Event>) -> ParselyRequest? {
         let now = Date()
         let request = ParselyRequest.init(
             url: buildPixelEndpoint(now: now),
@@ -58,7 +58,7 @@ class RequestBuilder {
         return request
     }
 
-    static func buildPixelEndpoint(now: Date?) -> String {
+    internal static func buildPixelEndpoint(now: Date?) -> String {
         let now: Date = now ?? Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd-HH"
@@ -68,13 +68,13 @@ class RequestBuilder {
         return self._baseURL!
     }
     
-    static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, Any> {
+    internal static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, Any> {
         // return headers as a Dictionary
         let userAgent: String = getUserAgent()
         return ["User-Agent": userAgent]
     }
 
-    static func buildParamsDict(events: Array<Event>) -> Dictionary<String, Any> {
+    internal static func buildParamsDict(events: Array<Event>) -> Dictionary<String, Any> {
         // return a Dictionary with one key, 'events', to pass to the client
         var eventDicts: Array<Dictionary<String, Any>> = Array<Dictionary<String, Any>>.init()
         for event in events {
