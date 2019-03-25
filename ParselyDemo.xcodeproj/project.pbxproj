@@ -14,6 +14,7 @@
 		2A1F0DF37B68B0886A0E6848 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		57E211E09EB0BEF46691064D /* Pods_ParselyDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */; };
 		AA73AAAF2242C1F10089BF1D /* ParselyTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */; };
+		AA7473DE224956A000C75436 /* ParselyAnalytics.podspec in Resources */ = {isa = PBXBuildFile; fileRef = AA7473DD224956A000C75436 /* ParselyAnalytics.podspec */; };
 		AAEDC3272212161F00769350 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEDC3262212161F00769350 /* HttpClient.swift */; };
 		AAEDC32922123DD300769350 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = AAEDC32822123DD300769350 /* README.md */; };
 		AAF629792216382800F59789 /* ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAEDC32A2212407700769350 /* ParselyTracker.framework */; };
@@ -116,6 +117,7 @@
 		9CD753A4903488F9E572497D /* Pods-AnalyticsSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDKTests/Pods-AnalyticsSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A07DD8B365F9DFAC828E58C2 /* Pods-ParselyTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParselyTestCase.swift; sourceTree = "<group>"; };
+		AA7473DD224956A000C75436 /* ParselyAnalytics.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ParselyAnalytics.podspec; sourceTree = "<group>"; };
 		AAEDC3262212161F00769350 /* HttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
 		AAEDC32822123DD300769350 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AAEDC32A2212407700769350 /* ParselyTracker.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParselyTracker.framework; path = ../../../Downloads/ParselyTracker.framework; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 		F40D9A5120EFF74F0030525E = {
 			isa = PBXGroup;
 			children = (
+				AA7473DD224956A000C75436 /* ParselyAnalytics.podspec */,
 				AAEDC32822123DD300769350 /* README.md */,
 				F494BFB520FFDD5900025A4C /* Podfile */,
 				F40D9A5C20EFF74F0030525E /* ParselyDemo */,
@@ -495,6 +498,7 @@
 				F40D9A6720EFF74F0030525E /* Assets.xcassets in Resources */,
 				F494BFB620FFDD5900025A4C /* Podfile in Resources */,
 				F40D9A6520EFF74F0030525E /* Main.storyboard in Resources */,
+				AA7473DE224956A000C75436 /* ParselyAnalytics.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
