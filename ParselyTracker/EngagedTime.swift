@@ -1,18 +1,10 @@
-//
-//  engaged_time.swift
-//  AnalyticsSDK
-//
-//  Created by Chris Wisecarver on 5/17/18.
-//  Copyright © 2018 Parse.ly. All rights reserved.
-//
-
 import Foundation
 import os.log
 
 class EngagedTime: Sampler {
     override func sampleFn(key : String) -> Bool {
         let trackedData: Accumulator = accumulators[key]!
-        return trackedData.isEngaged // TODO: consider video playing
+        return trackedData.isEngaged
     }
     
     override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) {

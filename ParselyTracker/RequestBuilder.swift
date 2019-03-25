@@ -1,11 +1,3 @@
-//
-//  RequestBuilder.swift
-//  ParselyTracker
-//
-//  Created by Ashley Drake on 2/7/19.
-//  Copyright © 2019 Parse.ly. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import os.log
@@ -69,13 +61,11 @@ class RequestBuilder {
     }
     
     internal static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, Any> {
-        // return headers as a Dictionary
         let userAgent: String = getUserAgent()
         return ["User-Agent": userAgent]
     }
 
     internal static func buildParamsDict(events: Array<Event>) -> Dictionary<String, Any> {
-        // return a Dictionary with one key, 'events', to pass to the client
         var eventDicts: Array<Dictionary<String, Any>> = Array<Dictionary<String, Any>>.init()
         for event in events {
             eventDicts.append(event.toDict())
@@ -84,7 +74,6 @@ class RequestBuilder {
     }
 
     static private func getDeviceInfo() -> Dictionary<String, Any> {
-        // will be used in getUserAgent()
         var deviceInfo: [String: Any] = [:]
         let mainBundle = Bundle.main
         if let bundleName = mainBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") {

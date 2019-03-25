@@ -1,15 +1,6 @@
-//
-//  event.swift
-//  AnalyticsSDK
-//
-//  Created by Chris Wisecarver on 5/17/18.
-//  Copyright © 2018 Parse.ly. All rights reserved.
-//
-
 import Foundation
 
 class Event {
-    // underlying object behind pageview, heartbeat, videostart, vheartbeat, custom events
     var action: String
     var url: String
     var urlref: String
@@ -37,7 +28,6 @@ class Event {
          session_referrer: String? = nil,
          last_session_timestamp: Int? = nil
     ) {
-        // set instance properties
         self.action = action
         self.url = url
         self.urlref = urlref ?? ""
@@ -74,24 +64,24 @@ class Event {
             "action": self.action,
             "idsite": self.idsite,
         ]
-        // add a timestamp
+        
         data = extra_data ?? [:]
         data["ts"] = self.rand
-        // add visitor information if needed
+        
         if parsely_site_uuid != nil {
             data["parsely_site_uuid"] = parsely_site_uuid!
         }
-        // merge with extra_data
+        
         params["data"] = data
 
-        // add metadata at top level if present
+        
         if let metas = self.metadata {
             let metasDict = metas.toDict()
             if !metasDict.isEmpty {
                 params["metadata"] = metasDict
             }
         }
-        // session could be a struct, easier to check presence/absence
+        
         if self.session_id != nil {
             params["sid"] = self.session_id
             params["sts"] = self.session_timestamp

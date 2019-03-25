@@ -1,14 +1,5 @@
-//
-//  Metadata.swift
-//  ParselyTracker
-//
-//  Created by Ashley Drake on 2/19/19.
-//  Copyright © 2019 Parse.ly. All rights reserved.
-//
-
 import Foundation
 
-/// A class to manage and re-use metadata. Metadata contained in an instance of this class will conform to Parsely's schema. See logs for any failures.
 public class ParselyMetadata {
     var canonical_url: String?
     var pub_date: Date?
@@ -18,14 +9,10 @@ public class ParselyMetadata {
     var section: String?
     var tags: Array<String>?
     var duration: TimeInterval?
-    // not implemented:
-    // network_canonical
-    // network_id
-    // share_urls
     
     /**
      A class to manage and re-use metadata. Metadata contained in an instance of this
-     class will conform to Parsely's schema. See logs for any failures.
+     class will conform to Parsely's schema.
      
      - Parameter canonical_url: A post's canonical url. For videos, it is overridden with the vId and thus can be omitted.
      - Parameter pub_date: Date this piece of content was published.
@@ -44,7 +31,6 @@ public class ParselyMetadata {
          section: String? = nil,
          tags: Array<String>? = nil,
          duration: TimeInterval? = nil) {
-        // TODO: validation
         self.canonical_url = canonical_url
         self.pub_date = pub_date
         self.title = title
@@ -56,9 +42,8 @@ public class ParselyMetadata {
     }
     
     func toDict() -> Dictionary<String, Any> {
-        // Used within Event.toDict()
         var metas: Dictionary<String, Any> = [:]
-        // build metadata dictionary conditionally
+        
         if canonical_url != nil {
             metas["link"] = canonical_url!
         }
@@ -78,11 +63,9 @@ public class ParselyMetadata {
             metas["section"] = section!
         }
         if tags != nil {
-            // todo: Truncate to 20
             metas["tags"] = tags!
         }
         if duration != nil {
-            // todo: should convert to an int?
             metas["duration"] = duration!
         }
         

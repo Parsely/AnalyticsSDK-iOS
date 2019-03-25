@@ -1,8 +1,3 @@
-//
-// Created by Chris Wisecarver on 7/31/18.
-// Copyright (c) 2018 Parse.ly. All rights reserved.
-//
-
 import Foundation
 
 extension Date {

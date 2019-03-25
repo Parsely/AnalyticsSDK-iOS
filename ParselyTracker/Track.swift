@@ -1,18 +1,7 @@
-//
-//  Track.swift
-//  ParselyTracker
-//
-//  Created by Ashley Drake on 2/4/19.
-//  Copyright © 2019 Parse.ly. All rights reserved.
-//
-
 import Foundation
 import os.log
 
 class Track {
-    // handles "back of house" work to turn Events into pixels
-    // and enqueue them to be sent
-
     let pixel: Pixel
     let videoManager: VideoManager
     let engagedTime: EngagedTime
@@ -31,7 +20,7 @@ class Track {
             return
         }
         parselyTracker.startFlushTimer();
-        // generic helper function, sends the event as-is
+        
         self.pixel.beacon(event: event)
         os_log("Sending an event from Track", log: OSLog.tracker, type:.debug)
         dump(event.toDict())

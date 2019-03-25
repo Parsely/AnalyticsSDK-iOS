@@ -1,11 +1,3 @@
-//
-//  Sampler.swift
-//  AnalyticsSDK
-//
-//  Created by Chris Wisecarver on 5/17/18.
-//  Copyright © 2018 Parse.ly. All rights reserved.
-//
-
 import Foundation
 import os.log
 
@@ -33,7 +25,7 @@ extension TimeInterval {
 }
 
 class Sampler {
-    var baseHeartbeatInterval = TimeInterval(floatLiteral: 10.5) // default 10.5s
+    var baseHeartbeatInterval = TimeInterval(floatLiteral: 10.5)
     var heartbeatInterval: TimeInterval
     var hasStartedSampling: Bool = false
     var accumulators: Dictionary<String, Accumulator> = [:]
@@ -52,16 +44,13 @@ class Sampler {
         heartbeatInterval = baseHeartbeatInterval
     }
 
-    // Child classes should override each stub:
+    // Child classes should override these
     // heartbeatFn is called every time an Accumulator is eligible to send a heartbeat.
-    // Typical actions: send an event
     func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void { }
     // sampleFn is called to determine if an Accumulator is eligible to be sampled.
     // if true, the sample() loop will accumulate time for that item.
-    // e.g. "isPlaying" or "isEngaged" -> true/false
     func sampleFn(key: String) -> Bool { return true }
 
-    // Register a piece of content to be tracked.
     public func trackKey(key: String,
                          contentDuration: TimeInterval?,
                          eventArgs: Dictionary<String, Any>?,
@@ -102,7 +91,6 @@ class Sampler {
         self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: self.heartbeatInterval, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
     }
 
-    // Stop tracking this item altogether.
     public func dropKey(key: String) -> Void {
         os_log("Dropping Sampler key: %s", log: OSLog.tracker, type:.debug, key)
         sendHeartbeat(key: key)
@@ -110,7 +98,6 @@ class Sampler {
     }
 
     public func generateEventArgs(url: String, urlref: String, metadata: ParselyMetadata? = nil, extra_data: Dictionary<String, Any>?, idsite: String) -> Dictionary<String, Any> {
-        // eventArgs: url, urlref, metadata for heartbeats
         var eventArgs: [String: Any] = ["urlref": urlref, "url": url, "idsite": idsite]
         if (metadata != nil) {
             eventArgs["metadata"] = metadata!
@@ -121,8 +108,6 @@ class Sampler {
         return eventArgs
     }
 
-    // Sampler loop. Started on first trackKey call. Adds accumulated time to each
-    // Accumulator that is eligible.
     @objc private func sample() -> Void {
         let currentTime = Date()
         var shouldCountSample: Bool, increment: TimeInterval
@@ -130,7 +115,6 @@ class Sampler {
         for var (_, trackedData) in accumulators {
             shouldCountSample = sampleFn(key: trackedData.key)
             if shouldCountSample {
-                // update relevant accumulator
                 increment = currentTime.timeIntervalSince(trackedData.lastSampleTime!)
                 trackedData.accumulatedTime += increment
                 trackedData.totalTime += increment
@@ -154,8 +138,7 @@ class Sampler {
         self.heartbeatInterval = trackedData.heartbeatTimeout!
     }
 
-    @objc internal func sendHeartbeats() -> Void { // this is some bullshit. obj-c can't represent an optional so this needs to change to something else.
-        // maybe just wrap it in a dictionary and set it to nil if the key isn't there.
+    @objc internal func sendHeartbeats() -> Void {
         os_log("called send heartbeats", log: OSLog.tracker, type: .debug)
         for (key, _) in accumulators {
             sendHeartbeat(key: key)
@@ -165,9 +148,7 @@ class Sampler {
         }
     }
 
-    // copies of accumulators passed into methods do not update the shared accumulator[id] copy
     private func updateAccumulator(acc: Accumulator) -> Void {
-        // gross, dude
         accumulators[acc.key] = acc
     }
     
@@ -185,10 +166,8 @@ class Sampler {
     
     internal func resume() {
         os_log("Resumed from Sampler", log:OSLog.tracker, type:.debug)
-        // don't restart unless previously paused
         if hasStartedSampling {
             restartTimers()
         }
     }
-    
 }

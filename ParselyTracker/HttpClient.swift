@@ -1,11 +1,3 @@
-//
-//  HttpClient.swift
-//  ParselyTracker
-//
-//  Created by Emmett Butler on 2/11/19.
-//  Copyright © 2019 Parse.ly. All rights reserved.
-//
-
 import Foundation
 import os.log
 

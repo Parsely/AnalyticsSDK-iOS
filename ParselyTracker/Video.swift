@@ -1,11 +1,3 @@
-//
-//  video.swift
-//  AnalyticsSDK
-//
-//  Created by Chris Wisecarver on 5/17/18.
-//  Copyright © 2018 Parse.ly. All rights reserved.
-//
-
 import Foundation
 import os.log
 
@@ -36,7 +28,7 @@ class VideoManager: Sampler {
         }
         let roundedSecs: Int = Int(data.accumulatedTime)
         let totalMs: Int = Int(data.totalTime.milliseconds())
-        // get metadata for this video, too
+
         var curVideo = trackedVideos[data.key]!
         let event = Heartbeat(
             "vheartbeat",
@@ -93,18 +85,17 @@ class VideoManager: Sampler {
     private func updateVideoData(vId: String, url: String, duration: TimeInterval, eventArgs: Dictionary<String, Any>?) -> TrackedVideo {
         var _eventArgs: [String: Any] = eventArgs ?? [String: Any]()
         let metadata = _eventArgs["metadata"] as? ParselyMetadata
-        // Override a few values where necessary
+
         if (metadata != nil) {
             metadata!.canonical_url = vId
             metadata!.duration = duration
         }
         _eventArgs["metadata"] = metadata
         let key: String = createVideoTrackingKey(vId: vId, url: url)
-        // is this video key already tracked?
+
         if (trackedVideos[key] != nil) {
             trackedVideos[key]!.eventArgs = _eventArgs
         } else {
-            // register video metas
             trackedVideos[key] = TrackedVideo.init(
                 key: key,
                 vId: vId,
@@ -113,7 +104,7 @@ class VideoManager: Sampler {
                 hasStartedPlaying: false,
                 eventArgs: _eventArgs,
                 _heartbeatsSent: 0)
-            // register with sampler, using same composite key as the videos metas
+            
             trackKey(key: key, contentDuration: duration, eventArgs:_eventArgs)
         }
 
@@ -124,7 +115,6 @@ class VideoManager: Sampler {
         return url + "::" + vId
     }
 
-    // todo: this isn't called anywhere
     func reset(key: String) -> Void {
         if var curVideo = trackedVideos[key] {
             curVideo.hasStartedPlaying = false
@@ -132,5 +122,4 @@ class VideoManager: Sampler {
             dropKey(key: key)
         }
     }
-    
 }
