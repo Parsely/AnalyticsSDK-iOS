@@ -42,11 +42,80 @@ class TrackTests: ParselyTestCase {
                   "After a call to Track.videoStart, the tracked video should have its isPlaying flag set")
     }
     
-    func testVideoPause() { XCTAssert(false, "not implemented") }
-    func testVideoReset() { XCTAssert(false, "not implemented") }
-    func testStartEngagement() { XCTAssert(false, "not implemented") }
-    func testStopEngagement() { XCTAssert(false, "not implemented") }
-    func testPause() { XCTAssert(false, "not implemented") }
-    func testResume() { XCTAssert(false, "not implemented") }
+    func testVideoPause() {
+        track!.videoStart(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10), metadata: nil,
+                          extra_data: nil, idsite: ParselyTestCase.testApikey)
+        track!.videoPause()
+        let videoManager: VideoManager = track!.videoManager
+        let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
+        XCTAssertEqual(trackedVideos.count, 1,
+                       "After a call to Track.videoStart followed by a call to track.videoPause, there should be " +
+                       "exactly one video being tracked")
+        let testVideo: TrackedVideo = trackedVideos.values.first!
+        XCTAssertFalse(testVideo.isPlaying,
+                       "After a call to Track.videoStart, the tracked video should have its isPlaying flag unset")
+    }
+    
+    func testVideoReset() {
+        track!.videoStart(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10), metadata: nil,
+                          extra_data: nil, idsite: ParselyTestCase.testApikey)
+        track!.pause()  // XXX workaround for a crash caused by videoReset
+        track!.videoReset(url: testUrl, vId: testVideoId)
+        XCTAssertNotNil(track!.videoManager.samplerTimer,
+                        "videoReset should run successfully without the Track instance being paused")
+        let videoManager: VideoManager = track!.videoManager
+        let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
+        XCTAssertEqual(trackedVideos.count, 0,
+                       "A call to Parsely.resetVideo should remove an tracked video from the video manager")
+    }
+    
+    func testStartEngagement() {
+        track!.startEngagement(url: testUrl, urlref: testUrl, extra_data: nil, idsite: ParselyTestCase.testApikey)
+        let internalAccumulators:Dictionary<String, Accumulator> = track!.engagedTime.accumulators
+        let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
+        XCTAssert(testUrlAccumulator.isEngaged,
+                  "After a call to Track.startEngagement, the internal accumulator for the engaged url should exist " +
+                  "and its isEngaged flag should be set")
+    }
+    
+    func testStopEngagement() {
+        track!.startEngagement(url: testUrl, urlref: testUrl, extra_data: nil, idsite: ParselyTestCase.testApikey)
+        track!.stopEngagement()
+        let internalAccumulators:Dictionary<String, Accumulator> = track!.engagedTime.accumulators
+        let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
+        XCTAssertFalse(testUrlAccumulator.isEngaged,
+                       "After a call to Track.startEngagement followed by a call to Track.stopEngagement, the internal " +
+                       "accumulator for the engaged url should exist and its isEngaged flag should be unset")
+    }
+    
+    func testPause() {
+        track!.pause()
+        XCTAssertNil(track!.engagedTime.samplerTimer,
+                     "After a call to Track.pause(), Track.engagedTime.samplerTimer should be nil")
+        XCTAssertNil(track!.videoManager.samplerTimer,
+                     "After a call to Track.pause(), Track.videoManager.samplerTimer should be nil")
+    }
+    
+    func testResumeNoTrack() {
+        track!.pause()
+        track!.resume()
+        XCTAssertNil(track!.engagedTime.samplerTimer,
+                     "After a call to Track.resume() without timers running, Track.engagedTime.samplerTimer should be nil")
+        XCTAssertNil(track!.videoManager.samplerTimer,
+                     "After a call to Track.resume() without timers running, Track.videoManager.samplerTimer should be nil")
+    }
+    
+    func testResume() {
+        track!.videoStart(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10), metadata: nil,
+                          extra_data: nil, idsite: ParselyTestCase.testApikey)
+        track!.startEngagement(url: testUrl, urlref: testUrl, extra_data: nil, idsite: ParselyTestCase.testApikey)
+        track!.pause()
+        track!.resume()
+        XCTAssertNotNil(track!.engagedTime.samplerTimer,
+                        "After a call to Track.resume() with timers running, Track.engagedTime.samplerTimer should be non-nil")
+        XCTAssertNotNil(track!.videoManager.samplerTimer,
+                        "After a call to Track.resume() with timers running, Track.videoManager.samplerTimer should be non-nil")
+    }
+    
     func testSendHeartbeats() { XCTAssert(false, "not implemented") }
 }
