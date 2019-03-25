@@ -54,15 +54,34 @@ class VideoTests: ParselyTestCase {
         let secondTestMetadata: ParselyMetadata = ParselyMetadata(canonical_url: testUrl, pub_date: Date(), title: "test",
                                                                   authors: nil, image_url: nil, section: testSectionSecond,
                                                                   tags: nil, duration: nil)
-        videoManager.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
-                               metadata: secondTestMetadata, extra_data: nil, idsite: ParselyTestCase.testApikey)
-        let secondTestTrackedVideo: TrackedVideo = videoManager.trackedVideos.values.first!
+        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
+                                metadata: secondTestMetadata, extra_data: nil, idsite: ParselyTestCase.testApikey)
+        let secondTestTrackedVideo: TrackedVideo = videoManager!.trackedVideos.values.first!
         let secondActualMetadata: ParselyMetadata = secondTestTrackedVideo.eventArgs["metadata"]! as! ParselyMetadata
         XCTAssertEqual(secondActualMetadata.section, testSectionSecond,
                        "The section metadata stored for a preexisting video after a call to parsely.track.videoManager.trackPlay " +
                        "should match the section metadata passed to that call.")
     }
     
-    func testSampleFn() { XCTAssert(false, "not implemented") }
+    func testSampleFn() {
+        let testVideoKey: String = testUrl + "::" + testVideoId
+        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
+                                metadata: nil, extra_data: nil, idsite: ParselyTestCase.testApikey)
+        let sampleResult: Bool = videoManager!.sampleFn(key: testVideoKey)
+        XCTAssert(sampleResult,
+                  "After a call to VideoManager.trackPlay, VideoManager.sample should return true for the viewing key")
+    }
+    
+    func testSampleFnPaused() {
+        let testVideoKey: String = testUrl + "::" + testVideoId
+        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
+                                metadata: nil, extra_data: nil, idsite: ParselyTestCase.testApikey)
+        videoManager!.trackPause()
+        let sampleResult: Bool = videoManager!.sampleFn(key: testVideoKey)
+        XCTAssertFalse(sampleResult,
+                       "After a call to VideoManager.trackPlay followed by a call to VideoManager.trackPause, " +
+                       "VideoManager.sample should return false for the viewing key")
+    }
+    
     func testHeartbeatFn() { XCTAssert(false, "not implemented") }
 }
