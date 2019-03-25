@@ -114,12 +114,4 @@ class VideoManager: Sampler {
     private func createVideoTrackingKey(vId: String, url: String) -> String {
         return url + "::" + vId
     }
-
-    func reset(key: String) -> Void {
-        if var curVideo = trackedVideos[key] {
-            curVideo.hasStartedPlaying = false
-            curVideo.isPlaying = false
-            dropKey(key: key)
-        }
-    }
 }
