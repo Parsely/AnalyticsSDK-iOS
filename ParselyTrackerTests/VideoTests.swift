@@ -83,5 +83,18 @@ class VideoTests: ParselyTestCase {
                        "VideoManager.sample should return false for the viewing key")
     }
     
-    func testHeartbeatFn() { XCTAssert(false, "not implemented") }
+    func testHeartbeatFn() {
+        let testVideoKey: String = testUrl + "::" + testVideoId
+        let dummyEventArgs: Dictionary<String, Any> = videoManager!.generateEventArgs(
+            url: testUrl, urlref: "", extra_data: nil, idsite: ParselyTestCase.testApikey)
+        let dummyAccumulator: Accumulator = Accumulator(key: testVideoKey, accumulatedTime: 0, totalTime: 0,
+                                                        lastSampleTime: Date(), lastPositiveSampleTime: Date(),
+                                                        heartbeatTimeout: 0, contentDuration: 0, isEngaged: false,
+                                                        eventArgs: dummyEventArgs)
+        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
+                                metadata: nil, extra_data: nil, idsite: ParselyTestCase.testApikey)
+        videoManager!.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
+        XCTAssertEqual(parselyTestTracker.eventQueue.length(), 2,
+                       "A call to VideoManager should add two events to eventQueue")
+    }
 }
