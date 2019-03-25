@@ -112,11 +112,9 @@ class EventTests: ParselyTestCase {
         let idKeyExists: Bool = actualExtraData["parsely_site_uuid"] != nil
         XCTAssert(idKeyExists, "After a call to Event.setVisitorInfo that " +
                   "passes a visitor dictionary, the parsely_site_uuid key should exist in the extra_data dictionary.")
-        if (idKeyExists) {
-            XCTAssertEqual(actualExtraData["parsely_site_uuid"] as! String, expectedVisitorID,
-                           "A visitor ID provided via Event.setVisitorInfo should be accessible in the result of " +
-                           "Event.toDict as data[\"parsely_site_uuid\"]")
-        }
+        XCTAssertEqual(actualExtraData["parsely_site_uuid"] as! String, expectedVisitorID,
+                       "A visitor ID provided via Event.setVisitorInfo should be accessible in the result of " +
+                       "Event.toDict as data[\"parsely_site_uuid\"]")
         XCTAssert((actualExtraData["ts"] as! Int) > timestampInThePast,
                   "The data.ts field of the result of Event.toDict should be a non-ancient timestamp")
     }
@@ -149,7 +147,7 @@ class EventTests: ParselyTestCase {
                                    urlref: expectedStrings["urlref"], metadata: testMetadata,
                                    extra_data: extraData, idsite: expectedStrings["idsite"]!)
         eventUnderTest.setVisitorInfo(visitorInfo: ["id": expectedVisitorID])
-        XCTAssertEqual(eventUnderTest.parsley_site_uuid, expectedVisitorID,
+        XCTAssertEqual(eventUnderTest.parsely_site_uuid, expectedVisitorID,
                        "The parsely_site_uuid set via setVisitorInfo should be stored properly")
     }
 }
