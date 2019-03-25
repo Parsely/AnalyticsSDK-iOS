@@ -2,37 +2,63 @@ import XCTest
 @testable import ParselyTracker
 
 class EngagedTimeTests: ParselyTestCase {
+    var engagedTime: EngagedTime?
     let testUrl: String = "http://parsely-stuff.com"
     
+    override func setUp() {
+        super.setUp()
+        engagedTime = EngagedTime(trackerInstance: parselyTestTracker)
+    }
+    
     func testHeartbeatFn() {
-        let dummyEventArgs: Dictionary<String, Any> = parselyTestTracker.track.engagedTime.generateEventArgs(
-            url: testUrl, urlref: "", extra_data: nil, idsite: testApikey)
+        let dummyEventArgs: Dictionary<String, Any> = engagedTime!.generateEventArgs(
+            url: testUrl, urlref: "", extra_data: nil, idsite: ParselyTestCase.testApikey)
         let dummyAccumulator: Accumulator = Accumulator(key: "", accumulatedTime: 0, totalTime: 0,
                                                         lastSampleTime: Date(), lastPositiveSampleTime: Date(),
                                                         heartbeatTimeout: 0, contentDuration: 0, isEngaged: false,
                                                         eventArgs: dummyEventArgs)
-        parselyTestTracker.track.engagedTime.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
+        engagedTime!.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
         XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
-                       "A call to Parsely.track.engagedTime.heartbeatFn should add an event to eventQueue")
+                       "A call to EngagedTime.heartbeatFn should add an event to eventQueue")
     }
     
     func testStartInteraction() {
-        parselyTestTracker.track.engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil, idsite: testApikey)
-        let internalAccumulators:Dictionary<String, Accumulator> = parselyTestTracker.track.engagedTime.accumulators
+        engagedTime!.startInteraction(url: testUrl, urlref: "", extra_data: nil,
+                                      idsite: ParselyTestCase.testApikey)
+        let internalAccumulators:Dictionary<String, Accumulator> = engagedTime!.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssert(testUrlAccumulator.isEngaged,
-                  "After a call to Parsely.track.engagedTime.startInteraction, the internal accumulator for the engaged " +
+                  "After a call to EngagedTime.startInteraction, the internal accumulator for the engaged " +
                   "url should exist and its isEngaged flag should be set")
     }
     
     func testEndInteraction() {
-        parselyTestTracker.track.engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil, idsite: testApikey)
-        parselyTestTracker.track.engagedTime.endInteraction()
-        let internalAccumulators:Dictionary<String, Accumulator> = parselyTestTracker.track.engagedTime.accumulators
+        engagedTime!.startInteraction(url: testUrl, urlref: "", extra_data: nil,
+                                      idsite: ParselyTestCase.testApikey)
+        engagedTime!.endInteraction()
+        let internalAccumulators:Dictionary<String, Accumulator> = engagedTime!.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssertFalse(testUrlAccumulator.isEngaged,
-                       "After a call to Parsely.track.engagedTime.startInteraction followed by a call to " +
-                       "Parsely.track.engagedTime.stopInteraction, the internal accumulator for the engaged " +
+                       "After a call to EngagedTime.startInteraction followed by a call to " +
+                       "EngagedTime.stopInteraction, the internal accumulator for the engaged " +
                        "url should exist and its isEngaged flag should be unset")
+    }
+    
+    func testSampleFn() {
+        engagedTime!.startInteraction(url: testUrl, urlref: "", extra_data: nil,
+                                      idsite: ParselyTestCase.testApikey)
+        let sampleResult: Bool = engagedTime!.sampleFn(key: testUrl)
+        XCTAssert(sampleResult,
+                  "After a call to EngagedTime.startInteraction, EngagedTime.sample should return true for the interacting key")
+    }
+    
+    func testSampleFnPaused() {
+        engagedTime!.startInteraction(url: testUrl, urlref: "", extra_data: nil,
+                                      idsite: ParselyTestCase.testApikey)
+        engagedTime!.endInteraction()
+        let sampleResult: Bool = engagedTime!.sampleFn(key: testUrl)
+        XCTAssertFalse(sampleResult,
+                       "After a call to EngagedTime.startInteraction followed by a call to " +
+                       "EngagedTime.stopInteraction, EngagedTime.sample should return false for the interacting key")
     }
 }

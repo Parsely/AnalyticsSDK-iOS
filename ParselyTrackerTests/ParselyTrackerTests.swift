@@ -7,11 +7,11 @@ class ParselyTrackerTests: ParselyTestCase {
     
     override func setUp() {
         super.setUp()
-        parselyTestTracker.configure(siteId: testApikey)
+        parselyTestTracker.configure(siteId: ParselyTestCase.testApikey)
     }
     
     func testConfigure() {
-        XCTAssertEqual(parselyTestTracker.apikey, testApikey,
+        XCTAssertEqual(parselyTestTracker.apikey, ParselyTestCase.testApikey,
                        "After a call to Parsely.configure, Parsely.apikey should be the value used in the call's " +
                        "siteId argument")
     }
@@ -45,6 +45,8 @@ class ParselyTrackerTests: ParselyTestCase {
         parselyTestTracker.trackPlay(url: testUrl, videoID: testVideoId, duration: TimeInterval(10))
         let videoManager: VideoManager = parselyTestTracker.track.videoManager
         let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
+        XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
+                       "A call to Parsely.trackPlay should add an event to eventQueue")
         XCTAssertEqual(trackedVideos.count, 1,
                        "After a call to parsely.trackPlay, there should be exactly one video being tracked")
         let testVideo: TrackedVideo = trackedVideos.values.first!
@@ -61,6 +63,14 @@ class ParselyTrackerTests: ParselyTestCase {
                        "exactly one video being tracked")
         let testVideo: TrackedVideo = trackedVideos.values.first!
         XCTAssertFalse(testVideo.isPlaying,
-                  "After a call to Parsely.trackPlay, the tracked video should have its isPlaying flag unset")
+                       "After a call to Parsely.trackPlay, the tracked video should have its isPlaying flag unset")
+    }
+    func testResetVideo() {
+        parselyTestTracker.trackPlay(url: testUrl, videoID: testVideoId, duration: TimeInterval(10))
+        parselyTestTracker.resetVideo(url: testUrl, videoID: testVideoId)
+        let videoManager: VideoManager = parselyTestTracker.track.videoManager
+        let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
+        XCTAssertEqual(trackedVideos.count, 0,
+                       "A call to Parsely.resetVideo should remove an tracked video from the video manager")
     }
 }
