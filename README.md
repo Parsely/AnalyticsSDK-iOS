@@ -9,19 +9,6 @@ This repository contains the code necessary to build and test the Parsely tracki
     $ sudo gem install cocoapods
     $ pod install
 
-## Building the framework
-
-The iOS tracker SDK is distributed as a `.framework` file. How to build this file:
-
-* Open this repository's toplevel `xcworkspace` file in XCode.
-* Click the scheme indicator, directly right of the "stop" button in the upper left corner
-* Select the `ParselyTracker` scheme and the "Generic iOS Device" target
-* Click the play button to build the framework
-* Click the XCode menu, then Preferences, then Locations
-* Note the path labeled "Derived Data", navigate to this path in Finder
-* Find the directory whose name includes `ParselyDemo`, navigate to `Build/Products/Debug-iphoneos` therein
-* Find the `ParselyTracker.framework` file
-
 ## Including the framework in a project
 
 * Click the toplevel XCode project file for your project in the Project Navigator
@@ -35,6 +22,8 @@ pod 'ReachabilitySwift', '~> 4.3.0'
 ```
 
 ## Using the tracker
+
+In any file that uses Parsely Analytics functionality, include `import ParselyTracker`
 
 At app startup, initialize the `Parsely` singleton. A good place to do this might be the top-level application delegate:
 ```

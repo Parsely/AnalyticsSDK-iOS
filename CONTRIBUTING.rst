@@ -1,6 +1,20 @@
 Contribution Guide
 ==================
 
+Building the framework
+----------------------
+
+The iOS tracker SDK is distributed as a `.framework` file. How to build this file:
+
+* Open this repository's toplevel `xcworkspace` file in XCode.
+* Click the scheme indicator, directly right of the "stop" button in the upper left corner
+* Select the `ParselyTracker` scheme and the "Generic iOS Device" target
+* Click the play button to build the framework
+* Click the XCode menu, then Preferences, then Locations
+* Note the path labeled "Derived Data", navigate to this path in Finder
+* Find the directory whose name includes `ParselyDemo`, navigate to `Build/Products/Debug-iphoneos` therein
+* Find the `ParselyTracker.framework` file
+
 Versioning
 ----------
 
@@ -27,6 +41,7 @@ Release Process
 * Add and commit updates to the `changelog`_
 * Increment the `version`_ according to SemVer, commit and tag with the version string
 * Push this change with `git push origin master --tags`
+* `pod trunk push ParselyAnalytics.podspec`
 * Use the GitHub `release UI`_ to create a new release
 * Increment the `version`_ according to SemVer to the next development version.
   Commit and push this change, but don't make a new tag.
