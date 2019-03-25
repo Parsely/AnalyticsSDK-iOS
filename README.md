@@ -1,5 +1,4 @@
-.. image:: https://travis-ci.com/Parsely/AnalyticsSDK-iOS.svg?branch=master
-:target: https://travis-ci.com/Parsely/AnalyticsSDK-iOS
+[![Build Status](https://travis-ci.com/Parsely/AnalyticsSDK-iOS.svg?token=9KfLpysxdvyb5zeXEppg&branch=master)](https://travis-ci.com/Parsely/AnalyticsSDK-iOS)
 
 # Parsely Tracking on iOS
 
