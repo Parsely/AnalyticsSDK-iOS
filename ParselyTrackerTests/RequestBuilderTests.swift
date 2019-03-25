@@ -56,6 +56,13 @@ class RequestBuilderTests: ParselyTestCase {
                        "relevant revents")
     }
     
-    func testGetHardwareString() { XCTAssert(false, "not implemented") }
+    func testGetHardwareString() {
+        let result = RequestBuilder.getHardwareString()
+        let expected = "x86_64"
+        XCTAssertEqual(result, expected,
+                       "The result of RequestBuilder.getHardwareString should accurately represent the simulator hardware"
+        )
+    }
+    
     func testGetUserAgent() { XCTAssert(false, "not implemented") }
 }
