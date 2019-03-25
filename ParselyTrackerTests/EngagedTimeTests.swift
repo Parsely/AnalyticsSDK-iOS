@@ -43,4 +43,22 @@ class EngagedTimeTests: ParselyTestCase {
                        "EngagedTime.stopInteraction, the internal accumulator for the engaged " +
                        "url should exist and its isEngaged flag should be unset")
     }
+    
+    func testSampleFn() {
+        engagedTime!.startInteraction(url: testUrl, urlref: "", extra_data: nil,
+                                      idsite: ParselyTestCase.testApikey)
+        let sampleResult: Bool = engagedTime!.sampleFn(key: testUrl)
+        XCTAssert(sampleResult,
+                  "After a call to EngagedTime.startInteraction, EngagedTime.sample should return true for the interacting key")
+    }
+    
+    func testSampleFnPaused() {
+        engagedTime!.startInteraction(url: testUrl, urlref: "", extra_data: nil,
+                                      idsite: ParselyTestCase.testApikey)
+        engagedTime!.endInteraction()
+        let sampleResult: Bool = engagedTime!.sampleFn(key: testUrl)
+        XCTAssertFalse(sampleResult,
+                       "After a call to EngagedTime.startInteraction followed by a call to " +
+                       "EngagedTime.stopInteraction, EngagedTime.sample should return false for the interacting key")
+    }
 }
