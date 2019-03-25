@@ -42,7 +42,18 @@ class RequestBuilderTests: ParselyTestCase {
         let events = makeEvents()
         let request = RequestBuilder.buildRequest(events: events)
         XCTAssertNotNil(request, "buildRequest should return a non-nil value")
-        XCTAssert(false, "buildRequest should return a request object with valid attributes")
+        XCTAssert(request!.url.contains("https://srv-"),
+                  "RequestBuilder.buildRequest should return a request with a valid-looking url attribute")
+        XCTAssertNotNil(request!.headers,
+                        "RequestBuilder.buildRequest should return a request with a non-nil headers attribute")
+        XCTAssertNotNil(request!.headers["User-Agent"],
+                        "RequestBuilder.buildRequest should return a request with a non-nil User-Agent header")
+        XCTAssertNotNil(request!.params,
+                        "RequestBuilder.buildRequest should return a request with a non-nil params attribute")
+        let actualEvents: Array<Dictionary<String, Any>> = request!.params["events"] as! Array<Dictionary<String, Any>>
+        XCTAssertEqual(actualEvents.count, events.count,
+                       "RequestBuilder.buildRequest should return a request with an events array containing all " +
+                       "relevant revents")
     }
     
     func testGetHardwareString() { XCTAssert(false, "not implemented") }
