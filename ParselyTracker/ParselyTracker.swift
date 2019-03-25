@@ -223,8 +223,7 @@ public class Parsely {
         }
         self.active = false
         os_log("Stopping execution before background/inactive/terminate", log:OSLog.tracker, type:.info)
-        pauseFlushTimer()
-        track.pause()
+        hardShutdown()
         
         DispatchQueue.global(qos: .userInitiated).async{
             let _self = self
@@ -236,6 +235,11 @@ public class Parsely {
             _self.flush()
             _self.endBackgroundFlushTask()
         }
+    }
+    
+    internal func hardShutdown() {
+        pauseFlushTimer()
+        track.pause()
     }
     
     private func endBackgroundFlushTask() {

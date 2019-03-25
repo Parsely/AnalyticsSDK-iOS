@@ -17,7 +17,7 @@ class RequestBuilderTests: ParselyTestCase {
         XCTAssert(endpoint != "", "buildPixelEndpoint should return a non-empty string")
     }
     
-    func testDatedEndpoint() {
+    func testBuildPixelEndpoint() {
         var expected: String = "https://srv-2019-01-01-12.pixel.parsely.com/mobileproxy"
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone(abbreviation: "UTC")
@@ -38,9 +38,37 @@ class RequestBuilderTests: ParselyTestCase {
                   "user agent string")
     }
 
-    func testRequests() {
+    func testBuildRequest() {
         let events = makeEvents()
         let request = RequestBuilder.buildRequest(events: events)
         XCTAssertNotNil(request, "buildRequest should return a non-nil value")
+        XCTAssert(request!.url.contains("https://srv-"),
+                  "RequestBuilder.buildRequest should return a request with a valid-looking url attribute")
+        XCTAssertNotNil(request!.headers,
+                        "RequestBuilder.buildRequest should return a request with a non-nil headers attribute")
+        XCTAssertNotNil(request!.headers["User-Agent"],
+                        "RequestBuilder.buildRequest should return a request with a non-nil User-Agent header")
+        XCTAssertNotNil(request!.params,
+                        "RequestBuilder.buildRequest should return a request with a non-nil params attribute")
+        let actualEvents: Array<Dictionary<String, Any>> = request!.params["events"] as! Array<Dictionary<String, Any>>
+        XCTAssertEqual(actualEvents.count, events.count,
+                       "RequestBuilder.buildRequest should return a request with an events array containing all " +
+                       "relevant revents")
+    }
+    
+    func testGetHardwareString() {
+        let result = RequestBuilder.getHardwareString()
+        let expected = "x86_64"
+        XCTAssertEqual(result, expected,
+                       "The result of RequestBuilder.getHardwareString should accurately represent the simulator hardware"
+        )
+    }
+    
+    func testGetUserAgent() {
+        let result = RequestBuilder.getUserAgent()
+        let expectedSubstring = "ParselyDemo/1.0 iOS"
+        XCTAssert(result.contains(expectedSubstring),
+                       "The result of RequestBuilder.getUserAgent should accurately represent the simulator agent"
+        )
     }
 }
