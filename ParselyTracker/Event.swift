@@ -22,7 +22,7 @@ class Event {
     var session_url: String?
     var session_referrer: String?
     var last_session_timestamp: Int?
-    var parsley_site_uuid: String?
+    var parsely_site_uuid: String?
     var rand: Int!
     
     init(_ action: String,
@@ -63,7 +63,7 @@ class Event {
 
     func setVisitorInfo(visitorInfo: Dictionary<String, Any>?) {
         if let visitor = visitorInfo {
-            self.parsley_site_uuid = (visitor["id"] as! String)
+            self.parsely_site_uuid = (visitor["id"] as! String)
         }
     }
 
@@ -78,8 +78,8 @@ class Event {
         data = extra_data ?? [:]
         data["ts"] = self.rand
         // add visitor information if needed
-        if parsley_site_uuid != nil {
-            data["parsley_site_uuid"] = parsley_site_uuid!
+        if parsely_site_uuid != nil {
+            data["parsely_site_uuid"] = parsely_site_uuid!
         }
         // merge with extra_data
         params["data"] = data
