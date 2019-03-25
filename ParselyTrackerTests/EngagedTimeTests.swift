@@ -19,7 +19,7 @@ class EngagedTimeTests: ParselyTestCase {
                                                         eventArgs: dummyEventArgs)
         engagedTime!.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
         XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
-                       "A call to Parsely.track.engagedTime.heartbeatFn should add an event to eventQueue")
+                       "A call to EngagedTime.heartbeatFn should add an event to eventQueue")
     }
     
     func testStartInteraction() {
@@ -28,7 +28,7 @@ class EngagedTimeTests: ParselyTestCase {
         let internalAccumulators:Dictionary<String, Accumulator> = engagedTime!.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssert(testUrlAccumulator.isEngaged,
-                  "After a call to Parsely.track.engagedTime.startInteraction, the internal accumulator for the engaged " +
+                  "After a call to EngagedTime.startInteraction, the internal accumulator for the engaged " +
                   "url should exist and its isEngaged flag should be set")
     }
     
@@ -39,8 +39,8 @@ class EngagedTimeTests: ParselyTestCase {
         let internalAccumulators:Dictionary<String, Accumulator> = engagedTime!.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssertFalse(testUrlAccumulator.isEngaged,
-                       "After a call to Parsely.track.engagedTime.startInteraction followed by a call to " +
-                       "Parsely.track.engagedTime.stopInteraction, the internal accumulator for the engaged " +
+                       "After a call to EngagedTime.startInteraction followed by a call to " +
+                       "EngagedTime.stopInteraction, the internal accumulator for the engaged " +
                        "url should exist and its isEngaged flag should be unset")
     }
 }
