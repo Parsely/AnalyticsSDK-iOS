@@ -4,22 +4,19 @@
 
 This repository contains the code necessary to build and test the Parsely tracking framework for iOS. It also includes a basic sample iOS app that can be used to interactively experiment with Parsely tracking.
 
-## XCode setup
+The `ParselyAnalytics` SDK is available via [CocoaPods](https://cocoapods.org/pods/ParselyAnalytics).
+
+## Including ParselyAnalytics in a project
+
+First, set up a local CocoaPods environment if you haven't already:
 
     $ sudo gem install cocoapods
-    $ pod install
 
-## Including the framework in a project
+Then add the following to your the project's Podfile:
 
-* Click the toplevel XCode project file for your project in the Project Navigator
-* In the "Build Phases" tab, expand "Link Binary with Libraries"
-* Click the "+" sign and select the `ParselyTracker.framework` file
-* Add the following dependencies to the project's Podfile:
-```
-pod 'SwiftyJSON', '~> 4.1.0'
-pod 'SwiftHTTP', '~> 3.0.1'
-pod 'ReachabilitySwift', '~> 4.3.0'
-```
+    pod 'ParselyAnalytics'
+
+Then, run `pod install` to install `ParselyAnalytics` as a dependency.
 
 ## Using the tracker
 
