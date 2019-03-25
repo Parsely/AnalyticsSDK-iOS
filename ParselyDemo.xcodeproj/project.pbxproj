@@ -141,8 +141,6 @@
 		F40D9A6920EFF74F0030525E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F40D9A6B20EFF7500030525E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F40D9A7020EFF7500030525E /* ParselyDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParselyDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F40D9A7420EFF7500030525E /* AnalyticsSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsSDKTests.swift; sourceTree = "<group>"; };
-		F40D9A7620EFF7500030525E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F40D9A7F20EFF7D70030525E /* AnalyticsSDK.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AnalyticsSDK.entitlements; sourceTree = "<group>"; };
 		F40D9A8020EFFADD0030525E /* ParselyTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParselyTracker.swift; sourceTree = "<group>"; };
 		F410D63021061D7800DB3EBE /* PixelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelTests.swift; sourceTree = "<group>"; };
@@ -249,7 +247,6 @@
 				AAEDC32822123DD300769350 /* README.md */,
 				F494BFB520FFDD5900025A4C /* Podfile */,
 				F40D9A5C20EFF74F0030525E /* ParselyDemo */,
-				F40D9A7320EFF7500030525E /* ParselyDemoTests */,
 				F433338F20F0087E004BB6F5 /* ParselyTracker */,
 				F433339C20F0087E004BB6F5 /* ParselyTrackerTests */,
 				F40D9A5B20EFF74F0030525E /* Products */,
@@ -282,15 +279,6 @@
 				F40D9A6B20EFF7500030525E /* Info.plist */,
 			);
 			path = ParselyDemo;
-			sourceTree = "<group>";
-		};
-		F40D9A7320EFF7500030525E /* ParselyDemoTests */ = {
-			isa = PBXGroup;
-			children = (
-				F40D9A7420EFF7500030525E /* AnalyticsSDKTests.swift */,
-				F40D9A7620EFF7500030525E /* Info.plist */,
-			);
-			path = ParselyDemoTests;
 			sourceTree = "<group>";
 		};
 		F433338F20F0087E004BB6F5 /* ParselyTracker */ = {
