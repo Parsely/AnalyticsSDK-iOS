@@ -130,7 +130,12 @@ class Sampler {
     private func backoff(existingTimeout: TimeInterval,
                          totalTrackedTime: TimeInterval) -> TimeInterval
     {
-        return TimeInterval(min(MAX_TIME_BETWEEN_HEARTBEATS, existingTimeout * 1.25));
+        let offsetMatchingBaseInterval: TimeInterval = TimeInterval(35)
+        let backoffProportion: Double = 0.3
+        let totalWithOffset: TimeInterval = totalTrackedTime + offsetMatchingBaseInterval
+        let newInterval: TimeInterval = totalWithOffset * backoffProportion
+        let clampedNewInterval: TimeInterval = min(MAX_TIME_BETWEEN_HEARTBEATS, newInterval)
+        return clampedNewInterval
     }
 
     private func sendHeartbeat(key: String) -> Void {
