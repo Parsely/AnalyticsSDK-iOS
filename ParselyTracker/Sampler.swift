@@ -10,6 +10,7 @@ struct Accumulator {
     var key: String
     var accumulatedTime: TimeInterval = TimeInterval(0)
     var totalTime: TimeInterval = TimeInterval(0)
+    var firstSampleTime: Date?
     var lastSampleTime: Date?
     var lastPositiveSampleTime: Date?
     var heartbeatTimeout: TimeInterval?
@@ -64,6 +65,7 @@ class Sampler {
                   key: key,
                   accumulatedTime: TimeInterval(0),
                   totalTime: TimeInterval(0),
+                  firstSampleTime: Date(),
                   lastSampleTime: Date(),
                   lastPositiveSampleTime: nil,
                   heartbeatTimeout: heartbeatInterval,
@@ -124,6 +126,12 @@ class Sampler {
         }
         self.samplerTimer = Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
     }
+    
+    private func backoff(existingTimeout: TimeInterval,
+                         totalTrackedTime: TimeInterval) -> TimeInterval
+    {
+        return TimeInterval(min(MAX_TIME_BETWEEN_HEARTBEATS, existingTimeout * 1.25));
+    }
 
     private func sendHeartbeat(key: String) -> Void {
         var trackedData = accumulators[key]!
@@ -133,7 +141,11 @@ class Sampler {
             heartbeatFn(data: trackedData, enableHeartbeats: true)
         }
         trackedData.accumulatedTime = 0
-        trackedData.heartbeatTimeout = TimeInterval(min(MAX_TIME_BETWEEN_HEARTBEATS, trackedData.heartbeatTimeout! * 1.25))
+        let currentTime: Date = Date();
+        let totalTrackedTime: TimeInterval = currentTime.timeIntervalSince(trackedData.firstSampleTime!);
+        trackedData.heartbeatTimeout = self.backoff(
+            existingTimeout: trackedData.heartbeatTimeout!,
+            totalTrackedTime: totalTrackedTime)
         updateAccumulator(acc: trackedData)
         self.heartbeatInterval = trackedData.heartbeatTimeout!
     }
