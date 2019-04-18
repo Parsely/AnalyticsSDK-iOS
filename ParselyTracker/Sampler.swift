@@ -27,6 +27,8 @@ extension TimeInterval {
 
 class Sampler {
     var baseHeartbeatInterval = TimeInterval(floatLiteral: 10.5)
+    private let offsetMatchingBaseInterval: TimeInterval = TimeInterval(35)
+    private let backoffProportion: Double = 0.3
     var heartbeatInterval: TimeInterval
     var hasStartedSampling: Bool = false
     var accumulators: Dictionary<String, Accumulator> = [:]
@@ -127,11 +129,9 @@ class Sampler {
         self.samplerTimer = Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
     }
     
-    private func backoff(existingTimeout: TimeInterval,
-                         totalTrackedTime: TimeInterval) -> TimeInterval
+    private func getHeartbeatInterval(existingTimeout: TimeInterval,
+                                      totalTrackedTime: TimeInterval) -> TimeInterval
     {
-        let offsetMatchingBaseInterval: TimeInterval = TimeInterval(35)
-        let backoffProportion: Double = 0.3
         let totalWithOffset: TimeInterval = totalTrackedTime + offsetMatchingBaseInterval
         let newInterval: TimeInterval = totalWithOffset * backoffProportion
         let clampedNewInterval: TimeInterval = min(MAX_TIME_BETWEEN_HEARTBEATS, newInterval)
@@ -148,7 +148,7 @@ class Sampler {
         trackedData.accumulatedTime = 0
         let currentTime: Date = Date();
         let totalTrackedTime: TimeInterval = currentTime.timeIntervalSince(trackedData.firstSampleTime!);
-        trackedData.heartbeatTimeout = self.backoff(
+        trackedData.heartbeatTimeout = self.getHeartbeatInterval(
             existingTimeout: trackedData.heartbeatTimeout!,
             totalTrackedTime: totalTrackedTime)
         updateAccumulator(acc: trackedData)
