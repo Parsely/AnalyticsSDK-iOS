@@ -146,8 +146,7 @@ class Sampler {
             heartbeatFn(data: trackedData, enableHeartbeats: true)
         }
         trackedData.accumulatedTime = 0
-        let currentTime: Date = Date();
-        let totalTrackedTime: TimeInterval = currentTime.timeIntervalSince(trackedData.firstSampleTime!);
+        let totalTrackedTime: TimeInterval = Date().timeIntervalSince(trackedData.firstSampleTime!);
         trackedData.heartbeatTimeout = self.getHeartbeatInterval(
             existingTimeout: trackedData.heartbeatTimeout!,
             totalTrackedTime: totalTrackedTime)
