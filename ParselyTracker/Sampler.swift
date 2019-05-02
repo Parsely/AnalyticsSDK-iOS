@@ -10,6 +10,7 @@ struct Accumulator {
     var key: String
     var accumulatedTime: TimeInterval = TimeInterval(0)
     var totalTime: TimeInterval = TimeInterval(0)
+    var firstSampleTime: Date?
     var lastSampleTime: Date?
     var lastPositiveSampleTime: Date?
     var heartbeatTimeout: TimeInterval?
@@ -26,6 +27,8 @@ extension TimeInterval {
 
 class Sampler {
     var baseHeartbeatInterval = TimeInterval(floatLiteral: 10.5)
+    private let offsetMatchingBaseInterval: TimeInterval = TimeInterval(35)
+    private let backoffProportion: Double = 0.3
     var heartbeatInterval: TimeInterval
     var hasStartedSampling: Bool = false
     var accumulators: Dictionary<String, Accumulator> = [:]
@@ -64,6 +67,7 @@ class Sampler {
                   key: key,
                   accumulatedTime: TimeInterval(0),
                   totalTime: TimeInterval(0),
+                  firstSampleTime: Date(),
                   lastSampleTime: Date(),
                   lastPositiveSampleTime: nil,
                   heartbeatTimeout: heartbeatInterval,
@@ -124,6 +128,15 @@ class Sampler {
         }
         self.samplerTimer = Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
     }
+    
+    private func getHeartbeatInterval(existingTimeout: TimeInterval,
+                                      totalTrackedTime: TimeInterval) -> TimeInterval
+    {
+        let totalWithOffset: TimeInterval = totalTrackedTime + offsetMatchingBaseInterval
+        let newInterval: TimeInterval = totalWithOffset * backoffProportion
+        let clampedNewInterval: TimeInterval = min(MAX_TIME_BETWEEN_HEARTBEATS, newInterval)
+        return clampedNewInterval
+    }
 
     private func sendHeartbeat(key: String) -> Void {
         var trackedData = accumulators[key]!
@@ -133,7 +146,10 @@ class Sampler {
             heartbeatFn(data: trackedData, enableHeartbeats: true)
         }
         trackedData.accumulatedTime = 0
-        trackedData.heartbeatTimeout = TimeInterval(min(MAX_TIME_BETWEEN_HEARTBEATS, trackedData.heartbeatTimeout! * 1.25))
+        let totalTrackedTime: TimeInterval = Date().timeIntervalSince(trackedData.firstSampleTime!);
+        trackedData.heartbeatTimeout = self.getHeartbeatInterval(
+            existingTimeout: trackedData.heartbeatTimeout!,
+            totalTrackedTime: totalTrackedTime)
         updateAccumulator(acc: trackedData)
         self.heartbeatInterval = trackedData.heartbeatTimeout!
     }

@@ -49,8 +49,7 @@ class SamplerTests: ParselyTestCase {
 
     func testBackoff() {
         let initialInterval = samplerUnderTest!.heartbeatInterval
-        let expectedBackoffMultiplier = 1.25
-        let expectedUpdatedInterval = initialInterval * expectedBackoffMultiplier
+        let expectedUpdatedInterval: TimeInterval = TimeInterval(13.65)
         let assertionTimeout:TimeInterval = initialInterval + TimeInterval(2)
         
         samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
@@ -62,7 +61,8 @@ class SamplerTests: ParselyTestCase {
         waitForExpectations(timeout: assertionTimeout + 1, handler: nil)
         
         let actualUpdatedInterval = samplerUnderTest!.heartbeatInterval
-        XCTAssertEqual(actualUpdatedInterval, expectedUpdatedInterval,
+        let actualRoundedInterval: TimeInterval = TimeInterval(round(100 * actualUpdatedInterval) / 100)
+        XCTAssertEqual(actualRoundedInterval, expectedUpdatedInterval,
                   "Heartbeat interval should increase by the expected amount after a single heartbeat")
     }
 

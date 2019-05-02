@@ -87,6 +87,7 @@ class VideoTests: ParselyTestCase {
         let dummyEventArgs: Dictionary<String, Any> = videoManager!.generateEventArgs(
             url: testUrl, urlref: "", extra_data: nil, idsite: ParselyTestCase.testApikey)
         let dummyAccumulator: Accumulator = Accumulator(key: testVideoKey, accumulatedTime: 0, totalTime: 0,
+                                                        firstSampleTime: Date(),
                                                         lastSampleTime: Date(), lastPositiveSampleTime: Date(),
                                                         heartbeatTimeout: 0, contentDuration: 0, isEngaged: false,
                                                         eventArgs: dummyEventArgs)
