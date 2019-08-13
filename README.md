@@ -36,3 +36,9 @@ self.parsely.trackPageView(url: "http://mysite.com/story1")
 self.parsely.startEngagement(url: "http://mysite.com/story2")
 self.parsely.stopEngagement()
 ```
+
+## Design Notes
+
+To conserve battery usage and network bandwidth, the SDK will batch pixel requests as they are made, 
+and flush them periodically. Each pixel retains its creation timestamp regardless of when it was sent. 
+Upon app shutdown, or when the app is backgrounded, it will flush whatever pixels are currently in the queue.
