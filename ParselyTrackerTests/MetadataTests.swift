@@ -39,12 +39,13 @@ class MetadataTests: ParselyTestCase {
             duration: expected["duration"] as? TimeInterval
         )
         let actual: Dictionary<String, Any> = metasUnderTest.toDict()
+        let pubDateUnix: String = String(format:"%i", (expected["pub_date"]! as! Date).timeIntervalSince1970 * 1000)
         XCTAssertFalse(actual.isEmpty, "Creating a ParselyMetadataobject with many parameters results in a " +
                        "non-empty object")
         XCTAssertEqual(actual["link"]! as! String, expected["canonical_url"]! as! String,
                        "The link field in the result of ParselyMetadata.toDict should match the canonical_url argument " +
                        "used at initialization")
-        XCTAssertEqual(actual["pub_date"]! as! Date, expected["pub_date"]! as! Date,
+        XCTAssertEqual(actual["pub_date"]! as! String, pubDateUnix,
                        "The pub_date field in the result of ParselyMetadata.toDict should match the pub_date argument " +
                        "used at initialization")
         XCTAssertEqual(actual["title"]! as! String, expected["title"]! as! String,
