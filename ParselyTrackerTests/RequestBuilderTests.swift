@@ -3,11 +3,21 @@ import XCTest
 
 class RequestBuilderTests: ParselyTestCase {
     private func makeEvents() -> Array<Event> {
+        let exampleMetadata: ParselyMetadata = ParselyMetadata(
+            canonical_url:"http://parsely-test.com",
+            pub_date: Date(timeIntervalSince1970: 3),
+            title: "a title.",
+            authors: ["Yogi Berra"],
+            image_url: "http://parsely-test.com/image2",
+            section: "Things my mother says",
+            tags: ["tag1", "tag2"],
+            duration: TimeInterval(100)
+        )
         return [Event(
             "pageview",
             url: "http://test.com",
             urlref: nil,
-            metadata: nil, 
+            metadata: exampleMetadata,
             extra_data: nil
             )]
     }
@@ -54,6 +64,16 @@ class RequestBuilderTests: ParselyTestCase {
         XCTAssertEqual(actualEvents.count, events.count,
                        "RequestBuilder.buildRequest should return a request with an events array containing all " +
                        "relevant revents")
+    }
+    
+    func testParamsJson() {
+        let events = makeEvents()
+        let request = RequestBuilder.buildRequest(events: events)
+        var jsonData: Data? = nil
+        do {
+            jsonData = try JSONSerialization.data(withJSONObject: request!.params)
+        } catch { }
+        XCTAssertNotNil(jsonData, "Request params should serialize to JSON")
     }
     
     func testGetHardwareString() {

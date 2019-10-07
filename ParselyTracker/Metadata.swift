@@ -48,7 +48,7 @@ public class ParselyMetadata {
             metas["link"] = canonical_url!
         }
         if pub_date != nil {
-            metas["pub_date"] = pub_date!
+            metas["pub_date"] = String(format:"%i", pub_date!.timeIntervalSince1970 * 1000)
         }
         if title != nil {
             metas["title"] = title!
