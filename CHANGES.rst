@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.0.3 (10-8-2019)
+-----------------
+
+Bugfixes
+--------
+
+* Fixed an incorrect unit on the `sts` event attribute
+
+
 0.0.2 (10-7-2019)
 -----------------
 
