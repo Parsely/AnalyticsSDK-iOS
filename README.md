@@ -20,12 +20,18 @@ Then, run `pod install` to install `ParselyAnalytics` as a dependency.
 
 ## Using the tracker
 
-In any file that uses Parsely Analytics functionality, include `import ParselyTracker`
+In any file that uses Parsely Analytics functionality, include `import ParselyAnalytics`
 
 At app startup, initialize the `Parsely` singleton. A good place to do this might be the top-level application delegate:
 ```
+var parsely: Parsely?
+
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     self.parsely = Parsely.sharedInstance
+
+    // optionally call configure to set an API Key for all requests
+    self.parsely.configure(siteId: "example.com")
+
     // other app initialization
     return true
 }
