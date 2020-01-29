@@ -139,7 +139,10 @@ class Sampler {
     }
 
     private func sendHeartbeat(key: String) -> Void {
-        var trackedData = accumulators[key]!
+        guard var trackedData = accumulators[key] else {
+            os_log("No accumulator found for %s, skipping sendHeartbeat", log: OSLog.tracker, type:.debug, key)
+            return
+        }
         let incSecs: TimeInterval = trackedData.accumulatedTime
         if incSecs > 0 {
             os_log("Sending heartbeat for %s", log: OSLog.tracker, type:.debug, key)
