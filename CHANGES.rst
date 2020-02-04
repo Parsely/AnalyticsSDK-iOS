@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.0.4 (2-4-2020)
+-----------------
+
+Bugfixes
+--------
+
+* Added a `guard` to iteration over `accumulators`
+
+
 0.0.3 (10-8-2019)
 -----------------
 
