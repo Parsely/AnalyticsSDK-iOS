@@ -1,11 +1,11 @@
 import Foundation
 
 extension Date {
-    var millisecondsSince1970:Int {
-        return Int((self.timeIntervalSince1970 * 1000.0).rounded())
+    var millisecondsSince1970:UInt64 {
+        return UInt64(floor(self.timeIntervalSince1970 * 1000))
     }
     
-    init(milliseconds:Int) {
+    init(milliseconds:UInt64) {
         self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }
 }

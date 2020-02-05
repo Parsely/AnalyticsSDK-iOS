@@ -115,7 +115,7 @@ class EventTests: ParselyTestCase {
         XCTAssertEqual(actualExtraData["parsely_site_uuid"] as! String, expectedVisitorID,
                        "A visitor ID provided via Event.setVisitorInfo should be accessible in the result of " +
                        "Event.toDict as data[\"parsely_site_uuid\"]")
-        XCTAssert((actualExtraData["ts"] as! Int) > timestampInThePast,
+        XCTAssert((actualExtraData["ts"] as! UInt64) > timestampInThePast,
                   "The data.ts field of the result of Event.toDict should be a non-ancient timestamp")
     }
     
