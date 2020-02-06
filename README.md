@@ -2,7 +2,7 @@
 
 # Parsely Tracking on iOS
 
-This repository contains the code necessary to build and test the Parsely tracking framework for iOS. It also includes a basic sample iOS app that can be used to interactively experiment with Parsely tracking.
+This repository contains the code necessary to build and test the Parsely tracking framework for iOS. It also includes a basic sample iOS app that can be used to interactively experiment with Parsely tracking. Full API documentation is available [here](https://www.parse.ly/help/integration/ios-sdk).
 
 The `ParselyAnalytics` SDK is available via [CocoaPods](https://cocoapods.org/pods/ParselyAnalytics).
 
