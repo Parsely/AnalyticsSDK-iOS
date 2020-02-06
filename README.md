@@ -2,7 +2,7 @@
 
 # Parsely Tracking on iOS
 
-This repository contains the code necessary to build and test the Parsely tracking framework for iOS. It also includes a basic sample iOS app that can be used to interactively experiment with Parsely tracking.
+This repository contains the code necessary to build and test the Parsely tracking framework for iOS. It also includes a basic sample iOS app that can be used to interactively experiment with Parsely tracking. Full API documentation is available [here](https://www.parse.ly/help/integration/ios-sdk).
 
 The `ParselyAnalytics` SDK is available via [CocoaPods](https://cocoapods.org/pods/ParselyAnalytics).
 
@@ -20,12 +20,18 @@ Then, run `pod install` to install `ParselyAnalytics` as a dependency.
 
 ## Using the tracker
 
-In any file that uses Parsely Analytics functionality, include `import ParselyTracker`
+In any file that uses Parsely Analytics functionality, include `import ParselyAnalytics`
 
 At app startup, initialize the `Parsely` singleton. A good place to do this might be the top-level application delegate:
 ```
+var parsely: Parsely?
+
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     self.parsely = Parsely.sharedInstance
+
+    // optionally call configure to set an API Key for all requests
+    self.parsely.configure(siteId: "example.com")
+
     // other app initialization
     return true
 }
