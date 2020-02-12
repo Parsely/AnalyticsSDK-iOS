@@ -1,5 +1,4 @@
 import Foundation
-import SwiftHTTP
 import os.log
 
 class Pixel {
