@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.0.5 (2-12-2020)
+-----------------
+
+Bugfixes
+--------
+
+* Switched to `UInt64` for timestamps to avoid crashes on 32-bit devices
+
 0.0.4 (2-4-2020)
 -----------------
 
