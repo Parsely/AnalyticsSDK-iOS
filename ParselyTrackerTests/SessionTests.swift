@@ -23,9 +23,9 @@ class SessionTests: ParselyTestCase {
                        "The session_url of a newly-created session should be the url it was initialized with")
         XCTAssertEqual(session["session_referrer"] as! String, testSubsequentUrl,
                        "The session_referrer of a newly-created session should be the urlref it was initialized with")
-        XCTAssertGreaterThan(session["session_ts"] as! Int, epochTimeInThePast,
+        XCTAssertGreaterThan(session["session_ts"] as! UInt64, UInt64(epochTimeInThePast),
                              "The session_ts of a newly-created session should be non-ancient")
-        XCTAssertGreaterThan(session["last_session_ts"] as! Int, epochTimeInThePast,
+        XCTAssertGreaterThan(session["last_session_ts"] as! UInt64, UInt64(epochTimeInThePast),
                              "The last_session_ts of a newly-created session should be non-ancient")
     }
 
@@ -48,10 +48,10 @@ class SessionTests: ParselyTestCase {
         let session = sessions.get(url: testInitialUrl, urlref: testSubsequentUrl)
         let mutatedVisitor = visitorManager.getVisitorInfo()
         let expectedSessionCount = initialSessionCount + 1
-        let expectedLastSessionTs: Int = session["session_ts"] as! Int
+        let expectedLastSessionTs: UInt64 = session["session_ts"] as! UInt64
         XCTAssertEqual(mutatedVisitor["session_count"] as! Int, expectedSessionCount,
                        "The visitor's session_count should have been incremented after a call to SessionManager.get")
-        XCTAssertEqual(mutatedVisitor["last_session_ts"] as! Int, expectedLastSessionTs,
+        XCTAssertEqual(mutatedVisitor["last_session_ts"] as! UInt64, UInt64(expectedLastSessionTs),
                        "The visitor's last_session_ts should have been set to the session's session_ts after a call to " +
                        "SessionManager.get")
     }

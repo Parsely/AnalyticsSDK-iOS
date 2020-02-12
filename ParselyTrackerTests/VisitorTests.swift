@@ -18,7 +18,7 @@ class VisitorTests: ParselyTestCase {
         XCTAssertEqual(visitor["session_count"] as! Int, subsequentVisitor["session_count"] as! Int,
                        "Sequential calls to VisitorManager.getVisitorInfo within the default expiry should return objects " +
                        "with the same session count")
-        XCTAssertEqual(visitor["last_session_ts"] as! Int, subsequentVisitor["last_session_ts"] as! Int,
+        XCTAssertEqual(visitor["last_session_ts"] as! UInt64, subsequentVisitor["last_session_ts"] as! UInt64,
                        "Sequential calls to VisitorManager.getVisitorInfo within the default expiry should return objects " +
                        "with the same last session timestamp")
     }

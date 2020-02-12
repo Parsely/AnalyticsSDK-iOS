@@ -14,7 +14,7 @@ class Event {
     var session_referrer: String?
     var last_session_timestamp: Int?
     var parsely_site_uuid: String?
-    var rand: Int!
+    var rand: UInt64!
     
     init(_ action: String,
          url: String,

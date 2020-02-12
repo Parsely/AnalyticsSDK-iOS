@@ -29,7 +29,7 @@ class SessionManager {
             session["session_id"] = visitorInfo["session_count"]
             session["session_url"] = url
             session["session_referrer"] = urlref
-            session["session_ts"] = Int(Date().timeIntervalSince1970 * 1000.0)
+            session["session_ts"] = Date().millisecondsSince1970
             session["last_session_ts"] = visitorInfo["last_session_ts"]
             
             visitorInfo["last_session_ts"] = session["session_ts"]
