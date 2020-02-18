@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.0.6 (2-18-2020)
+-----------------
+
+Bugfixes
+--------
+
+* Upgraded to a newer version of SwiftyJSON.
+* Switched HTTP client from SwiftHTTP to Alamofire
+
 0.0.5 (2-12-2020)
 -----------------
 
