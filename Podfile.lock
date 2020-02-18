@@ -1,15 +1,15 @@
 PODS:
   - ReachabilitySwift (4.3.0)
   - SwiftHTTP (3.0.1)
-  - SwiftyJSON (4.1.0)
+  - SwiftyJSON (4.2.0)
 
 DEPENDENCIES:
   - ReachabilitySwift (~> 4.3.0)
   - SwiftHTTP (~> 3.0.1)
-  - SwiftyJSON (~> 4.1.0)
+  - SwiftyJSON (~> 4.2.0)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - ReachabilitySwift
     - SwiftHTTP
     - SwiftyJSON
@@ -17,8 +17,8 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   ReachabilitySwift: 408477d1b6ed9779dba301953171e017c31241f3
   SwiftHTTP: e94f1aa8cde58637dcc0100f6349de31a3337fde
-  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
+  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 8c7e0c42f58f2a850f41b0eb637b19f0e84d62ea
+PODFILE CHECKSUM: 5108c08fa9243da1573d11cb9b4a29b410d9be7f
 
-COCOAPODS: 1.7.0.beta.2
+COCOAPODS: 1.8.4
