@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                   = "ParselyAnalytics"
-  s.version                = "0.0.5-dev"
+  s.version                = "0.0.6"
   s.swift_version          = "4.2"
   s.summary                = "Parsely analytics integration for iOS"
   s.homepage               = "https://www.parse.ly/help/integration/ios-sdk/"
@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.source                 = { :git => "https://github.com/Parsely/AnalyticsSDK-iOS.git", :tag => "#{s.version}" }
   s.source_files           = "ParselyTracker"
   s.framework              = 'Foundation'
-  s.dependency               'SwiftyJSON', '~> 4.1.0'
-  s.dependency               'SwiftHTTP', '~> 3.0.1'
+  s.dependency               'SwiftyJSON', '~> 4.2.0'
+  s.dependency               'Alamofire', '~> 4.8.2'
   s.dependency               'ReachabilitySwift', '~> 4.3.0'
 end
