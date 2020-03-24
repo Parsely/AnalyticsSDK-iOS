@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.source                 = { :git => "https://github.com/Parsely/AnalyticsSDK-iOS.git", :tag => "#{s.version}" }
   s.source_files           = "ParselyTracker"
   s.framework              = 'Foundation'
-  s.dependency               'SwiftyJSON', '~> 4.2.0'
-  s.dependency               'Alamofire', '~> 4.8.2'
-  s.dependency               'ReachabilitySwift', '~> 4.3.0'
+  s.dependency               'SwiftyJSON', '~> 4.2'
+  s.dependency               'Alamofire', '~> 4.8'
+  s.dependency               'ReachabilitySwift', '~> 4.3'
 end
