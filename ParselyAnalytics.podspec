@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                   = "ParselyAnalytics"
-  s.version                = "0.0.7-dev"
+  s.version                = "0.0.7"
   s.swift_version          = "4.2"
   s.summary                = "Parsely analytics integration for iOS"
   s.homepage               = "https://www.parse.ly/help/integration/ios-sdk/"
