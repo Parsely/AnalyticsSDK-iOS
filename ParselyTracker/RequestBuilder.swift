@@ -34,7 +34,10 @@ class RequestBuilder {
             }
             let osDescriptor = String(format: "iOS/%@", UIDevice.current.systemVersion)
             let hardwareString = getHardwareString()
-            userAgent = String(format: "%@ %@ (%@)", appDescriptor, osDescriptor, hardwareString)
+            let userAgentString = String(format: "%@ %@ (%@)", appDescriptor, osDescriptor, hardwareString)
+            // encode the user agent into latin1 in case there are utf8 characters
+            let userAgentData = Data(userAgentString.utf8)
+            userAgent = String(data: userAgentData, encoding: .isoLatin1)
         }
         return userAgent!
     }
