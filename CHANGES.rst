@@ -1,6 +1,30 @@
 Changelog
 =========
 
+0.0.9 (5-6-2020)
+-----------------
+
+Bugfixes
+--------
+
+* Force User-Agent header to be latin1 encoded
+
+0.0.8 (3-24-2020)
+-----------------
+
+Bugfixes
+--------
+
+* Increment bugfix version
+
+0.0.7 (3-24-2020)
+-----------------
+
+Bugfixes
+--------
+
+* Increment bugfix version
+
 0.0.6 (2-18-2020)
 -----------------
 
