@@ -7,7 +7,7 @@ class HttpClient {
     static func sendRequest(request: ParselyRequest) {
         os_log("Sending request to %s", log: OSLog.tracker, type: .debug, request.url)
         
-        Alamofire.request(request.url, method: .post, parameters: request.params, encoding: JSONEncoding.default, headers: request.headers as? HTTPHeaders).responseJSON {
+        AF.request(request.url, method: .post, parameters: request.params, encoding: JSONEncoding.default, headers: HTTPHeaders(request.headers)).responseJSON {
             (response) in
             if let err = response.error {
                 os_log("Request failed: %s", log: OSLog.tracker, type: .error, err.localizedDescription)
