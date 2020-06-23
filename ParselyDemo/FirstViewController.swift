@@ -3,7 +3,6 @@ import os.log
 import ParselyTracker
 
 class FirstViewController: UIViewController {
-    @IBOutlet weak var trackPVButton: UIButton!
     let delegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
