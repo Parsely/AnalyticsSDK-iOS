@@ -10,11 +10,11 @@ stages:
 jobs:
   include:
     - stage: test
-      name: Run Unit Tests (iOS 10.3.1, iPhone 5)
+      name: Run Unit Tests (iOS 10.3.1, iPhone 5s)
       osx_image: xcode11.5
       xcode_workspace: ParselyDemo.xcworkspace
       xcode_scheme: ParselyTrackerTests
-      xcode_destination: platform=iOS Simulator,OS=10.3.1,name=iPhone 5
+      xcode_destination: platform=iOS Simulator,OS=10.3.1,name=iPhone 5s
       before_install:
         - pod repo update
     - stage: test
