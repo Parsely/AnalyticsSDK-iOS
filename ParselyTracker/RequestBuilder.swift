@@ -4,7 +4,7 @@ import os.log
 
 struct ParselyRequest {
     var url: String
-    var headers: Dictionary<String, Any>
+    var headers: Dictionary<String, String>
     var params: Dictionary<String, Any>
 }
 
@@ -63,7 +63,7 @@ class RequestBuilder {
         return self._baseURL!
     }
     
-    internal static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, Any> {
+    internal static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, String> {
         let userAgent: String = getUserAgent()
         return ["User-Agent": userAgent]
     }
