@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.0.10 (6-29-2020)
+------------------
+
+Bugfixes
+--------
+
+* Remove AlamoFire dependency in favor of stdlib HTTP request interface
+
+
 0.0.9 (5-6-2020)
 -----------------
 
