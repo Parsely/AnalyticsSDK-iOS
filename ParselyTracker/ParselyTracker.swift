@@ -18,7 +18,7 @@ public class Parsely {
     private var flushInterval: TimeInterval = 30
     private let reachability: Reachability = Reachability()!
     private var backgroundFlushTask: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-    private var active: Bool = true
+    public var active: Bool = true
     public var secondsBetweenHeartbeats: TimeInterval? {
         get {
             if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! TimeInterval? {
@@ -159,7 +159,7 @@ public class Parsely {
         track.videoReset(url: url, vId: videoID)
     }
     
-    @objc private func flush() {
+    @objc public func flush() {
         if self.eventQueue.length() == 0 {
             return
         }
@@ -172,23 +172,6 @@ public class Parsely {
         os_log("Got %s events", log: OSLog.tracker, type:.debug, String(describing: events.count))
         let request = RequestBuilder.buildRequest(events: events)
         HttpClient.sendRequest(request: request!)
-    }
-    
-    internal func startFlushTimer() {
-        os_log("Flush timer starting", log: OSLog.tracker, type:.debug)
-        if self.flushTimer == nil && self.active {
-            self.flushTimer = Timer.scheduledTimer(timeInterval: self.flushInterval, target: self, selector: #selector(self.flush), userInfo: nil, repeats: true)
-            os_log("Flush timer started", log: OSLog.tracker, type:.debug)
-        }
-    }
-    
-    internal func pauseFlushTimer() {
-        os_log("Flush timer stopping", log: OSLog.tracker, type:.debug)
-        if self.flushTimer != nil && !self.active {
-            self.flushTimer!.invalidate()
-            self.flushTimer = nil
-            os_log("Flush timer stopped", log: OSLog.tracker, type:.debug)
-        }
     }
     
     private func addApplicationObservers() {
@@ -205,7 +188,7 @@ public class Parsely {
         }
         self.active = true
         os_log("Resuming execution after foreground/active", log:OSLog.tracker, type:.info)
-        startFlushTimer()
+        track.startFlushTimer()
         track.resume()
     }
     
@@ -230,7 +213,7 @@ public class Parsely {
     }
     
     internal func hardShutdown() {
-        pauseFlushTimer()
+        track.pauseFlushTimer()
         track.pause()
     }
     

@@ -6,6 +6,9 @@ class Track {
     let videoManager: VideoManager
     let engagedTime: EngagedTime
     private let parselyTracker: Parsely
+    private var flushTimer: Timer?
+    private var flushInterval: TimeInterval = 30
+
 
     init(trackerInstance: Parsely) {
         parselyTracker = trackerInstance
@@ -19,7 +22,7 @@ class Track {
             os_log("idsite not specified. Use ParselyTracker.configure or specify it as an argument to tracking functions.", log: OSLog.tracker, type:.error)
             return
         }
-        parselyTracker.startFlushTimer();
+        self.startFlushTimer();
         
         self.pixel.beacon(event: event)
         os_log("Sending an event from Track", log: OSLog.tracker, type:.debug)
@@ -80,5 +83,22 @@ class Track {
         os_log("Sending heartbeats from track", log:OSLog.tracker, type:.debug)
         engagedTime.sendHeartbeats()
         videoManager.sendHeartbeats()
+    }
+
+    internal func startFlushTimer() {
+        os_log("Flush timer starting", log: OSLog.tracker, type:.debug)
+        if self.flushTimer == nil && parselyTracker.active {
+            self.flushTimer = Timer.scheduledTimer(timeInterval: self.flushInterval, target: parselyTracker, selector: #selector(parselyTracker.flush), userInfo: nil, repeats: true)
+            os_log("Flush timer started", log: OSLog.tracker, type:.debug)
+        }
+    }
+
+    internal func pauseFlushTimer() {
+        os_log("Flush timer stopping", log: OSLog.tracker, type:.debug)
+        if self.flushTimer != nil && !parselyTracker.active {
+            self.flushTimer!.invalidate()
+            self.flushTimer = nil
+            os_log("Flush timer stopped", log: OSLog.tracker, type:.debug)
+        }
     }
 }
