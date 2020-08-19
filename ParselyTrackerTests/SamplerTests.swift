@@ -23,8 +23,8 @@ class SamplerTests: ParselyTestCase {
     func testMultipleTrackedItemsInOneSampler() {
         let itemOne: String = "itemOne"
         let itemTwo: String = "itemTwo"
-        samplerUnderTest!.trackKey(key: itemOne, contentDuration: nil, eventArgs: [:])
-        samplerUnderTest!.trackKey(key: itemTwo, contentDuration: nil, eventArgs: [:])
+        samplerUnderTest!.trackKey(key: itemOne, contentDuration: nil, eventArgs: EventArgs())
+        samplerUnderTest!.trackKey(key: itemTwo, contentDuration: nil, eventArgs: EventArgs())
 
         XCTAssert(samplerUnderTest!.accumulators[itemOne]!.key != samplerUnderTest!.accumulators[itemTwo]!.key,
                   "Sequential calls to trackKey with different keys should not clobber each other's accumulator data")
@@ -34,7 +34,7 @@ class SamplerTests: ParselyTestCase {
         let assertionTimeout:TimeInterval = TimeInterval(3)
         let acceptableDifference:TimeInterval = TimeInterval(0.2)
         
-        samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
+        samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: EventArgs())
         
         let expectation = self.expectation(description: "Sampling")
         Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
@@ -52,7 +52,7 @@ class SamplerTests: ParselyTestCase {
         let expectedUpdatedInterval: TimeInterval = TimeInterval(13.65)
         let assertionTimeout:TimeInterval = initialInterval + TimeInterval(2)
         
-        samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
+        samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: EventArgs())
         
         let expectation = self.expectation(description: "Wait for heartbeat")
         Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
@@ -69,15 +69,15 @@ class SamplerTests: ParselyTestCase {
     func testDistinctTrackedItems() {
         let sampler1 = Sampler(trackerInstance: parselyTestTracker)
         let sampler2 = Sampler(trackerInstance: parselyTestTracker)
-        sampler1.trackKey(key: testKey, contentDuration: nil, eventArgs: [:])
-        sampler2.trackKey(key: testKey, contentDuration: nil, eventArgs: [:])
+        sampler1.trackKey(key: testKey, contentDuration: nil, eventArgs: EventArgs())
+        sampler2.trackKey(key: testKey, contentDuration: nil, eventArgs: EventArgs())
         sampler1.dropKey(key: testKey)
         XCTAssert(sampler2.accumulators[testKey] != nil,
                   "A Sampler instance should not be affected by dropKey calls on another Sampler instance")
     }
     
     func testDropKey() {
-        samplerUnderTest!.trackKey(key: testKey, contentDuration: nil, eventArgs: [:])
+        samplerUnderTest!.trackKey(key: testKey, contentDuration: nil, eventArgs: EventArgs())
         samplerUnderTest!.dropKey(key: testKey)
         XCTAssertNil(samplerUnderTest!.accumulators[testKey],
                      "After a call to Sampler.dropKey, the accumulator for the droppesd key should not exist")
@@ -85,21 +85,21 @@ class SamplerTests: ParselyTestCase {
     
     func testGenerateEventArgs() {
         let testUrl: String = "http://parselystuff.com"
-        let eventArgs: Dictionary<String, Any> = samplerUnderTest!.generateEventArgs(
+        let eventArgs: EventArgs = samplerUnderTest!.generateEventArgs(
             url: testUrl, urlref: testUrl, metadata: testMetadata, extra_data: extraData,
             idsite: ParselyTestCase.testApikey)
-        XCTAssertEqual(eventArgs["url"] as! String, testUrl, "The url returned in the result of Sampler.generateEventArgs " +
+        XCTAssertEqual(eventArgs.url!, testUrl, "The url returned in the result of Sampler.generateEventArgs " +
                        "should match the one passed to the call")
-        XCTAssertEqual(eventArgs["urlref"] as! String, testUrl, "The urlref returned in the result of " +
+        XCTAssertEqual(eventArgs.urlref!, testUrl, "The urlref returned in the result of " +
                        "Sampler.generateEventArgs should match the one passed to the call")
-        XCTAssertEqual(eventArgs["idsite"] as! String, ParselyTestCase.testApikey,
+        XCTAssertEqual(eventArgs.idsite!, ParselyTestCase.testApikey,
                        "The idsite returned in the result of Sampler.generateEventArgs should match the one passed to the call")
-        let actualExtraData: Dictionary<String, Any> = eventArgs["extra_data"] as! Dictionary<String, Any>
+        let actualExtraData: Dictionary<String, Any> = eventArgs.extra_data!
         for (key, value) in extraData {
             XCTAssertEqual(actualExtraData[key]! as! String, value,
                            "The result of Sampler.generateEventArgs should have correct values passed via extra_data")
         }
-        let actualMetadata: ParselyMetadata = eventArgs["metadata"] as! ParselyMetadata
+        let actualMetadata: ParselyMetadata = eventArgs.metadata!
         let expectedMetadata: Dictionary<String, Any> = testMetadata.toDict()
         let result: Bool = NSDictionary(dictionary: actualMetadata.toDict()).isEqual(to: expectedMetadata)
         XCTAssert(result, "The metadata field of the result of Sampler.generateEventArgs should be a dict representation " +

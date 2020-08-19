@@ -46,7 +46,7 @@ class VideoTests: ParselyTestCase {
         videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
                                 metadata: firstTestMetadata, extra_data: nil, idsite: ParselyTestCase.testApikey)
         let testTrackedVideo: TrackedVideo = videoManager!.trackedVideos.values.first!
-        let actualMetadata: ParselyMetadata = testTrackedVideo.eventArgs["metadata"]! as! ParselyMetadata
+        let actualMetadata: ParselyMetadata = testTrackedVideo.eventArgs.metadata!
         XCTAssertEqual(actualMetadata.section, testSectionFirst,
                        "The section metadata stored for a video after a call to parsely.track.videoManager.trackPlay " +
                        "should match the section metadata passed to that call.")
@@ -56,7 +56,7 @@ class VideoTests: ParselyTestCase {
         videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
                                 metadata: secondTestMetadata, extra_data: nil, idsite: ParselyTestCase.testApikey)
         let secondTestTrackedVideo: TrackedVideo = videoManager!.trackedVideos.values.first!
-        let secondActualMetadata: ParselyMetadata = secondTestTrackedVideo.eventArgs["metadata"]! as! ParselyMetadata
+        let secondActualMetadata: ParselyMetadata = secondTestTrackedVideo.eventArgs.metadata!
         XCTAssertEqual(secondActualMetadata.section, testSectionSecond,
                        "The section metadata stored for a preexisting video after a call to parsely.track.videoManager.trackPlay " +
                        "should match the section metadata passed to that call.")
@@ -84,7 +84,7 @@ class VideoTests: ParselyTestCase {
     
     func testHeartbeatFn() {
         let testVideoKey: String = testUrl + "::" + testVideoId
-        let dummyEventArgs: Dictionary<String, Any> = videoManager!.generateEventArgs(
+        let dummyEventArgs: EventArgs = videoManager!.generateEventArgs(
             url: testUrl, urlref: "", extra_data: nil, idsite: ParselyTestCase.testApikey)
         let dummyAccumulator: Accumulator = Accumulator(key: testVideoKey, accumulatedTime: 0, totalTime: 0,
                                                         firstSampleTime: Date(),

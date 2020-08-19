@@ -11,7 +11,7 @@ class EngagedTimeTests: ParselyTestCase {
     }
     
     func testHeartbeatFn() {
-        let dummyEventArgs: Dictionary<String, Any> = engagedTime!.generateEventArgs(
+        let dummyEventArgs: EventArgs = engagedTime!.generateEventArgs(
             url: testUrl, urlref: "", extra_data: nil, idsite: ParselyTestCase.testApikey)
         let dummyAccumulator: Accumulator = Accumulator(key: "", accumulatedTime: 0, totalTime: 0,
                                                         firstSampleTime: Date(),
