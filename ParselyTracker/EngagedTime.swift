@@ -17,13 +17,13 @@ class EngagedTime: Sampler {
 
         let event = Heartbeat(
             "heartbeat",
-            url: eventArgs["url"] as! String,
-            urlref: eventArgs["urlref"] as? String,
+            url: eventArgs.url!,
+            urlref: eventArgs.urlref,
             inc: roundedSecs,
             tt: totalMs,
-            metadata: eventArgs["metadata"] as? ParselyMetadata,
-            extra_data: eventArgs["extra_data"] as? Dictionary<String, Any>,
-            idsite: (eventArgs["idsite"] as! String)
+            metadata: eventArgs.metadata,
+            extra_data: eventArgs.extra_data,
+            idsite: eventArgs.idsite!
         )
 
         parselyTracker.track.event(event: event)

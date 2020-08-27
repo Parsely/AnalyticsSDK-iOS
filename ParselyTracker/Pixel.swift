@@ -17,11 +17,11 @@ class Pixel {
             return
         }
         os_log("Fired beacon: action = %s", log: OSLog.tracker, type: .debug, event.action)
-        let session: Dictionary<String, Any?> = sessionManager.get(url: event.url, urlref: event.urlref,
+        let session: Session = sessionManager.get(url: event.url, urlref: event.urlref,
                                                               shouldExtendExisting: true)
         event.setSessionInfo(session: session)
         let visitorInfo = parselyTracker.visitorManager.getVisitorInfo(shouldExtendExisting: true)
-        event.setVisitorInfo(visitorInfo: visitorInfo as Dictionary<String, Any>)
+        event.setVisitorInfo(visitorId: visitorInfo.id)
         parselyTracker.eventQueue.push(event)
     }
 }

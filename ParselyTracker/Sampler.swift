@@ -6,6 +6,14 @@ let MIN_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(1)
 let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(900000)
 let BACKOFF_THRESHOLD = 60
 
+struct EventArgs {
+    var url: String?
+    var urlref: String?
+    var metadata: ParselyMetadata?
+    var extra_data: Dictionary<String, Any>?
+    var idsite: String?
+}
+
 struct Accumulator {
     var key: String
     var accumulatedTime: TimeInterval = TimeInterval(0)
@@ -16,7 +24,7 @@ struct Accumulator {
     var heartbeatTimeout: TimeInterval?
     var contentDuration: TimeInterval?
     var isEngaged: Bool
-    var eventArgs: Dictionary<String, Any>?
+    var eventArgs: EventArgs?
 }
 
 extension TimeInterval {
@@ -56,7 +64,7 @@ class Sampler {
 
     public func trackKey(key: String,
                          contentDuration: TimeInterval?,
-                         eventArgs: Dictionary<String, Any>?,
+                         eventArgs: EventArgs?,
                          resetOnExisting: Bool = false) -> Void {
         os_log("Sampler tracked key: %s", log: OSLog.tracker, type: .debug, key)
         let isNew: Bool = accumulators.index(forKey: key) == nil
@@ -101,15 +109,8 @@ class Sampler {
         accumulators.removeValue(forKey: key)
     }
 
-    public func generateEventArgs(url: String, urlref: String, metadata: ParselyMetadata? = nil, extra_data: Dictionary<String, Any>?, idsite: String) -> Dictionary<String, Any> {
-        var eventArgs: [String: Any] = ["urlref": urlref, "url": url, "idsite": idsite]
-        if (metadata != nil) {
-            eventArgs["metadata"] = metadata!
-        }
-        if (extra_data != nil) {
-            eventArgs["extra_data"] = extra_data!
-        }
-        return eventArgs
+    public func generateEventArgs(url: String, urlref: String, metadata: ParselyMetadata? = nil, extra_data: Dictionary<String, Any>?, idsite: String) -> EventArgs {
+        return EventArgs(url: url, urlref: urlref, metadata: metadata ?? ParselyMetadata(), extra_data: extra_data ?? [:], idsite: idsite)
     }
 
     @objc private func sample() -> Void {
