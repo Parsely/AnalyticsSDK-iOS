@@ -9,10 +9,10 @@ class Event {
     var idsite: String
     var extra_data: Dictionary<String, Any>?
     var session_id: Int?
-    var session_timestamp: Int?
+    var session_timestamp: UInt64?
     var session_url: String?
     var session_referrer: String?
-    var last_session_timestamp: Int?
+    var last_session_timestamp: UInt64?
     var parsely_site_uuid: String?
     var rand: UInt64!
     
@@ -23,10 +23,10 @@ class Event {
          extra_data: Dictionary<String, Any>?,
          idsite: String = "",
          session_id: Int? = nil,
-         session_timestamp: Int? = nil,
+         session_timestamp: UInt64? = nil,
          session_url: String? = nil,
          session_referrer: String? = nil,
-         last_session_timestamp: Int? = nil
+         last_session_timestamp: UInt64? = nil
     ) {
         self.action = action
         self.url = url
@@ -43,18 +43,16 @@ class Event {
 
     }
 
-    func setSessionInfo(session: Dictionary<String, Any?>) {
-        self.session_id = session["session_id"] as? Int ?? 0
-        self.session_timestamp = session["session_ts"] as? Int ?? 0
-        self.session_url = session["session_url"] as? String ?? ""
-        self.session_referrer = session["session_referrer"] as? String ?? ""
-        self.last_session_timestamp = session["last_session_ts"] as? Int ?? 0
+    func setSessionInfo(session: Session) {
+        self.session_id = session.session_id
+        self.session_timestamp = session.session_ts
+        self.session_url = session.session_url ?? ""
+        self.session_referrer = session.session_referrer ?? ""
+        self.last_session_timestamp = session.last_session_ts ?? 0
     }
 
-    func setVisitorInfo(visitorInfo: Dictionary<String, Any>?) {
-        if let visitor = visitorInfo {
-            self.parsely_site_uuid = (visitor["id"] as! String)
-        }
+    func setVisitorInfo(visitorId: String) {
+        self.parsely_site_uuid = visitorId
     }
 
     func toDict() -> Dictionary<String,Any> {

@@ -33,6 +33,21 @@
 		F40D9A6720EFF74F0030525E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F40D9A6620EFF74F0030525E /* Assets.xcassets */; };
 		F40D9A6A20EFF74F0030525E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F40D9A6820EFF74F0030525E /* LaunchScreen.storyboard */; };
 		F410D63121061D7800DB3EBE /* PixelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F410D63021061D7800DB3EBE /* PixelTests.swift */; };
+		F416B36224F5B5510027A9B9 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333AD20F008EE004BB6F5 /* Session.swift */; };
+		F416B36324F5B5570027A9B9 /* Visitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B420F008EF004BB6F5 /* Visitor.swift */; };
+		F416B36424F5BA590027A9B9 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333AD20F008EE004BB6F5 /* Session.swift */; };
+		F416B36524F5BA5E0027A9B9 /* Visitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B420F008EF004BB6F5 /* Visitor.swift */; };
+		F416B36624F5BAFF0027A9B9 /* ParselyTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A8020EFFADD0030525E /* ParselyTracker.swift */; };
+		F416B36724F5BB0D0027A9B9 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEDC3262212161F00769350 /* HttpClient.swift */; };
+		F416B36824F5BB0D0027A9B9 /* EngagedTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B220F008EF004BB6F5 /* EngagedTime.swift */; };
+		F416B36924F5BB0D0027A9B9 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B120F008EE004BB6F5 /* EventQueue.swift */; };
+		F416B36A24F5BB0D0027A9B9 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B520F008EF004BB6F5 /* Event.swift */; };
+		F416B36B24F5BB0D0027A9B9 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B320F008EF004BB6F5 /* Pixel.swift */; };
+		F416B36C24F5BB0D0027A9B9 /* Sampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B020F008EE004BB6F5 /* Sampler.swift */; };
+		F416B36D24F5BB0D0027A9B9 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333AE20F008EE004BB6F5 /* Video.swift */; };
+		F416B36F24F5BB0D0027A9B9 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BC46FA2208D60A000B937A /* Track.swift */; };
+		F416B37024F5BB0D0027A9B9 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889C220CB67500476E27 /* RequestBuilder.swift */; };
+		F416B37124F5BB0D0027A9B9 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FC40BD221CC42300C70806 /* Metadata.swift */; };
 		F433339720F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F433338E20F0087E004BB6F5 /* ParselyTracker.framework */; };
 		F433339E20F0087E004BB6F5 /* ParselyTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F433339D20F0087E004BB6F5 /* ParselyTrackerTests.swift */; };
 		F43333A420F0087E004BB6F5 /* ParselyTracker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F433338E20F0087E004BB6F5 /* ParselyTracker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -45,6 +60,17 @@
 		F43333BC20F008EF004BB6F5 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B320F008EF004BB6F5 /* Pixel.swift */; };
 		F43333BD20F008EF004BB6F5 /* Visitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B420F008EF004BB6F5 /* Visitor.swift */; };
 		F43333BE20F008EF004BB6F5 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B520F008EF004BB6F5 /* Event.swift */; };
+		F44016C824F8470100358861 /* ParselyTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A8020EFFADD0030525E /* ParselyTracker.swift */; };
+		F44016C924F847A200358861 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BC46FA2208D60A000B937A /* Track.swift */; };
+		F44016CA24F847CE00358861 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B120F008EE004BB6F5 /* EventQueue.swift */; };
+		F44016CB24F847E200358861 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B520F008EF004BB6F5 /* Event.swift */; };
+		F44016CC24F8480F00358861 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FC40BD221CC42300C70806 /* Metadata.swift */; };
+		F44016CD24F8482B00358861 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEDC3262212161F00769350 /* HttpClient.swift */; };
+		F44016CE24F8482B00358861 /* EngagedTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B220F008EF004BB6F5 /* EngagedTime.swift */; };
+		F44016CF24F8482B00358861 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B320F008EF004BB6F5 /* Pixel.swift */; };
+		F44016D024F8482B00358861 /* Sampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333B020F008EE004BB6F5 /* Sampler.swift */; };
+		F44016D124F8482B00358861 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43333AE20F008EE004BB6F5 /* Video.swift */; };
+		F44016D324F8482B00358861 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889C220CB67500476E27 /* RequestBuilder.swift */; };
 		F441A55C20F3B8BF009B556E /* EventQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F441A55B20F3B8BF009B556E /* EventQueueTests.swift */; };
 		F441A55E20F53A56009B556E /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F441A55D20F53A56009B556E /* EventTests.swift */; };
 		F494BFB620FFDD5900025A4C /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = F494BFB520FFDD5900025A4C /* Podfile */; };
@@ -609,6 +635,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F416B36724F5BB0D0027A9B9 /* HttpClient.swift in Sources */,
+				F416B36824F5BB0D0027A9B9 /* EngagedTime.swift in Sources */,
+				F416B36924F5BB0D0027A9B9 /* EventQueue.swift in Sources */,
+				F416B36A24F5BB0D0027A9B9 /* Event.swift in Sources */,
+				F416B36B24F5BB0D0027A9B9 /* Pixel.swift in Sources */,
+				F416B36C24F5BB0D0027A9B9 /* Sampler.swift in Sources */,
+				F416B36D24F5BB0D0027A9B9 /* Video.swift in Sources */,
+				F416B36F24F5BB0D0027A9B9 /* Track.swift in Sources */,
+				F416B37024F5BB0D0027A9B9 /* RequestBuilder.swift in Sources */,
+				F416B37124F5BB0D0027A9B9 /* Metadata.swift in Sources */,
+				F416B36624F5BAFF0027A9B9 /* ParselyTracker.swift in Sources */,
+				F416B36524F5BA5E0027A9B9 /* Visitor.swift in Sources */,
+				F416B36424F5BA590027A9B9 /* Session.swift in Sources */,
 				F40D9A6220EFF74F0030525E /* SecondViewController.swift in Sources */,
 				F40D9A5E20EFF74F0030525E /* AppDelegate.swift in Sources */,
 				F40D9A6020EFF74F0030525E /* FirstViewController.swift in Sources */,
@@ -648,6 +687,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F44016CD24F8482B00358861 /* HttpClient.swift in Sources */,
+				F44016CE24F8482B00358861 /* EngagedTime.swift in Sources */,
+				F44016CF24F8482B00358861 /* Pixel.swift in Sources */,
+				F44016D024F8482B00358861 /* Sampler.swift in Sources */,
+				F44016D124F8482B00358861 /* Video.swift in Sources */,
+				F44016D324F8482B00358861 /* RequestBuilder.swift in Sources */,
+				F44016CC24F8480F00358861 /* Metadata.swift in Sources */,
+				F44016CB24F847E200358861 /* Event.swift in Sources */,
+				F44016CA24F847CE00358861 /* EventQueue.swift in Sources */,
+				F44016C924F847A200358861 /* Track.swift in Sources */,
+				F44016C824F8470100358861 /* ParselyTracker.swift in Sources */,
+				2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */,
 				B2FC40C0221CC43200C70806 /* MetadataTests.swift in Sources */,
 				F410D63121061D7800DB3EBE /* PixelTests.swift in Sources */,
 				F4BF866E2190DB4A00BD3867 /* VideoTests.swift in Sources */,
@@ -657,7 +708,8 @@
 				B2C84B66220A03610018BC7B /* SamplerTests.swift in Sources */,
 				F4BF86682190DAFC00BD3867 /* EngagedTimeTests.swift in Sources */,
 				F433339E20F0087E004BB6F5 /* ParselyTrackerTests.swift in Sources */,
-				2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */,
+				F416B36224F5B5510027A9B9 /* Session.swift in Sources */,
+				F416B36324F5B5570027A9B9 /* Visitor.swift in Sources */,
 				F4BF866C2190DB3C00BD3867 /* SessionTests.swift in Sources */,
 				2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */,
 				F4BF866A2190DB1C00BD3867 /* TrackTests.swift in Sources */,

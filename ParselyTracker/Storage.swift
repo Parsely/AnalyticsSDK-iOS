@@ -10,37 +10,67 @@ extension Date {
     }
 }
 
+protocol Storable: Codable, Equatable {
+    var expires: Date? { get set }
+}
+
 class Storage {
     let defaults = UserDefaults.standard
     let expiryDateKey = "expires"
-
-    func get(key: String) -> Dictionary<String, Any?>? {
-        if let data = self.defaults.dictionary(forKey: key) {
-            if let expiryDate = data[self.expiryDateKey] as? Date {
-                let savedExpiryDate = expiryDate
-                let now = Date()
-                if savedExpiryDate <= now {
-                    self.defaults.removeObject(forKey: key)
-                    return nil
+    
+    func get<T: Storable>(key: String) -> T? {
+        if let data = self.defaults.object(forKey: key) as? Data {
+            let decoder = JSONDecoder()
+            if let decoded = try? decoder.decode(T.self, from: data) {
+                if let expiryDate = decoded.expires {
+                    let savedExpiryDate = expiryDate
+                    let now = Date()
+                    if savedExpiryDate <= now {
+                        self.defaults.removeObject(forKey: key)
+                        return nil
+                    }
                 }
+                return decoded
             }
-            return data
         }
         return nil
     }
 
-    func set(key: String, value: Dictionary<String, Any?>, expires: Date?) -> Dictionary<String, Any?> {
-        var data = value
+    func set(key: String, value: Session, expires: Date?) -> Session {
+        let encoder = JSONEncoder()
+        var session = value
         if expires != nil {
-           data[self.expiryDateKey] = expires
+            session.expires = expires
         }
-        self.defaults.set(data, forKey: key)
-        return data
+        if let encoded = try? encoder.encode(session) {
+            self.defaults.set(encoded, forKey: key)
+        }
+        return session
     }
-
-    func extendExpiry(key: String, expires: Date) -> Dictionary<String, Any?>? {
-        if let data = self.get(key: key) {
-            return set(key: key, value: data, expires: expires)
+    
+    func set(key: String, value: VisitorInfo, expires: Date?) -> VisitorInfo {
+        let encoder = JSONEncoder()
+        var visitorInfo = value
+        if expires != nil {
+            visitorInfo.expires = expires
+        }
+        if let encoded = try? encoder.encode(visitorInfo) {
+            self.defaults.set(encoded, forKey: key)
+        }
+        return visitorInfo
+    }
+    
+    func extendSessionExpiry(key: String, expires: Date) -> Session? {
+        if let data: Session = self.get(key: key) {
+            return self.set(key: key, value: data, expires: expires)
+        } else {
+            return nil
+        }
+    }
+    
+    func extendVisitorInfoExpiry(key: String, expires: Date) -> VisitorInfo? {
+        if let data: VisitorInfo = self.get(key: key) {
+            return self.set(key: key, value: data, expires: expires)
         } else {
             return nil
         }

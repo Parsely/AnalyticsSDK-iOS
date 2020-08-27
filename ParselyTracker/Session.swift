@@ -1,6 +1,19 @@
 import Foundation
 import UIKit
 
+struct Session : Storable {
+    var session_id: Int
+    var session_url: String?
+    var session_referrer: String?
+    var session_ts: UInt64
+    var last_session_ts: UInt64?
+    var expires: Date?
+    
+    static func ==(lhs: Session, rhs: Session) -> Bool {
+        return lhs.session_id == rhs.session_id && lhs.session_url == rhs.session_url && lhs.session_referrer == rhs.session_referrer && lhs.session_ts == rhs.session_ts && lhs.last_session_ts == rhs.last_session_ts && lhs.expires == rhs.expires
+    }
+}
+
 class SessionManager {
     private let SESSION_TIMEOUT: TimeInterval = 30 * 60.0
     private let storage = Parsely.sharedStorage
@@ -18,32 +31,27 @@ class SessionManager {
         visitorManager = parselyTracker.visitorManager
     }
 
-    internal func get(url: String, urlref: String, shouldExtendExisting: Bool = false) -> Dictionary<String, Any?> {
-        var session = self.storage.get(key: self.sessionKey) ?? [:]
-
-        if session.isEmpty {
+    internal func get(url: String, urlref: String, shouldExtendExisting: Bool = false) -> Session {
+        if var session: Session = self.storage.get(key: self.sessionKey) {
+            if shouldExtendExisting {
+                session = extendExpiry()
+            }
+            return session
+        } else {
             var visitorInfo = visitorManager.getVisitorInfo()
-            visitorInfo["session_count"] = visitorInfo["session_count"] as! Int + 1
-            
-            session = [:]
-            session["session_id"] = visitorInfo["session_count"]
-            session["session_url"] = url
-            session["session_referrer"] = urlref
-            session["session_ts"] = Date().millisecondsSince1970
-            session["last_session_ts"] = visitorInfo["last_session_ts"]
-            
-            visitorInfo["last_session_ts"] = session["session_ts"]
+            visitorInfo.session_count = visitorInfo.session_count + 1
+            var session = Session(session_id: visitorInfo.session_count, session_url: url, session_referrer: urlref, session_ts: Date().millisecondsSince1970, last_session_ts: visitorInfo.last_session_ts)
+            visitorInfo.last_session_ts = session.session_ts
             let _ = visitorManager.setVisitorInfo(visitorInfo: visitorInfo)
-            session = storage.set(key: sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: SESSION_TIMEOUT))
-        } else if shouldExtendExisting {
-            session = extendExpiry()
+            session = storage.set(key: sessionKey, value: session, expires: Date.init(timeIntervalSinceNow: SESSION_TIMEOUT))
+            return session
         }
-        return session
+
     }
     
-    internal func extendExpiry() -> Dictionary<String, Any> {
+    internal func extendExpiry() -> Session {
         let expiry = Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT)
-        let result = storage.extendExpiry(key: self.sessionKey, expires: expiry) ?? [:]
-        return result as Dictionary<String, Any>
+        let result = storage.extendSessionExpiry(key: self.sessionKey, expires: expiry) ?? Session(session_id: 0, session_url: nil, session_referrer: nil, session_ts: 0, last_session_ts: nil, expires: nil)
+        return result 
     }
 }
