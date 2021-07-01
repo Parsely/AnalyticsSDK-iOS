@@ -20,6 +20,11 @@ struct EventQueue<T> {
         os_log("Event pushed into queue", log: OSLog.tracker, type: .debug)
         list.append(element)
     }
+
+    mutating func push<Collection>(contentsOf elements:Collection) where T == Collection.Element, Collection: Sequence {
+        os_log("Events pushed into queue", log: OSLog.tracker, type: .debug)
+        list.append(contentsOf: elements)
+    }
     
     mutating func pop() -> T? {
         if list.isEmpty {

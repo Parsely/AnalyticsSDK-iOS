@@ -6,7 +6,6 @@ target 'ParselyDemo' do
   use_frameworks!
 
   pod 'SwiftyJSON', '~> 4.2'
-  pod 'ReachabilitySwift', '~> 4.3'
   target 'ParselyDemoTests' do
     inherit! :search_paths
     # Pods for testing
@@ -20,7 +19,6 @@ target 'ParselyTracker' do
 
   # Pods for ParselyTracker
   pod 'SwiftyJSON', '~> 4.2'
-  pod 'ReachabilitySwift', '~> 4.3'
   target 'ParselyTrackerTests' do
     inherit! :search_paths
     # Pods for testing

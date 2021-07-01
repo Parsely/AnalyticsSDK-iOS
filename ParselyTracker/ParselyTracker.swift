@@ -1,7 +1,6 @@
 import Foundation
+import UIKit
 import os.log
-
-import Reachability
 
 public class Parsely {
     public var apikey = ""
@@ -16,7 +15,6 @@ public class Parsely {
     private var configured = false
     private var flushTimer: Timer?
     private var flushInterval: TimeInterval = 30
-    private let reachability: Reachability = Reachability()!
     private var backgroundFlushTask: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     private var active: Bool = true
     public var secondsBetweenHeartbeats: TimeInterval? {
@@ -163,15 +161,18 @@ public class Parsely {
         if self.eventQueue.length() == 0 {
             return
         }
-        if reachability.connection == .none {
-            os_log("Network not reachable. Continuing", log:OSLog.tracker, type:.error)
-            return
-        }
+
         os_log("Flushing event queue", log: OSLog.tracker, type:.debug)
         let events = self.eventQueue.get()
         os_log("Got %s events", log: OSLog.tracker, type:.debug, String(describing: events.count))
         let request = RequestBuilder.buildRequest(events: events)
-        HttpClient.sendRequest(request: request!)
+        HttpClient.sendRequest(request: request!) { error in
+            if let error = error as? URLError, error.code == .notConnectedToInternet {
+                // When offline, return the events to the queue for the next flush().
+                self.eventQueue.push(contentsOf: events)
+                os_log("Network connection unavailable. Returning %s events to the queue.", String(describing: events.count))
+            }
+        }
     }
     
     internal func startFlushTimer() {
