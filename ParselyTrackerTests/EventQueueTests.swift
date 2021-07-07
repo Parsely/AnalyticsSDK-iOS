@@ -19,6 +19,16 @@ class EventQueueTests: ParselyTestCase {
         self.queue.push(31)
         XCTAssert(self.queue.list.count == 32)
     }
+
+    func testPushContentsOf() {
+        self.queue.push(contentsOf: [31])
+        XCTAssert(self.queue.list.count == 32)
+        self.queue.push(contentsOf: [32, 33])
+        XCTAssert(self.queue.list.count == 34)
+        self.queue.push(contentsOf: [34, 35].prefix(1))
+        XCTAssert(self.queue.list.count == 35)
+        XCTAssert(self.queue.list.suffix(4) == [31, 32, 33, 34])
+    }
     
     func testPop() {
         XCTAssert(self.queue.pop() == 0)
