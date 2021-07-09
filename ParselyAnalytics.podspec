@@ -12,5 +12,4 @@ Pod::Spec.new do |s|
   s.source_files           = "ParselyTracker"
   s.framework              = 'Foundation'
   s.dependency               'SwiftyJSON', '~> 4.2'
-  s.dependency               'ReachabilitySwift', '~> 4.3'
 end
