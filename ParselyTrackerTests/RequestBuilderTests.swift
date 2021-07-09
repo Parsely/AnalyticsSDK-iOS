@@ -23,21 +23,16 @@ class RequestBuilderTests: ParselyTestCase {
     }
     
     func testEndpoint() {
-        let endpoint = RequestBuilder.buildPixelEndpoint(now: nil)
+        let endpoint = RequestBuilder.buildPixelEndpoint()
         XCTAssert(endpoint != "", "buildPixelEndpoint should return a non-empty string")
     }
     
     func testBuildPixelEndpoint() {
-        var expected: String = "https://srv-2019-01-01-12.pixel.parsely.com/mobileproxy"
-        let formatter = DateFormatter()
-        formatter.timeZone = TimeZone(abbreviation: "UTC")
-        formatter.dateFormat = "yyyy/MM/dd HH:mm"
-        var now = formatter.date(from: "2019/01/01 12:31")
-        var actual = RequestBuilder.buildPixelEndpoint(now: now)
+        var expected: String = "https://p1.parsely.com/mobileproxy"
+        var actual = RequestBuilder.buildPixelEndpoint()
         XCTAssert(actual == expected, "buildPixelEndpoint should return the correct URL for the given date")
-        now = formatter.date(from: "2019/01/10 12:31")
-        expected = "https://srv-2019-01-10-12.pixel.parsely.com/mobileproxy"
-        actual = RequestBuilder.buildPixelEndpoint(now: now!)
+        expected = "https://p1.parsely.com/mobileproxy"
+        actual = RequestBuilder.buildPixelEndpoint()
         XCTAssert(actual == expected, "buildPixelEndpoint should return the correct URL for the given date")
     }
     
@@ -52,7 +47,7 @@ class RequestBuilderTests: ParselyTestCase {
         let events = makeEvents()
         let request = RequestBuilder.buildRequest(events: events)
         XCTAssertNotNil(request, "buildRequest should return a non-nil value")
-        XCTAssert(request!.url.contains("https://srv-"),
+        XCTAssert(request!.url.contains("https://p1"),
                   "RequestBuilder.buildRequest should return a request with a valid-looking url attribute")
         XCTAssertNotNil(request!.headers,
                         "RequestBuilder.buildRequest should return a request with a non-nil headers attribute")
