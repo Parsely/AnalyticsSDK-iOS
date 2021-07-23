@@ -5,7 +5,7 @@ class EventTests: ParselyTestCase {
     let testInc: Int = 5
     let testTT: Int = 15
     let expectedVisitorID: String = "12345fdffff"
-    let timestampInThePast: Int = 1553372504
+    let timestampInThePast: UInt64 = 1626963869621
     
     let expectedStrings: Dictionary<String, String> = [
         "action": "pageview",
@@ -17,8 +17,10 @@ class EventTests: ParselyTestCase {
         ]
     let expectedInts: Dictionary<String, Int> = [
         "sid": 0,
-        "sts": 1553295726,
-        "slts": 1553295726
+    ]
+    let expectedUInt64s: Dictionary<String, UInt64> = [
+        "sts": 1626963869621,
+        "slts": 1626963869621
     ]
     let extraData: Dictionary<String, String> = [
         "arbitraryParameter1": "testValue",
@@ -34,9 +36,9 @@ class EventTests: ParselyTestCase {
         let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
                                    urlref: expectedStrings["urlref"], metadata: testMetadata,
                                    extra_data: extraData, idsite: expectedStrings["idsite"]!,
-                                   session_id: expectedInts["sid"], session_timestamp: expectedInts["sts"],
+                                   session_id: expectedInts["sid"], session_timestamp: expectedUInt64s["sts"],
                                    session_url: expectedStrings["surl"], session_referrer: expectedStrings["sref"],
-                                   last_session_timestamp: expectedInts["slts"])
+                                   last_session_timestamp: expectedUInt64s["slts"])
         XCTAssertEqual(eventUnderTest.action, expectedStrings["action"],
                        "The action provided in Event initialization should be stored properly")
         XCTAssertEqual(eventUnderTest.url, expectedStrings["url"],
@@ -47,13 +49,13 @@ class EventTests: ParselyTestCase {
                        "The idsite provided in Event initialization should be stored properly")
         XCTAssertEqual(eventUnderTest.session_id, expectedInts["sid"],
                        "The sid provided in Event initialization should be stored properly")
-        XCTAssertEqual(eventUnderTest.session_timestamp, expectedInts["sts"],
+        XCTAssertEqual(eventUnderTest.session_timestamp, expectedUInt64s["sts"],
                        "The sts provided in Event initialization should be stored properly")
         XCTAssertEqual(eventUnderTest.session_url, expectedStrings["surl"],
                        "The surl provided in Event initialization should be stored properly")
         XCTAssertEqual(eventUnderTest.session_referrer, expectedStrings["sref"],
                        "The sref provided in Event initialization should be stored properly")
-        XCTAssertEqual(eventUnderTest.last_session_timestamp, expectedInts["slts"],
+        XCTAssertEqual(eventUnderTest.last_session_timestamp, expectedUInt64s["slts"],
                        "The slts provided in Event initialization should be stored properly")
         XCTAssert(eventUnderTest.rand > timestampInThePast,
                   "The rand of a newly-created Event should be a non-ancient timestamp")
@@ -86,9 +88,9 @@ class EventTests: ParselyTestCase {
         let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
                                    urlref: expectedStrings["urlref"], metadata: testMetadata,
                                    extra_data: extraData, idsite: expectedStrings["idsite"]!,
-                                   session_id: expectedInts["sid"], session_timestamp: expectedInts["sts"],
+                                   session_id: expectedInts["sid"], session_timestamp: expectedUInt64s["sts"],
                                    session_url: expectedStrings["surl"], session_referrer: expectedStrings["sref"],
-                                   last_session_timestamp: expectedInts["slts"])
+                                   last_session_timestamp: expectedUInt64s["slts"])
         eventUnderTest.setVisitorInfo(visitorInfo: ["id": expectedVisitorID])
         let actual: Dictionary<String, Any> = eventUnderTest.toDict()
         for (key, value) in expectedStrings {
@@ -125,16 +127,16 @@ class EventTests: ParselyTestCase {
                                    extra_data: extraData, idsite: expectedStrings["idsite"]!)
         eventUnderTest.setSessionInfo(session:[
             "session_id": expectedInts["sid"],
-            "session_ts": expectedInts["sts"],
-            "last_session_ts": expectedInts["slts"],
+            "session_ts": expectedUInt64s["sts"],
+            "last_session_ts": expectedUInt64s["slts"],
             "session_referrer": expectedStrings["sref"],
             "session_url": expectedStrings["surl"]
         ])
         XCTAssertEqual(eventUnderTest.session_id, expectedInts["sid"],
                        "The sid set via setSessionInfo should be stored properly")
-        XCTAssertEqual(eventUnderTest.session_timestamp, expectedInts["sts"],
+        XCTAssertEqual(eventUnderTest.session_timestamp, expectedUInt64s["sts"],
                        "The sts set via setSessionInfo should be stored properly")
-        XCTAssertEqual(eventUnderTest.last_session_timestamp, expectedInts["slts"],
+        XCTAssertEqual(eventUnderTest.last_session_timestamp, expectedUInt64s["slts"],
                        "The slts set via setSessionInfo should be stored properly")
         XCTAssertEqual(eventUnderTest.session_referrer, expectedStrings["sref"],
                        "The sref set via setSessionInfo should be stored properly")

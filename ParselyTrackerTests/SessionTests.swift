@@ -6,7 +6,7 @@ class SessionTests: ParselyTestCase {
     let sessionStorageKey = "_parsely_session_identifier"
     let testInitialUrl = "http://parsely-test.com/123"
     let testSubsequentUrl = "http://parsely-test.com/"
-    let epochTimeInThePast = 1553459222
+    let epochTimeInThePast = 1626963869621
     
     override func setUp() {
         super.setUp()
