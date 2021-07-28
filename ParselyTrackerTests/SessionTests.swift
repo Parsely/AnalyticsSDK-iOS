@@ -6,7 +6,7 @@ class SessionTests: ParselyTestCase {
     let sessionStorageKey = "_parsely_session_identifier"
     let testInitialUrl = "http://parsely-test.com/123"
     let testSubsequentUrl = "http://parsely-test.com/"
-    let epochTimeInThePast = 1553459222
+    let epochTimeInThePast:UInt64 = 1626963869621
     
     override func setUp() {
         super.setUp()
@@ -25,6 +25,7 @@ class SessionTests: ParselyTestCase {
                        "The session_referrer of a newly-created session should be the urlref it was initialized with")
         XCTAssertGreaterThan(session["session_ts"] as! UInt64, UInt64(epochTimeInThePast),
                              "The session_ts of a newly-created session should be non-ancient")
+        XCTAssertNotEqual(session["session_ts"] as! UInt64, 0, "The session_ts of a newly-created session should not be zero")
         XCTAssertGreaterThan(session["last_session_ts"] as! UInt64, UInt64(epochTimeInThePast),
                              "The last_session_ts of a newly-created session should be non-ancient")
     }
