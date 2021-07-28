@@ -43,9 +43,8 @@ class RequestBuilder {
     }
     
     internal static func buildRequest(events: Array<Event>) -> ParselyRequest? {
-        let now = Date()
         let request = ParselyRequest.init(
-            url: buildPixelEndpoint(now: now),
+            url: buildPixelEndpoint(),
             headers: buildHeadersDict(events: events),
             params: buildParamsDict(events: events)
         )
@@ -53,13 +52,8 @@ class RequestBuilder {
         return request
     }
 
-    internal static func buildPixelEndpoint(now: Date?) -> String {
-        let now: Date = now ?? Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd-HH"
-        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-        let dateString = dateFormatter.string(from: now)
-        self._baseURL = "https://srv-\(dateString).pixel.parsely.com/mobileproxy"
+    internal static func buildPixelEndpoint() -> String {
+        self._baseURL = "https://p1.parsely.com/mobileproxy"
         return self._baseURL!
     }
     
