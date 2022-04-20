@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.1.0 (4-20-2020)
+
+Bugfixes
+--------
+
+* Remove Reachability as a dependency
+* Fix 0 timestamps
+* Adding compatibility with arm64 and newer Swift versions
+
+
 0.0.10 (6-29-2020)
 ------------------
 
