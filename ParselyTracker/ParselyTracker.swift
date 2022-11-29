@@ -191,16 +191,22 @@ public class Parsely {
             os_log("Flush timer stopped", log: OSLog.tracker, type:.debug)
         }
     }
-    
+
     private func addApplicationObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIApplication.didEnterBackgroundNotification, object: nil)
+
+        if #available(iOS 13.0, *) {
+            NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIScene.didEnterBackgroundNotification, object: nil)
+        } else{
+            NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        }
+
         NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution), name: UIApplication.willTerminateNotification, object: nil)
     }
 
-    @objc private func resumeExecution() {
+    @objc private func resumeExecution(_notification: Notification) {
         if active {
             return
         }
@@ -210,7 +216,7 @@ public class Parsely {
         track.resume()
     }
     
-    @objc private func suspendExecution() {
+    @objc private func suspendExecution(_notification: Notification) {
         if !active {
             return
         }

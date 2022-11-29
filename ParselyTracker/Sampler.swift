@@ -58,7 +58,7 @@ class Sampler {
                          contentDuration: TimeInterval?,
                          eventArgs: Dictionary<String, Any>?,
                          resetOnExisting: Bool = false) -> Void {
-        os_log("Sampler tracked key: %s", log: OSLog.tracker, type: .debug, key)
+        os_log("Sampler tracked key: %s in class %@", log: OSLog.tracker, type: .debug, key, String(describing: self))
         let isNew: Bool = accumulators.index(forKey: key) == nil
         let shouldReset: Bool = !isNew && resetOnExisting
         if isNew || shouldReset {
@@ -85,6 +85,7 @@ class Sampler {
     }
     
     private func restartTimers() {
+        os_log("Restarted Timers in %@", log: OSLog.tracker, type: .debug, String(describing: self))
         if self.samplerTimer != nil {
             self.samplerTimer!.invalidate()
         }
@@ -158,7 +159,7 @@ class Sampler {
     }
 
     @objc internal func sendHeartbeats() -> Void {
-        os_log("called send heartbeats", log: OSLog.tracker, type: .debug)
+        os_log("called send heartbeats for %@", log: OSLog.tracker, type: .debug, String(describing: self))
         for (key, _) in accumulators {
             sendHeartbeat(key: key)
         }
@@ -172,7 +173,7 @@ class Sampler {
     }
     
     internal func pause() {
-        os_log("Paused from Sampler", log:OSLog.tracker, type:.debug)
+        os_log("Paused from %@", log:OSLog.tracker, type:.debug, String(describing: self))
         if samplerTimer != nil {
             self.samplerTimer!.invalidate()
             self.samplerTimer = nil
@@ -184,7 +185,7 @@ class Sampler {
     }
     
     internal func resume() {
-        os_log("Resumed from Sampler", log:OSLog.tracker, type:.debug)
+        os_log("Resumed from %@", log:OSLog.tracker, type:.debug, String(describing: self))
         if hasStartedSampling {
             restartTimers()
         }
