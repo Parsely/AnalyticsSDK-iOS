@@ -62,7 +62,7 @@ class Sampler {
         let isNew: Bool = accumulators.index(forKey: key) == nil
         let shouldReset: Bool = !isNew && resetOnExisting
         if isNew || shouldReset {
-            self.heartbeatInterval = baseHeartbeatInterval
+            heartbeatInterval = baseHeartbeatInterval
             let newTrackedData = Accumulator.init(
                   key: key,
                   accumulatedTime: TimeInterval(0),
@@ -86,14 +86,14 @@ class Sampler {
     
     private func restartTimers() {
         os_log("Restarted Timers in %@", log: OSLog.tracker, type: .debug, String(describing: self))
-        if self.samplerTimer != nil {
-            self.samplerTimer!.invalidate()
+        if samplerTimer != nil {
+            samplerTimer!.invalidate()
         }
-        self.samplerTimer = Timer.scheduledTimer(timeInterval: SAMPLE_RATE, target: self, selector: #selector(self.sample), userInfo: nil, repeats: false)
-        if self.heartbeatsTimer != nil {
-            self.heartbeatsTimer!.invalidate()
+        samplerTimer = Timer.scheduledTimer(timeInterval: SAMPLE_RATE, target: self, selector: #selector(sample), userInfo: nil, repeats: false)
+        if heartbeatsTimer != nil {
+            heartbeatsTimer!.invalidate()
         }
-        self.heartbeatsTimer = Timer.scheduledTimer(timeInterval: self.heartbeatInterval, target: self, selector: #selector(self.sendHeartbeats), userInfo: nil, repeats: false)
+        heartbeatsTimer = Timer.scheduledTimer(timeInterval: heartbeatInterval, target: self, selector: #selector(sendHeartbeats), userInfo: nil, repeats: false)
     }
 
     public func dropKey(key: String) -> Void {
@@ -127,7 +127,7 @@ class Sampler {
             trackedData.lastSampleTime = currentTime
             updateAccumulator(acc: trackedData)
         }
-        self.samplerTimer = Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
+        samplerTimer = Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
     }
     
     private func getHeartbeatInterval(existingTimeout: TimeInterval,
@@ -155,7 +155,7 @@ class Sampler {
             existingTimeout: trackedData.heartbeatTimeout!,
             totalTrackedTime: totalTrackedTime)
         updateAccumulator(acc: trackedData)
-        self.heartbeatInterval = trackedData.heartbeatTimeout!
+        heartbeatInterval = trackedData.heartbeatTimeout!
     }
 
     @objc internal func sendHeartbeats() -> Void {
@@ -163,7 +163,7 @@ class Sampler {
         for (key, _) in accumulators {
             sendHeartbeat(key: key)
         }
-        self.heartbeatsTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
+        heartbeatsTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
             self.sendHeartbeats()
         }
     }
@@ -175,12 +175,12 @@ class Sampler {
     internal func pause() {
         os_log("Paused from %@", log:OSLog.tracker, type:.debug, String(describing: self))
         if samplerTimer != nil {
-            self.samplerTimer!.invalidate()
-            self.samplerTimer = nil
+            samplerTimer!.invalidate()
+            samplerTimer = nil
         }
         if heartbeatsTimer != nil {
-            self.heartbeatsTimer!.invalidate()
-            self.heartbeatsTimer = nil
+            heartbeatsTimer!.invalidate()
+            heartbeatsTimer = nil
         }
     }
     

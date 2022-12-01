@@ -49,12 +49,12 @@ public class Parsely {
      */
     public func configure(siteId: String, handleLifecycle: Bool = true) {
         os_log("Configuring ParselyTracker", log: OSLog.tracker, type: .debug)
-        self.apikey = siteId
-        self.config = ["secondsBetweenHeartbeats": TimeInterval(10)]
+        apikey = siteId
+        config = ["secondsBetweenHeartbeats": TimeInterval(10)]
         if handleLifecycle {
             addApplicationObservers()
         }
-        self.configured = true
+        configured = true
     }
 
     /**
@@ -77,7 +77,7 @@ public class Parsely {
             _siteId = self.apikey
         }
         os_log("Tracking PageView", log: OSLog.tracker, type: .debug)
-        self.track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extraData, idsite: _siteId)
+        track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extraData, idsite: _siteId)
     }
 
     /**
@@ -158,12 +158,12 @@ public class Parsely {
     }
     
     @objc private func flush() {
-        if self.eventQueue.length() == 0 {
+        if eventQueue.length() == 0 {
             return
         }
 
         os_log("Flushing event queue", log: OSLog.tracker, type:.debug)
-        let events = self.eventQueue.get()
+        let events = eventQueue.get()
         os_log("Got %s events", log: OSLog.tracker, type:.debug, String(describing: events.count))
         let request = RequestBuilder.buildRequest(events: events)
         HttpClient.sendRequest(request: request!) { error in
@@ -177,17 +177,17 @@ public class Parsely {
     
     internal func startFlushTimer() {
         os_log("Flush timer starting", log: OSLog.tracker, type:.debug)
-        if self.flushTimer == nil && self.active {
-            self.flushTimer = Timer.scheduledTimer(timeInterval: self.flushInterval, target: self, selector: #selector(self.flush), userInfo: nil, repeats: true)
+        if flushTimer == nil && active {
+            flushTimer = Timer.scheduledTimer(timeInterval: flushInterval, target: self, selector: #selector(flush), userInfo: nil, repeats: true)
             os_log("Flush timer started", log: OSLog.tracker, type:.debug)
         }
     }
     
     internal func pauseFlushTimer() {
         os_log("Flush timer stopping", log: OSLog.tracker, type:.debug)
-        if self.flushTimer != nil && !self.active {
-            self.flushTimer!.invalidate()
-            self.flushTimer = nil
+        if flushTimer != nil && !active {
+            flushTimer!.invalidate()
+            flushTimer = nil
             os_log("Flush timer stopped", log: OSLog.tracker, type:.debug)
         }
     }
@@ -242,8 +242,8 @@ public class Parsely {
     }
     
     private func endBackgroundFlushTask() {
-        UIApplication.shared.endBackgroundTask(self.backgroundFlushTask)
-        self.backgroundFlushTask = UIBackgroundTaskIdentifier.invalid
+        UIApplication.shared.endBackgroundTask(backgroundFlushTask)
+        backgroundFlushTask = UIBackgroundTaskIdentifier.invalid
     }
 }
 

@@ -9,7 +9,7 @@ class Track {
 
     init(trackerInstance: Parsely) {
         parselyTracker = trackerInstance
-        self.pixel = Pixel(trackerInstance: parselyTracker)
+        pixel = Pixel(trackerInstance: parselyTracker)
         videoManager = VideoManager(trackerInstance: parselyTracker)
         engagedTime = EngagedTime(trackerInstance: parselyTracker)
     }
@@ -21,7 +21,7 @@ class Track {
         }
         parselyTracker.startFlushTimer();
         
-        self.pixel.beacon(event: event)
+        pixel.beacon(event: event)
         os_log("Sending an event from Track", log: OSLog.tracker, type:.debug)
         dump(event.toDict())
     }
@@ -55,12 +55,12 @@ class Track {
     }
 
     func startEngagement(url: String, urlref: String = "", extra_data: Dictionary<String, Any>?, idsite: String) {
-        self.engagedTime.startInteraction(url: url, urlref: urlref, extra_data: extra_data, idsite: idsite)
+        engagedTime.startInteraction(url: url, urlref: urlref, extra_data: extra_data, idsite: idsite)
         os_log("track start engagement from Track", log: OSLog.tracker, type:.debug)
     }
 
     func stopEngagement() {
-        self.engagedTime.endInteraction()
+        engagedTime.endInteraction()
         os_log("track stop engagement from Track", log: OSLog.tracker, type:.debug)
     }
     
