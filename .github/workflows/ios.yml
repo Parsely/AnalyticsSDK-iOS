@@ -15,7 +15,7 @@ jobs:
         include:
           - xcode: "13.2"
             ios: "15.2"
-          - xcode: "14.1"
+          - xcode: "14"
             ios: "16.1"
     steps:
     - uses: actions/checkout@v3
