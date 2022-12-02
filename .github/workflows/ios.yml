@@ -15,7 +15,7 @@ jobs:
           - macos: "macos-10.15"
             xcode: "11"
             ios: "13.0"
-          - macos: "macos-11"
+          - macos: "macos-10.15"
             xcode: "11.6"
             ios: "13.6"
           - macos: "macos-12"
