@@ -9,18 +9,22 @@ on:
 jobs:
   buildAndTest:
     name: Build and Test
-    runs-on: macos-12
     strategy:
       matrix:
         include:
-          - xcode: "11"
+          - macos: "macos-10.15"
+            xcode: "11"
             ios: "13.0"
-          - xcode: "11.6"
+          - macos: "macos-11"
+            xcode: "11.6"
             ios: "13.6"
-          - xcode: "13.4"
+          - macos: "macos-12"
+            xcode: "13.4"
             ios: "14.4"
-          - xcode: "14.1"
+          - macos: "macos-12"
+            xcode: "14.1"
             ios: "16.1"
+    runs-on: ${{ matrix.macos }}
     steps:
     - uses: actions/checkout@v3
     - uses: actions/cache@v2
