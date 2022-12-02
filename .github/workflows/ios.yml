@@ -8,8 +8,16 @@ on:
 
 jobs:
   buildAndTest:
-    name: Build and Test default scheme using any available iPhone simulator
+    name: Build and Test
     runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - xcode: "13.2"
+            ios: "15.2"
+          - xcode: "14.1"
+            ios: "16.1"
+    name: test iOS (${{ matrix.ios }})
     steps:
     - uses: actions/checkout@v3
     - uses: actions/cache@v2
@@ -18,11 +26,10 @@ jobs:
         key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-pods-
+    - name: Select Xcode
+      run: sudo xcode-select -switch /Applications/Xcode_$.app && /usr/bin/xcodebuild -version
     - name: CocoaPod Install
       run: pod install
-    - name: Test iPhone 12 OS 14.4
+    - name: Build and Test
       run: |
-        xcodebuild test -workspace ParselyDemo.xcworkspace -scheme ParselyTrackerTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.2'
-    - name: Test iPhone 14 OS 16.1
-      run: |
-        xcodebuild test -workspace ParselyDemo.xcworkspace -scheme ParselyTrackerTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.1'
+        xcodebuild test -workspace ParselyDemo.xcworkspace -scheme ParselyTrackerTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12,OS=$' | xcpretty && exit ${PIPESTATUS[0]}
