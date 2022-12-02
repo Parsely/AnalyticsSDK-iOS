@@ -27,7 +27,7 @@ jobs:
           ${{ runner.os }}-pods-
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: ${{ maxtrix.xcode }}
+        xcode-version: ${{ matrix.xcode }}
     - name: CocoaPod Install
       run: pod install
     - name: Build and Test
