@@ -20,15 +20,9 @@ jobs:
           ${{ runner.os }}-pods-
     - name: CocoaPod Install
       run: pod install
-    - name: Test iPhone 11 OS 13.0
-      run: |
-        xcodebuild test -workspace ParselyDemo.xcworkspace -scheme ParselyTrackerTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.0'
-    - name: Test iPhone 11 OS 13.6
-      run: |
-        xcodebuild test -workspace ParselyDemo.xcworkspace -scheme ParselyTrackerTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.6'
     - name: Test iPhone 12 OS 14.4
       run: |
-        xcodebuild test -workspace ParselyDemo.xcworkspace -scheme ParselyTrackerTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.4'
+        xcodebuild test -workspace ParselyDemo.xcworkspace -scheme ParselyTrackerTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.2'
     - name: Test iPhone 14 OS 16.1
       run: |
         xcodebuild test -workspace ParselyDemo.xcworkspace -scheme ParselyTrackerTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.1'
