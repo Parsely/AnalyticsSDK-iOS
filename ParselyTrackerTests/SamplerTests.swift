@@ -126,4 +126,31 @@ class SamplerTests: ParselyTestCase {
         XCTAssertNotNil(samplerUnderTest!.samplerTimer,
                         "After a call to Sampler.resume() without sampling having started, Sampler.samplerTimer should be nil")
     }
+    
+    func testPauseStopsCounting() {
+        let assertionTimeout:TimeInterval = TimeInterval(3)
+        let acceptableDifference:TimeInterval = TimeInterval(0.2)
+        
+        samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
+        
+        let expectation = self.expectation(description: "Sampling")
+        Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
+        
+        let accumulatedTime:TimeInterval = samplerUnderTest!.accumulators["sampler-test"]!.accumulatedTime
+        samplerUnderTest!.pause()
+        XCTAssert(accumulatedTime >= assertionTimeout - acceptableDifference,
+                  "The sampler should accumulate time constantly after a call to trackKey")
+        
+        let secondExpectation = self.expectation(description: "Paused sampling")
+        Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
+            secondExpectation.fulfill()
+        }
+        waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
+        
+        let secondAccumulatedTime: TimeInterval = samplerUnderTest!.accumulators["sampler-test"]!.accumulatedTime
+        XCTAssert(secondAccumulatedTime <= assertionTimeout, "AccumulatedTime was \(secondAccumulatedTime)")
+    }
 }

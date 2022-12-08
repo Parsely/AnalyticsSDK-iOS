@@ -1,13 +1,16 @@
 import XCTest
+import os.log
 @testable import ParselyTracker
 
 class EngagedTimeTests: ParselyTestCase {
     var engagedTime: EngagedTime?
+    var sharedInstance: Parsely?
     let testUrl: String = "http://parsely-stuff.com"
     
     override func setUp() {
         super.setUp()
         engagedTime = EngagedTime(trackerInstance: parselyTestTracker)
+        sharedInstance = Parsely.sharedInstance
     }
     
     func testHeartbeatFn() {
@@ -61,5 +64,44 @@ class EngagedTimeTests: ParselyTestCase {
         XCTAssertFalse(sampleResult,
                        "After a call to EngagedTime.startInteraction followed by a call to " +
                        "EngagedTime.stopInteraction, EngagedTime.sample should return false for the interacting key")
+    }
+    
+   
+    func testGlobalPause() {
+        let assertionTimeout:TimeInterval = TimeInterval(3)
+        let acceptableDifference:TimeInterval = TimeInterval(0.2)
+
+        sharedInstance!.startEngagement(url: testUrl, urlref: "", extraData: nil, siteId: ParselyTestCase.testApikey)
+        // sleep for three seconds
+        let expectation = self.expectation(description: "Sampling")
+        Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
+        // put application in background
+        if #available(iOS 13.0, *) {
+            NotificationCenter.default.post(name: UIScene.didEnterBackgroundNotification, object: nil)
+        } else{
+            NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
+        }
+        let accumulatedTime:TimeInterval = sharedInstance!.track.engagedTime.accumulators[testUrl]!.accumulatedTime
+        XCTAssert(accumulatedTime <= 3, "Engaged time should be less than or equal to 3 seconds but it was \(accumulatedTime)")
+
+        // sleep for three more seconds
+        let expectationTwo = self.expectation(description: "Sampling")
+        Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
+            expectationTwo.fulfill()
+        }
+        waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
+
+        // wake up the application
+        NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+
+        // stop tracking engaged time
+        sharedInstance!.stopEngagement()
+        let accumulatedTimeSecond:TimeInterval = sharedInstance!.track.engagedTime.accumulators[testUrl]!.accumulatedTime
+        XCTAssert(accumulatedTimeSecond == 0.0,
+                    "The accumulated time should be zero and it was \(accumulatedTimeSecond)")
+
     }
 }
