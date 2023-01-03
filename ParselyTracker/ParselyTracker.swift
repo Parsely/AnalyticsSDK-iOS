@@ -196,7 +196,11 @@ public class Parsely {
         NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIScene.didEnterBackgroundNotification, object: nil)
+        if #available(iOS 13.0, *) {
+            NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIScene.didEnterBackgroundNotification, object: nil)
+        } else {
+            NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willTerminateNotification, object: nil)
     }
 
