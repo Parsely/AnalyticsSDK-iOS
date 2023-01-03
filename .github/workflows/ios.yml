@@ -13,6 +13,10 @@ jobs:
       matrix:
         include:
           - macos: "macos-10.15"
+            xcode: "10.3"
+            ios: "12.4"
+            iphone: "iPhone 8"
+          - macos: "macos-10.15"
             xcode: "11.6"
             ios: "13.6"
             iphone: "iPhone 11"
