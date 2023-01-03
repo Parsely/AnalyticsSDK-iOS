@@ -197,11 +197,20 @@ public class Parsely {
         NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willResignActiveNotification, object: nil)
         if #available(iOS 13.0, *) {
-            NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIScene.didEnterBackgroundNotification, object: nil)
+            addUISceneDidEnterBackgroundObserver()
         } else {
-            NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+            addUIApplicationDidEnterBackgroundObserver()
         }
         NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willTerminateNotification, object: nil)
+    }
+    
+    @available(iOS 13.0, *)
+    private func addUISceneDidEnterBackgroundObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIScene.didEnterBackgroundNotification, object: nil)
+    }
+    
+    private func addUIApplicationDidEnterBackgroundObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
     @objc private func resumeExecution(_ notification: Notification) {
