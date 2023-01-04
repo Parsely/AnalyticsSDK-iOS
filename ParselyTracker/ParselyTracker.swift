@@ -192,25 +192,18 @@ public class Parsely {
         }
     }
 
-    private func addApplicationObservers() {
+    @objc private func addApplicationObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willResignActiveNotification, object: nil)
+        
         if #available(iOS 13.0, *) {
-            addUISceneDidEnterBackgroundObserver()
+            NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIScene.didEnterBackgroundNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIScene.willDeactivateNotification, object: nil)
         } else {
-            addUIApplicationDidEnterBackgroundObserver()
+            NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willResignActiveNotification, object: nil)
         }
         NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willTerminateNotification, object: nil)
-    }
-    
-    @available(iOS 13.0, *)
-    private func addUISceneDidEnterBackgroundObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIScene.didEnterBackgroundNotification, object: nil)
-    }
-    
-    private func addUIApplicationDidEnterBackgroundObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
     @objc private func resumeExecution(_ notification: Notification) {
