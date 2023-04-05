@@ -6,3 +6,6 @@
 xcuserdata
 xcuserdata/*
 *.xcuserdata
+.swiftpm/
+.vscode/
+
