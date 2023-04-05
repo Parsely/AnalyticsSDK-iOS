@@ -6,7 +6,7 @@ Changelog
 Changes
 --------
 
-* add support for Swift Package Manager (thanks @eddie-zhang)
+* Add support for Swift Package Manager (thanks @eddie-zhang)
 
 
 0.2.0 (12-12-2022)
