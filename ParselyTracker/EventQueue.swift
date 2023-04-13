@@ -43,7 +43,7 @@ struct EventQueue<T> {
         return list.take(count)
     }
     
-    public func length() -> Int {
+    func length() -> Int {
         return list.count
     }
 }
