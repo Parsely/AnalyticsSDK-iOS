@@ -33,10 +33,6 @@ public class Parsely {
     private var backgroundFlushTask: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     private var active: Bool = true
 
-    // Unused
-    private var default_config = [String: Any]()
-    var lastRequest: Dictionary<String, Any?>? = [:]
-
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
         _track = Track(trackerInstance: self)
