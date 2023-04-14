@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01520E457E678B18E060F1EE /* Pods_ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */; };
 		2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F03819E4FAF1F979D5926 /* StorageTests.swift */; };
 		2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F0DF37B68B0886A0E6848 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
-		57E211E09EB0BEF46691064D /* Pods_ParselyDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */; };
+		412303BAD35C03905845036B /* Pods_Parsely_ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E14A66E8F1BB8BC158D4959 /* Pods_Parsely_ParselyTracker.framework */; };
 		AA73AAAF2242C1F10089BF1D /* ParselyTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */; };
 		AA7473DE224956A000C75436 /* ParselyAnalytics.podspec in Resources */ = {isa = PBXBuildFile; fileRef = AA7473DD224956A000C75436 /* ParselyAnalytics.podspec */; };
 		AAEDC3272212161F00769350 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEDC3262212161F00769350 /* HttpClient.swift */; };
@@ -52,6 +51,7 @@
 		F4BF866C2190DB3C00BD3867 /* SessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF866B2190DB3C00BD3867 /* SessionTests.swift */; };
 		F4BF866E2190DB4A00BD3867 /* VideoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF866D2190DB4A00BD3867 /* VideoTests.swift */; };
 		F4BF86702190DB5A00BD3867 /* VisitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BF866F2190DB5A00BD3867 /* VisitorTests.swift */; };
+		FFAFE15752EDFF97939A720B /* Pods_Parsely_ParselyDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14B4D2093AFB65E10D802394 /* Pods_Parsely_ParselyDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,10 +94,16 @@
 
 /* Begin PBXFileReference section */
 		0512C3C37D1324FAF6BE71AD /* Pods-AnalyticsSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDK/Pods-AnalyticsSDK.debug.xcconfig"; sourceTree = "<group>"; };
+		14B4D2093AFB65E10D802394 /* Pods_Parsely_ParselyDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parsely_ParselyDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A1F03819E4FAF1F979D5926 /* StorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
 		2A1F0F92460A849C17B26338 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		2E14A66E8F1BB8BC158D4959 /* Pods_Parsely_ParselyTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parsely_ParselyTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyTrackerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		446CD722898871FC8DB4DE4D /* Pods-Parsely-ParselyTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parsely-ParselyTracker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Parsely-ParselyTracker/Pods-Parsely-ParselyTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		491B2BC988D8B0335724A102 /* Pods-Parsely-ParselyDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parsely-ParselyDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Parsely-ParselyDemo/Pods-Parsely-ParselyDemo.release.xcconfig"; sourceTree = "<group>"; };
 		510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnalyticsSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		51F998D6A6A125B4106BDE73 /* Pods-Parsely-ParselyTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parsely-ParselyTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Parsely-ParselyTracker/Pods-Parsely-ParselyTracker.release.xcconfig"; sourceTree = "<group>"; };
+		57664AA65429314270E473DB /* Pods-Parsely-ParselyDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parsely-ParselyDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Parsely-ParselyDemo/Pods-Parsely-ParselyDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		6D623D570B7F71EFD9E46D24 /* Pods-ParselyTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTracker/Pods-ParselyTracker.release.xcconfig"; sourceTree = "<group>"; };
 		8E611964813255DB16F1B8D3 /* Pods-ParselyDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo.release.xcconfig"; sourceTree = "<group>"; };
 		906991F0294DF786C982D060 /* Pods-ParselyDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -109,7 +115,6 @@
 		AAEDC32822123DD300769350 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AAEDC32A2212407700769350 /* ParselyTracker.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParselyTracker.framework; path = ../../../Downloads/ParselyTracker.framework; sourceTree = "<group>"; };
 		AB009DED9C4184290AB524B3 /* Pods-ParselyTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTracker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTracker/Pods-ParselyTracker.debug.xcconfig"; sourceTree = "<group>"; };
-		AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B205889C220CB67500476E27 /* RequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = "<group>"; };
 		B205889E220CB72A00476E27 /* RequestBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilderTests.swift; sourceTree = "<group>"; };
 		B2BC46FA2208D60A000B937A /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
@@ -117,7 +122,6 @@
 		B2FC40BD221CC42300C70806 /* Metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
 		B2FC40BF221CC43200C70806 /* MetadataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataTests.swift; sourceTree = "<group>"; };
 		C809B31A3D785C1DD2A05C4E /* Pods-AnalyticsSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDKTests/Pods-AnalyticsSDKTests.release.xcconfig"; sourceTree = "<group>"; };
-		EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F32771E2DD5F1A6A68B29BB2 /* Pods-AnalyticsSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnalyticsSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-AnalyticsSDK/Pods-AnalyticsSDK.release.xcconfig"; sourceTree = "<group>"; };
 		F40D9A5A20EFF74F0030525E /* ParselyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParselyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F40D9A5D20EFF74F0030525E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -159,8 +163,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57E211E09EB0BEF46691064D /* Pods_ParselyDemo.framework in Frameworks */,
 				AAF629792216382800F59789 /* ParselyTracker.framework in Frameworks */,
+				FFAFE15752EDFF97939A720B /* Pods_Parsely_ParselyDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,7 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01520E457E678B18E060F1EE /* Pods_ParselyTracker.framework in Frameworks */,
+				412303BAD35C03905845036B /* Pods_Parsely_ParselyTracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +201,10 @@
 				F641C3C76F714CE598D03837 /* Pods-ParselyTrackerTests.release.xcconfig */,
 				906991F0294DF786C982D060 /* Pods-ParselyDemo.debug.xcconfig */,
 				8E611964813255DB16F1B8D3 /* Pods-ParselyDemo.release.xcconfig */,
+				57664AA65429314270E473DB /* Pods-Parsely-ParselyDemo.debug.xcconfig */,
+				491B2BC988D8B0335724A102 /* Pods-Parsely-ParselyDemo.release.xcconfig */,
+				446CD722898871FC8DB4DE4D /* Pods-Parsely-ParselyTracker.debug.xcconfig */,
+				51F998D6A6A125B4106BDE73 /* Pods-Parsely-ParselyTracker.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -206,9 +214,9 @@
 			children = (
 				AAEDC32A2212407700769350 /* ParselyTracker.framework */,
 				510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */,
-				EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */,
 				3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */,
-				AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */,
+				14B4D2093AFB65E10D802394 /* Pods_Parsely_ParselyDemo.framework */,
+				2E14A66E8F1BB8BC158D4959 /* Pods_Parsely_ParselyTracker.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -460,7 +468,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Parsely-ParselyDemo/Pods-Parsely-ParselyDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -469,7 +477,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Parsely-ParselyDemo/Pods-Parsely-ParselyDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AAF24F042465B46CC0D7A05C /* [CP] Check Pods Manifest.lock */ = {
@@ -501,7 +509,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ParselyDemo-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Parsely-ParselyDemo-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -519,7 +527,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ParselyTracker-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Parsely-ParselyTracker-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -738,7 +746,7 @@
 		};
 		F40D9A7A20EFF7500030525E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 906991F0294DF786C982D060 /* Pods-ParselyDemo.debug.xcconfig */;
+			baseConfigurationReference = 57664AA65429314270E473DB /* Pods-Parsely-ParselyDemo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -756,7 +764,7 @@
 		};
 		F40D9A7B20EFF7500030525E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8E611964813255DB16F1B8D3 /* Pods-ParselyDemo.release.xcconfig */;
+			baseConfigurationReference = 491B2BC988D8B0335724A102 /* Pods-Parsely-ParselyDemo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -774,7 +782,7 @@
 		};
 		F43333A520F0087E004BB6F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AB009DED9C4184290AB524B3 /* Pods-ParselyTracker.debug.xcconfig */;
+			baseConfigurationReference = 446CD722898871FC8DB4DE4D /* Pods-Parsely-ParselyTracker.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -800,7 +808,7 @@
 		};
 		F43333A620F0087E004BB6F5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6D623D570B7F71EFD9E46D24 /* Pods-ParselyTracker.release.xcconfig */;
+			baseConfigurationReference = 51F998D6A6A125B4106BDE73 /* Pods-Parsely-ParselyTracker.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;

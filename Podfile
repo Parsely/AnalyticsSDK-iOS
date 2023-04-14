@@ -4,22 +4,17 @@ APP_IOS_DEPLOYMENT_TARGET = Gem::Version.new('13.0')
 
 platform :ios, APP_IOS_DEPLOYMENT_TARGET
 
-target 'ParselyDemo' do
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+abstract_target 'Parsely' do
   use_frameworks!
 
   pod 'SwiftyJSON', '~> 4.2'
-end
 
-target 'ParselyTracker' do
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
+  target 'ParselyDemo'
 
-  # Pods for ParselyTracker
-  pod 'SwiftyJSON', '~> 4.2'
-  target 'ParselyTrackerTests' do
-    inherit! :search_paths
-    # Pods for testing
+  target 'ParselyTracker' do
+    target 'ParselyTrackerTests' do
+      inherit! :search_paths
+    end
   end
 end
 
