@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import UIKit
 import os.log
 
@@ -28,7 +29,7 @@ public class Parsely {
 
     private var _track: Track!
     private var configured = false
-    private var flushTimer: Timer?
+    private var flushTimer: Cancellable?
     private var flushInterval: TimeInterval = 30
     private var backgroundFlushTask: UIBackgroundTaskIdentifier = .invalid
     private var active: Bool = true
@@ -204,6 +205,15 @@ public class Parsely {
             self.track.videoReset(url: url, vId: videoID)
         }
     }
+
+    /// After given `seconds`, invoke the given target-action in the event processor queue.
+    func scheduleEventProcessing(inSeconds seconds: Double, target: AnyObject, selector: Selector) -> Cancellable {
+        Just(0)
+            .delay(for: .seconds(seconds), scheduler: eventProcessor)
+            .sink { _ in
+                _ = target.perform(selector)
+            }
+    }
     
     @objc private func flush() {
         if eventQueue.length() == 0 {
@@ -226,7 +236,7 @@ public class Parsely {
     internal func startFlushTimer() {
         os_log("Flush timer starting", log: OSLog.tracker, type:.debug)
         if flushTimer == nil && active {
-            flushTimer = Timer.scheduledTimer(timeInterval: flushInterval, target: self, selector: #selector(flush), userInfo: nil, repeats: true)
+            flushTimer = scheduleEventProcessing(inSeconds: flushInterval, target: self, selector: #selector(flush))
             os_log("Flush timer started", log: OSLog.tracker, type:.debug)
         }
     }
@@ -234,7 +244,7 @@ public class Parsely {
     internal func pauseFlushTimer() {
         os_log("Flush timer stopping", log: OSLog.tracker, type:.debug)
         if flushTimer != nil && !active {
-            flushTimer?.invalidate()
+            flushTimer?.cancel()
             flushTimer = nil
             os_log("Flush timer stopped", log: OSLog.tracker, type:.debug)
         }
