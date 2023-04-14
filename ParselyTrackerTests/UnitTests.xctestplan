@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "E74B4D5C-BD46-4E81-83E3-7FF38FC45111",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ParselyDemo.xcodeproj",
+        "identifier" : "F433339520F0087E004BB6F5",
+        "name" : "ParselyTrackerTests"
+      }
+    }
+  ],
+  "version" : 1
+}
