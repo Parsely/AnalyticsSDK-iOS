@@ -366,6 +366,7 @@
 				F433339220F0087E004BB6F5 /* Sources */,
 				F433339320F0087E004BB6F5 /* Frameworks */,
 				F433339420F0087E004BB6F5 /* Resources */,
+				50A891132731B54A9972347D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -462,6 +463,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		50A891132731B54A9972347D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		96272734BE9824902EF80C99 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

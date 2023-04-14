@@ -32,9 +32,11 @@ public class Parsely {
     private var flushInterval: TimeInterval = 30
     private var backgroundFlushTask: UIBackgroundTaskIdentifier = .invalid
     private var active: Bool = true
+    private var eventProcessor: DispatchQueue
 
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
+        eventProcessor = DispatchQueue(label: "ly.parse.event-processor")
         _track = Track(trackerInstance: self)
     }
 
@@ -66,12 +68,25 @@ public class Parsely {
      - Parameter extraData: A dictionary of additional information to send with the generated pageview event
      - Parameter siteId: The Parsely site ID for which the pageview event should be counted
      */
-    public func trackPageView(url: String,
-                              urlref: String = "",
-                              metadata: ParselyMetadata? = nil,
-                              extraData: Dictionary<String, Any>? = nil,
-                              siteId: String = "")
-    {
+    public func trackPageView(
+        url: String,
+        urlref: String = "",
+        metadata: ParselyMetadata? = nil,
+        extraData: Dictionary<String, Any>? = nil,
+        siteId: String = ""
+    ) {
+        eventProcessor.async {
+            self._trackPageView(url: url, urlref: urlref, metadata: metadata, extraData: extraData, siteId: siteId)
+        }
+    }
+
+    private func _trackPageView(
+        url: String,
+        urlref: String,
+        metadata: ParselyMetadata?,
+        extraData: Dictionary<String, Any>?,
+        siteId: String
+    ) {
         var _siteId = siteId
         if (_siteId == "") {
             _siteId = self.apikey
@@ -90,11 +105,23 @@ public class Parsely {
      - Parameter extraData: A dictionary of additional information to send with generated heartbeat events
      - Parameter siteId: The Parsely site ID for which the heartbeat events should be counted
      */
-    public func startEngagement(url: String,
-                                urlref: String = "",
-                                extraData: Dictionary<String, Any>? = nil,
-                                siteId: String = "")
-    {
+    public func startEngagement(
+        url: String,
+        urlref: String = "",
+        extraData: Dictionary<String, Any>? = nil,
+        siteId: String = ""
+    ) {
+        eventProcessor.async {
+            self._startEngagement(url: url, urlref: urlref, extraData: extraData, siteId: siteId)
+        }
+    }
+
+    private func _startEngagement(
+        url: String,
+        urlref: String,
+        extraData: Dictionary<String, Any>?,
+        siteId: String
+    ) {
         var _siteId = siteId
         if (_siteId == "") {
             _siteId = self.apikey
@@ -107,7 +134,9 @@ public class Parsely {
      previously-engaged url, after which heartbeat events will stop being sent.
      */
     public func stopEngagement() {
-        track.stopEngagement()
+        eventProcessor.async {
+            self.track.stopEngagement()
+        }
     }
 
     /**
@@ -123,14 +152,29 @@ public class Parsely {
      - Parameter extraData: A dictionary of additional information to send with generated vheartbeat events
      - Parameter siteId: The Parsely site ID for which the vheartbeat events should be counted
      */
-    public func trackPlay(url: String,
-                          urlref: String = "",
-                          videoID: String,
-                          duration: TimeInterval,
-                          metadata: ParselyMetadata? = nil,
-                          extraData: Dictionary<String, Any>? = nil,
-                          siteId: String = "")
-    {
+    public func trackPlay(
+        url: String,
+        urlref: String = "",
+        videoID: String,
+        duration: TimeInterval,
+        metadata: ParselyMetadata? = nil,
+        extraData: Dictionary<String, Any>? = nil,
+        siteId: String = ""
+    ) {
+        eventProcessor.async {
+            self._trackPlay(url: url, urlref: urlref, videoID: videoID, duration: duration, metadata: metadata, extraData: extraData, siteId: siteId)
+        }
+    }
+
+    private func _trackPlay(
+        url: String,
+        urlref: String,
+        videoID: String,
+        duration: TimeInterval,
+        metadata: ParselyMetadata?,
+        extraData: Dictionary<String, Any>?,
+        siteId: String
+    ) {
         var _siteId = siteId
         if (_siteId == "") {
             _siteId = self.apikey
@@ -143,7 +187,9 @@ public class Parsely {
      event may be sent per previously-viewed url/video combination, after which vheartbeat events will stop being sent.
      */
     public func trackPause() {
-        track.videoPause()
+        eventProcessor.async {
+            self.track.videoPause()
+        }
     }
     
     /**
@@ -154,7 +200,9 @@ public class Parsely {
      - Parameter videoId: The video ID string for the video being reset
      */
     public func resetVideo(url:String, videoID:String) {
-        track.videoReset(url: url, vId: videoID)
+        eventProcessor.async {
+            self.track.videoReset(url: url, vId: videoID)
+        }
     }
     
     @objc private func flush() {

@@ -1,4 +1,6 @@
 import XCTest
+import Nimble
+
 @testable import ParselyTracker
 
 class ParselyTrackerTests: ParselyTestCase {
@@ -20,12 +22,15 @@ class ParselyTrackerTests: ParselyTestCase {
         XCTAssertEqual(parselyTestTracker.eventQueue.length(), 0,
                        "eventQueue should be empty immediately after initialization")
         parselyTestTracker.trackPageView(url: testUrl, urlref: testUrl, metadata: nil, extraData: nil)
+        expect(self.parselyTestTracker.eventQueue.length()).toEventually(equal(1))
         XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
                        "A call to Parsely.trackPageView should add an event to eventQueue")
     }
     
     func testStartEngagement() {
         parselyTestTracker.startEngagement(url: testUrl)
+        expect(self.parselyTestTracker.track.engagedTime.accumulators[self.testUrl]).toEventuallyNot(beNil())
+
         let internalAccumulators:Dictionary<String, Accumulator> = parselyTestTracker.track.engagedTime.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssert(testUrlAccumulator.isEngaged,
@@ -34,7 +39,11 @@ class ParselyTrackerTests: ParselyTestCase {
     }
     func testStopEngagement() {
         parselyTestTracker.startEngagement(url: testUrl)
+        expect(self.parselyTestTracker.track.engagedTime.accumulators[self.testUrl]).toEventuallyNot(beNil())
+
         parselyTestTracker.stopEngagement()
+        expect(self.parselyTestTracker.track.engagedTime.accumulators[self.testUrl]?.isEngaged).toEventually(beFalse())
+
         let internalAccumulators:Dictionary<String, Accumulator> = parselyTestTracker.track.engagedTime.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssertFalse(testUrlAccumulator.isEngaged,
@@ -43,6 +52,8 @@ class ParselyTrackerTests: ParselyTestCase {
     }
     func testTrackPlay() {
         parselyTestTracker.trackPlay(url: testUrl, videoID: testVideoId, duration: TimeInterval(10))
+        expect(self.parselyTestTracker.track.videoManager.trackedVideos.isEmpty).toEventually(beFalse())
+
         let videoManager: VideoManager = parselyTestTracker.track.videoManager
         let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
         XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
@@ -55,7 +66,11 @@ class ParselyTrackerTests: ParselyTestCase {
     }
     func testTrackPause() {
         parselyTestTracker.trackPlay(url: testUrl, videoID: testVideoId, duration: TimeInterval(10))
+        expect(self.parselyTestTracker.track.videoManager.trackedVideos.isEmpty).toEventually(beFalse())
+
         parselyTestTracker.trackPause()
+        expect(self.parselyTestTracker.track.videoManager.trackedVideos.values.first?.isPlaying).toEventually(beFalse())
+
         let videoManager: VideoManager = parselyTestTracker.track.videoManager
         let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
         XCTAssertEqual(trackedVideos.count, 1,
