@@ -19,12 +19,14 @@ let package = Package(
             name: "ParselyAnalytics",
             dependencies: [],
             path: "ParselyTracker",
+            exclude: ["Info.plist"],
             resources: []
         ),
         .testTarget(
             name: "ParselyTrackerTests",
             dependencies: ["ParselyAnalytics"],
-            path: "ParselyTrackerTests"
+            path: "ParselyTrackerTests",
+            exclude: ["Info.plist"]
         )
     ]
 )
