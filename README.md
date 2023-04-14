@@ -23,7 +23,8 @@ Then, run `pod install` to install `ParselyAnalytics` as a dependency.
 In any file that uses Parsely Analytics functionality, include `import ParselyAnalytics`
 
 At app startup, initialize the `Parsely` singleton. A good place to do this might be the top-level application delegate:
-```
+
+```swift
 var parsely: Parsely?
 
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -36,8 +37,10 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     return true
 }
 ```
+
 Once you've done this, you can call tracking methods on `self.parsely`:
-```
+
+```swift
 self.parsely.trackPageView(url: "http://mysite.com/story1")
 self.parsely.startEngagement(url: "http://mysite.com/story2")
 self.parsely.stopEngagement()
@@ -45,6 +48,6 @@ self.parsely.stopEngagement()
 
 ## Design Notes
 
-To conserve battery usage and network bandwidth, the SDK will batch pixel requests as they are made, 
-and flush them periodically. Each pixel retains its creation timestamp regardless of when it was sent. 
+To conserve battery usage and network bandwidth, the SDK will batch pixel requests as they are made,
+and flush them periodically. Each pixel retains its creation timestamp regardless of when it was sent.
 Upon app shutdown, or when the app is backgrounded, it will flush whatever pixels are currently in the queue.

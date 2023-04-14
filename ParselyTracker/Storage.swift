@@ -15,7 +15,7 @@ class Storage {
     let expiryDateKey = "expires"
 
     func get(key: String) -> Dictionary<String, Any?>? {
-        if var data = self.defaults.dictionary(forKey: key) {
+        if let data = self.defaults.dictionary(forKey: key) {
             if let expiryDate = data[self.expiryDateKey] as? Date {
                 let savedExpiryDate = expiryDate
                 let now = Date()

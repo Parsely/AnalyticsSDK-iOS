@@ -5,15 +5,6 @@ import ParselyTracker
 class FirstViewController: UIViewController {
     let delegate = UIApplication.shared.delegate as! AppDelegate
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     @IBAction func didTouchButton(_ sender: Any) {
         os_log("didTouchButton", log: OSLog.default, type: .debug)
         let demoMetas = ParselyMetadata(authors: ["Yogi Berr"])
@@ -39,4 +30,3 @@ class FirstViewController: UIViewController {
         delegate.parsely.trackPause()
     }
 }
-

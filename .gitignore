@@ -9,3 +9,5 @@ xcuserdata/*
 .swiftpm/
 .vscode/
 
+# Ruby tooling
+vendor/bundle
