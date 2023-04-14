@@ -5,7 +5,7 @@ class Pixel {
     var sessionManager: SessionManager
     private let parselyTracker: Parsely
     
-    public init(trackerInstance: Parsely) {
+    init(trackerInstance: Parsely) {
         parselyTracker = trackerInstance
         sessionManager = SessionManager(trackerInstance: parselyTracker)
     }

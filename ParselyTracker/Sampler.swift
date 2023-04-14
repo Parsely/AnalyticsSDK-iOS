@@ -54,10 +54,12 @@ class Sampler {
     // if true, the sample() loop will accumulate time for that item.
     func sampleFn(key: String) -> Bool { return true }
 
-    public func trackKey(key: String,
-                         contentDuration: TimeInterval?,
-                         eventArgs: Dictionary<String, Any>?,
-                         resetOnExisting: Bool = false) -> Void {
+    func trackKey(
+        key: String,
+        contentDuration: TimeInterval?,
+        eventArgs: Dictionary<String, Any>?,
+        resetOnExisting: Bool = false
+    ) -> Void {
         os_log("Sampler tracked key: %s in class %@", log: OSLog.tracker, type: .debug, key, String(describing: self))
         let isNew: Bool = accumulators.index(forKey: key) == nil
         let shouldReset: Bool = !isNew && resetOnExisting
@@ -96,13 +98,13 @@ class Sampler {
         heartbeatsTimer = Timer.scheduledTimer(timeInterval: heartbeatInterval, target: self, selector: #selector(sendHeartbeats), userInfo: nil, repeats: false)
     }
 
-    public func dropKey(key: String) -> Void {
+    func dropKey(key: String) -> Void {
         os_log("Dropping Sampler key: %s", log: OSLog.tracker, type:.debug, key)
         sendHeartbeat(key: key)
         accumulators.removeValue(forKey: key)
     }
 
-    public func generateEventArgs(url: String, urlref: String, metadata: ParselyMetadata? = nil, extra_data: Dictionary<String, Any>?, idsite: String) -> Dictionary<String, Any> {
+    func generateEventArgs(url: String, urlref: String, metadata: ParselyMetadata? = nil, extra_data: Dictionary<String, Any>?, idsite: String) -> Dictionary<String, Any> {
         var eventArgs: [String: Any] = ["urlref": urlref, "url": url, "idsite": idsite]
         if (metadata != nil) {
             eventArgs["metadata"] = metadata!
