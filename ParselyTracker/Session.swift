@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 class SessionManager {
     private let SESSION_TIMEOUT: TimeInterval = 30 * 60.0
