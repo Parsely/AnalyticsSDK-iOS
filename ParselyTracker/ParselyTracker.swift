@@ -3,20 +3,8 @@ import UIKit
 import os.log
 
 public class Parsely {
+
     public var apikey = ""
-    var config: [String: Any] = [:]
-    private var default_config = [String: Any]()
-    private var _track: Track!
-    var track: Track {
-        return _track
-    }
-    var lastRequest: Dictionary<String, Any?>? = [:]
-    var eventQueue: EventQueue<Event> = EventQueue()
-    private var configured = false
-    private var flushTimer: Timer?
-    private var flushInterval: TimeInterval = 30
-    private var backgroundFlushTask: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-    private var active: Bool = true
     public var secondsBetweenHeartbeats: TimeInterval? {
         get {
             if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as! TimeInterval? {
@@ -26,16 +14,28 @@ public class Parsely {
         }
     }
     public static let sharedInstance = Parsely()
+
+    var config: [String: Any] = [:]
+    var track: Track {
+        return _track
+    }
+    var eventQueue: EventQueue<Event> = EventQueue()
     internal static let sharedStorage = Storage()
     lazy var visitorManager = VisitorManager()
+    internal static func getInstance() -> Parsely {
+        return Parsely()
+    }
+
+    private var _track: Track!
+    private var configured = false
+    private var flushTimer: Timer?
+    private var flushInterval: TimeInterval = 30
+    private var backgroundFlushTask: UIBackgroundTaskIdentifier = .invalid
+    private var active: Bool = true
 
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
         _track = Track(trackerInstance: self)
-    }
-    
-    internal static func getInstance() -> Parsely {
-        return Parsely()
     }
 
     /**
