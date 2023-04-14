@@ -251,11 +251,13 @@ public class Parsely {
     }
 
     private func addApplicationObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIScene.didEnterBackgroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willTerminateNotification, object: nil)
+        let queue = OperationQueue()
+        queue.underlyingQueue = eventProcessor
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: queue, using: self.resumeExecution(_:))
+        NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: queue, using: self.resumeExecution(_:))
+        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: queue, using: self.suspendExecution(_:))
+        NotificationCenter.default.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: queue, using: self.suspendExecution(_:))
+        NotificationCenter.default.addObserver(forName: UIApplication.willTerminateNotification, object: nil, queue: queue, using: self.suspendExecution(_:))
     }
 
     @objc private func resumeExecution(_ notification: Notification) {
