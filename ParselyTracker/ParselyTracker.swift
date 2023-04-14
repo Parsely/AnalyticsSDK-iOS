@@ -30,7 +30,7 @@ public class Parsely {
     private var configured = false
     private var flushTimer: Timer?
     private var flushInterval: TimeInterval = 30
-    private var backgroundFlushTask: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+    private var backgroundFlushTask: UIBackgroundTaskIdentifier = .invalid
     private var active: Bool = true
 
     private init() {
