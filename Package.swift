@@ -10,7 +10,8 @@ let package = Package(
     products: [
         .library(
             name: "ParselyAnalytics",
-            targets: ["ParselyAnalytics"]),
+            targets: ["ParselyAnalytics"]
+        ),
     ],
     dependencies: [],
     targets: [
@@ -18,12 +19,12 @@ let package = Package(
             name: "ParselyAnalytics",
             dependencies: [],
             path: "ParselyTracker",
-            resources: [
-            ]
+            resources: []
         ),
         .testTarget(
             name: "ParselyTrackerTests",
             dependencies: ["ParselyAnalytics"],
-            path: "ParselyTrackerTests")
+            path: "ParselyTrackerTests"
+        )
     ]
 )
