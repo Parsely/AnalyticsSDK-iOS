@@ -21,6 +21,10 @@ public class Parsely {
         return _track
     }
     var eventQueue: EventQueue<Event> = EventQueue()
+    // All tracker related state should be modified in this serial queue, to ensure thread-safty.
+    // This property is declared as internal rather than private, because we need to use it to make sure
+    // unit tests that inspect tracker's internal state can pass reliably.
+    var eventProcessor: DispatchQueue
     internal static let sharedStorage = Storage()
     lazy var visitorManager = VisitorManager()
     internal static func getInstance() -> Parsely {
@@ -33,7 +37,6 @@ public class Parsely {
     private var flushInterval: TimeInterval = 30
     private var backgroundFlushTask: UIBackgroundTaskIdentifier = .invalid
     private var active: Bool = true
-    private var eventProcessor: DispatchQueue
 
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
