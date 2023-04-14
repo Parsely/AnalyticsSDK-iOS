@@ -9,10 +9,6 @@ target 'ParselyDemo' do
   use_frameworks!
 
   pod 'SwiftyJSON', '~> 4.2'
-  target 'ParselyDemoTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
 end
 
 target 'ParselyTracker' do

@@ -24,7 +24,6 @@
 		B2C84B66220A03610018BC7B /* SamplerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C84B65220A03610018BC7B /* SamplerTests.swift */; };
 		B2FC40BE221CC42300C70806 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FC40BD221CC42300C70806 /* Metadata.swift */; };
 		B2FC40C0221CC43200C70806 /* MetadataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FC40BF221CC43200C70806 /* MetadataTests.swift */; };
-		C26CD66D2E7BC7C6843FD36F /* Pods_ParselyDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526EF9377EAE8B4DC8CC0AA1 /* Pods_ParselyDemoTests.framework */; };
 		DFD7BB483E787F03E5494A20 /* Pods_ParselyTrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */; };
 		F40D9A5E20EFF74F0030525E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A5D20EFF74F0030525E /* AppDelegate.swift */; };
 		F40D9A6020EFF74F0030525E /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A5F20EFF74F0030525E /* FirstViewController.swift */; };
@@ -56,13 +55,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		F40D9A7120EFF7500030525E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F40D9A5220EFF74F0030525E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F40D9A5920EFF74F0030525E;
-			remoteInfo = AnalyticsSDK;
-		};
 		F433339820F0087E004BB6F5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F40D9A5220EFF74F0030525E /* Project object */;
@@ -105,10 +97,7 @@
 		2A1F03819E4FAF1F979D5926 /* StorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
 		2A1F0F92460A849C17B26338 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyTrackerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3ADAC2F93CE241A29B434DCE /* Pods-ParselyDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemoTests/Pods-ParselyDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnalyticsSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		526EF9377EAE8B4DC8CC0AA1 /* Pods_ParselyDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		60544B2E0BE096AC23166210 /* Pods-ParselyDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemoTests/Pods-ParselyDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		6D623D570B7F71EFD9E46D24 /* Pods-ParselyTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyTracker/Pods-ParselyTracker.release.xcconfig"; sourceTree = "<group>"; };
 		8E611964813255DB16F1B8D3 /* Pods-ParselyDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo.release.xcconfig"; sourceTree = "<group>"; };
 		906991F0294DF786C982D060 /* Pods-ParselyDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParselyDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ParselyDemo/Pods-ParselyDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -138,7 +127,6 @@
 		F40D9A6620EFF74F0030525E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F40D9A6920EFF74F0030525E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F40D9A6B20EFF7500030525E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F40D9A7020EFF7500030525E /* ParselyDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParselyDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F40D9A7F20EFF7D70030525E /* AnalyticsSDK.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AnalyticsSDK.entitlements; sourceTree = "<group>"; };
 		F40D9A8020EFFADD0030525E /* ParselyTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParselyTracker.swift; sourceTree = "<group>"; };
 		F410D63021061D7800DB3EBE /* PixelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelTests.swift; sourceTree = "<group>"; };
@@ -176,14 +164,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F40D9A6D20EFF7500030525E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C26CD66D2E7BC7C6843FD36F /* Pods_ParselyDemoTests.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		F433338A20F0087E004BB6F5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -217,8 +197,6 @@
 				F641C3C76F714CE598D03837 /* Pods-ParselyTrackerTests.release.xcconfig */,
 				906991F0294DF786C982D060 /* Pods-ParselyDemo.debug.xcconfig */,
 				8E611964813255DB16F1B8D3 /* Pods-ParselyDemo.release.xcconfig */,
-				3ADAC2F93CE241A29B434DCE /* Pods-ParselyDemoTests.debug.xcconfig */,
-				60544B2E0BE096AC23166210 /* Pods-ParselyDemoTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -231,7 +209,6 @@
 				EE743C16C8DDCAA9BDD45994 /* Pods_ParselyTracker.framework */,
 				3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */,
 				AC235FA4A9626257C28A45C4 /* Pods_ParselyDemo.framework */,
-				526EF9377EAE8B4DC8CC0AA1 /* Pods_ParselyDemoTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -255,7 +232,6 @@
 			isa = PBXGroup;
 			children = (
 				F40D9A5A20EFF74F0030525E /* ParselyDemo.app */,
-				F40D9A7020EFF7500030525E /* ParselyDemoTests.xctest */,
 				F433338E20F0087E004BB6F5 /* ParselyTracker.framework */,
 				F433339620F0087E004BB6F5 /* ParselyTrackerTests.xctest */,
 			);
@@ -355,25 +331,6 @@
 			productReference = F40D9A5A20EFF74F0030525E /* ParselyDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F40D9A6F20EFF7500030525E /* ParselyDemoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F40D9A7C20EFF7500030525E /* Build configuration list for PBXNativeTarget "ParselyDemoTests" */;
-			buildPhases = (
-				6D828DF51C26314B9940FD45 /* [CP] Check Pods Manifest.lock */,
-				F40D9A6C20EFF7500030525E /* Sources */,
-				F40D9A6D20EFF7500030525E /* Frameworks */,
-				F40D9A6E20EFF7500030525E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F40D9A7220EFF7500030525E /* PBXTargetDependency */,
-			);
-			name = ParselyDemoTests;
-			productName = AnalyticsSDKTests;
-			productReference = F40D9A7020EFF7500030525E /* ParselyDemoTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		F433338D20F0087E004BB6F5 /* ParselyTracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F43333A920F0087E004BB6F5 /* Build configuration list for PBXNativeTarget "ParselyTracker" */;
@@ -433,11 +390,6 @@
 							};
 						};
 					};
-					F40D9A6F20EFF7500030525E = {
-						CreatedOnToolsVersion = 9.0;
-						ProvisioningStyle = Automatic;
-						TestTargetID = F40D9A5920EFF74F0030525E;
-					};
 					F433338D20F0087E004BB6F5 = {
 						CreatedOnToolsVersion = 9.0;
 						LastSwiftMigration = "";
@@ -465,7 +417,6 @@
 			projectRoot = "";
 			targets = (
 				F40D9A5920EFF74F0030525E /* ParselyDemo */,
-				F40D9A6F20EFF7500030525E /* ParselyDemoTests */,
 				F433338D20F0087E004BB6F5 /* ParselyTracker */,
 				F433339520F0087E004BB6F5 /* ParselyTrackerTests */,
 			);
@@ -482,13 +433,6 @@
 				F494BFB620FFDD5900025A4C /* Podfile in Resources */,
 				F40D9A6520EFF74F0030525E /* Main.storyboard in Resources */,
 				AA7473DE224956A000C75436 /* ParselyAnalytics.podspec in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F40D9A6E20EFF7500030525E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,24 +454,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6D828DF51C26314B9940FD45 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ParselyDemoTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		96272734BE9824902EF80C99 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -614,13 +540,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F40D9A6C20EFF7500030525E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		F433338920F0087E004BB6F5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -667,11 +586,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		F40D9A7220EFF7500030525E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F40D9A5920EFF74F0030525E /* ParselyDemo */;
-			targetProxy = F40D9A7120EFF7500030525E /* PBXContainerItemProxy */;
-		};
 		F433339920F0087E004BB6F5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F433338D20F0087E004BB6F5 /* ParselyTracker */;
@@ -858,44 +772,6 @@
 			};
 			name = Release;
 		};
-		F40D9A7D20EFF7500030525E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3ADAC2F93CE241A29B434DCE /* Pods-ParselyDemoTests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = N3Z6SG5Z94;
-				INFOPLIST_FILE = AnalyticsSDKTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.AnalyticsSDKTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParselyDemo.app/ParselyDemo";
-			};
-			name = Debug;
-		};
-		F40D9A7E20EFF7500030525E /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 60544B2E0BE096AC23166210 /* Pods-ParselyDemoTests.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = N3Z6SG5Z94;
-				INFOPLIST_FILE = AnalyticsSDKTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.AnalyticsSDKTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParselyDemo.app/ParselyDemo";
-			};
-			name = Release;
-		};
 		F43333A520F0087E004BB6F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AB009DED9C4184290AB524B3 /* Pods-ParselyTracker.debug.xcconfig */;
@@ -1003,15 +879,6 @@
 			buildConfigurations = (
 				F40D9A7A20EFF7500030525E /* Debug */,
 				F40D9A7B20EFF7500030525E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F40D9A7C20EFF7500030525E /* Build configuration list for PBXNativeTarget "ParselyDemoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F40D9A7D20EFF7500030525E /* Debug */,
-				F40D9A7E20EFF7500030525E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
