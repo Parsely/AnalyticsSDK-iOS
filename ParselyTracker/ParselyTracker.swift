@@ -35,7 +35,6 @@ public class Parsely {
     private var configured = false
     private var flushTimer: Cancellable?
     private var flushInterval: TimeInterval = 30
-    private var backgroundFlushTask: UIBackgroundTaskIdentifier = .invalid
     private var active: Bool = true
 
     private init() {
@@ -217,11 +216,13 @@ public class Parsely {
                 _ = target.perform(selector)
             }
     }
-    
+
     @objc private func flush() {
         if eventQueue.length() == 0 {
             return
         }
+
+        let task = BackgroundTask.begin()
 
         os_log("Flushing event queue", log: OSLog.tracker, type:.debug)
         let events = eventQueue.get()
@@ -233,6 +234,8 @@ public class Parsely {
                 self.eventQueue.push(contentsOf: events)
                 os_log("Network connection unavailable. Returning %s events to the queue.", String(describing: events.count))
             }
+
+            task.end()
         }
     }
     
@@ -282,27 +285,44 @@ public class Parsely {
         os_log("Stopping execution before background/inactive/terminate", log:OSLog.tracker, type:.info)
         hardShutdown()
 
-        self.backgroundFlushTask = UIApplication.shared.beginBackgroundTask(expirationHandler:{
-            self.endBackgroundFlushTask()
-        })
         os_log("Flushing queue in background", log:OSLog.tracker, type:.info)
         self.track.sendHeartbeats()
         self.flush()
-        self.endBackgroundFlushTask()
     }
     
     internal func hardShutdown() {
         pauseFlushTimer()
         track.pause()
     }
-    
-    private func endBackgroundFlushTask() {
-        UIApplication.shared.endBackgroundTask(backgroundFlushTask)
-        backgroundFlushTask = UIBackgroundTaskIdentifier.invalid
-    }
+
 }
 
 extension OSLog {
     private static var logger = "ParselyTracker"
     static let tracker = OSLog(subsystem: "ParselyTracker", category: "parsely_tracker")
+}
+
+private final class BackgroundTask {
+    static func begin() -> Self {
+        let task = Self()
+        task.taskIdentifier = UIApplication.shared.beginBackgroundTask {
+            task.end()
+        }
+        return task
+    }
+
+    private var taskIdentifier: UIBackgroundTaskIdentifier!
+
+    private init() {
+        // Use `begin` to create an instance.
+    }
+
+    func end() {
+        guard taskIdentifier != .invalid else {
+            return
+        }
+
+        UIApplication.shared.endBackgroundTask(taskIdentifier)
+        taskIdentifier = .invalid
+    }
 }
