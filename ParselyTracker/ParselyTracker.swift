@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import UIKit
 import os.log
 
@@ -20,6 +21,10 @@ public class Parsely {
         return _track
     }
     var eventQueue: EventQueue<Event> = EventQueue()
+    // All tracker related state should be modified in this serial queue, to ensure thread-safty.
+    // This property is declared as internal rather than private, because we need to use it to make sure
+    // unit tests that inspect tracker's internal state can pass reliably.
+    var eventProcessor: DispatchQueue
     internal static let sharedStorage = Storage()
     lazy var visitorManager = VisitorManager()
     internal static func getInstance() -> Parsely {
@@ -28,13 +33,14 @@ public class Parsely {
 
     private var _track: Track!
     private var configured = false
-    private var flushTimer: Timer?
+    private var flushTimer: Cancellable?
     private var flushInterval: TimeInterval = 30
     private var backgroundFlushTask: UIBackgroundTaskIdentifier = .invalid
     private var active: Bool = true
 
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
+        eventProcessor = DispatchQueue(label: "ly.parse.event-processor")
         _track = Track(trackerInstance: self)
     }
 
@@ -66,12 +72,25 @@ public class Parsely {
      - Parameter extraData: A dictionary of additional information to send with the generated pageview event
      - Parameter siteId: The Parsely site ID for which the pageview event should be counted
      */
-    public func trackPageView(url: String,
-                              urlref: String = "",
-                              metadata: ParselyMetadata? = nil,
-                              extraData: Dictionary<String, Any>? = nil,
-                              siteId: String = "")
-    {
+    public func trackPageView(
+        url: String,
+        urlref: String = "",
+        metadata: ParselyMetadata? = nil,
+        extraData: Dictionary<String, Any>? = nil,
+        siteId: String = ""
+    ) {
+        eventProcessor.async {
+            self._trackPageView(url: url, urlref: urlref, metadata: metadata, extraData: extraData, siteId: siteId)
+        }
+    }
+
+    private func _trackPageView(
+        url: String,
+        urlref: String,
+        metadata: ParselyMetadata?,
+        extraData: Dictionary<String, Any>?,
+        siteId: String
+    ) {
         var _siteId = siteId
         if (_siteId == "") {
             _siteId = self.apikey
@@ -90,11 +109,23 @@ public class Parsely {
      - Parameter extraData: A dictionary of additional information to send with generated heartbeat events
      - Parameter siteId: The Parsely site ID for which the heartbeat events should be counted
      */
-    public func startEngagement(url: String,
-                                urlref: String = "",
-                                extraData: Dictionary<String, Any>? = nil,
-                                siteId: String = "")
-    {
+    public func startEngagement(
+        url: String,
+        urlref: String = "",
+        extraData: Dictionary<String, Any>? = nil,
+        siteId: String = ""
+    ) {
+        eventProcessor.async {
+            self._startEngagement(url: url, urlref: urlref, extraData: extraData, siteId: siteId)
+        }
+    }
+
+    private func _startEngagement(
+        url: String,
+        urlref: String,
+        extraData: Dictionary<String, Any>?,
+        siteId: String
+    ) {
         var _siteId = siteId
         if (_siteId == "") {
             _siteId = self.apikey
@@ -107,7 +138,9 @@ public class Parsely {
      previously-engaged url, after which heartbeat events will stop being sent.
      */
     public func stopEngagement() {
-        track.stopEngagement()
+        eventProcessor.async {
+            self.track.stopEngagement()
+        }
     }
 
     /**
@@ -123,14 +156,29 @@ public class Parsely {
      - Parameter extraData: A dictionary of additional information to send with generated vheartbeat events
      - Parameter siteId: The Parsely site ID for which the vheartbeat events should be counted
      */
-    public func trackPlay(url: String,
-                          urlref: String = "",
-                          videoID: String,
-                          duration: TimeInterval,
-                          metadata: ParselyMetadata? = nil,
-                          extraData: Dictionary<String, Any>? = nil,
-                          siteId: String = "")
-    {
+    public func trackPlay(
+        url: String,
+        urlref: String = "",
+        videoID: String,
+        duration: TimeInterval,
+        metadata: ParselyMetadata? = nil,
+        extraData: Dictionary<String, Any>? = nil,
+        siteId: String = ""
+    ) {
+        eventProcessor.async {
+            self._trackPlay(url: url, urlref: urlref, videoID: videoID, duration: duration, metadata: metadata, extraData: extraData, siteId: siteId)
+        }
+    }
+
+    private func _trackPlay(
+        url: String,
+        urlref: String,
+        videoID: String,
+        duration: TimeInterval,
+        metadata: ParselyMetadata?,
+        extraData: Dictionary<String, Any>?,
+        siteId: String
+    ) {
         var _siteId = siteId
         if (_siteId == "") {
             _siteId = self.apikey
@@ -143,7 +191,9 @@ public class Parsely {
      event may be sent per previously-viewed url/video combination, after which vheartbeat events will stop being sent.
      */
     public func trackPause() {
-        track.videoPause()
+        eventProcessor.async {
+            self.track.videoPause()
+        }
     }
     
     /**
@@ -154,7 +204,18 @@ public class Parsely {
      - Parameter videoId: The video ID string for the video being reset
      */
     public func resetVideo(url:String, videoID:String) {
-        track.videoReset(url: url, vId: videoID)
+        eventProcessor.async {
+            self.track.videoReset(url: url, vId: videoID)
+        }
+    }
+
+    /// After given `seconds`, invoke the given target-action in the event processor queue.
+    func scheduleEventProcessing(inSeconds seconds: Double, target: AnyObject, selector: Selector) -> Cancellable {
+        Just(0)
+            .delay(for: .seconds(seconds), scheduler: eventProcessor)
+            .sink { _ in
+                _ = target.perform(selector)
+            }
     }
     
     @objc private func flush() {
@@ -166,7 +227,7 @@ public class Parsely {
         let events = eventQueue.get()
         os_log("Got %s events", log: OSLog.tracker, type:.debug, String(describing: events.count))
         let request = RequestBuilder.buildRequest(events: events)
-        HttpClient.sendRequest(request: request!) { error in
+        HttpClient.sendRequest(request: request!, queue: eventProcessor) { error in
             if let error = error as? URLError, error.code == .notConnectedToInternet {
                 // When offline, return the events to the queue for the next flush().
                 self.eventQueue.push(contentsOf: events)
@@ -178,7 +239,7 @@ public class Parsely {
     internal func startFlushTimer() {
         os_log("Flush timer starting", log: OSLog.tracker, type:.debug)
         if flushTimer == nil && active {
-            flushTimer = Timer.scheduledTimer(timeInterval: flushInterval, target: self, selector: #selector(flush), userInfo: nil, repeats: true)
+            flushTimer = scheduleEventProcessing(inSeconds: flushInterval, target: self, selector: #selector(flush))
             os_log("Flush timer started", log: OSLog.tracker, type:.debug)
         }
     }
@@ -186,18 +247,21 @@ public class Parsely {
     internal func pauseFlushTimer() {
         os_log("Flush timer stopping", log: OSLog.tracker, type:.debug)
         if flushTimer != nil && !active {
-            flushTimer?.invalidate()
+            flushTimer?.cancel()
             flushTimer = nil
             os_log("Flush timer stopped", log: OSLog.tracker, type:.debug)
         }
     }
 
     private func addApplicationObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(resumeExecution(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIScene.didEnterBackgroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(suspendExecution(_:)), name: UIApplication.willTerminateNotification, object: nil)
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        queue.underlyingQueue = eventProcessor
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: queue, using: self.resumeExecution(_:))
+        NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: queue, using: self.resumeExecution(_:))
+        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: queue, using: self.suspendExecution(_:))
+        NotificationCenter.default.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: queue, using: self.suspendExecution(_:))
+        NotificationCenter.default.addObserver(forName: UIApplication.willTerminateNotification, object: nil, queue: queue, using: self.suspendExecution(_:))
     }
 
     @objc private func resumeExecution(_ notification: Notification) {
@@ -217,17 +281,14 @@ public class Parsely {
         self.active = false
         os_log("Stopping execution before background/inactive/terminate", log:OSLog.tracker, type:.info)
         hardShutdown()
-        
-        DispatchQueue.global(qos: .userInitiated).async{
-            let _self = self
-            _self.backgroundFlushTask = UIApplication.shared.beginBackgroundTask(expirationHandler:{
-                _self.endBackgroundFlushTask()
-            })
-            os_log("Flushing queue in background", log:OSLog.tracker, type:.info)
-            _self.track.sendHeartbeats()
-            _self.flush()
-            _self.endBackgroundFlushTask()
-        }
+
+        self.backgroundFlushTask = UIApplication.shared.beginBackgroundTask(expirationHandler:{
+            self.endBackgroundFlushTask()
+        })
+        os_log("Flushing queue in background", log:OSLog.tracker, type:.info)
+        self.track.sendHeartbeats()
+        self.flush()
+        self.endBackgroundFlushTask()
     }
     
     internal func hardShutdown() {

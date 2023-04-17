@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import os.log
 
 let SAMPLE_RATE = TimeInterval(0.1)
@@ -32,8 +33,8 @@ class Sampler {
     var heartbeatInterval: TimeInterval
     var hasStartedSampling: Bool = false
     var accumulators: Dictionary<String, Accumulator> = [:]
-    var samplerTimer: Timer?
-    var heartbeatsTimer: Timer?
+    var samplerTimer: Cancellable?
+    var heartbeatsTimer: Cancellable?
     internal let parselyTracker: Parsely
     
     init(trackerInstance: Parsely) {
@@ -89,13 +90,13 @@ class Sampler {
     private func restartTimers() {
         os_log("Restarted Timers in %@", log: OSLog.tracker, type: .debug, String(describing: self))
         if samplerTimer != nil {
-            samplerTimer!.invalidate()
+            samplerTimer!.cancel()
         }
-        samplerTimer = Timer.scheduledTimer(timeInterval: SAMPLE_RATE, target: self, selector: #selector(sample), userInfo: nil, repeats: false)
+        samplerTimer = parselyTracker.scheduleEventProcessing(inSeconds: SAMPLE_RATE, target: self, selector: #selector(sample))
         if heartbeatsTimer != nil {
-            heartbeatsTimer!.invalidate()
+            heartbeatsTimer!.cancel()
         }
-        heartbeatsTimer = Timer.scheduledTimer(timeInterval: heartbeatInterval, target: self, selector: #selector(sendHeartbeats), userInfo: nil, repeats: false)
+        heartbeatsTimer = parselyTracker.scheduleEventProcessing(inSeconds: heartbeatInterval, target: self, selector: #selector(sendHeartbeats))
     }
 
     func dropKey(key: String) -> Void {
@@ -129,7 +130,7 @@ class Sampler {
             trackedData.lastSampleTime = currentTime
             updateAccumulator(acc: trackedData)
         }
-        samplerTimer = Timer.scheduledTimer(withTimeInterval: SAMPLE_RATE, repeats: false) { timer in self.sample() }
+        samplerTimer = parselyTracker.scheduleEventProcessing(inSeconds: SAMPLE_RATE, target: self, selector: #selector(sample))
     }
     
     private func getHeartbeatInterval(existingTimeout: TimeInterval,
@@ -165,9 +166,7 @@ class Sampler {
         for (key, _) in accumulators {
             sendHeartbeat(key: key)
         }
-        heartbeatsTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(heartbeatInterval), repeats: false) { timer in
-            self.sendHeartbeats()
-        }
+        heartbeatsTimer = parselyTracker.scheduleEventProcessing(inSeconds: heartbeatInterval, target: self, selector: #selector(sendHeartbeats))
     }
 
     private func updateAccumulator(acc: Accumulator) -> Void {
@@ -177,11 +176,11 @@ class Sampler {
     internal func pause() {
         os_log("Paused from %@", log:OSLog.tracker, type:.debug, String(describing: self))
         if samplerTimer != nil {
-            samplerTimer!.invalidate()
+            samplerTimer!.cancel()
             samplerTimer = nil
         }
         if heartbeatsTimer != nil {
-            heartbeatsTimer!.invalidate()
+            heartbeatsTimer!.cancel()
             heartbeatsTimer = nil
         }
     }
