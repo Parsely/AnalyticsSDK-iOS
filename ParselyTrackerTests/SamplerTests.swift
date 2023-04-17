@@ -62,8 +62,21 @@ class SamplerTests: ParselyTestCase {
         
         let actualUpdatedInterval = samplerUnderTest!.heartbeatInterval
         let actualRoundedInterval: TimeInterval = TimeInterval(round(100 * actualUpdatedInterval) / 100)
-        XCTAssertEqual(actualRoundedInterval, expectedUpdatedInterval,
-                  "Heartbeat interval should increase by the expected amount after a single heartbeat")
+
+        // We've seen a version of this test with strict `XCTAssertEqual` being flaky and
+        // failing with a tracked interval a few hundredth of a second different from the expected
+        // value of 13.65.
+        //
+        // See for example https://github.com/Automattic/AnalyticsSDK-iOS/pull/6#issuecomment-1508327314
+        //
+        // In the context of a backoff implementation it seems acceptable to account for a few
+        // hundredth of a second difference between the expected interval and the recorded one.
+        XCTAssertEqual(
+            actualRoundedInterval,
+            expectedUpdatedInterval,
+            accuracy: 0.04,
+            "Heartbeat interval should increase by the expected amount after a single heartbeat"
+        )
     }
 
     func testDistinctTrackedItems() {
