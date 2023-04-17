@@ -47,7 +47,7 @@ class ParselyTrackerTests: ParselyTestCase {
         expectParselyState(self.parselyTestTracker.track.videoManager.trackedVideos.count).toEventually(equal(1))
 
         XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1, "A call to Parsely.trackPlay should add an event to eventQueue")
-        try XCTAssert(
+        try XCTAssertTrue(
             XCTUnwrap(parselyTestTracker.track.videoManager.trackedVideos.values.first).isPlaying,
             "After a call to Parsely.trackPlay, the tracked video should have its isPlaying flag set"
         )
@@ -71,7 +71,7 @@ class ParselyTrackerTests: ParselyTestCase {
         expectParselyState(self.parselyTestTracker.track.videoManager.trackedVideos.isEmpty).toEventually(beFalse())
 
         parselyTestTracker.resetVideo(url: testUrl, videoID: testVideoId)
-        // A call to Parsely.resetVideo should remove an tracked video from the video manager
+        // A call to Parsely.resetVideo should remove a tracked video from the video manager
         expectParselyState(self.parselyTestTracker.track.videoManager.trackedVideos.isEmpty).toEventually(beTrue())
     }
 
