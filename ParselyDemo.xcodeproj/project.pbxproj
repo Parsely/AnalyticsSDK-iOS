@@ -99,6 +99,7 @@
 		2A1F0F92460A849C17B26338 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		2E14A66E8F1BB8BC158D4959 /* Pods_Parsely_ParselyTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parsely_ParselyTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A80C09D1CED0319E596DBEE /* Pods_ParselyTrackerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParselyTrackerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FCAFC8B29E9775A00BC9360 /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
 		446CD722898871FC8DB4DE4D /* Pods-Parsely-ParselyTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parsely-ParselyTracker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Parsely-ParselyTracker/Pods-Parsely-ParselyTracker.debug.xcconfig"; sourceTree = "<group>"; };
 		491B2BC988D8B0335724A102 /* Pods-Parsely-ParselyDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parsely-ParselyDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Parsely-ParselyDemo/Pods-Parsely-ParselyDemo.release.xcconfig"; sourceTree = "<group>"; };
 		510E83E973D358D695481B9E /* Pods_AnalyticsSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnalyticsSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -301,6 +302,7 @@
 				B205889E220CB72A00476E27 /* RequestBuilderTests.swift */,
 				B2FC40BF221CC43200C70806 /* MetadataTests.swift */,
 				AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */,
+				3FCAFC8B29E9775A00BC9360 /* UnitTests.xctestplan */,
 			);
 			path = ParselyTrackerTests;
 			sourceTree = "<group>";
