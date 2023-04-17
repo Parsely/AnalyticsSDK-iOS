@@ -255,6 +255,7 @@ public class Parsely {
 
     private func addApplicationObservers() {
         let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
         queue.underlyingQueue = eventProcessor
         NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: queue, using: self.resumeExecution(_:))
         NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: queue, using: self.resumeExecution(_:))
