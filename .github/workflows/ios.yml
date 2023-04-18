@@ -42,7 +42,7 @@ jobs:
       run: |
         xcodebuild test \
           -workspace ParselyDemo.xcworkspace \
-          -scheme ParselyTracker \
+          -scheme ParselyDemo \
           -sdk iphonesimulator \
           -destination 'platform=iOS Simulator,name=iPhone 14,OS=latest' \
           | xcpretty \
