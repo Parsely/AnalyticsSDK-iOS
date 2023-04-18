@@ -1,14 +1,6 @@
 Changelog
 =========
 
-0.2.1 (4-5-2023)
-
-Changes
---------
-
-* add support for Swift Package Manager (thanks @eddie-zhang)
-
-
 0.2.0 (12-12-2022)
 
 Bugfixes
