@@ -64,7 +64,6 @@ class SamplerTests: ParselyTestCase {
         waitForExpectations(timeout: heartbeatDeliveryInterval, handler: nil)
         
         let actualUpdatedInterval = samplerUnderTest!.heartbeatInterval
-        let actualRoundedInterval: TimeInterval = TimeInterval(round(100 * actualUpdatedInterval) / 100)
         // This value depends on heartbeatInterval, and two magic numbers in the implementation.
         // We use the output value instead of writing out the math that computes it because doing
         // so would amount to duplicating the logic under test in the test itself.
@@ -79,7 +78,7 @@ class SamplerTests: ParselyTestCase {
         // In the context of a backoff implementation it seems acceptable to account for a few
         // hundredth of a second difference between the expected interval and the recorded one.
         XCTAssertEqual(
-            actualRoundedInterval,
+            actualUpdatedInterval,
             expectedUpdatedInterval,
             accuracy: 0.04,
             "Heartbeat interval should increase by the expected amount after a single heartbeat"
