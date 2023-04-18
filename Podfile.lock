@@ -1,20 +1,16 @@
 PODS:
   - Nimble (11.2.2)
-  - SwiftyJSON (4.2.0)
 
 DEPENDENCIES:
   - Nimble
-  - SwiftyJSON (~> 4.2)
 
 SPEC REPOS:
   trunk:
     - Nimble
-    - SwiftyJSON
 
 SPEC CHECKSUMS:
   Nimble: 01a944d4d07eab73617dfd4b32ac9f7152ac34de
-  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: e3bb13b3b5de3cb47f43955e46ae606366996378
+PODFILE CHECKSUM: b40c4302d457171fe102ded4f89b9a4f72906a80
 
 COCOAPODS: 1.12.0

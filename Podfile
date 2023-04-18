@@ -7,8 +7,6 @@ platform :ios, APP_IOS_DEPLOYMENT_TARGET
 abstract_target 'Parsely' do
   use_frameworks!
 
-  pod 'SwiftyJSON', '~> 4.2'
-
   target 'ParselyDemo'
 
   target 'ParselyTracker' do
