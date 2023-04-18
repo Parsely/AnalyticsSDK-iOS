@@ -52,7 +52,7 @@ class SamplerTests: ParselyTestCase {
         // Ensure value matches magic number from production code
         XCTAssertEqual(initialInterval, TimeInterval(10.5))
         
-        // Track an even, then make the test runner wait for the heartbeat interval plus some extra
+        // Track an event, then make the test runner wait for the heartbeat interval plus some extra
         // time to account for runtime delays.
         samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
         
