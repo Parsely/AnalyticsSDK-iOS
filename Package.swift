@@ -3,7 +3,7 @@ import PackageDescription
 let package = Package(
     name: "ParselyAnalytics",
     platforms: [
-        .iOS(.v13)
+        .iOS(.v12)
     ],
     products: [
         .library(
