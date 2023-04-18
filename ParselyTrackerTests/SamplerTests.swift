@@ -49,21 +49,40 @@ class SamplerTests: ParselyTestCase {
 
     func testBackoff() {
         let initialInterval = samplerUnderTest!.heartbeatInterval
-        let expectedUpdatedInterval: TimeInterval = TimeInterval(13.65)
-        let assertionTimeout:TimeInterval = initialInterval + TimeInterval(2)
+        // Ensure value matches magic number from production code
+        XCTAssertEqual(initialInterval, TimeInterval(10.5))
         
+        // Track an even, then make the test runner wait for the heartbeat interval plus some extra
+        // time to account for runtime delays.
         samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
         
         let expectation = self.expectation(description: "Wait for heartbeat")
-        Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
+        let heartbeatDeliveryInterval = initialInterval + TimeInterval(3)
+        Timer.scheduledTimer(withTimeInterval: heartbeatDeliveryInterval, repeats: false) { timer in
             expectation.fulfill()
         }
-        waitForExpectations(timeout: assertionTimeout + 1, handler: nil)
+        waitForExpectations(timeout: heartbeatDeliveryInterval, handler: nil)
         
         let actualUpdatedInterval = samplerUnderTest!.heartbeatInterval
-        let actualRoundedInterval: TimeInterval = TimeInterval(round(100 * actualUpdatedInterval) / 100)
-        XCTAssertEqual(actualRoundedInterval, expectedUpdatedInterval,
-                  "Heartbeat interval should increase by the expected amount after a single heartbeat")
+        // This value depends on heartbeatInterval, and two magic numbers in the implementation.
+        // We use the output value instead of writing out the math that computes it because doing
+        // so would amount to duplicating the logic under test in the test itself.
+        let expectedUpdatedInterval = TimeInterval(13.65)
+
+        // We've seen a version of this test with strict `XCTAssertEqual` being flaky and
+        // failing with a tracked interval a few hundredth of a second different from the expected
+        // value of 13.65.
+        //
+        // See for example https://github.com/Automattic/AnalyticsSDK-iOS/pull/6#issuecomment-1508327314
+        //
+        // In the context of a backoff implementation it seems acceptable to account for a few
+        // hundredth of a second difference between the expected interval and the recorded one.
+        XCTAssertEqual(
+            actualUpdatedInterval,
+            expectedUpdatedInterval,
+            accuracy: 0.04,
+            "Heartbeat interval should increase by the expected amount after a single heartbeat"
+        )
     }
 
     func testDistinctTrackedItems() {

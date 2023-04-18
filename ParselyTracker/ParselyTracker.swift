@@ -211,7 +211,11 @@ public class Parsely {
     /// After given `seconds`, invoke the given target-action in the event processor queue.
     func scheduleEventProcessing(inSeconds seconds: Double, target: AnyObject, selector: Selector) -> Cancellable {
         Just(0)
-            .delay(for: .seconds(seconds), scheduler: eventProcessor)
+            // From the Apple documentation it's not clear what the default tolerance is.
+            // They have an example with a .seconds(3) delay saying "3 seconds (±0.5 seconds)".
+            // To say on the safe side, we specify a 1ms tolerance, meaning "the Delay publisher may
+            // deliver elements this much sooner or later than the interval specifies."
+            .delay(for: .seconds(seconds), tolerance: .milliseconds(1), scheduler: eventProcessor)
             .sink { _ in
                 _ = target.perform(selector)
             }
