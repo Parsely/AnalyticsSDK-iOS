@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F03819E4FAF1F979D5926 /* StorageTests.swift */; };
-		2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
-		2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F0DF37B68B0886A0E6848 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		3F147F8F29EF8CA100752DFB /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 3F147F8E29EF8CA100752DFB /* Nimble */; };
 		412303BAD35C03905845036B /* Pods_Parsely_ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E14A66E8F1BB8BC158D4959 /* Pods_Parsely_ParselyTracker.framework */; };
@@ -529,7 +527,6 @@
 				F40D9A6220EFF74F0030525E /* SecondViewController.swift in Sources */,
 				F40D9A5E20EFF74F0030525E /* AppDelegate.swift in Sources */,
 				F40D9A6020EFF74F0030525E /* FirstViewController.swift in Sources */,
-				2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,7 +564,6 @@
 				B2C84B66220A03610018BC7B /* SamplerTests.swift in Sources */,
 				F4BF86682190DAFC00BD3867 /* EngagedTimeTests.swift in Sources */,
 				F433339E20F0087E004BB6F5 /* ParselyTrackerTests.swift in Sources */,
-				2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */,
 				F4BF866C2190DB3C00BD3867 /* SessionTests.swift in Sources */,
 				2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */,
 				F4BF866A2190DB1C00BD3867 /* TrackTests.swift in Sources */,
