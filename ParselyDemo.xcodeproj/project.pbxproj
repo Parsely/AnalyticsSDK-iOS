@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		2A1F02E3BE1F9F969BD9C6E1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F05EB11D3A1B7EC5FB2C1 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
 		2A1F0DF37B68B0886A0E6848 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F0F92460A849C17B26338 /* Storage.swift */; };
+		3F147F8F29EF8CA100752DFB /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 3F147F8E29EF8CA100752DFB /* Nimble */; };
 		412303BAD35C03905845036B /* Pods_Parsely_ParselyTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E14A66E8F1BB8BC158D4959 /* Pods_Parsely_ParselyTracker.framework */; };
 		AA73AAAF2242C1F10089BF1D /* ParselyTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */; };
 		AA7473DE224956A000C75436 /* ParselyAnalytics.podspec in Resources */ = {isa = PBXBuildFile; fileRef = AA7473DD224956A000C75436 /* ParselyAnalytics.podspec */; };
@@ -61,13 +62,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = F433338D20F0087E004BB6F5;
 			remoteInfo = ParselyTracker;
-		};
-		F433339A20F0087E004BB6F5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F40D9A5220EFF74F0030525E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F40D9A5920EFF74F0030525E;
-			remoteInfo = AnalyticsSDK;
 		};
 		F43333A120F0087E004BB6F5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -181,6 +175,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F147F8F29EF8CA100752DFB /* Nimble in Frameworks */,
 				F433339720F0087E004BB6F5 /* ParselyTracker.framework in Frameworks */,
 				DFD7BB483E787F03E5494A20 /* Pods_ParselyTrackerTests.framework in Frameworks */,
 			);
@@ -336,6 +331,8 @@
 				F43333A220F0087E004BB6F5 /* PBXTargetDependency */,
 			);
 			name = ParselyDemo;
+			packageProductDependencies = (
+			);
 			productName = AnalyticsSDK;
 			productReference = F40D9A5A20EFF74F0030525E /* ParselyDemo.app */;
 			productType = "com.apple.product-type.application";
@@ -367,15 +364,16 @@
 				F433339220F0087E004BB6F5 /* Sources */,
 				F433339320F0087E004BB6F5 /* Frameworks */,
 				F433339420F0087E004BB6F5 /* Resources */,
-				50A891132731B54A9972347D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				F433339920F0087E004BB6F5 /* PBXTargetDependency */,
-				F433339B20F0087E004BB6F5 /* PBXTargetDependency */,
 			);
 			name = ParselyTrackerTests;
+			packageProductDependencies = (
+				3F147F8E29EF8CA100752DFB /* Nimble */,
+			);
 			productName = ParselyTrackerTests;
 			productReference = F433339620F0087E004BB6F5 /* ParselyTrackerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -422,6 +420,9 @@
 				Base,
 			);
 			mainGroup = F40D9A5120EFF74F0030525E;
+			packageReferences = (
+				3F147F8B29EF8C9800752DFB /* XCRemoteSwiftPackageReference "Nimble" */,
+			);
 			productRefGroup = F40D9A5B20EFF74F0030525E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -464,24 +465,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		50A891132731B54A9972347D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParselyTrackerTests/Pods-ParselyTrackerTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		AAF24F042465B46CC0D7A05C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -740,7 +723,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -756,7 +740,10 @@
 				DEVELOPMENT_TEAM = N3Z6SG5Z94;
 				INFOPLIST_FILE = ParselyDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -774,7 +761,10 @@
 				DEVELOPMENT_TEAM = N3Z6SG5Z94;
 				INFOPLIST_FILE = ParselyDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -797,7 +787,11 @@
 				INFOPLIST_FILE = ParselyTracker/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyTracker;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -823,7 +817,11 @@
 				INFOPLIST_FILE = ParselyTracker/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyTracker;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -843,7 +841,11 @@
 				DEVELOPMENT_TEAM = N3Z6SG5Z94;
 				INFOPLIST_FILE = ParselyTrackerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyTrackerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -862,7 +864,11 @@
 				DEVELOPMENT_TEAM = N3Z6SG5Z94;
 				INFOPLIST_FILE = ParselyTrackerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.parsely.ParselyTrackerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -912,6 +918,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3F147F8B29EF8C9800752DFB /* XCRemoteSwiftPackageReference "Nimble" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Quick/Nimble";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3F147F8E29EF8CA100752DFB /* Nimble */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F147F8B29EF8C9800752DFB /* XCRemoteSwiftPackageReference "Nimble" */;
+			productName = Nimble;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F40D9A5220EFF74F0030525E /* Project object */;
 }

@@ -12,7 +12,6 @@ abstract_target 'Parsely' do
   target 'ParselyTracker' do
     target 'ParselyTrackerTests' do
       inherit! :search_paths
-      pod 'Nimble'
     end
   end
 end
