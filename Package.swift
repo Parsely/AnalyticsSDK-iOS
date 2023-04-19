@@ -28,7 +28,7 @@ let package = Package(
             name: "ParselyTrackerTests",
             dependencies: ["ParselyAnalytics", "Nimble"],
             path: "ParselyTrackerTests",
-            exclude: ["Info.plist"]
+            exclude: ["Info.plist", "UnitTests.xctestplan"]
         )
     ]
 )
