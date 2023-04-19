@@ -1,3 +1,4 @@
+import Nimble
 @testable import ParselyAnalytics
 import XCTest
 
@@ -80,10 +81,10 @@ class RequestBuilderTests: ParselyTestCase {
     }
     
     func testGetUserAgent() {
-        let result = RequestBuilder.getUserAgent()
-        let expectedSubstring = "ParselyDemo/1.0 iOS"
-        XCTAssert(result.contains(expectedSubstring),
-                       "The result of RequestBuilder.getUserAgent should accurately represent the simulator agent"
-        )
+        // When the tests run without a host app, like in our setup, the generated User Agent will
+        // be in the format
+        //
+        // xctest/<Xcode version> iOS/<iOS version> (<architecture>)
+        expect(RequestBuilder.getUserAgent()).to(match("xctest\\/\\d+\\.\\d+ iOS\\/\\d+\\.\\d+ (.*)"))
     }
 }
