@@ -170,7 +170,7 @@
 				AA7473DD224956A000C75436 /* ParselyAnalytics.podspec */,
 				AAEDC32822123DD300769350 /* README.md */,
 				F40D9A5C20EFF74F0030525E /* ParselyDemo */,
-				F433338F20F0087E004BB6F5 /* ParselyTracker */,
+				F433338F20F0087E004BB6F5 /* Sources */,
 				F433339C20F0087E004BB6F5 /* Tests */,
 				F40D9A5B20EFF74F0030525E /* Products */,
 				E6EFA5F61B38FE34B3DF5AD2 /* Frameworks */,
@@ -202,7 +202,7 @@
 			path = ParselyDemo;
 			sourceTree = "<group>";
 		};
-		F433338F20F0087E004BB6F5 /* ParselyTracker */ = {
+		F433338F20F0087E004BB6F5 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				AAEDC3262212161F00769350 /* HttpClient.swift */,
@@ -221,7 +221,7 @@
 				B205889C220CB67500476E27 /* RequestBuilder.swift */,
 				B2FC40BD221CC42300C70806 /* Metadata.swift */,
 			);
-			path = ParselyTracker;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		F433339C20F0087E004BB6F5 /* Tests */ = {
@@ -656,7 +656,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = ParselyTracker/Info.plist;
+				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -685,7 +685,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = ParselyTracker/Info.plist;
+				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
