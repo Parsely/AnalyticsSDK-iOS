@@ -1,6 +1,6 @@
 import XCTest
 import os.log
-@testable import ParselyTracker
+@testable import ParselyAnalytics
 
 class EngagedTimeTests: ParselyTestCase {
     var engagedTime: EngagedTime?

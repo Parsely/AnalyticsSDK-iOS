@@ -1,5 +1,5 @@
 import XCTest
-@testable import ParselyTracker
+@testable import ParselyAnalytics
 
 class VideoTests: ParselyTestCase {
     let testVideoId: String = "videoId"

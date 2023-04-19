@@ -1,5 +1,5 @@
 import XCTest
-@testable import ParselyTracker
+@testable import ParselyAnalytics
 
 class ParselyTestCase: XCTestCase {
     internal var parselyTestTracker: Parsely!
