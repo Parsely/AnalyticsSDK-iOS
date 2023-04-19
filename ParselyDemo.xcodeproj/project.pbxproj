@@ -171,7 +171,7 @@
 				AAEDC32822123DD300769350 /* README.md */,
 				F40D9A5C20EFF74F0030525E /* ParselyDemo */,
 				F433338F20F0087E004BB6F5 /* ParselyTracker */,
-				F433339C20F0087E004BB6F5 /* ParselyTrackerTests */,
+				F433339C20F0087E004BB6F5 /* Tests */,
 				F40D9A5B20EFF74F0030525E /* Products */,
 				E6EFA5F61B38FE34B3DF5AD2 /* Frameworks */,
 			);
@@ -224,7 +224,7 @@
 			path = ParselyTracker;
 			sourceTree = "<group>";
 		};
-		F433339C20F0087E004BB6F5 /* ParselyTrackerTests */ = {
+		F433339C20F0087E004BB6F5 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				F433339D20F0087E004BB6F5 /* ParselyTrackerTests.swift */,
@@ -244,7 +244,7 @@
 				AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */,
 				3FCAFC8B29E9775A00BC9360 /* UnitTests.xctestplan */,
 			);
-			path = ParselyTrackerTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -709,7 +709,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3Z6SG5Z94;
-				INFOPLIST_FILE = ParselyTrackerTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -731,7 +731,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3Z6SG5Z94;
-				INFOPLIST_FILE = ParselyTrackerTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
