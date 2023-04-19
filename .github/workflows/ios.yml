@@ -44,7 +44,7 @@ jobs:
     - name: Build and Test
       run: |
         xcodebuild test \
-          -workspace ParselyDemo.xcworkspace \
+          -project ParselyDemo.xcodeproj \
           -scheme ParselyDemo \
           -sdk iphonesimulator \
           -destination 'platform=iOS Simulator,name=iPhone 14,OS=latest' \
