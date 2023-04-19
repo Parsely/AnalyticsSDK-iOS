@@ -68,6 +68,9 @@ class EngagedTimeTests: ParselyTestCase {
     
    
     func testGlobalPause() {
+        // This is call to configure required for the start-stop mechanism to work
+        sharedInstance?.configure(siteId: ParselyTestCase.testApikey)
+
         let assertionTimeout:TimeInterval = TimeInterval(3)
         let acceptableDifference:TimeInterval = TimeInterval(0.2)
 
