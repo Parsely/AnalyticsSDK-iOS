@@ -2,7 +2,7 @@ import Foundation
 import os.log
 
 class HttpClient {
-    static func sendRequest(request: ParselyRequest, completion: ((Error?) -> Void)? = nil) {
+    static func sendRequest(request: ParselyRequest, queue: DispatchQueue, completion: ((Error?) -> Void)? = nil) {
         os_log("Sending request to %s", log: OSLog.tracker, type: .debug, request.url)
         
         guard let url = URL(string: request.url) else {
@@ -28,7 +28,9 @@ class HttpClient {
                 os_log("Request succeeded", log: OSLog.tracker, type: .debug)
             }
 
-            completion?(error)
+            queue.async {
+                completion?(error)
+            }
         }.resume()
     }
 }

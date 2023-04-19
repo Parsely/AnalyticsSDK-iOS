@@ -3,7 +3,11 @@ import os.log
 
 class EngagedTime: Sampler {
     override func sampleFn(key : String) -> Bool {
-        let trackedData: Accumulator = accumulators[key]!
+        guard let trackedData = accumulators[key] else {
+            os_log("No accumulator found for key %s. Skipping sampling.", log: OSLog.tracker, type: .debug, key)
+            return false
+        }
+
         return trackedData.isEngaged
     }
     

@@ -6,3 +6,8 @@
 xcuserdata
 xcuserdata/*
 *.xcuserdata
+.swiftpm/
+.vscode/
+
+# Ruby tooling
+vendor/bundle

@@ -41,7 +41,7 @@ class StorageTests: ParselyTestCase {
             "foo": "bar",
             "baz": 10,
             "bzz": 10.5,
-            "lol": ["huh": "yah", "right": 10, "yup": 10.5],
+            "lol": ["huh": "yah", "right": 10, "yup": 10.5] as [String : Any],
             "millis": Date().millisecondsSince1970
         ]
         let fifteenMinutes = Double(1000 * 15 * 60)

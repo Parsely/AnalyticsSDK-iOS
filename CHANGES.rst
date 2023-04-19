@@ -1,6 +1,27 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+Changes
+-------
+
+* The library now uses a serial queue to process events [#76]
+* Removed the dependency on SwiftyJSON [#76]
+
+Bugfixes
+--------
+
+* Fixed the Swift Package Manager setup [#76]
+
+0.2.1 (4-5-2023)
+
+Changes
+--------
+
+* add support for Swift Package Manager (thanks @eddie-zhang)
+
 0.2.0 (12-12-2022)
 
 Bugfixes

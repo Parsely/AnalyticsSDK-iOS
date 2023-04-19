@@ -12,14 +12,17 @@ jobs:
     strategy:
       matrix:
         include:
-          - macos: "macos-10.15"
-            xcode: "11.6"
-            ios: "13.6"
-            iphone: "iPhone 11"
-          - macos: "macos-11"
-            xcode: "12.4"
-            ios: "14.4"
-            iphone: "iPhone 12"
+          # Only using "latest" CI for the moment.
+          # We'll decide later whether to keep running tests on older environments
+          #
+          # - macos: "macos-10.15"
+          #   xcode: "11.6"
+          #   ios: "13.6"
+          #   iphone: "iPhone 11"
+          # - macos: "macos-11"
+          #   xcode: "12.4"
+          #   ios: "14.4"
+          #   iphone: "iPhone 12"
           - macos: "macos-12"
             xcode: "14.1"
             ios: "16.1"
@@ -40,4 +43,10 @@ jobs:
       run: pod install
     - name: Build and Test
       run: |
-        xcodebuild test -workspace ParselyDemo.xcworkspace -scheme ParselyTrackerTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=${{ matrix.iphone }},OS=${{ matrix.ios }}' | xcpretty && exit ${PIPESTATUS[0]}
+        xcodebuild test \
+          -workspace ParselyDemo.xcworkspace \
+          -scheme ParselyDemo \
+          -sdk iphonesimulator \
+          -destination 'platform=iOS Simulator,name=iPhone 14,OS=latest' \
+          | xcpretty \
+          && exit ${PIPESTATUS[0]}
