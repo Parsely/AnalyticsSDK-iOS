@@ -1,7 +1,8 @@
 @testable import ParselyAnalytics
 import XCTest
 
-class MetadataTests: ParselyTestCase {
+class MetadataTests: XCTestCase {
+
     let expected: Dictionary<String, Any> = [
         "canonical_url": "http://parsely-test.com",
         "pub_date": Date(),
@@ -12,12 +13,12 @@ class MetadataTests: ParselyTestCase {
         "tags": ["tag1", "tag2"],
         "duration": TimeInterval(100)
     ]
-    
+
     func testToDictEmpty() {
         let metas = ParselyMetadata()
         XCTAssert(metas.toDict().isEmpty, "Creating a ParselyMetadata object with no parameters results in an empty object")
     }
-    
+
     func testToDictBasic() {
         let metas = ParselyMetadata(canonical_url: "http://test.com")
         let expected = ["link": "http://test.com"]
@@ -26,7 +27,7 @@ class MetadataTests: ParselyTestCase {
                        "Creating a ParselyMetadata object with one parameter results in a valid object containing " +
                        "a representation of that parameter")
     }
-    
+
     func testToDictFields() {
         let metasUnderTest = ParselyMetadata(
             canonical_url: expected["canonical_url"] as? String,
@@ -67,7 +68,7 @@ class MetadataTests: ParselyTestCase {
                        "The duration field in the result of ParselyMetadata.toDict should match the duration argument " +
                        "used at initialization")
     }
-    
+
     func testMetadata() {
         let metasUnderTest = ParselyMetadata(
             canonical_url: expected["canonical_url"] as? String,
