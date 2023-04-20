@@ -1,7 +1,8 @@
 import XCTest
 @testable import ParselyAnalytics
 
-class VisitorTests: ParselyTestCase {
+class VisitorTests: XCTestCase {
+
     let visitors: VisitorManager = VisitorManager()
 
     func testGetVisitorInfo() {
