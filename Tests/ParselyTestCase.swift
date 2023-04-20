@@ -3,7 +3,6 @@ import XCTest
 
 class ParselyTestCase: XCTestCase {
     internal var parselyTestTracker: Parsely!
-    static let testApikey: String = "examplesite.com"
 
     override func setUp() {
         super.setUp()
@@ -21,4 +20,9 @@ class ParselyTestCase: XCTestCase {
 
         return tracker
     }
+}
+
+extension Parsely {
+
+    static let testAPIKey = "examplesite.com"
 }

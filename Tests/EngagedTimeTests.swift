@@ -6,16 +6,16 @@ class EngagedTimeTests: ParselyTestCase {
     var engagedTime: EngagedTime?
     var sharedInstance: Parsely?
     let testUrl: String = "http://parsely-stuff.com"
-    
+
     override func setUp() {
         super.setUp()
         engagedTime = EngagedTime(trackerInstance: parselyTestTracker)
         sharedInstance = Parsely.sharedInstance
     }
-    
+
     func testHeartbeatFn() {
         let dummyEventArgs: Dictionary<String, Any> = engagedTime!.generateEventArgs(
-            url: testUrl, urlref: "", extra_data: nil, idsite: ParselyTestCase.testApikey)
+            url: testUrl, urlref: "", extra_data: nil, idsite: Parsely.testAPIKey)
         let dummyAccumulator: Accumulator = Accumulator(key: "", accumulatedTime: 0, totalTime: 0,
                                                         firstSampleTime: Date(),
                                                         lastSampleTime: Date(), lastPositiveSampleTime: Date(),
@@ -25,20 +25,20 @@ class EngagedTimeTests: ParselyTestCase {
         XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
                        "A call to EngagedTime.heartbeatFn should add an event to eventQueue")
     }
-    
+
     func testStartInteraction() {
         engagedTime!.startInteraction(url: testUrl, urlref: "", extra_data: nil,
-                                      idsite: ParselyTestCase.testApikey)
+                                      idsite: Parsely.testAPIKey)
         let internalAccumulators:Dictionary<String, Accumulator> = engagedTime!.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssert(testUrlAccumulator.isEngaged,
                   "After a call to EngagedTime.startInteraction, the internal accumulator for the engaged " +
                   "url should exist and its isEngaged flag should be set")
     }
-    
+
     func testEndInteraction() {
         engagedTime!.startInteraction(url: testUrl, urlref: "", extra_data: nil,
-                                      idsite: ParselyTestCase.testApikey)
+                                      idsite: Parsely.testAPIKey)
         engagedTime!.endInteraction()
         let internalAccumulators:Dictionary<String, Accumulator> = engagedTime!.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
@@ -47,34 +47,34 @@ class EngagedTimeTests: ParselyTestCase {
                        "EngagedTime.stopInteraction, the internal accumulator for the engaged " +
                        "url should exist and its isEngaged flag should be unset")
     }
-    
+
     func testSampleFn() {
         engagedTime!.startInteraction(url: testUrl, urlref: "", extra_data: nil,
-                                      idsite: ParselyTestCase.testApikey)
+                                      idsite: Parsely.testAPIKey)
         let sampleResult: Bool = engagedTime!.sampleFn(key: testUrl)
         XCTAssert(sampleResult,
                   "After a call to EngagedTime.startInteraction, EngagedTime.sample should return true for the interacting key")
     }
-    
+
     func testSampleFnPaused() {
         engagedTime!.startInteraction(url: testUrl, urlref: "", extra_data: nil,
-                                      idsite: ParselyTestCase.testApikey)
+                                      idsite: Parsely.testAPIKey)
         engagedTime!.endInteraction()
         let sampleResult: Bool = engagedTime!.sampleFn(key: testUrl)
         XCTAssertFalse(sampleResult,
                        "After a call to EngagedTime.startInteraction followed by a call to " +
                        "EngagedTime.stopInteraction, EngagedTime.sample should return false for the interacting key")
     }
-    
-   
+
+
     func testGlobalPause() {
         // This is call to configure required for the start-stop mechanism to work
-        sharedInstance?.configure(siteId: ParselyTestCase.testApikey)
+        sharedInstance?.configure(siteId: Parsely.testAPIKey)
 
         let assertionTimeout:TimeInterval = TimeInterval(3)
         let acceptableDifference:TimeInterval = TimeInterval(0.2)
 
-        sharedInstance!.startEngagement(url: testUrl, urlref: "", extraData: nil, siteId: ParselyTestCase.testApikey)
+        sharedInstance!.startEngagement(url: testUrl, urlref: "", extraData: nil, siteId: Parsely.testAPIKey)
         // sleep for three seconds
         let expectation = self.expectation(description: "Sampling")
         Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
