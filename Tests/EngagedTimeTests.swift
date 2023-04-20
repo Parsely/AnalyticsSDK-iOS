@@ -4,13 +4,11 @@ import os.log
 
 class EngagedTimeTests: ParselyTestCase {
     var engagedTime: EngagedTime?
-    var sharedInstance: Parsely?
     let testUrl: String = "http://parsely-stuff.com"
 
     override func setUp() {
         super.setUp()
         engagedTime = EngagedTime(trackerInstance: parselyTestTracker)
-        sharedInstance = Parsely.sharedInstance
     }
 
     func testHeartbeatFn() {
@@ -68,13 +66,14 @@ class EngagedTimeTests: ParselyTestCase {
 
 
     func testGlobalPause() {
+        let parsely = makePareslyTracker()
         // This is call to configure required for the start-stop mechanism to work
-        sharedInstance?.configure(siteId: Parsely.testAPIKey)
+        parsely.configure(siteId: Parsely.testAPIKey)
 
         let assertionTimeout:TimeInterval = TimeInterval(3)
         let acceptableDifference:TimeInterval = TimeInterval(0.2)
 
-        sharedInstance!.startEngagement(url: testUrl, urlref: "", extraData: nil, siteId: Parsely.testAPIKey)
+        parsely.startEngagement(url: testUrl, urlref: "", extraData: nil, siteId: Parsely.testAPIKey)
         // sleep for three seconds
         let expectation = self.expectation(description: "Sampling")
         Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
@@ -87,7 +86,7 @@ class EngagedTimeTests: ParselyTestCase {
         } else{
             NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
         }
-        let accumulatedTime:TimeInterval = sharedInstance!.track.engagedTime.accumulators[testUrl]!.accumulatedTime
+        let accumulatedTime:TimeInterval = parsely.track.engagedTime.accumulators[testUrl]!.accumulatedTime
         XCTAssert(accumulatedTime <= 3, "Engaged time should be less than or equal to 3 seconds but it was \(accumulatedTime)")
 
         // sleep for three more seconds
@@ -101,8 +100,8 @@ class EngagedTimeTests: ParselyTestCase {
         NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
 
         // stop tracking engaged time
-        sharedInstance!.stopEngagement()
-        let accumulatedTimeSecond:TimeInterval = sharedInstance!.track.engagedTime.accumulators[testUrl]!.accumulatedTime
+        parsely.stopEngagement()
+        let accumulatedTimeSecond:TimeInterval = parsely.track.engagedTime.accumulators[testUrl]!.accumulatedTime
         XCTAssert(accumulatedTimeSecond == 0.0,
                     "The accumulated time should be zero and it was \(accumulatedTimeSecond)")
 
