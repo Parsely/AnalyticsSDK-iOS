@@ -7,7 +7,8 @@ class EngagedTimeTests: ParselyTestCase {
     let testUrl: String = "http://parsely-stuff.com"
 
     func testHeartbeatFn() {
-        let engagedTime = EngagedTime(trackerInstance: parselyTestTracker)
+        let parsely = makePareslyTracker()
+        let engagedTime = EngagedTime(trackerInstance: parsely)
         let dummyEventArgs: Dictionary<String, Any> = engagedTime.generateEventArgs(
             url: testUrl, urlref: "", extra_data: nil, idsite: Parsely.testAPIKey)
         let dummyAccumulator: Accumulator = Accumulator(key: "", accumulatedTime: 0, totalTime: 0,
@@ -16,12 +17,12 @@ class EngagedTimeTests: ParselyTestCase {
                                                         heartbeatTimeout: 0, contentDuration: 0, isEngaged: false,
                                                         eventArgs: dummyEventArgs)
         engagedTime.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
-        XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
+        XCTAssertEqual(parsely.eventQueue.length(), 1,
                        "A call to EngagedTime.heartbeatFn should add an event to eventQueue")
     }
 
     func testStartInteraction() {
-        let engagedTime = EngagedTime(trackerInstance: parselyTestTracker)
+        let engagedTime = makeEngagedTime()
         engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil,
                                       idsite: Parsely.testAPIKey)
         let internalAccumulators:Dictionary<String, Accumulator> = engagedTime.accumulators
@@ -32,7 +33,7 @@ class EngagedTimeTests: ParselyTestCase {
     }
 
     func testEndInteraction() {
-        let engagedTime = EngagedTime(trackerInstance: parselyTestTracker)
+        let engagedTime = makeEngagedTime()
         engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil,
                                       idsite: Parsely.testAPIKey)
         engagedTime.endInteraction()
@@ -45,7 +46,7 @@ class EngagedTimeTests: ParselyTestCase {
     }
 
     func testSampleFn() {
-        let engagedTime = EngagedTime(trackerInstance: parselyTestTracker)
+        let engagedTime = makeEngagedTime()
         engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil,
                                       idsite: Parsely.testAPIKey)
         let sampleResult: Bool = engagedTime.sampleFn(key: testUrl)
@@ -54,7 +55,7 @@ class EngagedTimeTests: ParselyTestCase {
     }
 
     func testSampleFnPaused() {
-        let engagedTime = EngagedTime(trackerInstance: parselyTestTracker)
+        let engagedTime = makeEngagedTime()
         engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil,
                                       idsite: Parsely.testAPIKey)
         engagedTime.endInteraction()
@@ -105,5 +106,9 @@ class EngagedTimeTests: ParselyTestCase {
         XCTAssert(accumulatedTimeSecond == 0.0,
                     "The accumulated time should be zero and it was \(accumulatedTimeSecond)")
 
+    }
+
+    func makeEngagedTime() -> EngagedTime {
+        EngagedTime(trackerInstance: makePareslyTracker())
     }
 }
