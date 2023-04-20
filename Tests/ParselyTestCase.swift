@@ -7,11 +7,18 @@ class ParselyTestCase: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        parselyTestTracker = Parsely.getInstance()
+        parselyTestTracker = makePareslyTracker()
     }
-    
-    override func tearDown() {
-        parselyTestTracker.hardShutdown()
-        super.tearDown()
+
+    func makePareslyTracker() -> Parsely {
+        let tracker = Parsely.getInstance()
+
+        // Note that because we call addTeardownBlock, this method needs to be defined within an
+        // XCTestCase
+        addTeardownBlock {
+            tracker.hardShutdown()
+        }
+
+        return tracker
     }
 }
