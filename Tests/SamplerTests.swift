@@ -61,7 +61,9 @@ class SamplerTests: ParselyTestCase {
         Timer.scheduledTimer(withTimeInterval: heartbeatDeliveryInterval, repeats: false) { timer in
             expectation.fulfill()
         }
-        waitForExpectations(timeout: heartbeatDeliveryInterval, handler: nil)
+        // Wait slightly longer to reduce the race between waiting for the `expectation` to be
+        // fulfilled and the fulfillment.
+        waitForExpectations(timeout: heartbeatDeliveryInterval + 0.01, handler: nil)
         
         let actualUpdatedInterval = samplerUnderTest!.heartbeatInterval
         // This value depends on heartbeatInterval, and two magic numbers in the implementation.
