@@ -162,8 +162,12 @@ class SamplerTests: ParselyTestCase {
         
         let accumulatedTime:TimeInterval = samplerUnderTest!.accumulators["sampler-test"]!.accumulatedTime
         samplerUnderTest!.pause()
-        XCTAssert(accumulatedTime >= assertionTimeout - acceptableDifference,
-                  "The sampler should accumulate time constantly after a call to trackKey")
+        XCTAssertEqual(
+            accumulatedTime,
+            assertionTimeout,
+            accuracy: acceptableDifference,
+            "The sampler should accumulate time constantly after a call to trackKey"
+        )
         
         let secondExpectation = self.expectation(description: "Paused sampling")
         Timer.scheduledTimer(withTimeInterval: assertionTimeout, repeats: false) { timer in
@@ -172,6 +176,11 @@ class SamplerTests: ParselyTestCase {
         waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
         
         let secondAccumulatedTime: TimeInterval = samplerUnderTest!.accumulators["sampler-test"]!.accumulatedTime
-        XCTAssert(secondAccumulatedTime <= assertionTimeout, "AccumulatedTime was \(secondAccumulatedTime)")
+        XCTAssertEqual(
+            secondAccumulatedTime,
+            assertionTimeout,
+            accuracy: acceptableDifference,
+            "AccumulatedTime was \(secondAccumulatedTime)"
+        )
     }
 }
