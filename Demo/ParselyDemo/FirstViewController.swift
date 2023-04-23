@@ -1,6 +1,6 @@
 import UIKit
 import os.log
-import ParselyTracker
+import ParselyAnalytics
 
 class FirstViewController: UIViewController {
     let delegate = UIApplication.shared.delegate as! AppDelegate

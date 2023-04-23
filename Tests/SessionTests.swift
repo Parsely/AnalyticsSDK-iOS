@@ -1,5 +1,5 @@
 import XCTest
-@testable import ParselyTracker
+@testable import ParselyAnalytics
 
 class SessionTests: ParselyTestCase {
     var sessions: SessionManager!

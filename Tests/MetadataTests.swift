@@ -1,4 +1,4 @@
-@testable import ParselyTracker
+@testable import ParselyAnalytics
 import XCTest
 
 class MetadataTests: ParselyTestCase {

@@ -13,20 +13,22 @@ let package = Package(
             targets: ["ParselyAnalytics"]
         ),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "12.0.0"))
+    ],
     targets: [
         .target(
             name: "ParselyAnalytics",
             dependencies: [],
-            path: "ParselyTracker",
+            path: "Sources",
             exclude: ["Info.plist"],
             resources: []
         ),
         .testTarget(
             name: "ParselyTrackerTests",
-            dependencies: ["ParselyAnalytics"],
-            path: "ParselyTrackerTests",
-            exclude: ["Info.plist"]
+            dependencies: ["ParselyAnalytics", "Nimble"],
+            path: "Tests",
+            exclude: ["Info.plist", "UnitTests.xctestplan"]
         )
     ]
 )

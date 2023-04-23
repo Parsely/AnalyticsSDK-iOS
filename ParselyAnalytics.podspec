@@ -11,6 +11,10 @@ Pod::Spec.new do |s|
   s.ios.deployment_target  = '13.0'
   s.tvos.deployment_target = '13.0'
   s.source                 = { git: 'https://github.com/Parsely/AnalyticsSDK-iOS.git', tag: s.version.to_s }
-  s.source_files           = 'ParselyTracker'
+  s.source_files           = 'Sources'
   s.framework              = 'Foundation'
+  s.test_spec 'Tests' do |test_spec|
+    test_spec.source_files = 'Tests'
+    test_spec.dependency 'Nimble'
+  end
 end

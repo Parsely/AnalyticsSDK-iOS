@@ -1,5 +1,5 @@
 import UIKit
-import ParselyTracker
+import ParselyAnalytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

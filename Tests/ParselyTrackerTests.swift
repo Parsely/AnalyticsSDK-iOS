@@ -1,7 +1,7 @@
 import XCTest
 import Nimble
 
-@testable import ParselyTracker
+@testable import ParselyAnalytics
 
 class ParselyTrackerTests: ParselyTestCase {
     let testUrl = "http://example.com/testurl"

@@ -38,7 +38,7 @@
       </MacroExpansion>
       <TestPlans>
          <TestPlanReference
-            reference = "container:ParselyTrackerTests/UnitTests.xctestplan"
+           reference = "container:../Tests/UnitTests.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
