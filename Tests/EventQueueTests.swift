@@ -1,58 +1,68 @@
-import XCTest
+import Nimble
 @testable import ParselyAnalytics
+import XCTest
 
-class EventQueueTests: ParselyTestCase {
-    var queue = ParselyAnalytics.EventQueue<Int>()
-    
-    override func setUp() {
-        super.setUp()
-        for i:Int in 0...30 {
-            self.queue.push(i)
-        }
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
+class EventQueueTests: XCTestCase {
+
     func testPush() {
-        self.queue.push(31)
-        XCTAssert(self.queue.list.count == 32)
+        var queue = makeQueue(loadedWithNumberOfItems: 30)
+        queue.push(1)
+        expect(queue.list).to(haveCount(31))
     }
 
     func testPushContentsOf() {
-        self.queue.push(contentsOf: [31])
-        XCTAssert(self.queue.list.count == 32)
-        self.queue.push(contentsOf: [32, 33])
-        XCTAssert(self.queue.list.count == 34)
-        self.queue.push(contentsOf: [34, 35].prefix(1))
-        XCTAssert(self.queue.list.count == 35)
-        XCTAssert(self.queue.list.suffix(4) == [31, 32, 33, 34])
-    }
-    
-    func testPop() {
-        XCTAssert(self.queue.pop() == 0)
-    }
-    
-    func testGet() {
-        XCTAssert(self.queue.get(count:5) == [0,1,2,3,4])
-        XCTAssert(self.queue.get(count:5) == [5,6,7,8,9])
-        XCTAssert(self.queue.get(count:21) == [10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
-        XCTAssert(self.queue.get(count:5) == [])
-    }
-    
-    func testGetAll() {
-        XCTAssert(self.queue.get() == [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
-    }
-    
-    func testGetTooMany() {
-        XCTAssert(self.queue.get(count:2147483647) == [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
-    }
-    
-    func testNegativeCount() {
-        let invalidGetResult = self.queue.get(count:-42)
-        XCTAssert(invalidGetResult == [])
-    }
-    
-}
+        var queue = makeQueue(loadedWithNumberOfItems: 0)
+        queue.push(contentsOf: [1])
+        expect(queue.list).to(haveCount(1))
 
+        queue.push(contentsOf: [2, 3])
+        expect(queue.list).to(haveCount(3))
+
+        queue.push(contentsOf: [4, 5].prefix(1))
+        expect(queue.list).to(haveCount((4)))
+
+        expect(queue.list.suffix(3)) == [2, 3, 4]
+    }
+
+    func testPop() {
+        var queue = makeQueue(loadedWithNumberOfItems: 2)
+        expect(queue.pop()) == 0
+        expect(queue.list).to(haveCount(1))
+    }
+
+    func testGet() {
+        var queue = makeQueue(loadedWithNumberOfItems: 30)
+
+        expect(queue.get(count: 5)) == [0, 1, 2, 3, 4]
+        expect(queue.list).to(haveCount(25))
+
+        expect(queue.get(count: 5)) == [5, 6, 7, 8, 9]
+        expect(queue.list).to(haveCount(20))
+
+        expect(queue.get(count: 21)) == (10...29).map { $0 }
+        expect(queue.list).to(beEmpty())
+
+        expect(queue.get(count: 5)) == []
+    }
+
+    func testGetAll() {
+        var queue = makeQueue(loadedWithNumberOfItems: 5)
+        expect(queue.get()) == [0, 1, 2, 3, 4]
+    }
+
+    func testGetTooMany() {
+        var queue = makeQueue(loadedWithNumberOfItems: 5)
+        expect(queue.get(count: 1_000)) == [0, 1, 2, 3, 4]
+    }
+
+    func testNegativeCount() {
+        var queue = makeQueue(loadedWithNumberOfItems: 5)
+        expect(queue.get(count: -1)) == []
+    }
+
+    func makeQueue(loadedWithNumberOfItems numberOfItem: Int = 30) -> EventQueue<Int> {
+        var queue = EventQueue<Int>()
+        (0..<numberOfItem).forEach { queue.push($0) }
+        return queue
+    }
+}

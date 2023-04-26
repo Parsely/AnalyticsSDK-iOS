@@ -1,10 +1,10 @@
 import XCTest
 @testable import ParselyAnalytics
 
-class VisitorTests: ParselyTestCase {
-    let visitors: VisitorManager = VisitorManager()
+class VisitorTests: XCTestCase {
 
     func testGetVisitorInfo() {
+        let visitors: VisitorManager = VisitorManager()
         let visitor = visitors.getVisitorInfo()
         XCTAssertFalse(visitor.isEmpty, "The first call to VisitorManager.getVisitorInfo should return a non-empty object")
         // FIXME: Visitor should have a way to expire visitors, at least for testing. Otherwise the first
@@ -22,7 +22,9 @@ class VisitorTests: ParselyTestCase {
                        "Sequential calls to VisitorManager.getVisitorInfo within the default expiry should return objects " +
                        "with the same last session timestamp")
     }
+
     func testExtendVisitorExpiry() {
+        let visitors: VisitorManager = VisitorManager()
         let visitor = visitors.getVisitorInfo()
         let capturedExpiryOne = visitor["expires"] as! Date
         let subsequentVisitor = visitors.getVisitorInfo(shouldExtendExisting: true)

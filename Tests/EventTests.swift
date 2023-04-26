@@ -1,37 +1,42 @@
-import XCTest
 @testable import ParselyAnalytics
+import XCTest
 
-class EventTests: ParselyTestCase {
+class EventTests: XCTestCase {
+
     let testInc: Int = 5
     let testTT: Int = 15
     let expectedVisitorID: String = "12345fdffff"
     let timestampInThePast: UInt64 = 1626963869621
-    
+
     let expectedStrings: Dictionary<String, String> = [
         "action": "pageview",
         "url": "http://parsely-stuff.com",
         "urlref": "http://testt.com",
-        "idsite": testApikey,
+        "idsite": "apikey",
         "surl": "http://parsely-stuff.com",
         "sref": "http://parsely-test.com",
-        ]
+    ]
+
     let expectedInts: Dictionary<String, Int> = [
         "sid": 0,
     ]
+
     let expectedUInt64s: Dictionary<String, UInt64> = [
         "sts": 1626963869621,
         "slts": 1626963869621
     ]
+
     let extraData: Dictionary<String, String> = [
         "arbitraryParameter1": "testValue",
         "arbitraryParameter2": "testValue2"
     ]
+
     let testMetadata: ParselyMetadata = ParselyMetadata(
         canonical_url: "http://parsely-test.com", pub_date: Date.init(), title: "a title.", authors: ["Yogi Berra"],
         image_url: "http://parsely-test.com/image2", section: "Things my mother says", tags: ["tag1", "tag2"],
         duration: TimeInterval(100)
     )
-    
+
     func testEvent() {
         let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
                                    urlref: expectedStrings["urlref"], metadata: testMetadata,
@@ -64,7 +69,7 @@ class EventTests: ParselyTestCase {
         let extraDataIsEquivalent: Bool = NSDictionary(dictionary: eventUnderTest.extra_data!).isEqual(to: extraData)
         XCTAssert(extraDataIsEquivalent, "The extra_data procided in Event initialization should be stored properly")
     }
-    
+
     func testHeartbeatEvents() {
         let event = Heartbeat(
             "heartbeat",
@@ -80,10 +85,10 @@ class EventTests: ParselyTestCase {
         XCTAssertEqual(event.url, expectedStrings["url"],
                        "The url used to initialize a heartbeat event should be stored properly")
         XCTAssertEqual(event.inc, testInc, "The inc parameter used to initialize a heartbeat event should be stored properly")
-        XCTAssertEqual(event.idsite, ParselyTestCase.testApikey,
+        XCTAssertEqual(event.idsite, "apikey",
                        "The idsite parameter used to initialize a heartbeat event should be stored properly")
     }
-    
+
     func testToDict() {
         let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
                                    urlref: expectedStrings["urlref"], metadata: testMetadata,
@@ -120,7 +125,7 @@ class EventTests: ParselyTestCase {
         XCTAssert((actualExtraData["ts"] as! UInt64) > timestampInThePast,
                   "The data.ts field of the result of Event.toDict should be a non-ancient timestamp")
     }
-    
+
     func testSetSessionInfo() {
         let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
                                    urlref: expectedStrings["urlref"], metadata: testMetadata,
@@ -143,7 +148,7 @@ class EventTests: ParselyTestCase {
         XCTAssertEqual(eventUnderTest.session_url, expectedStrings["surl"],
                        "The surl set via setSessionInfo should be stored properly")
     }
-    
+
     func testSetVisitorInfo() {
         let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
                                    urlref: expectedStrings["urlref"], metadata: testMetadata,
