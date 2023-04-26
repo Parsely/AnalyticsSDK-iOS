@@ -2,7 +2,8 @@ import Nimble
 @testable import ParselyAnalytics
 import XCTest
 
-class RequestBuilderTests: ParselyTestCase {
+class RequestBuilderTests: XCTestCase {
+
     private func makeEvents() -> Array<Event> {
         let exampleMetadata: ParselyMetadata = ParselyMetadata(
             canonical_url:"http://parsely-test.com",
@@ -22,12 +23,12 @@ class RequestBuilderTests: ParselyTestCase {
             extra_data: nil
             )]
     }
-    
+
     func testEndpoint() {
         let endpoint = RequestBuilder.buildPixelEndpoint()
         XCTAssert(endpoint != "", "buildPixelEndpoint should return a non-empty string")
     }
-    
+
     func testBuildPixelEndpoint() {
         var expected: String = "https://p1.parsely.com/mobileproxy"
         var actual = RequestBuilder.buildPixelEndpoint()
@@ -36,7 +37,7 @@ class RequestBuilderTests: ParselyTestCase {
         actual = RequestBuilder.buildPixelEndpoint()
         XCTAssert(actual == expected, "buildPixelEndpoint should return the correct URL for the given date")
     }
-    
+
     func testHeaders() {
         let events: Array<Event> = makeEvents()
         let actual: Dictionary<String, Any?> = RequestBuilder.buildHeadersDict(events: events)
@@ -61,7 +62,7 @@ class RequestBuilderTests: ParselyTestCase {
                        "RequestBuilder.buildRequest should return a request with an events array containing all " +
                        "relevant revents")
     }
-    
+
     func testParamsJson() {
         let events = makeEvents()
         let request = RequestBuilder.buildRequest(events: events)
@@ -71,7 +72,7 @@ class RequestBuilderTests: ParselyTestCase {
         } catch { }
         XCTAssertNotNil(jsonData, "Request params should serialize to JSON")
     }
-    
+
     func testGetHardwareString() {
         let result = RequestBuilder.getHardwareString()
         let expected = Set(["x86_64", "arm64"])
@@ -79,7 +80,7 @@ class RequestBuilderTests: ParselyTestCase {
                     "The result of RequestBuilder.getHardwareString should accurately represent the simulator hardware"
         )
     }
-    
+
     func testGetUserAgent() {
         // When the tests run without a host app, like in our setup, the generated User Agent will
         // be in the format

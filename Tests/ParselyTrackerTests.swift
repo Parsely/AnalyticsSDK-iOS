@@ -6,18 +6,18 @@ import Nimble
 class ParselyTrackerTests: ParselyTestCase {
     let testUrl = "http://example.com/testurl"
     let testVideoId = "12345"
-    
+
     override func setUp() {
         super.setUp()
-        parselyTestTracker.configure(siteId: ParselyTestCase.testApikey)
+        parselyTestTracker.configure(siteId: Parsely.testAPIKey)
     }
-    
+
     func testConfigure() {
-        XCTAssertEqual(parselyTestTracker.apikey, ParselyTestCase.testApikey,
+        XCTAssertEqual(parselyTestTracker.apikey, Parsely.testAPIKey,
                        "After a call to Parsely.configure, Parsely.apikey should be the value used in the call's " +
                        "siteId argument")
     }
-    
+
     func testTrackPageView() {
         XCTAssertEqual(parselyTestTracker.eventQueue.length(), 0,
                        "eventQueue should be empty immediately after initialization")
@@ -25,7 +25,7 @@ class ParselyTrackerTests: ParselyTestCase {
         // A call to Parsely.trackPageView should add an event to eventQueue
         expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(1))
     }
-    
+
     func testStartEngagement() {
         parselyTestTracker.startEngagement(url: testUrl)
         // After a call to Parsely.startEngagement, the internal accumulator for the engaged url should exist
@@ -88,4 +88,3 @@ class ParselyTrackerTests: ParselyTestCase {
         }
     }
 }
-

@@ -76,7 +76,7 @@ class StorageTests: ParselyTestCase {
         let actual = storage.get(key: "shouldextend") ?? [:]
         XCTAssert(actual.isEmpty, "Calls to Storage.get requesting expired keys should return empty objects")
     }
-    
+
     func testStoredDataPersistsAcrossStorageInstances() {
         let expected = ["foo": "bar"]
         _ = storage.set(key: "baz", value: expected, expires: nil)

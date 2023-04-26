@@ -1,20 +1,21 @@
-import XCTest
 @testable import ParselyAnalytics
+import XCTest
 
 class SessionTests: ParselyTestCase {
+
     var sessions: SessionManager!
     let sessionStorageKey = "_parsely_session_identifier"
     let testInitialUrl = "http://parsely-test.com/123"
     let testSubsequentUrl = "http://parsely-test.com/"
     let epochTimeInThePast:UInt64 = 1626963869621
-    
+
     override func setUp() {
         super.setUp()
         sessions = SessionManager(trackerInstance: parselyTestTracker)
-        // XXX slight hack, ideally this functionality should be a method on SessionManager
+        // Note: This is a slight hack, ideally this functionality should be a method on SessionManager
         Storage().expire(key: sessionStorageKey)
     }
-    
+
     func testGet() {
         let session = sessions.get(url: testInitialUrl, urlref: testSubsequentUrl)
         XCTAssertGreaterThanOrEqual(session["session_id"] as! Int, 0,
@@ -41,7 +42,7 @@ class SessionTests: ParselyTestCase {
         XCTAssertEqual(session["session_url"] as! String, testInitialUrl,
                        "The url of a session that has been extended with a different url should not have changed")
     }
-    
+
     func testGetCorrectlyMutatesVisitor() {
         let visitorManager = VisitorManager()
         let visitorInfo = visitorManager.getVisitorInfo()
@@ -65,7 +66,7 @@ class SessionTests: ParselyTestCase {
                   "shouldExtendExisting:true should return a session object with an extended expiry value " +
                   "compared to the original expiry of the session")
     }
-    
+
     func testExtendExpiry() {
         let initialSession = sessions.get(url: testInitialUrl, urlref: "")
         let initialSessionExpiry: Date = initialSession["expires"] as! Date
