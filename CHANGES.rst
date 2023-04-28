@@ -7,6 +7,18 @@ Unreleased
 Changes
 -------
 
+_None_
+
+Bugfixes
+--------
+
+_None_
+
+0.2.2-beta1 (4-28-2023)
+
+Changes
+-------
+
 * The library now uses a serial queue to process events [#76]
 * Removed the dependency on SwiftyJSON [#76]
 
