@@ -29,7 +29,7 @@ class VideoManager: Sampler {
         let roundedSecs: Int = Int(data.accumulatedTime)
         let totalMs: Int = Int(data.totalTime.milliseconds())
 
-        var curVideo = trackedVideos[data.key]!
+        guard var curVideo = trackedVideos[data.key] else { return }
         let event = Heartbeat(
             "vheartbeat",
             url: curVideo.url,
