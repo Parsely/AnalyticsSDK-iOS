@@ -13,7 +13,7 @@ class VideoTests: ParselyTestCase {
     func testTrackPlay() {
         let videoManager = VideoManager(trackerInstance: parselyTestTracker)
 
-        expect(videoManager.trackedVideos).to(beEmpty(), description: "videoManager.accumulators should be empty before calling trackPlay")
+        expect(videoManager.trackedVideos).to(beEmpty())
 
         videoManager.trackPlay(
             url: testUrl,
@@ -25,7 +25,7 @@ class VideoTests: ParselyTestCase {
             idsite: Parsely.testAPIKey
         )
 
-        expect(videoManager.trackedVideos).to(haveCount(1), description: "A call to trackPlay should populate videoManager.accumulators with one object")
+        expect(videoManager.trackedVideos).to(haveCount(1))
     }
 
     func testTrackPause() {
@@ -43,7 +43,7 @@ class VideoTests: ParselyTestCase {
 
         videoManager.trackPause()
 
-        expect(videoManager.trackedVideos).to(haveCount(1), description: "A call to trackPause should not remove an accumulator from videoManager.accumulators")
+        expect(videoManager.trackedVideos).to(haveCount(1))
     }
 
     func testReset() {
@@ -61,8 +61,8 @@ class VideoTests: ParselyTestCase {
 
         videoManager.reset(url: testUrl, vId: testVideoId)
 
-        expect(videoManager.samplerTimer).toNot(beNil(), description: "videoReset should run successfully without the VideoManager instance being paused")
-        expect(videoManager.trackedVideos).to(beEmpty(), description: "A call to Parsely.track.videoManager.reset should remove a video from videoManager.trackedVideos")
+        expect(videoManager.samplerTimer).toNot(beNil())
+        expect(videoManager.trackedVideos).to(beEmpty())
     }
 
     func testUpdateVideoEventArgs() throws {
@@ -94,10 +94,7 @@ class VideoTests: ParselyTestCase {
         let testTrackedVideo = try XCTUnwrap(videoManager.trackedVideos.values.first)
         let actualMetadata = try XCTUnwrap(testTrackedVideo.eventArgs["metadata"] as? ParselyMetadata)
 
-        expect(actualMetadata.section).to(
-            equal(testSectionFirst),
-            description: "The section metadata stored for a video after a call to parsely.track.videoManager.trackPlay should match the section metadata passed to that call."
-        )
+        expect(actualMetadata.section).to(equal(testSectionFirst))
 
         let secondTestMetadata = ParselyMetadata(
             canonical_url: testUrl,
@@ -123,10 +120,7 @@ class VideoTests: ParselyTestCase {
         let secondTestTrackedVideo = try XCTUnwrap(videoManager.trackedVideos.values.first)
         let secondActualMetadata = try XCTUnwrap(secondTestTrackedVideo.eventArgs["metadata"] as? ParselyMetadata)
 
-        expect(secondActualMetadata.section).to(
-            equal(testSectionSecond),
-            description: "The section metadata stored for a preexisting video after a call to parsely.track.videoManager.trackPlay should match the section metadata passed to that call."
-        )
+        expect(secondActualMetadata.section).to(equal(testSectionSecond))
     }
 
     func testSampleFn() {
@@ -142,10 +136,7 @@ class VideoTests: ParselyTestCase {
             idsite: Parsely.testAPIKey
         )
 
-        expect(videoManager.sampleFn(key: self.testVideoKey)).to(
-            beTrue(),
-            description: "After a call to VideoManager.trackPlay, VideoManager.sample should return true for the viewing key"
-        )
+        expect(videoManager.sampleFn(key: self.testVideoKey)).to(beTrue())
    }
 
     func testSampleFnPaused() {
@@ -162,10 +153,7 @@ class VideoTests: ParselyTestCase {
         )
         videoManager.trackPause()
 
-        expect(videoManager.sampleFn(key: self.testVideoKey)).to(
-            beFalse(),
-            description: "After a call to VideoManager.trackPlay followed by a call to VideoManager.trackPause, VideoManager.sample should return false for the viewing key"
-        )
+        expect(videoManager.sampleFn(key: self.testVideoKey)).to(beFalse())
     }
 
     func testHeartbeatFn() {
@@ -200,6 +188,6 @@ class VideoTests: ParselyTestCase {
         )
         videoManager.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
 
-        expect(self.parselyTestTracker.eventQueue.list).to(haveCount(2), description: "A call to VideoManager should add two events to eventQueue")
+        expect(self.parselyTestTracker.eventQueue.list).to(haveCount(2))
     }
 }
