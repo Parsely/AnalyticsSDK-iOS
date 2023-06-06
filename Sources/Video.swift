@@ -12,16 +12,16 @@ struct TrackedVideo {
 }
 
 class VideoManager: Sampler {
-    
+
     var trackedVideos: Dictionary<String, TrackedVideo> = [:]
-    
+
     override func sampleFn(key: String) -> Bool {
         if trackedVideos[key] == nil {
             return false
         }
         return (trackedVideos[key]?.isPlaying)!
     }
-    
+
     override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {
         if enableHeartbeats != true {
             return
@@ -29,7 +29,11 @@ class VideoManager: Sampler {
         let roundedSecs: Int = Int(data.accumulatedTime)
         let totalMs: Int = Int(data.totalTime.milliseconds())
 
-        guard var curVideo = trackedVideos[data.key] else { return }
+        guard var curVideo = trackedVideos[data.key] else {
+            os_log("Skipping heartbeat for video %s because it is not in the tracked videos list", log: OSLog.tracker, type:.debug, data.key)
+            return
+        }
+
         let event = Heartbeat(
             "vheartbeat",
             url: curVideo.url,
@@ -45,7 +49,7 @@ class VideoManager: Sampler {
         curVideo._heartbeatsSent += 1
         trackedVideos[curVideo.key] = curVideo
     }
-    
+
     func trackPlay(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: ParselyMetadata?, extra_data: Dictionary<String, Any>?, idsite: String) -> Void {
         trackPause()
         let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
@@ -74,7 +78,7 @@ class VideoManager: Sampler {
             trackedVideos[curVideo!.key] = curVideo
         }
     }
-    
+
     func reset(url: String, vId: String) {
         os_log("Reset video accumulator for url %s and vId %s", log: OSLog.tracker, type:.debug, url, vId)
         trackPause()
@@ -104,13 +108,13 @@ class VideoManager: Sampler {
                 hasStartedPlaying: false,
                 eventArgs: _eventArgs,
                 _heartbeatsSent: 0)
-            
+
             trackKey(key: key, contentDuration: duration, eventArgs:_eventArgs)
         }
 
         return trackedVideos[key]!
     }
-    
+
     private func createVideoTrackingKey(vId: String, url: String) -> String {
         return url + "::" + vId
     }
