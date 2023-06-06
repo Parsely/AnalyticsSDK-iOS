@@ -158,24 +158,7 @@ class VideoTests: ParselyTestCase {
 
     func testHeartbeatFn() {
         let videoManager = VideoManager(trackerInstance: parselyTestTracker)
-
-        let dummyAccumulator = Accumulator(
-            key: testVideoKey,
-            accumulatedTime: 0,
-            totalTime: 0,
-            firstSampleTime: Date(),
-            lastSampleTime: Date(),
-            lastPositiveSampleTime: Date(),
-            heartbeatTimeout: 0,
-            contentDuration: 0,
-            isEngaged: false,
-            eventArgs: videoManager.generateEventArgs(
-                url: testUrl,
-                urlref: "",
-                extra_data: nil,
-                idsite: Parsely.testAPIKey
-            ) as [String: Any]
-        )
+        let dummyAccumulator = makeAccumulator(videoManager: videoManager, key: testVideoKey, url: testUrl)
 
         videoManager.trackPlay(
             url: testUrl,
@@ -189,5 +172,40 @@ class VideoTests: ParselyTestCase {
         videoManager.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
 
         expect(self.parselyTestTracker.eventQueue.list).to(haveCount(2))
+    }
+
+    func testHeartbeatDoesNotCrashIfNoVideoHasBeenTracked() {
+        let videoManager = VideoManager(trackerInstance: parselyTestTracker)
+        let dummyAccumulator = makeAccumulator(videoManager: videoManager, key: testVideoKey, url: testUrl)
+
+        // Send heart beat without tracking a play first...
+        videoManager.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
+
+        // ...and verify that no crash has occurred by performing a simple assertion on the tracker state
+        expect(self.parselyTestTracker.eventQueue.list).to(beEmpty())
+    }
+}
+
+extension VideoTests {
+
+    func makeAccumulator(videoManager: VideoManager, key: String, url: String) -> Accumulator {
+        Accumulator(
+            key: key,
+            accumulatedTime: 0,
+            totalTime: 0,
+            firstSampleTime: Date(),
+            lastSampleTime: Date(),
+            lastPositiveSampleTime: Date(),
+            heartbeatTimeout: 0,
+            contentDuration: 0,
+            isEngaged: false,
+            eventArgs: videoManager.generateEventArgs(
+                url: url,
+                urlref: "",
+                extra_data: nil,
+                // Intresting: If this is defined as a default argument in the method signature, it won't compile.
+                idsite: Parsely.testAPIKey
+            ) as [String: Any]
+        )
     }
 }
