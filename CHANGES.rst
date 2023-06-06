@@ -12,7 +12,7 @@ _None_
 Bugfixes
 --------
 
-_None_
+* Prevented a crash in the rare occurrence when a `VideoManager` attempted to send an heartbeat for a video it had not tracked [#83]
 
 0.2.2 (5-10-2023)
 
