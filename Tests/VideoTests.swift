@@ -31,7 +31,7 @@ class VideoTests: ParselyTestCase {
     func testTrackPause() {
         let videoManager = VideoManager(trackerInstance: parselyTestTracker)
 
-    videoManager.trackPlay(
+        videoManager.trackPlay(
             url: testUrl,
             urlref: testUrl,
             vId: testVideoId,
@@ -137,7 +137,7 @@ class VideoTests: ParselyTestCase {
         )
 
         expect(videoManager.sampleFn(key: self.testVideoKey)).to(beTrue())
-   }
+    }
 
     func testSampleFnPaused() {
         let videoManager = VideoManager(trackerInstance: parselyTestTracker)
