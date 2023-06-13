@@ -1,100 +1,211 @@
-import XCTest
+import Nimble
 @testable import ParselyAnalytics
+import XCTest
 
 class VideoTests: ParselyTestCase {
+
     let testVideoId: String = "videoId"
     let testUrl: String = "testurl"
-    var videoManager: VideoManager?
-
-    override func setUp() {
-        super.setUp()
-        videoManager = VideoManager(trackerInstance: parselyTestTracker)
+    var testVideoKey: String {
+        return "\(testUrl)::\(testVideoId)"
     }
 
     func testTrackPlay() {
-        XCTAssertEqual(videoManager!.trackedVideos.count, 0,
-                       "videoManager.accumulators should be empty before calling trackPlay")
-        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
-                                metadata: nil, extra_data: nil, idsite: Parsely.testAPIKey)
-        XCTAssertEqual(videoManager!.trackedVideos.count, 1,
-                       "A call to trackPlay should populate videoManager.accumulators with one object")
+        let videoManager = VideoManager(trackerInstance: parselyTestTracker)
+
+        expect(videoManager.trackedVideos).to(beEmpty())
+
+        videoManager.trackPlay(
+            url: testUrl,
+            urlref: testUrl,
+            vId: testVideoId,
+            duration: TimeInterval(10),
+            metadata: nil,
+            extra_data: nil,
+            idsite: Parsely.testAPIKey
+        )
+
+        expect(videoManager.trackedVideos).to(haveCount(1))
     }
 
     func testTrackPause() {
-        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
-                                metadata: nil, extra_data: nil, idsite: Parsely.testAPIKey)
-        videoManager!.trackPause()
-        XCTAssertEqual(videoManager!.trackedVideos.count, 1,
-                       "A call to trackPause should not remove an accumulator from videoManager.accumulators")
+        let videoManager = VideoManager(trackerInstance: parselyTestTracker)
+
+        videoManager.trackPlay(
+            url: testUrl,
+            urlref: testUrl,
+            vId: testVideoId,
+            duration: TimeInterval(10),
+            metadata: nil,
+            extra_data: nil,
+            idsite: Parsely.testAPIKey
+        )
+
+        videoManager.trackPause()
+
+        expect(videoManager.trackedVideos).to(haveCount(1))
     }
 
     func testReset() {
-        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
-                                metadata: nil, extra_data: nil, idsite: Parsely.testAPIKey)
-        videoManager!.reset(url: testUrl, vId: testVideoId)
-        XCTAssertNotNil(videoManager!.samplerTimer,
-                        "videoReset should run successfully without the VideoManager instance being paused")
-        XCTAssertEqual(videoManager!.trackedVideos.count, 0,
-                       "A call to Parsely.track.videoManager.reset should remove a video from videoManager.trackedVideos")
+        let videoManager = VideoManager(trackerInstance: parselyTestTracker)
+
+        videoManager.trackPlay(
+            url: testUrl,
+            urlref: testUrl,
+            vId: testVideoId,
+            duration: TimeInterval(10),
+            metadata: nil,
+            extra_data: nil,
+            idsite: Parsely.testAPIKey
+        )
+
+        videoManager.reset(url: testUrl, vId: testVideoId)
+
+        expect(videoManager.samplerTimer).toNot(beNil())
+        expect(videoManager.trackedVideos).to(beEmpty())
     }
-    func testUpdateVideoEventArgs() {
-        let testSectionFirst: String = "sectionname"
-        let testSectionSecond: String = "adifferentsection"
-        let firstTestMetadata: ParselyMetadata = ParselyMetadata(canonical_url: testUrl, pub_date: Date(), title: "test",
-                                                                 authors: nil, image_url: nil, section: testSectionFirst,
-                                                                 tags: nil, duration: nil)
-        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
-                                metadata: firstTestMetadata, extra_data: nil, idsite: Parsely.testAPIKey)
-        let testTrackedVideo: TrackedVideo = videoManager!.trackedVideos.values.first!
-        let actualMetadata: ParselyMetadata = testTrackedVideo.eventArgs["metadata"]! as! ParselyMetadata
-        XCTAssertEqual(actualMetadata.section, testSectionFirst,
-                       "The section metadata stored for a video after a call to parsely.track.videoManager.trackPlay " +
-                       "should match the section metadata passed to that call.")
-        let secondTestMetadata: ParselyMetadata = ParselyMetadata(canonical_url: testUrl, pub_date: Date(), title: "test",
-                                                                  authors: nil, image_url: nil, section: testSectionSecond,
-                                                                  tags: nil, duration: nil)
-        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
-                                metadata: secondTestMetadata, extra_data: nil, idsite: Parsely.testAPIKey)
-        let secondTestTrackedVideo: TrackedVideo = videoManager!.trackedVideos.values.first!
-        let secondActualMetadata: ParselyMetadata = secondTestTrackedVideo.eventArgs["metadata"]! as! ParselyMetadata
-        XCTAssertEqual(secondActualMetadata.section, testSectionSecond,
-                       "The section metadata stored for a preexisting video after a call to parsely.track.videoManager.trackPlay " +
-                       "should match the section metadata passed to that call.")
+
+    func testUpdateVideoEventArgs() throws {
+        let videoManager = VideoManager(trackerInstance: parselyTestTracker)
+
+        let testSectionFirst = "sectionname"
+        let testSectionSecond = "adifferentsection"
+        let firstTestMetadata = ParselyMetadata(
+            canonical_url: testUrl,
+            pub_date: Date(),
+            title: "test",
+            authors: nil,
+            image_url: nil,
+            section: testSectionFirst,
+            tags: nil,
+            duration: nil
+        )
+
+        videoManager.trackPlay(
+            url: testUrl,
+            urlref: testUrl,
+            vId: testVideoId,
+            duration: TimeInterval(10),
+            metadata: firstTestMetadata,
+            extra_data: nil,
+            idsite: Parsely.testAPIKey
+        )
+
+        let testTrackedVideo = try XCTUnwrap(videoManager.trackedVideos.values.first)
+        let actualMetadata = try XCTUnwrap(testTrackedVideo.eventArgs["metadata"] as? ParselyMetadata)
+
+        expect(actualMetadata.section).to(equal(testSectionFirst))
+
+        let secondTestMetadata = ParselyMetadata(
+            canonical_url: testUrl,
+            pub_date: Date(),
+            title: "test",
+            authors: nil,
+            image_url: nil,
+            section: testSectionSecond,
+            tags: nil,
+            duration: nil
+        )
+
+        videoManager.trackPlay(
+            url: testUrl,
+            urlref: testUrl,
+            vId: testVideoId,
+            duration: TimeInterval(10),
+            metadata: secondTestMetadata,
+            extra_data: nil,
+            idsite: Parsely.testAPIKey
+        )
+
+        let secondTestTrackedVideo = try XCTUnwrap(videoManager.trackedVideos.values.first)
+        let secondActualMetadata = try XCTUnwrap(secondTestTrackedVideo.eventArgs["metadata"] as? ParselyMetadata)
+
+        expect(secondActualMetadata.section).to(equal(testSectionSecond))
     }
 
     func testSampleFn() {
-        let testVideoKey: String = testUrl + "::" + testVideoId
-        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
-                                metadata: nil, extra_data: nil, idsite: Parsely.testAPIKey)
-        let sampleResult: Bool = videoManager!.sampleFn(key: testVideoKey)
-        XCTAssert(sampleResult,
-                  "After a call to VideoManager.trackPlay, VideoManager.sample should return true for the viewing key")
+        let videoManager = VideoManager(trackerInstance: parselyTestTracker)
+
+        videoManager.trackPlay(
+            url: testUrl,
+            urlref: testUrl,
+            vId: testVideoId,
+            duration: TimeInterval(10),
+            metadata: nil,
+            extra_data: nil,
+            idsite: Parsely.testAPIKey
+        )
+
+        expect(videoManager.sampleFn(key: self.testVideoKey)).to(beTrue())
     }
 
     func testSampleFnPaused() {
-        let testVideoKey: String = testUrl + "::" + testVideoId
-        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
-                                metadata: nil, extra_data: nil, idsite: Parsely.testAPIKey)
-        videoManager!.trackPause()
-        let sampleResult: Bool = videoManager!.sampleFn(key: testVideoKey)
-        XCTAssertFalse(sampleResult,
-                       "After a call to VideoManager.trackPlay followed by a call to VideoManager.trackPause, " +
-                       "VideoManager.sample should return false for the viewing key")
+        let videoManager = VideoManager(trackerInstance: parselyTestTracker)
+
+        videoManager.trackPlay(
+            url: testUrl,
+            urlref: testUrl,
+            vId: testVideoId,
+            duration: TimeInterval(10),
+            metadata: nil,
+            extra_data: nil,
+            idsite: Parsely.testAPIKey
+        )
+        videoManager.trackPause()
+
+        expect(videoManager.sampleFn(key: self.testVideoKey)).to(beFalse())
     }
 
     func testHeartbeatFn() {
-        let testVideoKey: String = testUrl + "::" + testVideoId
-        let dummyEventArgs: Dictionary<String, Any> = videoManager!.generateEventArgs(
-            url: testUrl, urlref: "", extra_data: nil, idsite: Parsely.testAPIKey)
-        let dummyAccumulator: Accumulator = Accumulator(key: testVideoKey, accumulatedTime: 0, totalTime: 0,
-                                                        firstSampleTime: Date(),
-                                                        lastSampleTime: Date(), lastPositiveSampleTime: Date(),
-                                                        heartbeatTimeout: 0, contentDuration: 0, isEngaged: false,
-                                                        eventArgs: dummyEventArgs)
-        videoManager!.trackPlay(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10),
-                                metadata: nil, extra_data: nil, idsite: Parsely.testAPIKey)
-        videoManager!.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
-        XCTAssertEqual(parselyTestTracker.eventQueue.length(), 2,
-                       "A call to VideoManager should add two events to eventQueue")
+        let videoManager = VideoManager(trackerInstance: parselyTestTracker)
+        let dummyAccumulator = makeAccumulator(videoManager: videoManager, key: testVideoKey, url: testUrl)
+
+        videoManager.trackPlay(
+            url: testUrl,
+            urlref: testUrl,
+            vId: testVideoId,
+            duration: TimeInterval(10),
+            metadata: nil,
+            extra_data: nil,
+            idsite: Parsely.testAPIKey
+        )
+        videoManager.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
+
+        expect(self.parselyTestTracker.eventQueue.list).to(haveCount(2))
+    }
+
+    func testHeartbeatDoesNotCrashIfNoVideoHasBeenTracked() {
+        let videoManager = VideoManager(trackerInstance: parselyTestTracker)
+        let dummyAccumulator = makeAccumulator(videoManager: videoManager, key: testVideoKey, url: testUrl)
+
+        // Send heart beat without tracking a play first...
+        videoManager.heartbeatFn(data: dummyAccumulator, enableHeartbeats: true)
+
+        // ...and verify that no crash has occurred by performing a simple assertion on the tracker state
+        expect(self.parselyTestTracker.eventQueue.list).to(beEmpty())
+    }
+}
+
+extension VideoTests {
+
+    func makeAccumulator(videoManager: VideoManager, key: String, url: String) -> Accumulator {
+        Accumulator(
+            key: key,
+            accumulatedTime: 0,
+            totalTime: 0,
+            firstSampleTime: Date(),
+            lastSampleTime: Date(),
+            lastPositiveSampleTime: Date(),
+            heartbeatTimeout: 0,
+            contentDuration: 0,
+            isEngaged: false,
+            eventArgs: videoManager.generateEventArgs(
+                url: url,
+                urlref: "",
+                extra_data: nil,
+                // Intresting: If this is defined as a default argument in the method signature, it won't compile.
+                idsite: Parsely.testAPIKey
+            ) as [String: Any]
+        )
     }
 }
