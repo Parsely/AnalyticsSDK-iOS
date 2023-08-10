@@ -81,14 +81,16 @@ class Event {
                 params["metadata"] = metasDict
             }
         }
-        
-        if self.session_id != nil {
-            params["sid"] = self.session_id
-            params["sts"] = self.session_timestamp
-            params["surl"] = self.session_url
-            params["sref"] = self.session_referrer
-            params["slts"] = self.last_session_timestamp
+
+        guard let session_id else {
+            return params
         }
+
+        params["sid"] = session_id
+        params["sts"] = session_timestamp
+        params["surl"] = session_url
+        params["sref"] = session_referrer
+        params["slts"] = last_session_timestamp
 
         return params
     }
