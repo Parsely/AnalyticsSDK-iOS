@@ -6,7 +6,7 @@ class Event {
     let urlref: String
     let metadata: ParselyMetadata?
     let idsite: String
-    let extra_data: Dictionary<String, Any>?
+    let extra_data: Dictionary<String, Any>
     private(set) var session_id: Int?
     private(set) var session_timestamp: UInt64?
     private(set) var session_url: String?
@@ -32,7 +32,7 @@ class Event {
         self.urlref = urlref ?? ""
         self.idsite = idsite
         self.metadata = metadata
-        self.extra_data = extra_data
+        self.extra_data = extra_data ?? [:]
         self.session_id = session_id
         self.session_timestamp = session_timestamp
         self.session_url = session_url
@@ -64,7 +64,7 @@ class Event {
             "idsite": self.idsite,
         ]
         
-        var data: [String: Any] = extra_data ?? [:]
+        var data: [String: Any] = extra_data
         data["ts"] = self.rand
         
         if parsely_site_uuid != nil {

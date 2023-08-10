@@ -1,3 +1,4 @@
+import Nimble
 @testable import ParselyAnalytics
 import XCTest
 
@@ -66,8 +67,30 @@ class EventTests: XCTestCase {
                   "The rand of a newly-created Event should be a non-ancient timestamp")
         XCTAssert(eventUnderTest.metadata! === testMetadata,
                   "The metadata procided in Event initialization should be stored properly")
-        let extraDataIsEquivalent: Bool = NSDictionary(dictionary: eventUnderTest.extra_data!).isEqual(to: extraData)
+        let extraDataIsEquivalent: Bool = NSDictionary(dictionary: eventUnderTest.extra_data).isEqual(to: extraData)
         XCTAssert(extraDataIsEquivalent, "The extra_data procided in Event initialization should be stored properly")
+    }
+
+    func testEventDefaultValues() {
+        let event = Event(
+            "action",
+            url: "a_url",
+            urlref: .none,
+            metadata: .none,
+            extra_data: .none
+        )
+
+        XCTAssertEqual(event.action, "action")
+        XCTAssertEqual(event.url, "a_url") // Note that this String is not a valid URL...
+        XCTAssertEqual(event.urlref, "")
+        XCTAssertEqual(event.idsite, "")
+        XCTAssertNil(event.metadata)
+        XCTAssertEqual(event.session_id, .none)
+        XCTAssertEqual(event.session_timestamp, .none)
+        XCTAssertEqual(event.session_referrer, .none)
+        XCTAssertEqual(event.session_url, .none)
+        XCTAssertEqual(event.last_session_timestamp, .none)
+        expect(event.extra_data).to(beEmpty())
     }
 
     func testHeartbeatEvents() {
