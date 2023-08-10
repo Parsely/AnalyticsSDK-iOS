@@ -14,7 +14,7 @@ class Event {
     private(set) var session_referrer: String?
     private(set) var last_session_timestamp: UInt64?
     private(set) var parsely_site_uuid: String?
-    let rand: UInt64!
+    let rand: UInt64
     
     init(_ action: String,
          url: String,
@@ -39,8 +39,8 @@ class Event {
         self.session_url = session_url
         self.session_referrer = session_referrer
         self.last_session_timestamp = last_session_timestamp
+        // Note that, while this value will likely always be different at runtime, is not truly random.
         self.rand = Date().millisecondsSince1970
-
     }
 
     func setSessionInfo(session: Dictionary<String, Any?>) {
