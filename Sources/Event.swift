@@ -69,8 +69,8 @@ class Event {
         var data: [String: Any] = extra_data
         data["ts"] = self.rand
         
-        if parsely_site_uuid != nil {
-            data["parsely_site_uuid"] = parsely_site_uuid!
+        if let parsely_site_uuid {
+            data["parsely_site_uuid"] = parsely_site_uuid
         }
         
         params["data"] = data
