@@ -1,20 +1,20 @@
 import Foundation
 
 class Event {
-    var action: String
-    var url: String
-    var urlref: String
-    var data: Dictionary<String, Any>!
-    var metadata: ParselyMetadata?
-    var idsite: String
-    var extra_data: Dictionary<String, Any>?
-    var session_id: Int?
-    var session_timestamp: UInt64?
-    var session_url: String?
-    var session_referrer: String?
-    var last_session_timestamp: UInt64?
-    var parsely_site_uuid: String?
-    var rand: UInt64!
+    let action: String
+    let url: String
+    let urlref: String
+    private(set) var data: Dictionary<String, Any>!
+    let metadata: ParselyMetadata?
+    let idsite: String
+    let extra_data: Dictionary<String, Any>?
+    private(set) var session_id: Int?
+    private(set) var session_timestamp: UInt64?
+    private(set) var session_url: String?
+    private(set) var session_referrer: String?
+    private(set) var last_session_timestamp: UInt64?
+    private(set) var parsely_site_uuid: String?
+    let rand: UInt64!
     
     init(_ action: String,
          url: String,
