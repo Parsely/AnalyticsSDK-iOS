@@ -51,9 +51,11 @@ class Event {
     }
 
     func setVisitorInfo(visitorInfo: Dictionary<String, Any>?) {
-        if let visitor = visitorInfo {
-            self.parsely_site_uuid = (visitor["id"] as! String)
+        guard let visitor = visitorInfo?["id"] as? String else {
+            return
         }
+
+        parsely_site_uuid = visitor
     }
 
     func toDict() -> Dictionary<String,Any> {
