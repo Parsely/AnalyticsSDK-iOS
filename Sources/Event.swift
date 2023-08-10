@@ -4,7 +4,6 @@ class Event {
     let action: String
     let url: String
     let urlref: String
-    private(set) var data: Dictionary<String, Any>!
     let metadata: ParselyMetadata?
     let idsite: String
     let extra_data: Dictionary<String, Any>?
@@ -65,7 +64,7 @@ class Event {
             "idsite": self.idsite,
         ]
         
-        data = extra_data ?? [:]
+        var data: [String: Any] = extra_data ?? [:]
         data["ts"] = self.rand
         
         if parsely_site_uuid != nil {
@@ -74,7 +73,6 @@ class Event {
         
         params["data"] = data
 
-        
         if let metas = self.metadata {
             let metasDict = metas.toDict()
             if !metasDict.isEmpty {
