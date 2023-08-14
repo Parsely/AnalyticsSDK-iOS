@@ -86,6 +86,6 @@ class RequestBuilderTests: XCTestCase {
         // be in the format
         //
         // xctest/<Xcode version> iOS/<iOS version> (<architecture>)
-        expect(RequestBuilder.getUserAgent()).to(match("xctest\\/\\d+\\.\\d+ iOS\\/\\d+\\.\\d+ (.*)"))
+        expect(RequestBuilder.getUserAgent()).to(match("xctest\\/\\d+\\.\\d+(\\.\\d+)? iOS\\/\\d+\\.\\d+ (.*)"))
     }
 }
