@@ -44,29 +44,29 @@ public class ParselyMetadata {
     func toDict() -> Dictionary<String, Any> {
         var metas: Dictionary<String, Any> = [:]
         
-        if canonical_url != nil {
-            metas["link"] = canonical_url!
+        if let canonical_url {
+            metas["link"] = canonical_url
         }
-        if pub_date != nil {
-            metas["pub_date"] = String(format:"%i", pub_date!.millisecondsSince1970)
+        if let pub_date {
+            metas["pub_date"] = String(format:"%i", pub_date.millisecondsSince1970)
         }
-        if title != nil {
-            metas["title"] = title!
+        if let title {
+            metas["title"] = title
         }
-        if authors != nil {
-            metas["authors"] = authors!
+        if let authors {
+            metas["authors"] = authors
         }
-        if image_url != nil {
-            metas["image_url"] = image_url!
+        if let image_url {
+            metas["image_url"] = image_url
         }
-        if section != nil {
-            metas["section"] = section!
+        if let section {
+            metas["section"] = section
         }
-        if tags != nil {
-            metas["tags"] = tags!
+        if let tags {
+            metas["tags"] = tags
         }
-        if duration != nil {
-            metas["duration"] = duration!
+        if let duration {
+            metas["duration"] = duration
         }
         
         return metas
