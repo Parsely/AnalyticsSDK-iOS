@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2A1F02DDE91E502E3B49AFAB /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1F03819E4FAF1F979D5926 /* StorageTests.swift */; };
+		3F0B192F2A8DD03B0012C731 /* ParselyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0B192D2A8DCFBC0012C731 /* ParselyTests.swift */; };
 		3F147F8F29EF8CA100752DFB /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 3F147F8E29EF8CA100752DFB /* Nimble */; };
 		3F147F9529EF965500752DFB /* ParselyAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3F147F9429EF965500752DFB /* ParselyAnalytics */; };
 		3F147F9729EF96EE00752DFB /* ParselyAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3F147F9629EF96EE00752DFB /* ParselyAnalytics */; };
@@ -57,6 +58,7 @@
 
 /* Begin PBXFileReference section */
 		2A1F03819E4FAF1F979D5926 /* StorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
+		3F0B192D2A8DCFBC0012C731 /* ParselyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParselyTests.swift; sourceTree = "<group>"; };
 		3F147F9129EF962200752DFB /* AnalyticsSDK-iOS */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "AnalyticsSDK-iOS"; path = ..; sourceTree = "<group>"; };
 		3FCAFC8B29E9775A00BC9360 /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
 		AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParselyTestCase.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				B205889E220CB72A00476E27 /* RequestBuilderTests.swift */,
 				B2FC40BF221CC43200C70806 /* MetadataTests.swift */,
 				AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */,
+				3F0B192D2A8DCFBC0012C731 /* ParselyTests.swift */,
 				3FCAFC8B29E9775A00BC9360 /* UnitTests.xctestplan */,
 			);
 			name = Tests;
@@ -314,6 +317,7 @@
 			files = (
 				B2FC40C0221CC43200C70806 /* MetadataTests.swift in Sources */,
 				F410D63121061D7800DB3EBE /* PixelTests.swift in Sources */,
+				3F0B192F2A8DD03B0012C731 /* ParselyTests.swift in Sources */,
 				F4BF866E2190DB4A00BD3867 /* VideoTests.swift in Sources */,
 				AA73AAAF2242C1F10089BF1D /* ParselyTestCase.swift in Sources */,
 				F441A55C20F3B8BF009B556E /* EventQueueTests.swift in Sources */,

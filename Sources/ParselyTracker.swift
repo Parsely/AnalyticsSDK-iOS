@@ -8,10 +8,7 @@ public class Parsely {
     public var apikey = ""
     public var secondsBetweenHeartbeats: TimeInterval? {
         get {
-            if let secondsBtwnHeartbeats = config["secondsBetweenHeartbeats"] as? TimeInterval {
-                return secondsBtwnHeartbeats
-            }
-            return nil
+            config["secondsBetweenHeartbeats"] as? TimeInterval
         }
     }
     public static let sharedInstance = Parsely()
