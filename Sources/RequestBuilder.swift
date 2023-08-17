@@ -43,7 +43,7 @@ class RequestBuilder {
         return userAgent
     }
     
-    internal static func buildRequest(events: Array<Event>) -> ParselyRequest? {
+    static func buildRequest(events: Array<Event>) -> ParselyRequest {
         let request = ParselyRequest.init(
             url: buildPixelEndpoint(),
             headers: buildHeadersDict(events: events),
