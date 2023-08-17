@@ -17,7 +17,7 @@ class EngagedTime: Sampler {
         }
         let roundedSecs: Int = Int(data.accumulatedTime)
         let totalMs: Int = Int(data.totalTime.milliseconds())
-        let eventArgs = data.eventArgs!
+        let eventArgs = data.eventArgs
 
         let event = Heartbeat(
             "heartbeat",

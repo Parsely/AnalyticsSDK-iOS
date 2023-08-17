@@ -17,7 +17,7 @@ struct Accumulator {
     var heartbeatTimeout: TimeInterval?
     var contentDuration: TimeInterval?
     var isEngaged: Bool
-    var eventArgs: Dictionary<String, Any>?
+    var eventArgs: Dictionary<String, Any>
 }
 
 extension TimeInterval {
@@ -58,7 +58,7 @@ class Sampler {
     func trackKey(
         key: String,
         contentDuration: TimeInterval?,
-        eventArgs: Dictionary<String, Any>?,
+        eventArgs: Dictionary<String, Any> = [:],
         resetOnExisting: Bool = false
     ) -> Void {
         os_log("Sampler tracked key: %s in class %@", log: OSLog.tracker, type: .debug, key, String(describing: self))
