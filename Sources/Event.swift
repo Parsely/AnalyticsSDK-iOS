@@ -105,10 +105,28 @@ class Heartbeat: Event {
     var tt: Int
     var inc: Int
 
-    init(_ action: String, url: String, urlref: String?, inc: Int, tt: Int, metadata: ParselyMetadata?, extra_data: Dictionary<String, Any>?, idsite: String = "") {
+    init(
+        _ action: String,
+        url: String,
+        urlref: String?,
+        inc: Int,
+        tt: Int,
+        metadata: ParselyMetadata?,
+        extra_data: Dictionary<String, Any>?,
+        idsite: String?
+    ) {
         self.tt = tt
         self.inc = inc
-        super.init(action, url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
+
+        super.init(
+            action,
+            url: url,
+            urlref: urlref,
+            metadata: metadata,
+            extra_data: extra_data,
+            // empty string seems a weird default, but is what we had in the code before this comment was written
+            idsite: idsite ?? ""
+        )
     }
 
     override func toDict() -> Dictionary<String, Any> {

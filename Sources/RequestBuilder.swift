@@ -24,25 +24,26 @@ class RequestBuilder {
         return platform
     }
 
-    internal static func getUserAgent() -> String {
-        if userAgent == nil {
+    static func getUserAgent() -> String {
+        guard let userAgent else {
             var appDescriptor: String = ""
-            if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
-                if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-                    appDescriptor = String(format: "%@/%@", appName, appVersion)
-                }
+            if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String,
+               let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+                appDescriptor = String(format: "%@/%@", appName, appVersion)
             }
             let osDescriptor = String(format: "iOS/%@", UIDevice.current.systemVersion)
             let hardwareString = getHardwareString()
             let userAgentString = String(format: "%@ %@ (%@)", appDescriptor, osDescriptor, hardwareString)
             // encode the user agent into latin1 in case there are utf8 characters
             let userAgentData = Data(userAgentString.utf8)
-            userAgent = String(data: userAgentData, encoding: .isoLatin1)
+
+            return String(data: userAgentData, encoding: .isoLatin1) ?? "invalid user agent"
         }
-        return userAgent!
+
+        return userAgent
     }
     
-    internal static func buildRequest(events: Array<Event>) -> ParselyRequest? {
+    static func buildRequest(events: Array<Event>) -> ParselyRequest {
         let request = ParselyRequest.init(
             url: buildPixelEndpoint(),
             headers: buildHeadersDict(events: events),
@@ -52,9 +53,10 @@ class RequestBuilder {
         return request
     }
 
-    internal static func buildPixelEndpoint() -> String {
-        self._baseURL = "https://p1.parsely.com/mobileproxy"
-        return self._baseURL!
+    static func buildPixelEndpoint() -> String {
+        let endpoint = "https://p1.parsely.com/mobileproxy"
+        _baseURL = endpoint
+        return endpoint
     }
     
     internal static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, String> {

@@ -22,7 +22,10 @@ class SessionManager {
 
         if session.isEmpty {
             var visitorInfo = visitorManager.getVisitorInfo()
-            visitorInfo["session_count"] = visitorInfo["session_count"] as! Int + 1
+
+            if let previousCount = visitorInfo["session_count"] as? Int {
+                visitorInfo["session_count"] = previousCount + 1
+            }
             
             session = [:]
             session["session_id"] = visitorInfo["session_count"]

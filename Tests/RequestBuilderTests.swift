@@ -24,18 +24,8 @@ class RequestBuilderTests: XCTestCase {
             )]
     }
 
-    func testEndpoint() {
-        let endpoint = RequestBuilder.buildPixelEndpoint()
-        XCTAssert(endpoint != "", "buildPixelEndpoint should return a non-empty string")
-    }
-
     func testBuildPixelEndpoint() {
-        var expected: String = "https://p1.parsely.com/mobileproxy"
-        var actual = RequestBuilder.buildPixelEndpoint()
-        XCTAssert(actual == expected, "buildPixelEndpoint should return the correct URL for the given date")
-        expected = "https://p1.parsely.com/mobileproxy"
-        actual = RequestBuilder.buildPixelEndpoint()
-        XCTAssert(actual == expected, "buildPixelEndpoint should return the correct URL for the given date")
+        XCTAssertEqual(RequestBuilder.buildPixelEndpoint(), "https://p1.parsely.com/mobileproxy")
     }
 
     func testHeaders() {
@@ -48,16 +38,15 @@ class RequestBuilderTests: XCTestCase {
     func testBuildRequest() {
         let events = makeEvents()
         let request = RequestBuilder.buildRequest(events: events)
-        XCTAssertNotNil(request, "buildRequest should return a non-nil value")
-        XCTAssert(request!.url.contains("https://p1"),
+        XCTAssert(request.url.contains("https://p1"),
                   "RequestBuilder.buildRequest should return a request with a valid-looking url attribute")
-        XCTAssertNotNil(request!.headers,
+        XCTAssertNotNil(request.headers,
                         "RequestBuilder.buildRequest should return a request with a non-nil headers attribute")
-        XCTAssertNotNil(request!.headers["User-Agent"],
+        XCTAssertNotNil(request.headers["User-Agent"],
                         "RequestBuilder.buildRequest should return a request with a non-nil User-Agent header")
-        XCTAssertNotNil(request!.params,
+        XCTAssertNotNil(request.params,
                         "RequestBuilder.buildRequest should return a request with a non-nil params attribute")
-        let actualEvents: Array<Dictionary<String, Any>> = request!.params["events"] as! Array<Dictionary<String, Any>>
+        let actualEvents: Array<Dictionary<String, Any>> = request.params["events"] as! Array<Dictionary<String, Any>>
         XCTAssertEqual(actualEvents.count, events.count,
                        "RequestBuilder.buildRequest should return a request with an events array containing all " +
                        "relevant revents")
@@ -68,7 +57,7 @@ class RequestBuilderTests: XCTestCase {
         let request = RequestBuilder.buildRequest(events: events)
         var jsonData: Data? = nil
         do {
-            jsonData = try JSONSerialization.data(withJSONObject: request!.params)
+            jsonData = try JSONSerialization.data(withJSONObject: request.params)
         } catch { }
         XCTAssertNotNil(jsonData, "Request params should serialize to JSON")
     }

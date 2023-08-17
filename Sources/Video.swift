@@ -16,10 +16,7 @@ class VideoManager: Sampler {
     var trackedVideos: Dictionary<String, TrackedVideo> = [:]
 
     override func sampleFn(key: String) -> Bool {
-        if trackedVideos[key] == nil {
-            return false
-        }
-        return (trackedVideos[key]?.isPlaying)!
+        trackedVideos[key]?.isPlaying ?? false
     }
 
     override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {
@@ -42,7 +39,7 @@ class VideoManager: Sampler {
             tt: totalMs,
             metadata: curVideo.eventArgs["metadata"] as? ParselyMetadata,
             extra_data: curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>,
-            idsite: curVideo.eventArgs["idsite"] as! String
+            idsite: curVideo.eventArgs["idsite"] as? String
         )
         parselyTracker.track.event(event: event)
         os_log("Sent vheartbeat for video %s", log: OSLog.tracker, type:.debug, data.key)
