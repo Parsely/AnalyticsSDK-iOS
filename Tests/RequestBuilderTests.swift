@@ -24,18 +24,8 @@ class RequestBuilderTests: XCTestCase {
             )]
     }
 
-    func testEndpoint() {
-        let endpoint = RequestBuilder.buildPixelEndpoint()
-        XCTAssert(endpoint != "", "buildPixelEndpoint should return a non-empty string")
-    }
-
     func testBuildPixelEndpoint() {
-        var expected: String = "https://p1.parsely.com/mobileproxy"
-        var actual = RequestBuilder.buildPixelEndpoint()
-        XCTAssert(actual == expected, "buildPixelEndpoint should return the correct URL for the given date")
-        expected = "https://p1.parsely.com/mobileproxy"
-        actual = RequestBuilder.buildPixelEndpoint()
-        XCTAssert(actual == expected, "buildPixelEndpoint should return the correct URL for the given date")
+        XCTAssertEqual(RequestBuilder.buildPixelEndpoint(), "https://p1.parsely.com/mobileproxy")
     }
 
     func testHeaders() {

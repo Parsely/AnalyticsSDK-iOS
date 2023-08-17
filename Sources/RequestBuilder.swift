@@ -53,9 +53,10 @@ class RequestBuilder {
         return request
     }
 
-    internal static func buildPixelEndpoint() -> String {
-        self._baseURL = "https://p1.parsely.com/mobileproxy"
-        return self._baseURL!
+    static func buildPixelEndpoint() -> String {
+        let endpoint = "https://p1.parsely.com/mobileproxy"
+        _baseURL = endpoint
+        return endpoint
     }
     
     internal static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, String> {
