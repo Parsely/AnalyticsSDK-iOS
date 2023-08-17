@@ -16,10 +16,7 @@ class VideoManager: Sampler {
     var trackedVideos: Dictionary<String, TrackedVideo> = [:]
 
     override func sampleFn(key: String) -> Bool {
-        if trackedVideos[key] == nil {
-            return false
-        }
-        return (trackedVideos[key]?.isPlaying)!
+        trackedVideos[key]?.isPlaying ?? false
     }
 
     override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) -> Void {
