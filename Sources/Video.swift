@@ -39,7 +39,7 @@ class VideoManager: Sampler {
             tt: totalMs,
             metadata: curVideo.eventArgs["metadata"] as? ParselyMetadata,
             extra_data: curVideo.eventArgs["extra_data"] as? Dictionary<String, Any>,
-            idsite: curVideo.eventArgs["idsite"] as? String ?? "IDSITE_MISSING"
+            idsite: curVideo.eventArgs["idsite"] as? String
         )
         parselyTracker.track.event(event: event)
         os_log("Sent vheartbeat for video %s", log: OSLog.tracker, type:.debug, data.key)

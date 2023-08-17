@@ -27,7 +27,7 @@ class EngagedTime: Sampler {
             tt: totalMs,
             metadata: eventArgs["metadata"] as? ParselyMetadata,
             extra_data: eventArgs["extra_data"] as? Dictionary<String, Any>,
-            idsite: eventArgs["idsite"] as? String ?? "IDSITE_MISSING"
+            idsite: eventArgs["idsite"] as? String
         )
 
         parselyTracker.track.event(event: event)
