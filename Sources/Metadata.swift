@@ -9,6 +9,7 @@ public class ParselyMetadata {
     var section: String?
     var tags: Array<String>?
     var duration: TimeInterval?
+    var page_type: String?
     
     /**
      A class to manage and re-use metadata. Metadata contained in an instance of this
@@ -22,6 +23,7 @@ public class ParselyMetadata {
      - Parameter section: Same as section for website integration.
      - Parameter tags: Up to 20 tags on an event are allowed.
      - Parameter duration: Durations passed explicitly to trackVideoStart take precedence over any in metadata.
+     - Parameter page_type: The type of page being tracked
     */
     public init(canonical_url: String? = nil,
          pub_date: Date? = nil,
@@ -30,7 +32,8 @@ public class ParselyMetadata {
          image_url: String? = nil,
          section: String? = nil,
          tags: Array<String>? = nil,
-         duration: TimeInterval? = nil) {
+         duration: TimeInterval? = nil,
+         page_type: String? = nil) {
         self.canonical_url = canonical_url
         self.pub_date = pub_date
         self.title = title
@@ -39,6 +42,7 @@ public class ParselyMetadata {
         self.section = section
         self.tags = tags
         self.duration = duration
+        self.page_type = page_type
     }
     
     func toDict() -> Dictionary<String, Any> {
@@ -67,6 +71,9 @@ public class ParselyMetadata {
         }
         if let duration {
             metas["duration"] = duration
+        }
+        if let page_type {
+            metas["page_type"] = page_type
         }
         
         return metas
