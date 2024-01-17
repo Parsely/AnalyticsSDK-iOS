@@ -11,7 +11,8 @@ class MetadataTests: XCTestCase {
         "image_url": "http://parsely-test.com/image2",
         "section": "Things my mother says",
         "tags": ["tag1", "tag2"],
-        "duration": TimeInterval(100)
+        "duration": TimeInterval(100),
+        "page_type": "post"
     ]
 
     func testToDictEmpty() {
@@ -37,7 +38,8 @@ class MetadataTests: XCTestCase {
             image_url: expected["image_url"] as? String,
             section: expected["section"] as? String,
             tags: expected["tags"] as? Array<String>,
-            duration: expected["duration"] as? TimeInterval
+            duration: expected["duration"] as? TimeInterval,
+            page_type: expected["page_type"] as? String
         )
         let actual: Dictionary<String, Any> = metasUnderTest.toDict()
         let pubDateUnix: String = String(format:"%i", (expected["pub_date"]! as! Date).millisecondsSince1970)
@@ -67,6 +69,9 @@ class MetadataTests: XCTestCase {
         XCTAssertEqual(actual["duration"]! as! TimeInterval, expected["duration"]! as! TimeInterval,
                        "The duration field in the result of ParselyMetadata.toDict should match the duration argument " +
                        "used at initialization")
+        XCTAssertEqual(actual["page_type"]! as! String, expected["page_type"]! as! String,
+                       "The page_type field in the result of ParselyMetadata.toDict should match the page_type argument " +
+                       "used at initialization")                       
     }
 
     func testMetadata() {
@@ -78,7 +83,8 @@ class MetadataTests: XCTestCase {
             image_url: expected["image_url"] as? String,
             section: expected["section"] as? String,
             tags: expected["tags"] as? Array<String>,
-            duration: expected["duration"] as? TimeInterval
+            duration: expected["duration"] as? TimeInterval,
+            page_type: expected["page_type"] as? String
         )
         XCTAssertEqual(metasUnderTest.canonical_url, expected["canonical_url"]! as? String,
                        "The canonical_url field on ParselyMetadata should match the canonical_url argument " +
@@ -104,5 +110,8 @@ class MetadataTests: XCTestCase {
         XCTAssertEqual(metasUnderTest.duration, expected["duration"]! as? TimeInterval,
                        "The duration field on ParselyMetadata should match the duration argument " +
                        "used at initialization")
+        XCTAssertEqual(metasUnderTest.page_type, expected["page_type"]! as? Array<String>,
+                       "The page_type field on ParselyMetadata should match the page_type argument " +
+                       "used at initialization")                       
     }
 }

@@ -13,7 +13,8 @@ class RequestBuilderTests: XCTestCase {
             image_url: "http://parsely-test.com/image2",
             section: "Things my mother says",
             tags: ["tag1", "tag2"],
-            duration: TimeInterval(100)
+            duration: TimeInterval(100),
+            page_type: "post"
         )
         return [Event(
             "pageview",

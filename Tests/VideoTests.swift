@@ -78,7 +78,8 @@ class VideoTests: ParselyTestCase {
             image_url: nil,
             section: testSectionFirst,
             tags: nil,
-            duration: nil
+            duration: nil,
+            page_type: nil
         )
 
         videoManager.trackPlay(
@@ -104,7 +105,8 @@ class VideoTests: ParselyTestCase {
             image_url: nil,
             section: testSectionSecond,
             tags: nil,
-            duration: nil
+            duration: nil,
+            page_type: nil
         )
 
         videoManager.trackPlay(
