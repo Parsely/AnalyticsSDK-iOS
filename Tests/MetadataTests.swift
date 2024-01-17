@@ -110,7 +110,7 @@ class MetadataTests: XCTestCase {
         XCTAssertEqual(metasUnderTest.duration, expected["duration"]! as? TimeInterval,
                        "The duration field on ParselyMetadata should match the duration argument " +
                        "used at initialization")
-        XCTAssertEqual(metasUnderTest.page_type, expected["page_type"]! as? Array<String>,
+        XCTAssertEqual(metasUnderTest.page_type, expected["page_type"]! as? String,
                        "The page_type field on ParselyMetadata should match the page_type argument " +
                        "used at initialization")                       
     }
