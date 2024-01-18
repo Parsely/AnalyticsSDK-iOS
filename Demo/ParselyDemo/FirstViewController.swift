@@ -7,7 +7,7 @@ class FirstViewController: UIViewController {
     
     @IBAction func didTouchButton(_ sender: Any) {
         os_log("didTouchButton", log: OSLog.default, type: .debug)
-        let demoMetas = ParselyMetadata(authors: ["Yogi Berr"])
+        let demoMetas = ParselyMetadata(authors: ["Yogi Berr"], page_type: "post")
         delegate.parsely.trackPageView(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", metadata: demoMetas, extraData: ["product-id": "12345"], siteId: "subdomain.parsely-test.com")
     }
     
