@@ -126,7 +126,6 @@ class VideoTests: ParselyTestCase {
             section: testSectionSecond,
             tags: nil,
             duration: nil,
-            page_type: nil,
             page_type: "post",
             urls: nil,
             post_id: nil,

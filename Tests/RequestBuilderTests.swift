@@ -16,7 +16,7 @@ class RequestBuilderTests: XCTestCase {
             tags: ["tag1", "tag2"],
             duration: TimeInterval(100),
             page_type: "post",
-            urls: ["http://parsely-test.com/1", "http://parsely-test.com/2"],
+            urls: "http://parsely-test.com/1",
             post_id: "1",
             pub_date_tmsp: Date(timeIntervalSince1970: 5),
             custom_metadata: "custom",
@@ -33,7 +33,7 @@ class RequestBuilderTests: XCTestCase {
             full_content_sha512: "full content sha512",
             network_id_str: "network id",
             network_canonical: "http://parsely-test.com/network_canonical",
-            content_enrichments: {"enrichment1": "value1", "enrichment2": "value2"}
+            content_enrichments: ["enrichment1": "value1", "enrichment2": "value2"]
         )
         return [Event(
             "pageview",
