@@ -8,13 +8,32 @@ class RequestBuilderTests: XCTestCase {
         let exampleMetadata: ParselyMetadata = ParselyMetadata(
             canonical_url:"http://parsely-test.com",
             pub_date: Date(timeIntervalSince1970: 3),
+            save_date: Date(timeIntervalSince1970: 4),
             title: "a title.",
             authors: ["Yogi Berra"],
             image_url: "http://parsely-test.com/image2",
             section: "Things my mother says",
             tags: ["tag1", "tag2"],
             duration: TimeInterval(100),
-            page_type: "post"
+            page_type: "post",
+            urls: ["http://parsely-test.com/1", "http://parsely-test.com/2"],
+            post_id: "1",
+            pub_date_tmsp: Date(timeIntervalSince1970: 5),
+            custom_metadata: "custom",
+            save_date_tmsp: Date(timeIntervalSince1970: 6),
+            thumb_url: "http://parsely-test.com/thumb",
+            full_content_word_count: 1000,
+            share_urls: ["http://parsely-test.com/share1", "http://parsely-test.com/share2"],
+            data_source: "test",
+            canonical_hash: "hash",
+            canonical_hash64: "hash64",
+            video_platform: "youtube",
+            language: "en",
+            full_content: "full content",
+            full_content_sha512: "full content sha512",
+            network_id_str: "network id",
+            network_canonical: "http://parsely-test.com/network_canonical",
+            content_enrichments: {"enrichment1": "value1", "enrichment2": "value2"}
         )
         return [Event(
             "pageview",

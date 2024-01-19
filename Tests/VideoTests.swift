@@ -73,13 +73,32 @@ class VideoTests: ParselyTestCase {
         let firstTestMetadata = ParselyMetadata(
             canonical_url: testUrl,
             pub_date: Date(),
+            save_date: Date(),
             title: "test",
             authors: nil,
             image_url: nil,
             section: testSectionFirst,
             tags: nil,
             duration: nil,
-            page_type: nil
+            page_type: "post",
+            urls: nil,
+            post_id: nil,
+            pub_date_tmsp: nil,
+            custom_metadata: nil,
+            save_date_tmsp: nil,
+            thumb_url: nil,
+            full_content_word_count: nil,
+            share_urls: nil,
+            data_source: nil,
+            canonical_hash: nil,
+            canonical_hash64: nil,
+            video_platform: nil,
+            language: nil,
+            full_content: nil,
+            full_content_sha512: nil,
+            network_id_str: nil,
+            network_canonical: nil,
+            content_enrichments: nil
         )
 
         videoManager.trackPlay(
@@ -100,13 +119,33 @@ class VideoTests: ParselyTestCase {
         let secondTestMetadata = ParselyMetadata(
             canonical_url: testUrl,
             pub_date: Date(),
+            save_date: Date(),
             title: "test",
             authors: nil,
             image_url: nil,
             section: testSectionSecond,
             tags: nil,
             duration: nil,
-            page_type: nil
+            page_type: nil,
+            page_type: "post",
+            urls: nil,
+            post_id: nil,
+            pub_date_tmsp: nil,
+            custom_metadata: nil,
+            save_date_tmsp: nil,
+            thumb_url: nil,
+            full_content_word_count: nil,
+            share_urls: nil,
+            data_source: nil,
+            canonical_hash: nil,
+            canonical_hash64: nil,
+            video_platform: nil,
+            language: nil,
+            full_content: nil,
+            full_content_sha512: nil,
+            network_id_str: nil,
+            network_canonical: nil,
+            content_enrichments: nil            
         )
 
         videoManager.trackPlay(
