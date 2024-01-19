@@ -34,7 +34,7 @@ public class ParselyMetadata {
          section: String? = nil,
          tags: Array<String>? = nil,
          duration: TimeInterval? = nil,
-         page_type: String? = nil
+         page_type: String? = nil,
          urls: String? = nil,
          post_id: String? = nil,
          pub_date_tmsp: Date? = nil,
