@@ -3,12 +3,33 @@ import Foundation
 public class ParselyMetadata {
     var canonical_url: String?
     var pub_date: Date?
+    var save_date: Date?
     var title: String?
     var authors: Array<String>?
     var image_url: String?
     var section: String?
     var tags: Array<String>?
     var duration: TimeInterval?
+    var page_type: String?
+    var urls: String?
+    var post_id: String?
+    var pub_date_tmsp: Date?
+    var custom_metadata: String?
+    var save_date_tmsp: Date?
+    var thumb_url: String?
+    var full_content_word_count: Int?
+    var share_urls: Array<String>?
+    var data_source: String?
+    var canonical_hash: String?
+    var canonical_hash64: String?
+    var video_platform: String?
+    var language: String?
+    var full_content: String?
+    var full_content_sha512: String?
+    var network_id_str: String?
+    var network_canonical: String?
+    var content_enrichments: Dictionary<String, Any>?
+
     
     /**
      A class to manage and re-use metadata. Metadata contained in an instance of this
@@ -16,29 +37,89 @@ public class ParselyMetadata {
      
      - Parameter canonical_url: A post's canonical url. For videos, it is overridden with the vId and thus can be omitted.
      - Parameter pub_date: Date this piece of content was published.
+     - Parameter save_date: Date this piece of content was saved.
      - Parameter title: Title of the content.
      - Parameter authors: Up to 10 authors are accepted.
      - Parameter image_url: Where the main image for this post is hosted.
      - Parameter section: Same as section for website integration.
      - Parameter tags: Up to 20 tags on an event are allowed.
      - Parameter duration: Durations passed explicitly to trackVideoStart take precedence over any in metadata.
+     - Parameter page_type: The type of page being tracked
+     - Parameter urls: A list of urls associated with this post.
+     - Parameter post_id: A unique identifier for this post.
+     - Parameter pub_date_tmsp: Date this piece of content was published.
+     - Parameter custom_metadata: A string of custom metadata.
+     - Parameter save_date_tmsp: Date this piece of content was saved.
+     - Parameter thumb_url: Where the thumbnail image for this post is hosted.
+     - Parameter full_content_word_count: The number of words in the full content.
+     - Parameter share_urls: A list of urls associated with this post.
+     - Parameter data_source: The data source for this post.
+     - Parameter canonical_hash: The canonical hash for this post.
+     - Parameter canonical_hash64: The canonical hash for this post.
+     - Parameter video_platform: The video platform for this post.
+     - Parameter language: The language for this post.
+     - Parameter full_content: The full content for this post.
+     - Parameter full_content_sha512: The full content sha512 for this post.
+     - Parameter network_id_str: The network id for this post.
+     - Parameter network_canonical: The network canonical for this post.
+     - Parameter content_enrichments: The content enrichments for this post.
     */
     public init(canonical_url: String? = nil,
          pub_date: Date? = nil,
+         save_date: Date? = nil,
          title: String? = nil,
          authors: Array<String>? = nil,
          image_url: String? = nil,
          section: String? = nil,
          tags: Array<String>? = nil,
-         duration: TimeInterval? = nil) {
+         duration: TimeInterval? = nil,
+         page_type: String? = nil,
+         urls: String? = nil,
+         post_id: String? = nil,
+         pub_date_tmsp: Date? = nil,
+         custom_metadata: String? = nil,
+         save_date_tmsp: Date? = nil,
+         thumb_url: String? = nil,
+         full_content_word_count: Int? = nil,
+         share_urls: Array<String>? = nil,
+         data_source: String? = nil,
+         canonical_hash: String? = nil,
+         canonical_hash64: String? = nil,
+         video_platform: String? = nil,
+         language: String? = nil,
+         full_content: String? = nil,
+         full_content_sha512: String? = nil,
+         network_id_str: String? = nil,
+         network_canonical: String? = nil,
+         content_enrichments: Dictionary<String, Any>? = nil) {
         self.canonical_url = canonical_url
         self.pub_date = pub_date
+        self.save_date = save_date
         self.title = title
         self.authors = authors
         self.image_url = image_url
         self.section = section
         self.tags = tags
         self.duration = duration
+        self.page_type = page_type
+        self.urls = urls
+        self.post_id = post_id
+        self.pub_date_tmsp = pub_date_tmsp
+        self.custom_metadata = custom_metadata
+        self.save_date_tmsp = save_date_tmsp
+        self.thumb_url = thumb_url
+        self.full_content_word_count = full_content_word_count
+        self.share_urls = share_urls
+        self.data_source = data_source
+        self.canonical_hash = canonical_hash
+        self.canonical_hash64 = canonical_hash64
+        self.video_platform = video_platform
+        self.language = language
+        self.full_content = full_content
+        self.full_content_sha512 = full_content_sha512
+        self.network_id_str = network_id_str
+        self.network_canonical = network_canonical
+        self.content_enrichments = content_enrichments
     }
     
     func toDict() -> Dictionary<String, Any> {
@@ -50,6 +131,9 @@ public class ParselyMetadata {
         if let pub_date {
             metas["pub_date"] = String(format:"%i", pub_date.millisecondsSince1970)
         }
+        if let save_date {
+            metas["save_date"] = String(format:"%i", save_date.millisecondsSince1970)
+        }        
         if let title {
             metas["title"] = title
         }
@@ -68,7 +152,63 @@ public class ParselyMetadata {
         if let duration {
             metas["duration"] = duration
         }
-        
+        if let page_type {
+            metas["page_type"] = page_type
+        }
+        if let urls {
+            metas["urls"] = urls
+        }
+        if let post_id {
+            metas["post_id"] = post_id
+        }
+        if let pub_date_tmsp {
+            metas["pub_date_tmsp"] = String(format:"%i", pub_date_tmsp.millisecondsSince1970)
+        }
+        if let custom_metadata {
+            metas["custom_metadata"] = custom_metadata
+        }
+        if let save_date_tmsp {
+            metas["save_date_tmsp"] = String(format:"%i", save_date_tmsp.millisecondsSince1970)
+        }
+        if let thumb_url {
+            metas["thumb_url"] = thumb_url
+        }
+        if let full_content_word_count {
+            metas["full_content_word_count"] = full_content_word_count
+        }
+        if let share_urls {
+            metas["share_urls"] = share_urls
+        }
+        if let data_source {
+            metas["data_source"] = data_source
+        }
+        if let canonical_hash {
+            metas["canonical_hash"] = canonical_hash
+        }
+        if let canonical_hash64 {
+            metas["canonical_hash64"] = canonical_hash64
+        }
+        if let video_platform {
+            metas["video_platform"] = video_platform
+        }
+        if let language {
+            metas["language"] = language
+        }
+        if let full_content {
+            metas["full_content"] = full_content
+        }
+        if let full_content_sha512 {
+            metas["full_content_sha512"] = full_content_sha512
+        }
+        if let network_id_str {
+            metas["network_id_str"] = network_id_str
+        }
+        if let network_canonical {
+            metas["network_canonical"] = network_canonical
+        }
+        if let content_enrichments {
+            metas["content_enrichments"] = content_enrichments
+        }
         return metas
     }
 }
