@@ -74,6 +74,14 @@ class ParselyTrackerTests: ParselyTestCase {
         // A call to Parsely.resetVideo should remove a tracked video from the video manager
         expectParselyState(self.parselyTestTracker.track.videoManager.trackedVideos.isEmpty).toEventually(beTrue())
     }
+    func testMultipleSites() {
+        parselyTestTracker.trackPageView(url: testUrl)
+        parselyTestTracker.trackPageView(url: testUrl, siteId: "another-site.com")
+        expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(2))
+
+        let eventSiteIds = self.parselyTestTracker.eventQueue.get().map { $0.idsite }
+        XCTAssertEqual(eventSiteIds, [Parsely.testAPIKey, "another-site.com"])
+    }
 
     // A helper method to safely inspect the tracker's internal state.
     private func expectParselyState<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure @escaping () -> T?) -> SyncExpectation<T> {
