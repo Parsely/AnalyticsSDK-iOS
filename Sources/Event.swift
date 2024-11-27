@@ -14,7 +14,7 @@ class Event {
     private(set) var last_session_timestamp: UInt64?
     private(set) var parsely_site_uuid: String?
     let rand: UInt64
-    
+
     init(_ action: String,
          url: String,
          urlref: String?,
@@ -58,21 +58,21 @@ class Event {
         parsely_site_uuid = visitor
     }
 
-    func toDict() -> Dictionary<String,Any> {
+    func toDict() -> Dictionary<String, Any> {
         var params: Dictionary<String, Any> = [
             "url": self.url,
             "urlref": self.urlref,
             "action": self.action,
             "idsite": self.idsite,
         ]
-        
+
         var data: [String: Any] = extra_data
         data["ts"] = self.rand
-        
+
         if let parsely_site_uuid {
             data["parsely_site_uuid"] = parsely_site_uuid
         }
-        
+
         params["data"] = data
 
         if let metas = self.metadata {

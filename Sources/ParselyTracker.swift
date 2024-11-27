@@ -43,11 +43,11 @@ public class Parsely {
     /**
      Configure the Parsely tracking SDK. Should be called once per application load, before other Parsely SDK functions
      are called
-     
+
      - Parameter siteId: The Parsely site ID for which the pageview event should be counted. Can be overridden
-                         on individual tracking method calls.
+     on individual tracking method calls.
      - Parameter handleLifecycle: If true, set up listeners to handle tracking across application lifecycle events.
-                                  Defaults to true.
+     Defaults to true.
      */
     public func configure(siteId: String, handleLifecycle: Bool = true) {
         os_log("Configuring ParselyTracker", log: OSLog.tracker, type: .debug)
@@ -61,7 +61,7 @@ public class Parsely {
 
     /**
      Track a pageview event
-     
+
      - Parameter url: The url of the page that was viewed
      - Parameter urlref: The url of the page that linked to the viewed page
      - Parameter metadata: Metadata for the viewed page
@@ -88,7 +88,7 @@ public class Parsely {
         siteId: String
     ) {
         var _siteId = siteId
-        if (_siteId == "") {
+        if _siteId == "" {
             _siteId = self.apikey
         }
         os_log("Tracking PageView", log: OSLog.tracker, type: .debug)
@@ -99,7 +99,7 @@ public class Parsely {
      Start tracking engaged time for a given url. Once called, heartbeat events will be sent periodically for this url
      until engaged time tracking is stopped. Stops tracking engaged time for any urls currently being tracked for engaged
      time.
-     
+
      - Parameter url: The url of the page being engaged with
      - Parameter urlref: The url of the page that linked to the page being engaged with
      - Parameter extraData: A dictionary of additional information to send with generated heartbeat events
@@ -123,7 +123,7 @@ public class Parsely {
         siteId: String
     ) {
         var _siteId = siteId
-        if (_siteId == "") {
+        if _siteId == "" {
             _siteId = self.apikey
         }
         track.startEngagement(url: url, urlref: urlref, extra_data: extraData, idsite: _siteId)
@@ -143,7 +143,7 @@ public class Parsely {
      Start tracking view time for a given video being viewed at a given url. Sends a videostart event for the given
      url/video combination. Once called, vheartbeat events will be sent periodically for this url/video combination until video
      view tracking is stopped. Stops tracking view time for any url/video combinations currently being tracked for view time.
-     
+
      - Parameter url: The url at which the video is being viewed. Equivalent to the url of the page on which the video is embedded
      - Parameter urlref: The url of the page that linked to the page on which the video is being viewed
      - Parameter videoID: A string uniquely identifying the video within your Parsely account
@@ -176,7 +176,7 @@ public class Parsely {
         siteId: String
     ) {
         var _siteId = siteId
-        if (_siteId == "") {
+        if _siteId == "" {
             _siteId = self.apikey
         }
         track.videoStart(url: url, urlref: urlref, vId: videoID, duration: duration, metadata: metadata, extra_data: extraData, idsite: _siteId)
@@ -191,15 +191,15 @@ public class Parsely {
             self.track.videoPause()
         }
     }
-    
+
     /**
      Unset tracking data for the given url/video combination. The next time trackPlay is called for that combination, it will
      behave as if it had never been tracked before during this run of the app.
-     
+
      - Parameter url: The url at which the video wss being viewed. Equivalent to the url of the page on which the video is embedded
      - Parameter videoId: The video ID string for the video being reset
      */
-    public func resetVideo(url:String, videoID:String) {
+    public func resetVideo(url: String, videoID: String) {
         eventProcessor.async {
             self.track.videoReset(url: url, vId: videoID)
         }
@@ -225,9 +225,9 @@ public class Parsely {
 
         let task = BackgroundTask.begin()
 
-        os_log("Flushing event queue", log: OSLog.tracker, type:.debug)
+        os_log("Flushing event queue", log: OSLog.tracker, type: .debug)
         let events = eventQueue.get()
-        os_log("Got %s events", log: OSLog.tracker, type:.debug, String(describing: events.count))
+        os_log("Got %s events", log: OSLog.tracker, type: .debug, String(describing: events.count))
         let request = RequestBuilder.buildRequest(events: events)
         HttpClient.sendRequest(request: request, queue: eventProcessor) { error in
             if let error = error as? URLError, error.code == .notConnectedToInternet {
@@ -239,21 +239,21 @@ public class Parsely {
             task.end()
         }
     }
-    
+
     internal func startFlushTimer() {
-        os_log("Flush timer starting", log: OSLog.tracker, type:.debug)
+        os_log("Flush timer starting", log: OSLog.tracker, type: .debug)
         if flushTimer == nil && active {
             flushTimer = scheduleEventProcessing(inSeconds: flushInterval, target: self, selector: #selector(flush))
-            os_log("Flush timer started", log: OSLog.tracker, type:.debug)
+            os_log("Flush timer started", log: OSLog.tracker, type: .debug)
         }
     }
-    
+
     internal func pauseFlushTimer() {
-        os_log("Flush timer stopping", log: OSLog.tracker, type:.debug)
+        os_log("Flush timer stopping", log: OSLog.tracker, type: .debug)
         if flushTimer != nil && !active {
             flushTimer?.cancel()
             flushTimer = nil
-            os_log("Flush timer stopped", log: OSLog.tracker, type:.debug)
+            os_log("Flush timer stopped", log: OSLog.tracker, type: .debug)
         }
     }
 
@@ -273,24 +273,24 @@ public class Parsely {
             return
         }
         self.active = true
-        os_log("Resuming execution after foreground/active", log:OSLog.tracker, type:.info)
+        os_log("Resuming execution after foreground/active", log: OSLog.tracker, type: .info)
         startFlushTimer()
         track.resume()
     }
-    
+
     @objc private func suspendExecution(_ notification: Notification) {
         if !active {
             return
         }
         self.active = false
-        os_log("Stopping execution before background/inactive/terminate", log:OSLog.tracker, type:.info)
+        os_log("Stopping execution before background/inactive/terminate", log: OSLog.tracker, type: .info)
         hardShutdown()
 
-        os_log("Flushing queue in background", log:OSLog.tracker, type:.info)
+        os_log("Flushing queue in background", log: OSLog.tracker, type: .info)
         self.track.sendHeartbeats()
         self.flush()
     }
-    
+
     internal func hardShutdown() {
         pauseFlushTimer()
         track.pause()

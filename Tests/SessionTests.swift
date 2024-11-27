@@ -7,7 +7,7 @@ class SessionTests: ParselyTestCase {
     let sessionStorageKey = "_parsely_session_identifier"
     let testInitialUrl = "http://parsely-test.com/123"
     let testSubsequentUrl = "http://parsely-test.com/"
-    let epochTimeInThePast:UInt64 = 1626963869621
+    let epochTimeInThePast: UInt64 = 1626963869621
 
     override func setUp() {
         super.setUp()
@@ -37,8 +37,8 @@ class SessionTests: ParselyTestCase {
         let subsequentSession = sessions.get(url: testSubsequentUrl, urlref: testInitialUrl, shouldExtendExisting: true)
         XCTAssertEqual(session["session_id"] as! Int, subsequentSession["session_id"] as! Int,
                        "Sequential calls to SessionManager.get within the session timeout that have " +
-                       "shouldExtendExisting:true should return a session object with the same session ID as the " +
-                       "preexisting session object")
+                        "shouldExtendExisting:true should return a session object with the same session ID as the " +
+                        "preexisting session object")
         XCTAssertEqual(session["session_url"] as! String, testInitialUrl,
                        "The url of a session that has been extended with a different url should not have changed")
     }
@@ -55,7 +55,7 @@ class SessionTests: ParselyTestCase {
                        "The visitor's session_count should have been incremented after a call to SessionManager.get")
         XCTAssertEqual(mutatedVisitor["last_session_ts"] as! UInt64, UInt64(expectedLastSessionTs),
                        "The visitor's last_session_ts should have been set to the session's session_ts after a call to " +
-                       "SessionManager.get")
+                        "SessionManager.get")
     }
 
     func testShouldExtendExisting() {
@@ -63,8 +63,8 @@ class SessionTests: ParselyTestCase {
         let subsequentSession = sessions.get(url: testInitialUrl, urlref: "", shouldExtendExisting: true)
         XCTAssert(subsequentSession["expires"] as! Date > session["expires"] as! Date,
                   "Sequential calls to SessionManager.get within the session timeout that have " +
-                  "shouldExtendExisting:true should return a session object with an extended expiry value " +
-                  "compared to the original expiry of the session")
+                    "shouldExtendExisting:true should return a session object with an extended expiry value " +
+                    "compared to the original expiry of the session")
     }
 
     func testExtendExpiry() {
@@ -74,9 +74,9 @@ class SessionTests: ParselyTestCase {
         let sessionUnderTest = sessions.get(url: testInitialUrl, urlref: "")
         XCTAssertGreaterThan(extendSessionExpiryResult["expires"] as! Date, initialSessionExpiry,
                              "A call to extendSessionExpiry after a call to SessionManager.get should extend the session's " +
-                             "expiry by the expected amount and return the corresponding value.")
+                                "expiry by the expected amount and return the corresponding value.")
         XCTAssertGreaterThan(sessionUnderTest["expires"] as! Date, initialSessionExpiry,
                              "A call to extendSessionExpiry after a call to SessionManager.get should extend the session's " +
-                             "expiry by the expected amount.")
+                                "expiry by the expected amount.")
     }
 }

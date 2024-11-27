@@ -36,10 +36,10 @@ class Sampler {
     var samplerTimer: Cancellable?
     var heartbeatsTimer: Cancellable?
     internal let parselyTracker: Parsely
-    
+
     init(trackerInstance: Parsely) {
         parselyTracker = trackerInstance
-        
+
         if let secondsBetweenHeartbeats: TimeInterval = parselyTracker.secondsBetweenHeartbeats {
             if secondsBetweenHeartbeats >= MIN_TIME_BETWEEN_HEARTBEATS && secondsBetweenHeartbeats <= MAX_TIME_BETWEEN_HEARTBEATS {
                 baseHeartbeatInterval = secondsBetweenHeartbeats
@@ -67,17 +67,17 @@ class Sampler {
         if isNew || shouldReset {
             heartbeatInterval = baseHeartbeatInterval
             let newTrackedData = Accumulator.init(
-                  key: key,
-                  accumulatedTime: TimeInterval(0),
-                  totalTime: TimeInterval(0),
-                  firstSampleTime: Date(),
-                  lastSampleTime: Date(),
-                  lastPositiveSampleTime: nil,
-                  heartbeatTimeout: heartbeatInterval,
-                  contentDuration: contentDuration,
-                  isEngaged: false,
-                  eventArgs: eventArgs
-              )
+                key: key,
+                accumulatedTime: TimeInterval(0),
+                totalTime: TimeInterval(0),
+                firstSampleTime: Date(),
+                lastSampleTime: Date(),
+                lastPositiveSampleTime: nil,
+                heartbeatTimeout: heartbeatInterval,
+                contentDuration: contentDuration,
+                isEngaged: false,
+                eventArgs: eventArgs
+            )
             accumulators[key] = newTrackedData
         }
 
@@ -86,7 +86,7 @@ class Sampler {
             restartTimers()
         }
     }
-    
+
     private func restartTimers() {
         os_log("Restarted Timers in %@", log: OSLog.tracker, type: .debug, String(describing: self))
         if samplerTimer != nil {
@@ -100,17 +100,17 @@ class Sampler {
     }
 
     func dropKey(key: String) -> Void {
-        os_log("Dropping Sampler key: %s", log: OSLog.tracker, type:.debug, key)
+        os_log("Dropping Sampler key: %s", log: OSLog.tracker, type: .debug, key)
         sendHeartbeat(key: key)
         accumulators.removeValue(forKey: key)
     }
 
     func generateEventArgs(url: String, urlref: String, metadata: ParselyMetadata? = nil, extra_data: Dictionary<String, Any>?, idsite: String) -> Dictionary<String, Any> {
         var eventArgs: [String: Any] = ["urlref": urlref, "url": url, "idsite": idsite]
-        if (metadata != nil) {
+        if metadata != nil {
             eventArgs["metadata"] = metadata!
         }
-        if (extra_data != nil) {
+        if extra_data != nil {
             eventArgs["extra_data"] = extra_data!
         }
         return eventArgs
@@ -119,7 +119,7 @@ class Sampler {
     @objc private func sample() -> Void {
         let currentTime = Date()
         var shouldCountSample: Bool, increment: TimeInterval
-        
+
         for var (_, trackedData) in accumulators {
             shouldCountSample = sampleFn(key: trackedData.key)
             if shouldCountSample {
@@ -132,10 +132,9 @@ class Sampler {
         }
         samplerTimer = parselyTracker.scheduleEventProcessing(inSeconds: SAMPLE_RATE, target: self, selector: #selector(sample))
     }
-    
+
     private func getHeartbeatInterval(existingTimeout: TimeInterval,
-                                      totalTrackedTime: TimeInterval) -> TimeInterval
-    {
+                                      totalTrackedTime: TimeInterval) -> TimeInterval {
         let totalWithOffset: TimeInterval = totalTrackedTime + offsetMatchingBaseInterval
         let newInterval: TimeInterval = totalWithOffset * backoffProportion
         let clampedNewInterval: TimeInterval = min(MAX_TIME_BETWEEN_HEARTBEATS, newInterval)
@@ -144,16 +143,16 @@ class Sampler {
 
     private func sendHeartbeat(key: String) -> Void {
         guard var trackedData = accumulators[key] else {
-            os_log("No accumulator found for %s, skipping sendHeartbeat", log: OSLog.tracker, type:.debug, key)
+            os_log("No accumulator found for %s, skipping sendHeartbeat", log: OSLog.tracker, type: .debug, key)
             return
         }
         let incSecs: TimeInterval = trackedData.accumulatedTime
         if incSecs > 0 {
-            os_log("Sending heartbeat for %s", log: OSLog.tracker, type:.debug, key)
+            os_log("Sending heartbeat for %s", log: OSLog.tracker, type: .debug, key)
             heartbeatFn(data: trackedData, enableHeartbeats: true)
         }
         trackedData.accumulatedTime = 0
-        let totalTrackedTime: TimeInterval = Date().timeIntervalSince(trackedData.firstSampleTime!);
+        let totalTrackedTime: TimeInterval = Date().timeIntervalSince(trackedData.firstSampleTime!)
         trackedData.heartbeatTimeout = self.getHeartbeatInterval(
             existingTimeout: trackedData.heartbeatTimeout!,
             totalTrackedTime: totalTrackedTime)
@@ -172,9 +171,9 @@ class Sampler {
     private func updateAccumulator(acc: Accumulator) -> Void {
         accumulators[acc.key] = acc
     }
-    
+
     internal func pause() {
-        os_log("Paused from %@", log:OSLog.tracker, type:.debug, String(describing: self))
+        os_log("Paused from %@", log: OSLog.tracker, type: .debug, String(describing: self))
         if samplerTimer != nil {
             samplerTimer!.cancel()
             samplerTimer = nil
@@ -184,9 +183,9 @@ class Sampler {
             heartbeatsTimer = nil
         }
     }
-    
+
     internal func resume() {
-        os_log("Resumed from %@", log:OSLog.tracker, type:.debug, String(describing: self))
+        os_log("Resumed from %@", log: OSLog.tracker, type: .debug, String(describing: self))
         if hasStartedSampling {
             restartTimers()
         }
