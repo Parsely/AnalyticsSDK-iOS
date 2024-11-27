@@ -16,3 +16,7 @@ test:
 		-sdk iphonesimulator \
 		-destination 'platform=iOS Simulator,name=$(SIMULATOR_NAME),OS=$(SIMULATOR_OS)' \
 		| xcpretty
+
+# TODO: Add automation to set up SwiftLint
+format:
+	swiftlint --fix --format
