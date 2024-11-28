@@ -6,6 +6,10 @@ class EngagedTimeTests: ParselyTestCase {
 
     let testUrl: String = "http://parsely-stuff.com"
 
+    func testFailOnPurpose() {
+        XCTAssert(false)
+    }
+
     func testHeartbeatFn() {
         let parsely = makePareslyTracker()
         let engagedTime = EngagedTime(trackerInstance: parsely)
