@@ -26,14 +26,14 @@ class SessionManager {
             if let previousCount = visitorInfo["session_count"] as? Int {
                 visitorInfo["session_count"] = previousCount + 1
             }
-            
+
             session = [:]
             session["session_id"] = visitorInfo["session_count"]
             session["session_url"] = url
             session["session_referrer"] = urlref
             session["session_ts"] = Date().millisecondsSince1970
             session["last_session_ts"] = visitorInfo["last_session_ts"]
-            
+
             visitorInfo["last_session_ts"] = session["session_ts"]
             let _ = visitorManager.setVisitorInfo(visitorInfo: visitorInfo)
             session = storage.set(key: sessionKey, value: session as Dictionary<String, Any>, expires: Date.init(timeIntervalSinceNow: SESSION_TIMEOUT))
@@ -42,7 +42,7 @@ class SessionManager {
         }
         return session
     }
-    
+
     internal func extendExpiry() -> Dictionary<String, Any> {
         let expiry = Date.init(timeIntervalSinceNow: self.SESSION_TIMEOUT)
         let result = storage.extendExpiry(key: self.sessionKey, expires: expiry) ?? [:]

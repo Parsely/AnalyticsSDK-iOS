@@ -22,7 +22,7 @@ class StorageTests: ParselyTestCase {
         expected["expires"] = expires
         XCTAssertEqual(expected as NSObject, retrievedData! as NSObject,
                        "Sequential calls to Storage.set and Storage.get should preserve the stored object and its " +
-                       "expiry information")
+                        "expiry information")
     }
 
     func testGetSetWithNegativeExpires() {
@@ -33,7 +33,7 @@ class StorageTests: ParselyTestCase {
         let retrievedData = storage.get(key: "baz") ?? [:]
         XCTAssert(retrievedData.isEmpty,
                   "After a call to Storage.set with a negative expires argument, calls to Storage.get for the set key " +
-                  "should return nil")
+                    "should return nil")
     }
 
     func testDataTypes() {
@@ -41,7 +41,7 @@ class StorageTests: ParselyTestCase {
             "foo": "bar",
             "baz": 10,
             "bzz": 10.5,
-            "lol": ["huh": "yah", "right": 10, "yup": 10.5] as [String : Any],
+            "lol": ["huh": "yah", "right": 10, "yup": 10.5] as [String: Any],
             "millis": Date().millisecondsSince1970
         ]
         let fifteenMinutes = Double(1000 * 15 * 60)
@@ -52,7 +52,7 @@ class StorageTests: ParselyTestCase {
         expected["expires"] = expires
         XCTAssertEqual(expected as NSObject, retrievedData as NSObject,
                        "Sequential calls to Storage.set and Storage.get storing and retrieving varied datatypes should " +
-                       "preserve the stored object and its expiry information")
+                        "preserve the stored object and its expiry information")
     }
 
     func testExtendExpiry() {

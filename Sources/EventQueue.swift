@@ -15,17 +15,17 @@ extension Array {
 
 struct EventQueue<T> {
     var list = [T]()
-    
-    mutating func push(_ element:T) {
+
+    mutating func push(_ element: T) {
         os_log("Event pushed into queue", log: OSLog.tracker, type: .debug)
         list.append(element)
     }
 
-    mutating func push<Collection>(contentsOf elements:Collection) where T == Collection.Element, Collection: Sequence {
+    mutating func push<Collection>(contentsOf elements: Collection) where T == Collection.Element, Collection: Sequence {
         os_log("Events pushed into queue", log: OSLog.tracker, type: .debug)
         list.append(contentsOf: elements)
     }
-    
+
     mutating func pop() -> T? {
         if list.isEmpty {
             return nil
@@ -33,8 +33,8 @@ struct EventQueue<T> {
         os_log("Event popped from queue", log: OSLog.tracker, type: .debug)
         return list.removeFirst()
     }
-    
-    mutating func get(count:Int = 0) -> [T] {
+
+    mutating func get(count: Int = 0) -> [T] {
         if count == 0 {
             os_log("Got %zd events from queue", log: OSLog.tracker, type: .debug, list.count)
             return list.take(list.count)
@@ -42,7 +42,7 @@ struct EventQueue<T> {
         os_log("Got %zd events from queue", log: OSLog.tracker, type: .debug, count)
         return list.take(count)
     }
-    
+
     func length() -> Int {
         return list.count
     }

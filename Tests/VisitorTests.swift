@@ -14,13 +14,13 @@ class VisitorTests: XCTestCase {
         let subsequentVisitor = visitors.getVisitorInfo()
         XCTAssertEqual(visitor["id"] as! String, subsequentVisitor["id"] as! String,
                        "Sequential calls to VisitorManager.getVisitorInfo within the default expiry should return objects " +
-                       "with the same visitor ID")
+                        "with the same visitor ID")
         XCTAssertEqual(visitor["session_count"] as! Int, subsequentVisitor["session_count"] as! Int,
                        "Sequential calls to VisitorManager.getVisitorInfo within the default expiry should return objects " +
-                       "with the same session count")
+                        "with the same session count")
         XCTAssertEqual(visitor["last_session_ts"] as! UInt64, subsequentVisitor["last_session_ts"] as! UInt64,
                        "Sequential calls to VisitorManager.getVisitorInfo within the default expiry should return objects " +
-                       "with the same last session timestamp")
+                        "with the same last session timestamp")
     }
 
     func testExtendVisitorExpiry() {
@@ -31,6 +31,6 @@ class VisitorTests: XCTestCase {
         let capturedExpiryTwo = subsequentVisitor["expires"] as! Date
         XCTAssert(capturedExpiryOne < capturedExpiryTwo,
                   "Given an existing visitor, a call to VisitorManager.getVisitorInfo with shouldExtendExisting:true " +
-                  "should return an object with a later expiry than the preexisting one")
+                    "should return an object with a later expiry than the preexisting one")
     }
 }

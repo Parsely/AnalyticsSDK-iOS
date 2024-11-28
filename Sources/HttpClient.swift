@@ -4,21 +4,21 @@ import os.log
 class HttpClient {
     static func sendRequest(request: ParselyRequest, queue: DispatchQueue, completion: ((Error?) -> Void)? = nil) {
         os_log("Sending request to %s", log: OSLog.tracker, type: .debug, request.url)
-        
+
         guard let url = URL(string: request.url) else {
             os_log("Failed to create URL from %s", log: OSLog.tracker, type: .error, request.url)
             return
         }
-        
+
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: request.params)
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         request.headers.forEach { key, value in
             urlRequest.setValue(value, forHTTPHeaderField: key)
         }
-                
+
         URLSession.shared.dataTask(with: urlRequest) { _, _, error in
             if let err = error {
                 os_log("Request failed: %s", log: OSLog.tracker, type: .error, err.localizedDescription)

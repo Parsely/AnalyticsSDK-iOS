@@ -2,7 +2,7 @@ import Foundation
 import os.log
 
 class EngagedTime: Sampler {
-    override func sampleFn(key : String) -> Bool {
+    override func sampleFn(key: String) -> Bool {
         guard let trackedData = accumulators[key] else {
             os_log("No accumulator found for key %s. Skipping sampling.", log: OSLog.tracker, type: .debug, key)
             return false
@@ -10,7 +10,7 @@ class EngagedTime: Sampler {
 
         return trackedData.isEngaged
     }
-    
+
     override func heartbeatFn(data: Accumulator, enableHeartbeats: Bool) {
         if enableHeartbeats != true {
             return
@@ -32,20 +32,20 @@ class EngagedTime: Sampler {
 
         parselyTracker.track.event(event: event)
     }
-    
+
     func startInteraction(url: String, urlref: String = "", extra_data: Dictionary<String, Any>?, idsite: String) {
         endInteraction()
         os_log("Starting Interaction", log: OSLog.tracker, type: .debug)
         let eventArgs = generateEventArgs(url: url, urlref: urlref, extra_data: extra_data, idsite: idsite)
-        trackKey(key: url, contentDuration: nil, eventArgs: eventArgs, resetOnExisting: true);
+        trackKey(key: url, contentDuration: nil, eventArgs: eventArgs, resetOnExisting: true)
         accumulators[url]!.isEngaged = true
     }
-    
+
     func endInteraction() {
         os_log("Ending Interaction", log: OSLog.tracker, type: .debug)
         for (url, _) in accumulators {
             guard var _ = accumulators[url] else {
-                os_log("No accumulator found for %s, skipping endInteraction", log: OSLog.tracker, type:.debug, url)
+                os_log("No accumulator found for %s, skipping endInteraction", log: OSLog.tracker, type: .debug, url)
                 return
             }
             accumulators[url]!.isEngaged = false

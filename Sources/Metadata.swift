@@ -9,11 +9,11 @@ public class ParselyMetadata {
     var section: String?
     var tags: Array<String>?
     var duration: TimeInterval?
-    
+
     /**
      A class to manage and re-use metadata. Metadata contained in an instance of this
      class will conform to Parsely's schema.
-     
+
      - Parameter canonical_url: A post's canonical url. For videos, it is overridden with the vId and thus can be omitted.
      - Parameter pub_date: Date this piece of content was published.
      - Parameter title: Title of the content.
@@ -22,15 +22,15 @@ public class ParselyMetadata {
      - Parameter section: Same as section for website integration.
      - Parameter tags: Up to 20 tags on an event are allowed.
      - Parameter duration: Durations passed explicitly to trackVideoStart take precedence over any in metadata.
-    */
+     */
     public init(canonical_url: String? = nil,
-         pub_date: Date? = nil,
-         title: String? = nil,
-         authors: Array<String>? = nil,
-         image_url: String? = nil,
-         section: String? = nil,
-         tags: Array<String>? = nil,
-         duration: TimeInterval? = nil) {
+                pub_date: Date? = nil,
+                title: String? = nil,
+                authors: Array<String>? = nil,
+                image_url: String? = nil,
+                section: String? = nil,
+                tags: Array<String>? = nil,
+                duration: TimeInterval? = nil) {
         self.canonical_url = canonical_url
         self.pub_date = pub_date
         self.title = title
@@ -40,15 +40,15 @@ public class ParselyMetadata {
         self.tags = tags
         self.duration = duration
     }
-    
+
     func toDict() -> Dictionary<String, Any> {
         var metas: Dictionary<String, Any> = [:]
-        
+
         if let canonical_url {
             metas["link"] = canonical_url
         }
         if let pub_date {
-            metas["pub_date"] = String(format:"%i", pub_date.millisecondsSince1970)
+            metas["pub_date"] = String(format: "%i", pub_date.millisecondsSince1970)
         }
         if let title {
             metas["title"] = title
@@ -68,7 +68,7 @@ public class ParselyMetadata {
         if let duration {
             metas["duration"] = duration
         }
-        
+
         return metas
     }
 }
