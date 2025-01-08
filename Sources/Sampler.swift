@@ -147,18 +147,28 @@ class Sampler {
             os_log("No accumulator found for %s, skipping sendHeartbeat", log: OSLog.tracker, type:.debug, key)
             return
         }
+        let now = Date()
         let incSecs: TimeInterval = trackedData.accumulatedTime
         if incSecs > 0 {
-            os_log("Sending heartbeat for %s", log: OSLog.tracker, type:.debug, key)
+            os_log(
+                "Sending heartbeat for %s. Timestamp: %s.",
+                log: OSLog.tracker,
+                type:.debug,
+                key,
+                now.description
+            )
             heartbeatFn(data: trackedData, enableHeartbeats: true)
         }
         trackedData.accumulatedTime = 0
-        let totalTrackedTime: TimeInterval = Date().timeIntervalSince(trackedData.firstSampleTime!);
-        trackedData.heartbeatTimeout = self.getHeartbeatInterval(
+        let totalTrackedTime: TimeInterval = now.timeIntervalSince(trackedData.firstSampleTime!)
+        trackedData.heartbeatTimeout = getHeartbeatInterval(
             existingTimeout: trackedData.heartbeatTimeout!,
-            totalTrackedTime: totalTrackedTime)
+            totalTrackedTime: totalTrackedTime
+        )
         updateAccumulator(acc: trackedData)
         heartbeatInterval = trackedData.heartbeatTimeout!
+
+        os_log("Send heartbeat completed. New heartbeat timeout %.2f seconds.", trackedData.heartbeatTimeout!)
     }
 
     @objc internal func sendHeartbeats() -> Void {

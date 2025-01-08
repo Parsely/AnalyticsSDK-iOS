@@ -22,8 +22,7 @@ class Track {
         parselyTracker.startFlushTimer();
         
         pixel.beacon(event: event)
-        os_log("Sending an event from Track", log: OSLog.tracker, type:.debug)
-        dump(event.toDict())
+        os_log_sending_event(event)
     }
 
     func pageview(url: String, urlref: String = "", metadata: ParselyMetadata?, extra_data: Dictionary<String, Any>?, idsite: String) {
@@ -81,4 +80,11 @@ class Track {
         engagedTime.sendHeartbeats()
         videoManager.sendHeartbeats()
     }
+}
+
+/// Utility to log sending event with a dump of the event.
+private func os_log_sending_event(_ event: Event, log: OSLog = .tracker, type: OSLogType = .debug) {
+    var eventDump = ""
+    dump(event.toDict(), to: &eventDump)
+    os_log("Sending an event from Track:\n%@", log: log, type: type, eventDump)
 }

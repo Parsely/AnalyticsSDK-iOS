@@ -34,11 +34,4 @@ jobs:
       with:
         xcode-version: ${{ matrix.xcode }}
     - name: Build and Test
-      run: |
-        xcodebuild test \
-          -project Demo/ParselyDemo.xcodeproj \
-          -scheme ParselyDemo \
-          -sdk iphonesimulator \
-          -destination 'platform=iOS Simulator,name=iPhone 14,OS=latest' \
-          | xcpretty \
-          && exit ${PIPESTATUS[0]}
+      run: make test

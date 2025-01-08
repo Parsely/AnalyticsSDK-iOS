@@ -11,3 +11,7 @@ xcuserdata/*
 
 # Ruby tooling
 vendor/bundle
+
+
+# SwiftLint Remote Config Cache
+.swiftlint/RemoteConfigCache
