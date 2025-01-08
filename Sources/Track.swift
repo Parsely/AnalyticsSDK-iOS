@@ -82,7 +82,7 @@ class Track {
     }
 }
 
-/// Utitlity to log sending event with a dump of the event.
+/// Utility to log sending event with a dump of the event.
 private func os_log_sending_event(_ event: Event, log: OSLog = .tracker, type: OSLogType = .debug) {
     var eventDump = ""
     dump(event.toDict(), to: &eventDump)
