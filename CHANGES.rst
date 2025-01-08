@@ -14,6 +14,13 @@ Bugfixes
 
 _None_
 
+0.2.5 (1-08-2025)
+
+Changes
+-------
+
+* The logs show more information #93
+
 0.2.4 (1-28-2024)
 
 Changes
