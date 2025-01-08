@@ -14,6 +14,13 @@ Bugfixes
 
 _None_
 
+0.2.4 (1-28-2024)
+
+Changes
+-------
+
+* Implementation cleanups: Remove unnecessary Optionals, IUOs, force casts and the like [#88, #89]
+
 0.2.3 (1-28-2024)
 
 Bugfixes
