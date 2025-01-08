@@ -160,6 +160,8 @@ class Sampler {
         )
         updateAccumulator(acc: trackedData)
         heartbeatInterval = trackedData.heartbeatTimeout!
+
+        os_log("Send heartbeat completed. New heartbeat timeout %.2f seconds.", trackedData.heartbeatTimeout!)
     }
 
     @objc internal func sendHeartbeats() -> Void {
