@@ -12,6 +12,27 @@ _None_
 Bugfixes
 --------
 
+_None_
+
+0.2.5 (1-08-2025)
+
+Changes
+-------
+
+* The logs show more information #93
+
+0.2.4 (1-28-2024)
+
+Changes
+-------
+
+* Implementation cleanups: Remove unnecessary Optionals, IUOs, force casts and the like [#88, #89]
+
+0.2.3 (1-28-2024)
+
+Bugfixes
+--------
+
 * Prevented a crash in the rare occurrence when a `VideoManager` attempted to send an heartbeat for a video it had not tracked [#83]
 
 0.2.2 (5-10-2023)
