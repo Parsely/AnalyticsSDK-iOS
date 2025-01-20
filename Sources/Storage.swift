@@ -1,11 +1,11 @@
 import Foundation
 
 extension Date {
-    var millisecondsSince1970:UInt64 {
+    var millisecondsSince1970: UInt64 {
         return UInt64(floor(self.timeIntervalSince1970 * 1000))
     }
-    
-    init(milliseconds:UInt64) {
+
+    init(milliseconds: UInt64) {
         self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }
 }
@@ -32,7 +32,7 @@ class Storage {
     func set(key: String, value: Dictionary<String, Any?>, expires: Date?) -> Dictionary<String, Any?> {
         var data = value
         if expires != nil {
-           data[self.expiryDateKey] = expires
+            data[self.expiryDateKey] = expires
         }
         self.defaults.set(data, forKey: key)
         return data

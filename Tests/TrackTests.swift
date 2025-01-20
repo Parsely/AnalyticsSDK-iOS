@@ -50,7 +50,7 @@ class TrackTests: ParselyTestCase {
         let trackedVideos: Dictionary<String, TrackedVideo> = videoManager.trackedVideos
         XCTAssertEqual(trackedVideos.count, 1,
                        "After a call to Track.videoStart followed by a call to track.videoPause, there should be " +
-                       "exactly one video being tracked")
+                        "exactly one video being tracked")
         let testVideo: TrackedVideo = trackedVideos.values.first!
         XCTAssertFalse(testVideo.isPlaying,
                        "After a call to Track.videoStart, the tracked video should have its isPlaying flag unset")
@@ -70,21 +70,21 @@ class TrackTests: ParselyTestCase {
 
     func testStartEngagement() {
         track!.startEngagement(url: testUrl, urlref: testUrl, extra_data: nil, idsite: Parsely.testAPIKey)
-        let internalAccumulators:Dictionary<String, Accumulator> = track!.engagedTime.accumulators
+        let internalAccumulators: Dictionary<String, Accumulator> = track!.engagedTime.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssert(testUrlAccumulator.isEngaged,
                   "After a call to Track.startEngagement, the internal accumulator for the engaged url should exist " +
-                  "and its isEngaged flag should be set")
+                    "and its isEngaged flag should be set")
     }
 
     func testStopEngagement() {
         track!.startEngagement(url: testUrl, urlref: testUrl, extra_data: nil, idsite: Parsely.testAPIKey)
         track!.stopEngagement()
-        let internalAccumulators:Dictionary<String, Accumulator> = track!.engagedTime.accumulators
+        let internalAccumulators: Dictionary<String, Accumulator> = track!.engagedTime.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssertFalse(testUrlAccumulator.isEngaged,
                        "After a call to Track.startEngagement followed by a call to Track.stopEngagement, the internal " +
-                       "accumulator for the engaged url should exist and its isEngaged flag should be unset")
+                        "accumulator for the engaged url should exist and its isEngaged flag should be unset")
     }
 
     func testPause() {

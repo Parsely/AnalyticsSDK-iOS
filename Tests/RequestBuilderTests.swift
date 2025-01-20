@@ -6,7 +6,7 @@ class RequestBuilderTests: XCTestCase {
 
     private func makeEvents() -> Array<Event> {
         let exampleMetadata: ParselyMetadata = ParselyMetadata(
-            canonical_url:"http://parsely-test.com",
+            canonical_url: "http://parsely-test.com",
             pub_date: Date(timeIntervalSince1970: 3),
             title: "a title.",
             authors: ["Yogi Berra"],
@@ -21,7 +21,7 @@ class RequestBuilderTests: XCTestCase {
             urlref: nil,
             metadata: exampleMetadata,
             extra_data: nil
-            )]
+        )]
     }
 
     func testBuildPixelEndpoint() {
@@ -32,7 +32,7 @@ class RequestBuilderTests: XCTestCase {
         let events: Array<Event> = makeEvents()
         let actual: Dictionary<String, Any?> = RequestBuilder.buildHeadersDict(events: events)
         XCTAssert(actual["User-Agent"] != nil, "buildHeadersDict should return a dictionary containing a non-nil " +
-                  "user agent string")
+                    "user agent string")
     }
 
     func testBuildRequest() {
@@ -49,7 +49,7 @@ class RequestBuilderTests: XCTestCase {
         let actualEvents: Array<Dictionary<String, Any>> = request.params["events"] as! Array<Dictionary<String, Any>>
         XCTAssertEqual(actualEvents.count, events.count,
                        "RequestBuilder.buildRequest should return a request with an events array containing all " +
-                       "relevant revents")
+                        "relevant revents")
     }
 
     func testParamsJson() {
@@ -66,7 +66,7 @@ class RequestBuilderTests: XCTestCase {
         let result = RequestBuilder.getHardwareString()
         let expected = Set(["x86_64", "arm64"])
         XCTAssertTrue(expected.contains(result),
-                    "The result of RequestBuilder.getHardwareString should accurately represent the simulator hardware"
+                      "The result of RequestBuilder.getHardwareString should accurately represent the simulator hardware"
         )
     }
 

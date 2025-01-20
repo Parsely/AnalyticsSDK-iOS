@@ -31,8 +31,8 @@ class SamplerTests: ParselyTestCase {
     }
 
     func testSampleFn() {
-        let assertionTimeout:TimeInterval = TimeInterval(3)
-        let acceptableDifference:TimeInterval = TimeInterval(0.2)
+        let assertionTimeout: TimeInterval = TimeInterval(3)
+        let acceptableDifference: TimeInterval = TimeInterval(0.2)
 
         samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
 
@@ -42,7 +42,7 @@ class SamplerTests: ParselyTestCase {
         }
         waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
 
-        let accumulatedTime:TimeInterval = samplerUnderTest!.accumulators["sampler-test"]!.totalTime
+        let accumulatedTime: TimeInterval = samplerUnderTest!.accumulators["sampler-test"]!.totalTime
         XCTAssert(accumulatedTime >= assertionTimeout - acceptableDifference,
                   "The sampler should accumulate time constantly after a call to trackKey")
     }
@@ -110,9 +110,9 @@ class SamplerTests: ParselyTestCase {
             url: testUrl, urlref: testUrl, metadata: testMetadata, extra_data: extraData,
             idsite: Parsely.testAPIKey)
         XCTAssertEqual(eventArgs["url"] as! String, testUrl, "The url returned in the result of Sampler.generateEventArgs " +
-                       "should match the one passed to the call")
+                        "should match the one passed to the call")
         XCTAssertEqual(eventArgs["urlref"] as! String, testUrl, "The urlref returned in the result of " +
-                       "Sampler.generateEventArgs should match the one passed to the call")
+                        "Sampler.generateEventArgs should match the one passed to the call")
         XCTAssertEqual(eventArgs["idsite"] as! String, Parsely.testAPIKey,
                        "The idsite returned in the result of Sampler.generateEventArgs should match the one passed to the call")
         let actualExtraData: Dictionary<String, Any> = eventArgs["extra_data"] as! Dictionary<String, Any>
@@ -124,7 +124,7 @@ class SamplerTests: ParselyTestCase {
         let expectedMetadata: Dictionary<String, Any> = testMetadata.toDict()
         let result: Bool = NSDictionary(dictionary: actualMetadata.toDict()).isEqual(to: expectedMetadata)
         XCTAssert(result, "The metadata field of the result of Sampler.generateEventArgs should be a dict representation " +
-                          "of the given metadata")
+                    "of the given metadata")
     }
 
     func testPause() {
@@ -149,8 +149,8 @@ class SamplerTests: ParselyTestCase {
     }
 
     func testPauseStopsCounting() {
-        let assertionTimeout:TimeInterval = TimeInterval(3)
-        let acceptableDifference:TimeInterval = TimeInterval(0.2)
+        let assertionTimeout: TimeInterval = TimeInterval(3)
+        let acceptableDifference: TimeInterval = TimeInterval(0.2)
 
         samplerUnderTest!.trackKey(key: "sampler-test", contentDuration: nil, eventArgs: [:])
 
@@ -160,7 +160,7 @@ class SamplerTests: ParselyTestCase {
         }
         waitForExpectations(timeout: assertionTimeout + acceptableDifference, handler: nil)
 
-        let accumulatedTime:TimeInterval = samplerUnderTest!.accumulators["sampler-test"]!.accumulatedTime
+        let accumulatedTime: TimeInterval = samplerUnderTest!.accumulators["sampler-test"]!.accumulatedTime
         samplerUnderTest!.pause()
         XCTAssertEqual(
             accumulatedTime,

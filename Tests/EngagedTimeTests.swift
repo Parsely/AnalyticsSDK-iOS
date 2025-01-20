@@ -24,31 +24,31 @@ class EngagedTimeTests: ParselyTestCase {
     func testStartInteraction() {
         let engagedTime = makeEngagedTime()
         engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil,
-                                      idsite: Parsely.testAPIKey)
-        let internalAccumulators:Dictionary<String, Accumulator> = engagedTime.accumulators
+                                     idsite: Parsely.testAPIKey)
+        let internalAccumulators: Dictionary<String, Accumulator> = engagedTime.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssert(testUrlAccumulator.isEngaged,
                   "After a call to EngagedTime.startInteraction, the internal accumulator for the engaged " +
-                  "url should exist and its isEngaged flag should be set")
+                    "url should exist and its isEngaged flag should be set")
     }
 
     func testEndInteraction() {
         let engagedTime = makeEngagedTime()
         engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil,
-                                      idsite: Parsely.testAPIKey)
+                                     idsite: Parsely.testAPIKey)
         engagedTime.endInteraction()
-        let internalAccumulators:Dictionary<String, Accumulator> = engagedTime.accumulators
+        let internalAccumulators: Dictionary<String, Accumulator> = engagedTime.accumulators
         let testUrlAccumulator: Accumulator = internalAccumulators[testUrl]!
         XCTAssertFalse(testUrlAccumulator.isEngaged,
                        "After a call to EngagedTime.startInteraction followed by a call to " +
-                       "EngagedTime.stopInteraction, the internal accumulator for the engaged " +
-                       "url should exist and its isEngaged flag should be unset")
+                        "EngagedTime.stopInteraction, the internal accumulator for the engaged " +
+                        "url should exist and its isEngaged flag should be unset")
     }
 
     func testSampleFn() {
         let engagedTime = makeEngagedTime()
         engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil,
-                                      idsite: Parsely.testAPIKey)
+                                     idsite: Parsely.testAPIKey)
         let sampleResult: Bool = engagedTime.sampleFn(key: testUrl)
         XCTAssert(sampleResult,
                   "After a call to EngagedTime.startInteraction, EngagedTime.sample should return true for the interacting key")
@@ -57,12 +57,12 @@ class EngagedTimeTests: ParselyTestCase {
     func testSampleFnPaused() {
         let engagedTime = makeEngagedTime()
         engagedTime.startInteraction(url: testUrl, urlref: "", extra_data: nil,
-                                      idsite: Parsely.testAPIKey)
+                                     idsite: Parsely.testAPIKey)
         engagedTime.endInteraction()
         let sampleResult: Bool = engagedTime.sampleFn(key: testUrl)
         XCTAssertFalse(sampleResult,
                        "After a call to EngagedTime.startInteraction followed by a call to " +
-                       "EngagedTime.stopInteraction, EngagedTime.sample should return false for the interacting key")
+                        "EngagedTime.stopInteraction, EngagedTime.sample should return false for the interacting key")
     }
 
 
@@ -71,8 +71,8 @@ class EngagedTimeTests: ParselyTestCase {
         // This is call to configure required for the start-stop mechanism to work
         parsely.configure(siteId: Parsely.testAPIKey)
 
-        let assertionTimeout:TimeInterval = TimeInterval(3)
-        let acceptableDifference:TimeInterval = TimeInterval(0.2)
+        let assertionTimeout: TimeInterval = TimeInterval(3)
+        let acceptableDifference: TimeInterval = TimeInterval(0.2)
 
         parsely.startEngagement(url: testUrl, urlref: "", extraData: nil, siteId: Parsely.testAPIKey)
         // sleep for three seconds
@@ -84,10 +84,10 @@ class EngagedTimeTests: ParselyTestCase {
         // put application in background
         if #available(iOS 13.0, *) {
             NotificationCenter.default.post(name: UIScene.didEnterBackgroundNotification, object: nil)
-        } else{
+        } else {
             NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
         }
-        let accumulatedTime:TimeInterval = parsely.track.engagedTime.accumulators[testUrl]!.accumulatedTime
+        let accumulatedTime: TimeInterval = parsely.track.engagedTime.accumulators[testUrl]!.accumulatedTime
         XCTAssert(accumulatedTime <= 3, "Engaged time should be less than or equal to 3 seconds but it was \(accumulatedTime)")
 
         // sleep for three more seconds
@@ -102,9 +102,9 @@ class EngagedTimeTests: ParselyTestCase {
 
         // stop tracking engaged time
         parsely.stopEngagement()
-        let accumulatedTimeSecond:TimeInterval = parsely.track.engagedTime.accumulators[testUrl]!.accumulatedTime
+        let accumulatedTimeSecond: TimeInterval = parsely.track.engagedTime.accumulators[testUrl]!.accumulatedTime
         XCTAssert(accumulatedTimeSecond == 0.0,
-                    "The accumulated time should be zero and it was \(accumulatedTimeSecond)")
+                  "The accumulated time should be zero and it was \(accumulatedTimeSecond)")
 
     }
 

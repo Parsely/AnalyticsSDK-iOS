@@ -4,18 +4,18 @@ import ParselyAnalytics
 
 class FirstViewController: UIViewController {
     let delegate = UIApplication.shared.delegate as! AppDelegate
-    
+
     @IBAction func didTouchButton(_ sender: Any) {
         log("didTouchButton")
         let demoMetas = ParselyMetadata(authors: ["Yogi Berr"])
         delegate.parsely.trackPageView(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", metadata: demoMetas, extraData: ["product-id": "12345"], siteId: "subdomain.parsely-test.com")
     }
-    
+
     @IBAction func didStartEngagement(_ sender: Any) {
         log("didStartEngagement")
-        delegate.parsely.startEngagement(url: "http://parsely.com/very-not-real", urlref:"http://parsely.com/not-real", extraData: ["product-id": "12345"], siteId: "engaged.parsely-test.com")
+        delegate.parsely.startEngagement(url: "http://parsely.com/very-not-real", urlref: "http://parsely.com/not-real", extraData: ["product-id": "12345"], siteId: "engaged.parsely-test.com")
     }
-    
+
     @IBAction func didStopEngagement(_ sender: Any) {
         log("didStopEngagement")
         delegate.parsely.stopEngagement()

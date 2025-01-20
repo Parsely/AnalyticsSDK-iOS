@@ -9,17 +9,17 @@ struct ParselyRequest {
 }
 
 class RequestBuilder {
-    
+
     static var _baseURL: String? = nil
     static var userAgent: String? = nil
-    
+
     internal static func getHardwareString() -> String {
         var mib  = [CTL_HW, HW_MACHINE]
         var len: size_t = 0
         sysctl(&mib, 2, nil, &len, nil, 0)
-        let machine = UnsafeMutablePointer<Int8>.allocate(capacity:len)
+        let machine = UnsafeMutablePointer<Int8>.allocate(capacity: len)
         sysctl(&mib, 2, machine, &len, nil, 0)
-        let platform: String = String(cString:machine, encoding:String.Encoding.ascii) ?? ""
+        let platform: String = String(cString: machine, encoding: String.Encoding.ascii) ?? ""
         machine.deallocate()
         return platform
     }
@@ -42,14 +42,14 @@ class RequestBuilder {
 
         return userAgent
     }
-    
+
     static func buildRequest(events: Array<Event>) -> ParselyRequest {
         let request = ParselyRequest.init(
             url: buildPixelEndpoint(),
             headers: buildHeadersDict(events: events),
             params: buildParamsDict(events: events)
         )
-        os_log("Built request", log: OSLog.tracker, type:.debug)
+        os_log("Built request", log: OSLog.tracker, type: .debug)
         return request
     }
 
@@ -58,7 +58,7 @@ class RequestBuilder {
         _baseURL = endpoint
         return endpoint
     }
-    
+
     internal static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, String> {
         let userAgent: String = getUserAgent()
         return ["User-Agent": userAgent]

@@ -4,7 +4,7 @@ import os.log
 class Pixel {
     var sessionManager: SessionManager
     private let parselyTracker: Parsely
-    
+
     init(trackerInstance: Parsely) {
         parselyTracker = trackerInstance
         sessionManager = SessionManager(trackerInstance: parselyTracker)
@@ -18,7 +18,7 @@ class Pixel {
         }
         os_log("Fired beacon: action = %s", log: OSLog.tracker, type: .debug, event.action)
         let session: Dictionary<String, Any?> = sessionManager.get(url: event.url, urlref: event.urlref,
-                                                              shouldExtendExisting: true)
+                                                                   shouldExtendExisting: true)
         event.setSessionInfo(session: session)
         let visitorInfo = parselyTracker.visitorManager.getVisitorInfo(shouldExtendExisting: true)
         event.setVisitorInfo(visitorInfo: visitorInfo as Dictionary<String, Any>)

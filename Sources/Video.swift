@@ -27,7 +27,7 @@ class VideoManager: Sampler {
         let totalMs: Int = Int(data.totalTime.milliseconds())
 
         guard var curVideo = trackedVideos[data.key] else {
-            os_log("Skipping heartbeat for video %s because it is not in the tracked videos list", log: OSLog.tracker, type:.debug, data.key)
+            os_log("Skipping heartbeat for video %s because it is not in the tracked videos list", log: OSLog.tracker, type: .debug, data.key)
             return
         }
 
@@ -42,7 +42,7 @@ class VideoManager: Sampler {
             idsite: curVideo.eventArgs["idsite"] as? String
         )
         parselyTracker.track.event(event: event)
-        os_log("Sent vheartbeat for video %s", log: OSLog.tracker, type:.debug, data.key)
+        os_log("Sent vheartbeat for video %s", log: OSLog.tracker, type: .debug, data.key)
         curVideo._heartbeatsSent += 1
         trackedVideos[curVideo.key] = curVideo
     }
@@ -51,7 +51,7 @@ class VideoManager: Sampler {
         trackPause()
         let eventArgs = generateEventArgs(url: url, urlref: urlref, metadata: metadata, extra_data: extra_data, idsite: idsite)
         var curVideo = self.updateVideoData(vId: vId, url: url, duration: duration, eventArgs: eventArgs)
-        if (curVideo.hasStartedPlaying != true) {
+        if curVideo.hasStartedPlaying != true {
             curVideo.hasStartedPlaying = true
             let event = Event(
                 "videostart",
@@ -68,7 +68,7 @@ class VideoManager: Sampler {
     }
 
     func trackPause() -> Void {
-        os_log("Pausing all tracked videos", log: OSLog.tracker, type:.debug)
+        os_log("Pausing all tracked videos", log: OSLog.tracker, type: .debug)
         for (key, _) in trackedVideos {
             var curVideo = trackedVideos[key]
             curVideo!.isPlaying = false
@@ -77,24 +77,24 @@ class VideoManager: Sampler {
     }
 
     func reset(url: String, vId: String) {
-        os_log("Reset video accumulator for url %s and vId %s", log: OSLog.tracker, type:.debug, url, vId)
+        os_log("Reset video accumulator for url %s and vId %s", log: OSLog.tracker, type: .debug, url, vId)
         trackPause()
         let key: String = createVideoTrackingKey(vId: vId, url: url)
-        trackedVideos.removeValue(forKey:key)
+        trackedVideos.removeValue(forKey: key)
     }
 
     private func updateVideoData(vId: String, url: String, duration: TimeInterval, eventArgs: Dictionary<String, Any>?) -> TrackedVideo {
         var _eventArgs: [String: Any] = eventArgs ?? [String: Any]()
         let metadata = _eventArgs["metadata"] as? ParselyMetadata
 
-        if (metadata != nil) {
+        if metadata != nil {
             metadata!.canonical_url = vId
             metadata!.duration = duration
         }
         _eventArgs["metadata"] = metadata
         let key: String = createVideoTrackingKey(vId: vId, url: url)
 
-        if (trackedVideos[key] != nil) {
+        if trackedVideos[key] != nil {
             trackedVideos[key]!.eventArgs = _eventArgs
         } else {
             trackedVideos[key] = TrackedVideo.init(
@@ -106,7 +106,7 @@ class VideoManager: Sampler {
                 eventArgs: _eventArgs,
                 _heartbeatsSent: 0)
 
-            trackKey(key: key, contentDuration: duration, eventArgs:_eventArgs)
+            trackKey(key: key, contentDuration: duration, eventArgs: _eventArgs)
         }
 
         return trackedVideos[key]!
