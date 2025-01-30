@@ -138,13 +138,13 @@ class EventTests: XCTestCase {
         let expectedMetadata: Dictionary<String, Any> = testMetadata.toDict()
         let result: Bool = NSDictionary(dictionary: actualMetadata).isEqual(to: expectedMetadata)
         XCTAssert(result, "The metadata field of the result of Event.toDict should be a dict representation of the " +
-                          "given metadata")
+                    "given metadata")
         let idKeyExists: Bool = actualExtraData["parsely_site_uuid"] != nil
         XCTAssert(idKeyExists, "After a call to Event.setVisitorInfo that " +
-                  "passes a visitor dictionary, the parsely_site_uuid key should exist in the extra_data dictionary.")
+                    "passes a visitor dictionary, the parsely_site_uuid key should exist in the extra_data dictionary.")
         XCTAssertEqual(actualExtraData["parsely_site_uuid"] as! String, expectedVisitorID,
                        "A visitor ID provided via Event.setVisitorInfo should be accessible in the result of " +
-                       "Event.toDict as data[\"parsely_site_uuid\"]")
+                        "Event.toDict as data[\"parsely_site_uuid\"]")
         XCTAssert((actualExtraData["ts"] as! UInt64) > timestampInThePast,
                   "The data.ts field of the result of Event.toDict should be a non-ancient timestamp")
     }
@@ -153,7 +153,7 @@ class EventTests: XCTestCase {
         let eventUnderTest = Event(expectedStrings["action"]!, url: expectedStrings["url"]!,
                                    urlref: expectedStrings["urlref"], metadata: testMetadata,
                                    extra_data: extraData, idsite: expectedStrings["idsite"]!)
-        eventUnderTest.setSessionInfo(session:[
+        eventUnderTest.setSessionInfo(session: [
             "session_id": expectedInts["sid"],
             "session_ts": expectedUInt64s["sts"],
             "last_session_ts": expectedUInt64s["slts"],

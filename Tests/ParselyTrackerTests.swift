@@ -15,7 +15,7 @@ class ParselyTrackerTests: ParselyTestCase {
     func testConfigure() {
         XCTAssertEqual(parselyTestTracker.apikey, Parsely.testAPIKey,
                        "After a call to Parsely.configure, Parsely.apikey should be the value used in the call's " +
-                       "siteId argument")
+                        "siteId argument")
     }
 
     func testTrackPageView() {
