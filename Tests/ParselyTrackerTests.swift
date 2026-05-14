@@ -26,6 +26,23 @@ class ParselyTrackerTests: ParselyTestCase {
         expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(1))
     }
 
+    func testTrackConversion() {
+        XCTAssertEqual(parselyTestTracker.eventQueue.length(), 0,
+                       "eventQueue should be empty immediately after initialization")
+        parselyTestTracker.trackConversion(
+            url: testUrl,
+            conversionType: .subscription,
+            conversionLabel: "weekly_plan"
+        )
+        // A call to Parsely.trackConversion should add an event to eventQueue
+        expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(1))
+        expectParselyState(self.parselyTestTracker.eventQueue.list.first?.action).toEventually(equal("conversion"))
+        expectParselyState(self.parselyTestTracker.eventQueue.list.first?.extra_data["_conversion_type"] as? String)
+            .toEventually(equal("subscription"))
+        expectParselyState(self.parselyTestTracker.eventQueue.list.first?.extra_data["_conversion_label"] as? String)
+            .toEventually(equal("weekly_plan"))
+    }
+
     func testStartEngagement() {
         parselyTestTracker.startEngagement(url: testUrl)
         // After a call to Parsely.startEngagement, the internal accumulator for the engaged url should exist

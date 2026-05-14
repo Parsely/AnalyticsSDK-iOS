@@ -3,6 +3,20 @@ import Combine
 import UIKit
 import os.log
 
+/**
+ The category of a conversion event. The raw value of each case is the string sent to Parse.ly
+ over the wire and must match the values accepted by the Parse.ly conversions backend.
+ Use `.custom` for conversions that don't fit one of the named categories.
+ */
+public enum ConversionType: String {
+    case newsletterSignup = "newsletter_signup"
+    case leadCapture      = "lead_capture"
+    case linkClick        = "link_click"
+    case subscription     = "subscription"
+    case purchase         = "purchase"
+    case custom           = "custom"
+}
+
 public class Parsely {
 
     public var apikey = ""
@@ -93,6 +107,68 @@ public class Parsely {
         }
         os_log("Tracking PageView", log: OSLog.tracker, type: .debug)
         track.pageview(url: url, urlref: urlref, metadata: metadata, extra_data: extraData, idsite: _siteId)
+    }
+
+    /**
+     Track a conversion event (e.g. newsletter signup, subscription, purchase).
+
+     - Parameter url: The url at which the conversion occurred
+     - Parameter conversionType: One of the supported conversion categories. Use `.custom` for
+     conversions that don't fit the named categories.
+     - Parameter conversionLabel: A customer-defined identifier for this conversion
+     (e.g. "weekly_plan", "homepage_cta"). Events without a label are dropped by the Parse.ly
+     conversions backend.
+     - Parameter urlref: The url of the page that linked to the conversion page
+     - Parameter metadata: Metadata for the page on which the conversion occurred
+     - Parameter extraData: A dictionary of additional information to send with the event.
+     Reserved keys `_conversion_type` and `_conversion_label` will be overwritten.
+     - Parameter siteId: The Parsely site ID for which the conversion event should be counted
+     */
+    public func trackConversion(
+        url: String,
+        conversionType: ConversionType,
+        conversionLabel: String,
+        urlref: String = "",
+        metadata: ParselyMetadata? = nil,
+        extraData: Dictionary<String, Any>? = nil,
+        siteId: String = ""
+    ) {
+        eventProcessor.async {
+            self._trackConversion(
+                url: url,
+                conversionType: conversionType,
+                conversionLabel: conversionLabel,
+                urlref: urlref,
+                metadata: metadata,
+                extraData: extraData,
+                siteId: siteId
+            )
+        }
+    }
+
+    private func _trackConversion(
+        url: String,
+        conversionType: ConversionType,
+        conversionLabel: String,
+        urlref: String,
+        metadata: ParselyMetadata?,
+        extraData: Dictionary<String, Any>?,
+        siteId: String
+    ) {
+        var _siteId = siteId
+        if _siteId == "" {
+            _siteId = self.apikey
+        }
+        os_log("Tracking Conversion", log: OSLog.tracker, type: .debug)
+        track.conversion(
+            url: url,
+            urlref: urlref,
+            conversionType: conversionType.rawValue,
+            conversionLabel: conversionLabel,
+            metadata: metadata,
+            extra_data: extraData,
+            idsite: _siteId
+        )
     }
 
     /**
