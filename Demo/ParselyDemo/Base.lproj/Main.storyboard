@@ -66,6 +66,26 @@
                                             <action selector="didPauseVideo:" destination="9pv-A4-QxB" eventType="primaryActionTriggered" id="TbX-BH-W7q"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sandbox" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rrx-sb-lbl">
+                                        <rect key="frame" x="0.0" y="226" width="125" height="20"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrx-sb-pgv">
+                                        <rect key="frame" x="0.0" y="251" width="125" height="30"/>
+                                        <state key="normal" title="Track Pageview (sandbox)"/>
+                                        <connections>
+                                            <action selector="didTouchSandboxPageview:" destination="9pv-A4-QxB" eventType="primaryActionTriggered" id="rrx-sb-pv1"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrx-sb-cnv">
+                                        <rect key="frame" x="0.0" y="286" width="125" height="30"/>
+                                        <state key="normal" title="Track Conversion v2 (sandbox)"/>
+                                        <connections>
+                                            <action selector="didTouchSandboxConversion:" destination="9pv-A4-QxB" eventType="primaryActionTriggered" id="rrx-sb-cn1"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </stackView>
                         </subviews>
