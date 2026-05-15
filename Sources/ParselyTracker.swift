@@ -118,8 +118,9 @@ public class Parsely {
      - Parameter conversionType: One of the supported conversion categories. Use `.custom` for
      conversions that don't fit the named categories.
      - Parameter conversionLabel: A customer-defined identifier for this conversion
-     (e.g. "weekly_plan", "homepage_cta"). Events without a label are dropped by the Parse.ly
-     conversions backend.
+     (e.g. "weekly_plan", "homepage_cta"). Required and must be non-empty — the Parse.ly
+     conversions backend drops events without a label, so calls with an empty label are
+     skipped before they are enqueued and an error is logged.
      - Parameter urlref: The url of the page that linked to the conversion page
      - Parameter metadata: Metadata for the page on which the conversion occurred
      - Parameter extraData: A dictionary of additional information to send with the event.
@@ -157,6 +158,11 @@ public class Parsely {
         extraData: Dictionary<String, Any>?,
         siteId: String
     ) {
+        guard !conversionLabel.isEmpty else {
+            os_log("conversionLabel cannot be empty. Parse.ly's conversions backend drops events without a label, so this call is being skipped.",
+                   log: OSLog.tracker, type: .error)
+            return
+        }
         var _siteId = siteId
         if _siteId == "" {
             _siteId = self.apikey
