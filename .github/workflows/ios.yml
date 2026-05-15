@@ -14,7 +14,7 @@ jobs:
         include:
           # Only using "latest" CI for the moment.
           # We'll decide later whether to keep running tests on older environments
-          - macos: "latest"
+          - macos: "macos-latest"
     runs-on: ${{ matrix.macos }}
     steps:
     - uses: actions/checkout@v3
