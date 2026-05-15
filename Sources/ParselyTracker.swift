@@ -7,6 +7,8 @@ import os.log
  The category of a conversion event. The raw value of each case is the string sent to Parse.ly
  over the wire and must match the values accepted by the Parse.ly conversions backend.
  Use `.custom` for conversions that don't fit one of the named categories.
+ 
+ @See: https://docs.parse.ly/api/api-endpoints/api-conversions-endpoint/
  */
 public enum ConversionType: String {
     case newsletterSignup = "newsletter_signup"
