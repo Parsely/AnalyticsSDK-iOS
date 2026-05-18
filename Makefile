@@ -1,4 +1,4 @@
-# TODO: Use newer Sim. Sticking with it at the moment because we know it works in the existing GitHub action setup.
+# Default simulator used for local runs and CI.
 SIMULATOR_NAME ?= iPhone 17
 SIMULATOR_OS ?= latest
 XCODE_PATH ?= /Applications/Xcode.app
