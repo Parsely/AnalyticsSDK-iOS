@@ -7,7 +7,7 @@ Unreleased
 Changes
 -------
 
-_None_
+* Added ``trackConversion(url:conversionType:conversionLabel:...)`` on ``Parsely`` for sending conversion events (newsletter signups, subscriptions, purchases, etc.). The new ``ConversionType`` enum mirrors the categories accepted by the Parse.ly conversions backend.
 
 Bugfixes
 --------

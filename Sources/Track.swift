@@ -39,6 +39,25 @@ class Track {
         event(event: event_)
     }
 
+    func conversion(url: String, urlref: String = "", conversionType: String, conversionLabel: String,
+                    metadata: ParselyMetadata?, extra_data: Dictionary<String, Any>?, idsite: String) {
+        var merged = extra_data ?? [:]
+        merged["_conversion_type"] = conversionType
+        merged["_conversion_label"] = conversionLabel
+
+        let event_ = Event(
+            "conversion",
+            url: url,
+            urlref: urlref,
+            metadata: metadata,
+            extra_data: merged,
+            idsite: idsite
+        )
+
+        os_log("Sending a conversion from Track", log: OSLog.tracker, type: .debug)
+        event(event: event_)
+    }
+
     func videoStart(url: String, urlref: String, vId: String, duration: TimeInterval, metadata: ParselyMetadata?, extra_data: Dictionary<String, Any>?, idsite: String) {
         videoManager.trackPlay(url: url, urlref: urlref, vId: vId, duration: duration, metadata: metadata, extra_data: extra_data, idsite: idsite)
         os_log("Tracked videoStart from Track", log: OSLog.tracker, type: .debug)

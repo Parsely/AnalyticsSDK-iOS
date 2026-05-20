@@ -28,6 +28,49 @@ class TrackTests: ParselyTestCase {
                        "A call to Track.pageview should add an event to eventQueue")
     }
 
+    func testConversion() {
+        XCTAssertEqual(parselyTestTracker.eventQueue.length(), 0,
+                       "eventQueue should be empty immediately after initialization")
+        track!.conversion(
+            url: testUrl,
+            urlref: testUrl,
+            conversionType: "subscription",
+            conversionLabel: "weekly_plan",
+            metadata: nil,
+            extra_data: ["plan": "Active"],
+            idsite: Parsely.testAPIKey
+        )
+        XCTAssertEqual(parselyTestTracker.eventQueue.length(), 1,
+                       "A call to Track.conversion should add an event to eventQueue")
+
+        let queued = parselyTestTracker.eventQueue.list.first!
+        XCTAssertEqual(queued.action, "conversion",
+                       "Track.conversion should produce an event whose action is \"conversion\"")
+        XCTAssertEqual(queued.extra_data["_conversion_type"] as? String, "subscription",
+                       "Track.conversion should merge _conversion_type into extra_data")
+        XCTAssertEqual(queued.extra_data["_conversion_label"] as? String, "weekly_plan",
+                       "Track.conversion should merge _conversion_label into extra_data")
+        XCTAssertEqual(queued.extra_data["plan"] as? String, "Active",
+                       "Track.conversion should preserve caller-supplied extra_data values")
+    }
+
+    func testConversionReservedKeysOverwriteCallerExtraData() {
+        track!.conversion(
+            url: testUrl,
+            urlref: testUrl,
+            conversionType: "purchase",
+            conversionLabel: "cta_pricing",
+            metadata: nil,
+            extra_data: ["_conversion_type": "spoofed", "_conversion_label": "spoofed"],
+            idsite: Parsely.testAPIKey
+        )
+        let queued = parselyTestTracker.eventQueue.list.first!
+        XCTAssertEqual(queued.extra_data["_conversion_type"] as? String, "purchase",
+                       "Reserved key _conversion_type must not be overridable via caller extra_data")
+        XCTAssertEqual(queued.extra_data["_conversion_label"] as? String, "cta_pricing",
+                       "Reserved key _conversion_label must not be overridable via caller extra_data")
+    }
+
     func testVideoStart() {
         track!.videoStart(url: testUrl, urlref: testUrl, vId: testVideoId, duration: TimeInterval(10), metadata: nil,
                           extra_data: nil, idsite: Parsely.testAPIKey)

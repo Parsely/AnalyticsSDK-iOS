@@ -5,10 +5,36 @@ import ParselyAnalytics
 class FirstViewController: UIViewController {
     let delegate = UIApplication.shared.delegate as! AppDelegate
 
+    // Sandbox test URL for the conversion-tracking smoke flow. Both the pageview and
+    // the conversion buttons fire against this URL on the `sandbox.joshhanson.io` apikey
+    // so pageview history and conversion events share a visitor session in the backend.
+    private let sandboxUrl = "https://sandbox.joshhanson.io/path/test-conversion2"
+    private let sandboxSiteId = "sandbox.joshhanson.io"
+
     @IBAction func didTouchButton(_ sender: Any) {
         log("didTouchButton")
         let demoMetas = ParselyMetadata(authors: ["Yogi Berr"])
         delegate.parsely.trackPageView(url: "http://parsely.com/path/cool-blog-post/1?qsarg=nawp&anotherone=yup", metadata: demoMetas, extraData: ["product-id": "12345"], siteId: "subdomain.parsely-test.com")
+    }
+
+    @IBAction func didTouchSandboxPageview(_ sender: Any) {
+        log("didTouchSandboxPageview")
+        delegate.parsely.trackPageView(
+            url: sandboxUrl,
+            extraData: ["source": "ios_demo_app"],
+            siteId: sandboxSiteId
+        )
+    }
+
+    @IBAction func didTouchSandboxConversion(_ sender: Any) {
+        log("didTouchSandboxConversion")
+        delegate.parsely.trackConversion(
+            url: sandboxUrl,
+            conversionType: .subscription,
+            conversionLabel: "ios_smoke_test_v2",
+            extraData: ["plan": "weekly", "source": "ios_demo_app"],
+            siteId: sandboxSiteId
+        )
     }
 
     @IBAction func didStartEngagement(_ sender: Any) {
