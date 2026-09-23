@@ -13,6 +13,14 @@ Pod::Spec.new do |s|
   s.source                 = { git: 'https://github.com/Parsely/AnalyticsSDK-iOS.git', tag: s.version.to_s }
   s.source_files           = 'Sources'
   s.framework              = 'Foundation'
+  s.preserve_paths        = 'Scripts/parsely-bake-hosts.sh'
+  s.script_phase          = {
+    name: 'Parse.ly: bake pixel hosts',
+    script: 'bash "${PODS_TARGET_SRCROOT}/Scripts/parsely-bake-hosts.sh"',
+    input_files: ['$(SRCROOT)/parsely-apikeys.json'],
+    output_files: ['$(SRCROOT)/ParselyHosts.json'],
+    execution_position: :before_compile
+  }
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Tests'
     test_spec.dependency 'Nimble'

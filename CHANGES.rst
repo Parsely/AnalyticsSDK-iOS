@@ -7,6 +7,7 @@ Unreleased
 Changes
 -------
 
+* **Breaking:** the collection endpoint is no longer hardcoded. Apps must declare their site IDs in ``parsely-apikeys.json`` and add the Parse.ly build phase, which generates ``ParselyHosts.json``. An app without that file sends no events, and events for a site ID missing from it are dropped rather than sent to the wrong endpoint. See the README.
 * Added ``trackConversion(url:conversionType:conversionLabel:...)`` on ``Parsely`` for sending conversion events (newsletter signups, subscriptions, purchases, etc.). The new ``ConversionType`` enum mirrors the categories accepted by the Parse.ly conversions backend.
 
 Bugfixes
