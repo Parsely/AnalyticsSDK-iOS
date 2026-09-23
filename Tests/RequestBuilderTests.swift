@@ -24,10 +24,6 @@ class RequestBuilderTests: XCTestCase {
         )]
     }
 
-    func testBuildPixelEndpoint() {
-        XCTAssertEqual(RequestBuilder.buildPixelEndpoint(), "https://p1.parsely.com/mobileproxy")
-    }
-
     func testHeaders() {
         let events: Array<Event> = makeEvents()
         let actual: Dictionary<String, Any?> = RequestBuilder.buildHeadersDict(events: events)
@@ -35,26 +31,38 @@ class RequestBuilderTests: XCTestCase {
                     "user agent string")
     }
 
-    func testBuildRequest() {
+    func testBuildRequestUsesGivenHost() {
         let events = makeEvents()
-        let request = RequestBuilder.buildRequest(events: events)
-        XCTAssert(request.url.contains("https://p1"),
-                  "RequestBuilder.buildRequest should return a request with a valid-looking url attribute")
-        XCTAssertNotNil(request.headers,
-                        "RequestBuilder.buildRequest should return a request with a non-nil headers attribute")
+        let request = RequestBuilder.buildRequest(events: events, host: "p1-irl.parsely.com")
+
+        XCTAssertEqual(request.url, "https://p1-irl.parsely.com/mobileproxy",
+                       "buildRequest should build its URL from the host it is given")
         XCTAssertNotNil(request.headers["User-Agent"],
                         "RequestBuilder.buildRequest should return a request with a non-nil User-Agent header")
-        XCTAssertNotNil(request.params,
-                        "RequestBuilder.buildRequest should return a request with a non-nil params attribute")
         let actualEvents: Array<Dictionary<String, Any>> = request.params["events"] as! Array<Dictionary<String, Any>>
         XCTAssertEqual(actualEvents.count, events.count,
                        "RequestBuilder.buildRequest should return a request with an events array containing all " +
-                        "relevant revents")
+                        "relevant events")
+    }
+
+    func testBuildRequestDoesNotDefaultToAnyHost() {
+        let request = RequestBuilder.buildRequest(events: makeEvents(), host: "example-host.com")
+
+        XCTAssertFalse(request.url.contains("p1.parsely.com"),
+                       "No default host may survive anywhere in the request path")
+    }
+
+    func testBuildRequestToleratesHostWithScheme() {
+        // Review Focus 4: a hand-edited artifact could carry a scheme. The result must still
+        // be a single well-formed URL, not "https://https://...".
+        let request = RequestBuilder.buildRequest(events: makeEvents(), host: "https://p1.parsely.com")
+
+        XCTAssertEqual(request.url, "https://p1.parsely.com/mobileproxy")
     }
 
     func testParamsJson() {
         let events = makeEvents()
-        let request = RequestBuilder.buildRequest(events: events)
+        let request = RequestBuilder.buildRequest(events: events, host: "p1.parsely.com")
         var jsonData: Data? = nil
         do {
             jsonData = try JSONSerialization.data(withJSONObject: request.params)

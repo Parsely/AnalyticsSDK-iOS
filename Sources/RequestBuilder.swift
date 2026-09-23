@@ -10,7 +10,6 @@ struct ParselyRequest {
 
 class RequestBuilder {
 
-    static var _baseURL: String? = nil
     static var userAgent: String? = nil
 
     internal static func getHardwareString() -> String {
@@ -43,9 +42,9 @@ class RequestBuilder {
         return userAgent
     }
 
-    static func buildRequest(events: Array<Event>) -> ParselyRequest {
+    static func buildRequest(events: Array<Event>, host: String) -> ParselyRequest {
         let request = ParselyRequest.init(
-            url: buildPixelEndpoint(),
+            url: buildPixelEndpoint(host: host),
             headers: buildHeadersDict(events: events),
             params: buildParamsDict(events: events)
         )
@@ -53,10 +52,13 @@ class RequestBuilder {
         return request
     }
 
-    static func buildPixelEndpoint() -> String {
-        let endpoint = "https://p1.parsely.com/mobileproxy"
-        _baseURL = endpoint
-        return endpoint
+    internal static func buildPixelEndpoint(host: String) -> String {
+        // A host from the generated resource is a bare hostname, but tolerate a scheme so a
+        // hand-edited file cannot produce "https://https://...".
+        let bareHost = host
+            .replacingOccurrences(of: "https://", with: "")
+            .replacingOccurrences(of: "http://", with: "")
+        return "https://\(bareHost)/mobileproxy"
     }
 
     internal static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, String> {

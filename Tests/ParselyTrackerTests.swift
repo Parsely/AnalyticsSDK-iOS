@@ -120,3 +120,95 @@ class ParselyTrackerTests: ParselyTestCase {
         }
     }
 }
+
+extension ParselyTrackerTests {
+
+    func testFlushWithNoHostMapSendsNothingAndClearsQueue() {
+        parselyTestTracker.pixelHosts = PixelHosts(hosts: [:])
+        parselyTestTracker.trackPageView(url: testUrl)
+        expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(1))
+
+        parselyTestTracker.flushForTesting()
+
+        // Unresolvable events are dropped, not held: the map cannot change while the app runs.
+        expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(0))
+    }
+
+    func testGroupingIsByHostNotApikey() {
+        parselyTestTracker.pixelHosts = PixelHosts(hosts: [
+            "a.com": "p1.parsely.com",
+            "b.com": "p1.parsely.com",
+            "c.com": "p1-irl.parsely.com",
+        ])
+        parselyTestTracker.trackPageView(url: testUrl, siteId: "a.com")
+        parselyTestTracker.trackPageView(url: testUrl, siteId: "b.com")
+        parselyTestTracker.trackPageView(url: testUrl, siteId: "c.com")
+        expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(3))
+
+        let grouped = parselyTestTracker.pixelHosts.group(events: parselyTestTracker.eventQueue.list)
+        XCTAssertEqual(grouped.byHost.count, 2, "Three apikeys across two regions is two requests")
+        XCTAssertEqual(grouped.byHost["p1.parsely.com"]?.count, 2)
+        XCTAssertEqual(grouped.byHost["p1-irl.parsely.com"]?.count, 1)
+        XCTAssertTrue(grouped.unresolved.isEmpty)
+    }
+
+    func testFlushSendsOneRequestPerHost() {
+        URLProtocol.registerClass(RecordingURLProtocol.self)
+        RecordingURLProtocol.reset()
+        addTeardownBlock { URLProtocol.unregisterClass(RecordingURLProtocol.self) }
+
+        parselyTestTracker.pixelHosts = PixelHosts(hosts: [
+            "a.com": "p1.parsely.com",
+            "b.com": "p1.parsely.com",
+            "c.com": "p1-irl.parsely.com",
+        ])
+        parselyTestTracker.trackPageView(url: testUrl, siteId: "a.com")
+        parselyTestTracker.trackPageView(url: testUrl, siteId: "b.com")
+        parselyTestTracker.trackPageView(url: testUrl, siteId: "c.com")
+        expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(3))
+
+        parselyTestTracker.flushForTesting()
+
+        expectParselyState(Set(RecordingURLProtocol.capturedURLs)).toEventually(equal([
+            "https://p1.parsely.com/mobileproxy",
+            "https://p1-irl.parsely.com/mobileproxy",
+        ]))
+    }
+
+    func testOfflineHostRequeuesOnlyItsOwnEvents() {
+        URLProtocol.registerClass(RecordingURLProtocol.self)
+        RecordingURLProtocol.reset()
+        RecordingURLProtocol.offlineHosts = ["p1-irl.parsely.com"]
+        addTeardownBlock { URLProtocol.unregisterClass(RecordingURLProtocol.self) }
+
+        parselyTestTracker.pixelHosts = PixelHosts(hosts: [
+            "a.com": "p1.parsely.com",
+            "c.com": "p1-irl.parsely.com",
+        ])
+        parselyTestTracker.trackPageView(url: testUrl, siteId: "a.com")
+        parselyTestTracker.trackPageView(url: testUrl, siteId: "c.com")
+        expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(2))
+
+        parselyTestTracker.flushForTesting()
+
+        // Only the offline host's event comes back; the successful host's is gone.
+        expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(1))
+        expectParselyState(self.parselyTestTracker.eventQueue.list.first?.idsite).toEventually(equal("c.com"))
+    }
+
+    func testFlushWithNoResolvableHostsSendsNoRequests() {
+        URLProtocol.registerClass(RecordingURLProtocol.self)
+        RecordingURLProtocol.reset()
+        addTeardownBlock { URLProtocol.unregisterClass(RecordingURLProtocol.self) }
+
+        parselyTestTracker.pixelHosts = PixelHosts(hosts: [:])
+        parselyTestTracker.trackPageView(url: testUrl)
+        expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(1))
+
+        parselyTestTracker.flushForTesting()
+
+        expectParselyState(self.parselyTestTracker.eventQueue.length()).toEventually(equal(0))
+        XCTAssertTrue(RecordingURLProtocol.capturedURLs.isEmpty,
+                      "An empty host map must produce no requests at all")
+    }
+}

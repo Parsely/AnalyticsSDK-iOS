@@ -39,6 +39,9 @@ public class Parsely {
     // unit tests that inspect tracker's internal state can pass reliably.
     var eventProcessor: DispatchQueue
     internal static let sharedStorage = Storage()
+    // Internal rather than private so tests can inject a map instead of staging a bundle
+    // resource. Populated from the app bundle by `configure`.
+    internal var pixelHosts: PixelHosts = PixelHosts(hosts: [:])
     lazy var visitorManager = VisitorManager()
     internal static func getInstance() -> Parsely {
         return Parsely()
@@ -69,6 +72,11 @@ public class Parsely {
         os_log("Configuring ParselyTracker", log: OSLog.tracker, type: .debug)
         apikey = siteId
         config = ["secondsBetweenHeartbeats": TimeInterval(10)]
+        pixelHosts = PixelHosts.loadFromMainBundle()
+        if pixelHosts.isEmpty {
+            os_log("No pixel hosts are configured. No events will be sent. See the Parse.ly iOS SDK README on adding the build phase.",
+                   log: OSLog.tracker, type: .error)
+        }
         if handleLifecycle {
             addApplicationObservers()
         }
@@ -312,15 +320,46 @@ public class Parsely {
         os_log("Flushing event queue", log: OSLog.tracker, type: .debug)
         let events = eventQueue.get()
         os_log("Got %s events", log: OSLog.tracker, type: .debug, String(describing: events.count))
-        let request = RequestBuilder.buildRequest(events: events)
-        HttpClient.sendRequest(request: request, queue: eventProcessor) { error in
-            if let error = error as? URLError, error.code == .notConnectedToInternet {
-                // When offline, return the events to the queue for the next flush().
-                self.eventQueue.push(contentsOf: events)
-                os_log("Network connection unavailable. Returning %s events to the queue.", String(describing: events.count))
-            }
+        let (byHost, unresolved) = pixelHosts.group(events: events)
 
+        if !unresolved.isEmpty {
+            // Dropped rather than requeued: the baked map cannot change while the app runs,
+            // so these events would never resolve on a later flush.
+            os_log("Dropping %s events whose site ID is not in ParselyHosts.json. Add every site ID your app uses to parsely-apikeys.json and rebuild.",
+                   log: OSLog.tracker, type: .error, String(describing: unresolved.count))
+        }
+
+        guard !byHost.isEmpty else {
             task.end()
+            return
+        }
+
+        // One background task covers every request; it ends when the last one completes.
+        // Mutated only from `eventProcessor`, which is where the completions are delivered.
+        var pending = byHost.count
+
+        for (host, hostEvents) in byHost {
+            let request = RequestBuilder.buildRequest(events: hostEvents, host: host)
+            HttpClient.sendRequest(request: request, queue: eventProcessor) { error in
+                if let error = error as? URLError, error.code == .notConnectedToInternet {
+                    // When offline, return only this host's events to the queue.
+                    self.eventQueue.push(contentsOf: hostEvents)
+                    os_log("Network connection unavailable. Returning %s events to the queue.", String(describing: hostEvents.count))
+                }
+
+                pending -= 1
+                if pending == 0 {
+                    task.end()
+                }
+            }
+        }
+    }
+
+    /// Test hook. `flush` is private and `@objc`-dispatched from the timer; the tests need to
+    /// drive one flush synchronously on the event processor.
+    internal func flushForTesting() {
+        eventProcessor.sync {
+            self.flush()
         }
     }
 
