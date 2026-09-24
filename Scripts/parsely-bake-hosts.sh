@@ -14,7 +14,7 @@
 
 set -euo pipefail
 
-ENDPOINT="${PARSELY_SDK_CONFIG_ENDPOINT:-https://dash.parsely.com/api/jess/sdk-config}"
+API_BASE="${PARSELY_API_BASE:-https://dash.parsely.com/api}"
 DECLARATION="${SRCROOT}/parsely-apikeys.json"
 ARTIFACT="${SRCROOT}/ParselyHosts.json"
 PY=/usr/bin/python3
@@ -24,7 +24,8 @@ warn() { echo "warning: [Parse.ly] $1" >&2; }
 
 [ -f "$DECLARATION" ] || fail "parsely-apikeys.json not found at ${DECLARATION}. Create it with {\"apikeys\": [\"yoursite.com\"]}."
 
-SITE_IDS=$("$PY" -c 'import json,sys; print("\n".join(json.load(open(sys.argv[1])).get("apikeys", [])))' "$DECLARATION") \
+# Python's own traceback would be noise in the Xcode build log; the fail message says it all.
+SITE_IDS=$("$PY" -c 'import json,sys; print("\n".join(json.load(open(sys.argv[1])).get("apikeys", [])))' "$DECLARATION" 2>/dev/null) \
     || fail "parsely-apikeys.json is not valid JSON."
 [ -n "$SITE_IDS" ] || fail "parsely-apikeys.json declares no site IDs. Add every site ID your app tracks."
 
@@ -36,7 +37,7 @@ while IFS= read -r SITE_ID; do
     ENCODED=$("$PY" -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$SITE_ID")
 
     set +e
-    RESPONSE=$(/usr/bin/curl -sS --max-time 20 -w '\n%{http_code}' "${ENDPOINT}/${ENCODED}/" 2>/dev/null)
+    RESPONSE=$(/usr/bin/curl -sS --max-time 20 -w '\n%{http_code}' "${API_BASE}/${ENCODED}/jess/sdk_config/" 2>/dev/null)
     CURL_STATUS=$?
     set -e
 
@@ -54,7 +55,7 @@ while IFS= read -r SITE_ID; do
         *)   fail "Parse.ly returned HTTP ${STATUS} for '${SITE_ID}'." ;;
     esac
 
-    HOST=$("$PY" -c 'import json,sys; print(json.loads(sys.argv[1]).get("pixel_host",""))' "$BODY") \
+    HOST=$("$PY" -c 'import json,sys; print(json.loads(sys.argv[1]).get("pixel_host",""))' "$BODY" 2>/dev/null) \
         || fail "Could not parse Parse.ly's response for '${SITE_ID}'."
     [ -n "$HOST" ] || fail "Parse.ly returned no host for '${SITE_ID}'."
     HOSTS="${HOSTS}${SITE_ID}	${HOST}
