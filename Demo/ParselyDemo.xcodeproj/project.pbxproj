@@ -14,6 +14,8 @@
 		3F147F9729EF96EE00752DFB /* ParselyAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3F147F9629EF96EE00752DFB /* ParselyAnalytics */; };
 		AA73AAAF2242C1F10089BF1D /* ParselyTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */; };
 		B205889F220CB72A00476E27 /* RequestBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205889E220CB72A00476E27 /* RequestBuilderTests.swift */; };
+		A1B2C3D40000000000000002 /* PixelHostsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000001 /* PixelHostsTests.swift */; };
+		A1B2C3D40000000000000004 /* RecordingURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D40000000000000003 /* RecordingURLProtocol.swift */; };
 		B2C84B66220A03610018BC7B /* SamplerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C84B65220A03610018BC7B /* SamplerTests.swift */; };
 		B2FC40C0221CC43200C70806 /* MetadataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FC40BF221CC43200C70806 /* MetadataTests.swift */; };
 		F40D9A5E20EFF74F0030525E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F40D9A5D20EFF74F0030525E /* AppDelegate.swift */; };
@@ -64,6 +66,8 @@
 		AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParselyTestCase.swift; sourceTree = "<group>"; };
 		AAEDC32A2212407700769350 /* ParselyTracker.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParselyTracker.framework; path = ../../../Downloads/ParselyTracker.framework; sourceTree = "<group>"; };
 		B205889E220CB72A00476E27 /* RequestBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilderTests.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000001 /* PixelHostsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelHostsTests.swift; sourceTree = "<group>"; };
+		A1B2C3D40000000000000003 /* RecordingURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingURLProtocol.swift; sourceTree = "<group>"; };
 		B2C84B65220A03610018BC7B /* SamplerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplerTests.swift; sourceTree = "<group>"; };
 		B2FC40BF221CC43200C70806 /* MetadataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataTests.swift; sourceTree = "<group>"; };
 		F40D9A5A20EFF74F0030525E /* ParselyDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParselyDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +180,8 @@
 				F4BF866F2190DB5A00BD3867 /* VisitorTests.swift */,
 				B2C84B65220A03610018BC7B /* SamplerTests.swift */,
 				B205889E220CB72A00476E27 /* RequestBuilderTests.swift */,
+				A1B2C3D40000000000000001 /* PixelHostsTests.swift */,
+				A1B2C3D40000000000000003 /* RecordingURLProtocol.swift */,
 				B2FC40BF221CC43200C70806 /* MetadataTests.swift */,
 				AA73AAAE2242C1F10089BF1D /* ParselyTestCase.swift */,
 				3F0B192D2A8DCFBC0012C731 /* ParselyTests.swift */,
@@ -330,6 +336,8 @@
 				F4BF866A2190DB1C00BD3867 /* TrackTests.swift in Sources */,
 				F4BF86702190DB5A00BD3867 /* VisitorTests.swift in Sources */,
 				B205889F220CB72A00476E27 /* RequestBuilderTests.swift in Sources */,
+				A1B2C3D40000000000000002 /* PixelHostsTests.swift in Sources */,
+				A1B2C3D40000000000000004 /* RecordingURLProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
