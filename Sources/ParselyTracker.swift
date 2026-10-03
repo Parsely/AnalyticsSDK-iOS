@@ -47,7 +47,7 @@ public class Parsely {
     private var _track: Track!
     private var configured = false
     private var flushTimer: Cancellable?
-    private var flushInterval: TimeInterval = 30
+    internal var flushInterval: TimeInterval = 30
     private var active: Bool = true
 
     private init() {
@@ -327,7 +327,13 @@ public class Parsely {
     internal func startFlushTimer() {
         os_log("Flush timer starting", log: OSLog.tracker, type: .debug)
         if flushTimer == nil && active {
-            flushTimer = scheduleEventProcessing(inSeconds: flushInterval, target: self, selector: #selector(flush))
+            flushTimer = eventProcessor.schedule(
+                after: eventProcessor.now.advanced(by: .seconds(flushInterval)),
+                interval: .seconds(flushInterval),
+                tolerance: .milliseconds(1)
+            ) { [weak self] in
+                self?.flush()
+            }
             os_log("Flush timer started", log: OSLog.tracker, type: .debug)
         }
     }

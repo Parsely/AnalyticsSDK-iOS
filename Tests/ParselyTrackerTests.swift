@@ -107,6 +107,24 @@ class ParselyTrackerTests: ParselyTestCase {
         expectParselyState(self.parselyTestTracker.track.videoManager.trackedVideos.isEmpty).toEventually(beTrue())
     }
 
+    func testFlushTimerKeepsFlushingWhileActive() {
+        URLProtocol.registerClass(StubPixelURLProtocol.self)
+        addTeardownBlock { URLProtocol.unregisterClass(StubPixelURLProtocol.self) }
+        // A unique id keeps flushes from other tests' trackers out of the count. The JSON body
+        // escapes "/", so match on the id rather than the whole URL.
+        let id = UUID().uuidString
+        let url = "http://example.com/flush-timer-\(id)"
+        parselyTestTracker.eventProcessor.sync { parselyTestTracker.flushInterval = 0.5 }
+
+        parselyTestTracker.trackPageView(url: url, urlref: url, metadata: nil, extraData: nil)
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(1), timeout: .seconds(3))
+
+        // An event tracked later in the same foreground stint should go out on the next tick,
+        // not wait until the app is backgrounded
+        parselyTestTracker.trackPageView(url: url, urlref: url, metadata: nil, extraData: nil)
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(2), timeout: .seconds(3))
+    }
+
     // A helper method to safely inspect the tracker's internal state.
     private func expectParselyState<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure @escaping () -> T?) -> SyncExpectation<T> {
         expect(file: file, line: line) {
@@ -118,5 +136,42 @@ class ParselyTrackerTests: ParselyTestCase {
             }
             return value
         }
+    }
+}
+
+/// Answers every request with a 200 and records its body, so tests that flush never reach p1.parsely.com.
+final class StubPixelURLProtocol: URLProtocol {
+    private static let lock = NSLock()
+    private static var bodies: [String] = []
+
+    static func requestCount(containing text: String) -> Int {
+        lock.withLock { bodies.filter { $0.contains(text) }.count }
+    }
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+    override func startLoading() {
+        let body = String(decoding: request.httpBody ?? Self.read(request.httpBodyStream), as: UTF8.self)
+        Self.lock.withLock { Self.bodies.append(body) }
+        let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocolDidFinishLoading(self)
+    }
+
+    override func stopLoading() {}
+
+    private static func read(_ stream: InputStream?) -> Data {
+        guard let stream else { return Data() }
+        stream.open()
+        defer { stream.close() }
+        var data = Data()
+        var buffer = [UInt8](repeating: 0, count: 4096)
+        while stream.hasBytesAvailable {
+            let n = stream.read(&buffer, maxLength: buffer.count)
+            if n <= 0 { break }
+            data.append(buffer, count: n)
+        }
+        return data
     }
 }
