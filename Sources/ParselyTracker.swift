@@ -56,6 +56,8 @@ public class Parsely {
     private var active: Bool = true
     private var sending = false
     private var consecutiveRetries = 0
+    /// When the current retry backoff ends. A clock time, so time spent in the background counts toward it.
+    internal var retryAfter: Date?
     /// Events per batch: halved after a 413, back to the full size after a 2xx.
     private var batchLimit = RequestBuilder.maxBatchEvents
 
@@ -343,26 +345,31 @@ public class Parsely {
         os_log("Flushing %s events", log: OSLog.tracker, type: .debug, String(describing: batch.count))
         cancel = HttpClient.sendRequest(request: RequestBuilder.buildRequest(lines: batch), queue: eventProcessor) { status, error in
             self.sending = false
-            switch SendOutcome(status: status) {
+            let outcome = SendOutcome(status: status)
+            switch outcome {
             case .sent:
                 self.queueStore.remove(batch)
-                self.consecutiveRetries = 0
                 self.batchLimit = RequestBuilder.maxBatchEvents
             case .split where batch.count > 1:
-                self.consecutiveRetries = 0
                 self.batchLimit = max(1, batch.count / 2)
                 os_log("Server refused %s events as too large. Sending %s at a time.", log: OSLog.tracker, type: .info,
                        String(describing: batch.count), String(describing: self.batchLimit))
             case .drop, .split:
                 self.queueStore.remove(batch)
-                self.consecutiveRetries = 0
                 os_log("Server rejected %s events with status %s. Not resending them.", log: OSLog.tracker, type: .error,
                        String(describing: batch.count), String(describing: status ?? 0))
             case .retry:
-                self.consecutiveRetries += 1
                 os_log("Send failed (%s). Keeping %s events for a retry.", log: OSLog.tracker, type: .info,
                        status.map { "status \($0)" } ?? error?.localizedDescription ?? "no response",
                        String(describing: batch.count))
+            }
+            if outcome == .retry {
+                self.consecutiveRetries += 1
+                let backoff = Self.backoffDelay(afterRetries: self.consecutiveRetries, interval: self.flushInterval)
+                self.retryAfter = Date().addingTimeInterval(backoff * self.flushJitter())
+            } else {
+                self.consecutiveRetries = 0
+                self.retryAfter = nil
             }
             if self.active {
                 self.scheduleFlush()
@@ -381,10 +388,25 @@ public class Parsely {
 
     /// Arms one tick at a time, rather than a repeating timer, so that each period gets its own jitter or backoff.
     private func scheduleFlush() {
-        let delay = consecutiveRetries > 0
-            ? Self.backoffDelay(afterRetries: consecutiveRetries, interval: flushInterval)
-            : flushInterval
-        flushTimer = scheduleEventProcessing(inSeconds: delay * flushJitter(), target: self, selector: #selector(flushTimerFired))
+        flushTimer = scheduleEventProcessing(inSeconds: nextFlushDelay(), target: self, selector: #selector(flushTimerFired))
+    }
+
+    /// What is left of a pending backoff, so returning to the foreground resumes it instead of starting it
+    /// over. Otherwise a jittered flush interval.
+    internal func nextFlushDelay() -> TimeInterval {
+        backoffRemaining ?? flushInterval * flushJitter()
+    }
+
+    internal var backoffPending: Bool {
+        backoffRemaining != nil
+    }
+
+    /// A deadline further out than the longest jittered backoff means the clock was set back, so it is ignored.
+    private var backoffRemaining: TimeInterval? {
+        guard let remaining = retryAfter?.timeIntervalSinceNow, remaining > 0, remaining <= Self.maxFlushBackoff * 1.2 else {
+            return nil
+        }
+        return remaining
     }
 
     /// Doubles the interval after each consecutive failed send, up to 15 minutes.
@@ -441,11 +463,11 @@ public class Parsely {
 
         self.track.sendHeartbeats()
         // During a backoff, store events for later rather than retry early against a failing proxy.
-        if consecutiveRetries == 0 {
+        if backoffPending {
+            storeQueuedEvents()
+        } else {
             os_log("Flushing queue in background", log: OSLog.tracker, type: .info)
             self.flush()
-        } else {
-            storeQueuedEvents()
         }
     }
 

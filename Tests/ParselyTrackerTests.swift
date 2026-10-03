@@ -248,6 +248,32 @@ class ParselyTrackerTests: ParselyTestCase {
         XCTAssertEqual(delays, [60, 120, 240, 480, 900, 900])
     }
 
+    func testBackoffResumesWhereItStoppedAndEndsOnTheClock() {
+        let tracker: Parsely = parselyTestTracker
+        func state(retryingIn seconds: TimeInterval) -> (pending: Bool, delay: TimeInterval) {
+            tracker.eventProcessor.sync {
+                tracker.retryAfter = Date().addingTimeInterval(seconds)
+                return (tracker.backoffPending, tracker.nextFlushDelay())
+            }
+        }
+        tracker.eventProcessor.sync {
+            tracker.flushInterval = 30
+            tracker.flushJitter = { 1 }
+        }
+
+        let pending = state(retryingIn: 100)
+        XCTAssertTrue(pending.pending)
+        XCTAssertEqual(pending.delay, 100, accuracy: 1, "Returning to the foreground should wait out the rest of the backoff, not start it over")
+
+        let elapsed = state(retryingIn: -1)
+        XCTAssertFalse(elapsed.pending, "A backoff that ran out in the background should let the background flush send")
+        XCTAssertEqual(elapsed.delay, 30, "Once the backoff has run out, ticks should be back to the flush interval")
+
+        let clockSetBack = state(retryingIn: 86_400)
+        XCTAssertFalse(clockSetBack.pending, "A deadline beyond any backoff should not hold sends back")
+        XCTAssertEqual(clockSetBack.delay, 30)
+    }
+
     /// Tracks pageviews whose url carries a new marker, scripts the stub's answers for it, and
     /// makes flush ticks fast and unjittered. Returns the marker.
     private func trackMarkedPageView(count: Int = 1, answering answers: [StubPixelURLProtocol.Answer]) -> String {
