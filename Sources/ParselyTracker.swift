@@ -56,6 +56,8 @@ public class Parsely {
     private var active: Bool = true
     private var sending = false
     private var consecutiveRetries = 0
+    /// Events per batch: halved after a 413, back to the full size after a 2xx.
+    private var batchLimit = RequestBuilder.maxBatchEvents
 
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
@@ -329,7 +331,7 @@ public class Parsely {
             return
         }
         queueStore.dropEvents(olderThan: Date().addingTimeInterval(-QueueStore.maxEventAge))
-        let batch = queueStore.oldest(limit: RequestBuilder.maxBatchEvents, maxBytes: RequestBuilder.maxBatchBytes)
+        let batch = queueStore.oldest(limit: batchLimit, maxBytes: RequestBuilder.maxBatchBytes)
         if batch.isEmpty {
             return
         }
@@ -345,7 +347,13 @@ public class Parsely {
             case .sent:
                 self.queueStore.remove(batch)
                 self.consecutiveRetries = 0
-            case .drop:
+                self.batchLimit = RequestBuilder.maxBatchEvents
+            case .split where batch.count > 1:
+                self.consecutiveRetries = 0
+                self.batchLimit = max(1, batch.count / 2)
+                os_log("Server refused %s events as too large. Sending %s at a time.", log: OSLog.tracker, type: .info,
+                       String(describing: batch.count), String(describing: self.batchLimit))
+            case .drop, .split:
                 self.queueStore.remove(batch)
                 self.consecutiveRetries = 0
                 os_log("Server rejected %s events with status %s. Not resending them.", log: OSLog.tracker, type: .error,

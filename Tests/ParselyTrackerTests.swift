@@ -178,6 +178,23 @@ class ParselyTrackerTests: ParselyTestCase {
         expect(StubPixelURLProtocol.requestCount(containing: id)).toNever(beGreaterThan(1), until: .milliseconds(500))
     }
 
+    func testTooLargeBatchIsSplitNotDropped() {
+        let id = trackMarkedPageView(count: 2, answering: [.status(413)])
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(3), timeout: .seconds(3))
+        let eventsPerRequest = StubPixelURLProtocol.bodies(containing: id).map {
+            $0.components(separatedBy: "\"action\":\"pageview\"").count - 1
+        }
+        XCTAssertEqual(eventsPerRequest, [2, 1, 1], "After a 413 the same events should go out in smaller batches")
+        expectParselyState(self.parselyTestTracker.queueStore.count).toEventually(equal(0))
+    }
+
+    func testTooLargeSingleEventIsDropped() {
+        let id = trackMarkedPageView(answering: [.status(413)])
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(1), timeout: .seconds(3))
+        expectParselyState(self.parselyTestTracker.queueStore.count).toEventually(equal(0))
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toNever(beGreaterThan(1), until: .milliseconds(500))
+    }
+
     func testFailedBatchIsStoredOnDisk() {
         let directory = makeQueueDirectory()
         parselyTestTracker.eventProcessor.sync { parselyTestTracker.queueStore = QueueStore(directory: directory) }
@@ -221,7 +238,7 @@ class ParselyTrackerTests: ParselyTestCase {
         XCTAssertEqual(SendOutcome(status: 503), .retry)
         XCTAssertEqual(SendOutcome(status: 504), .retry)
         XCTAssertEqual(SendOutcome(status: 400), .drop)
-        XCTAssertEqual(SendOutcome(status: 413), .drop)
+        XCTAssertEqual(SendOutcome(status: 413), .split)
         XCTAssertEqual(SendOutcome(status: 429), .drop)
         XCTAssertEqual(SendOutcome(status: 500), .drop, "A repeating proxy error should not loop")
     }
@@ -231,9 +248,9 @@ class ParselyTrackerTests: ParselyTestCase {
         XCTAssertEqual(delays, [60, 120, 240, 480, 900, 900])
     }
 
-    /// Tracks a pageview whose url carries a new marker, scripts the stub's answers for it, and
+    /// Tracks pageviews whose url carries a new marker, scripts the stub's answers for it, and
     /// makes flush ticks fast and unjittered. Returns the marker.
-    private func trackMarkedPageView(answering answers: [StubPixelURLProtocol.Answer]) -> String {
+    private func trackMarkedPageView(count: Int = 1, answering answers: [StubPixelURLProtocol.Answer]) -> String {
         URLProtocol.registerClass(StubPixelURLProtocol.self)
         addTeardownBlock { URLProtocol.unregisterClass(StubPixelURLProtocol.self) }
         let tracker: Parsely = parselyTestTracker
@@ -245,7 +262,9 @@ class ParselyTrackerTests: ParselyTestCase {
         }
         addTeardownBlock { tracker.eventProcessor.sync { tracker.flushInterval = 3_600 } }
         let url = "http://example.com/send-outcome-\(id)"
-        tracker.trackPageView(url: url, urlref: url, metadata: nil, extraData: nil)
+        for _ in 0..<count {
+            tracker.trackPageView(url: url, urlref: url, metadata: nil, extraData: nil)
+        }
         return id
     }
 
