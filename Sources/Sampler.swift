@@ -4,7 +4,7 @@ import os.log
 
 let SAMPLE_RATE = TimeInterval(0.1)
 let MIN_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(1)
-let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(900000)
+let MAX_TIME_BETWEEN_HEARTBEATS: TimeInterval = TimeInterval(900)
 let BACKOFF_THRESHOLD = 60
 
 struct Accumulator {

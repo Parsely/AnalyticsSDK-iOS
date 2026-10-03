@@ -87,6 +87,31 @@ class SamplerTests: ParselyTestCase {
         )
     }
 
+    func testBackoffIsCappedAtFifteenMinutes() {
+        let shortSampler = Sampler(trackerInstance: parselyTestTracker)
+        let longSampler = samplerUnderTest!
+        // The next interval is 0.3 x (seconds tracked + 35 s), so it passes 900 s once a key
+        // has been tracked for 2965 s.
+        parselyTestTracker.eventProcessor.sync {
+            shortSampler.trackKey(key: testKey, contentDuration: nil, eventArgs: [:])
+            shortSampler.accumulators[testKey]!.firstSampleTime = Date().addingTimeInterval(-1000)
+            longSampler.trackKey(key: testKey, contentDuration: nil, eventArgs: [:])
+            longSampler.accumulators[testKey]!.firstSampleTime = Date().addingTimeInterval(-4000)
+
+            shortSampler.sendHeartbeats()
+            longSampler.sendHeartbeats()
+            shortSampler.pause()
+            longSampler.pause()
+        }
+
+        XCTAssertEqual(shortSampler.heartbeatInterval, TimeInterval(310.5), accuracy: 0.01,
+                       "Below the cap, the interval should follow the backoff formula")
+        XCTAssertEqual(longSampler.accumulators[testKey]?.heartbeatTimeout, TimeInterval(900),
+                       "A key tracked for over 2965 s should back off to 15 minutes, not more")
+        XCTAssertEqual(longSampler.heartbeatInterval, TimeInterval(900),
+                       "The next heartbeat should be scheduled at most 15 minutes out")
+    }
+
     func testDistinctTrackedItems() {
         let sampler1 = Sampler(trackerInstance: parselyTestTracker)
         let sampler2 = Sampler(trackerInstance: parselyTestTracker)
