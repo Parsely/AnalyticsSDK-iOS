@@ -70,6 +70,15 @@ class RequestBuilderTests: XCTestCase {
         )
     }
 
+    func testBuildRequestFromLinesSendsThemUnchanged() throws {
+        let lines = ["{\"action\":\"pageview\",\"b\":1,\"a\":2}", "{\"action\":\"heartbeat\"}"]
+        let request = RequestBuilder.buildRequest(lines: lines)
+        let body = try XCTUnwrap(request.body)
+        XCTAssertEqual(String(decoding: body, as: UTF8.self), "{\"events\":[" + lines.joined(separator: ",") + "]}")
+        XCTAssertNotNil(try JSONSerialization.jsonObject(with: body) as? [String: Any], "The body should be valid JSON")
+        XCTAssertNotNil(request.headers["User-Agent"])
+    }
+
     func testGetUserAgent() {
         // When the tests run without a host app, like in our setup, the generated User Agent will
         // be in the format

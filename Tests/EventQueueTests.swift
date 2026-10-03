@@ -66,3 +66,81 @@ class EventQueueTests: XCTestCase {
         return queue
     }
 }
+
+class QueueStoreTests: XCTestCase {
+
+    func testQueueSurvivesReopening() {
+        let directory = makeDirectory()
+        let lines = [line(1), line(2)]
+        QueueStore(directory: directory).append(lines)
+        XCTAssertEqual(QueueStore(directory: directory).oldest(limit: 10, maxBytes: .max), lines)
+    }
+
+    func testFullQueueDropsOldestEvents() {
+        let store = QueueStore(directory: nil)
+        let lines = (0..<(QueueStore.maxEvents + 5)).map { line($0) }
+        store.append(lines)
+        XCTAssertEqual(store.count, QueueStore.maxEvents)
+        XCTAssertEqual(store.oldest(limit: 1, maxBytes: .max), [lines[5]])
+    }
+
+    func testDropsEventsOlderThan23Hours() {
+        let directory = makeDirectory()
+        let now = Date()
+        let stale = line(1, ts: now.addingTimeInterval(-QueueStore.maxEventAge - 60).millisecondsSince1970)
+        let fresh = line(2, ts: now.addingTimeInterval(-60).millisecondsSince1970)
+        let store = QueueStore(directory: directory)
+        store.append([stale, fresh])
+        store.dropEvents(olderThan: now.addingTimeInterval(-QueueStore.maxEventAge))
+        XCTAssertEqual(QueueStore(directory: directory).oldest(limit: 10, maxBytes: .max), [fresh])
+    }
+
+    func testBatchesRespectEventAndByteLimits() {
+        let store = QueueStore(directory: nil)
+        let lines = (0..<5).map { line($0) }
+        store.append(lines)
+        XCTAssertEqual(store.oldest(limit: 2, maxBytes: .max), Array(lines[0..<2]))
+        let twoLines = lines[0].utf8.count + lines[1].utf8.count + 2
+        XCTAssertEqual(store.oldest(limit: 10, maxBytes: twoLines), Array(lines[0..<2]))
+        XCTAssertEqual(store.oldest(limit: 10, maxBytes: 1), [lines[0]], "A line over the byte cap should go on its own")
+    }
+
+    func testRemoveTakesOneCopyOfEachSentLine() {
+        let store = QueueStore(directory: nil)
+        let (first, second, third) = (line(1), line(2), line(3))
+        store.append([first, second, first, third])
+        store.remove([first, second])
+        XCTAssertEqual(store.oldest(limit: 10, maxBytes: .max), [first, third])
+    }
+
+    func testLoadSkipsLinesThatAreNotJSONObjects() throws {
+        let directory = makeDirectory()
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let good = line(1)
+        try Data((good + "\n{\"truncated\n[1]").utf8).write(to: directory.appendingPathComponent("parsely-events.jsonl"))
+        XCTAssertEqual(QueueStore(directory: directory).oldest(limit: 10, maxBytes: .max), [good])
+    }
+
+    func testSerializeSkipsEventsThatAreNotJSON() throws {
+        let good = Event("pageview", url: "http://example.com", urlref: nil, metadata: nil, extra_data: ["n": 1],
+                         idsite: "example.com")
+        let bad = Event("pageview", url: "http://example.com", urlref: nil, metadata: nil, extra_data: ["when": Date()],
+                        idsite: "example.com")
+        let line = try XCTUnwrap(QueueStore.serialize(good))
+        let decoded = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(line.utf8)) as? [String: Any])
+        XCTAssertEqual(decoded["url"] as? String, "http://example.com")
+        XCTAssertNil(QueueStore.serialize(bad), "An event JSON can't encode should be dropped, not crash the flush")
+    }
+
+    private func line(_ number: Int, ts: UInt64 = Date().millisecondsSince1970) -> String {
+        "{\"action\":\"pageview\",\"url\":\"http://example.com/\(number)\",\"data\":{\"ts\":\(ts)}}"
+    }
+
+    private func makeDirectory() -> URL {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("parsely-tests-\(UUID().uuidString)")
+        addTeardownBlock {
+            try? FileManager.default.removeItem(at: directory)
+        }
+        return directory
+    }
+}

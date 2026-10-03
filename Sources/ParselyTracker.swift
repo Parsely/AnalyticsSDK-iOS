@@ -34,6 +34,8 @@ public class Parsely {
         return _track
     }
     var eventQueue: EventQueue<Event> = EventQueue()
+    /// Events move here from `eventQueue` on each flush and leave once the server accepts or rejects them.
+    var queueStore = QueueStore()
     // All tracker related state should be modified in this serial queue, to ensure thread-safty.
     // This property is declared as internal rather than private, because we need to use it to make sure
     // unit tests that inspect tracker's internal state can pass reliably.
@@ -50,7 +52,10 @@ public class Parsely {
     internal var flushInterval: TimeInterval = 30
     /// Scales each flush delay, so devices that start together (after a push, say) drift apart.
     internal var flushJitter: () -> Double = { Double.random(in: 0.8...1.2) }
+    private static let maxFlushBackoff: TimeInterval = 900
     private var active: Bool = true
+    private var sending = false
+    private var consecutiveRetries = 0
 
     private init() {
         os_log("Initializing ParselyTracker", log: OSLog.tracker, type: .info)
@@ -75,6 +80,12 @@ public class Parsely {
             addApplicationObservers()
         }
         configured = true
+        eventProcessor.async {
+            // Sends events left over from an earlier launch.
+            if self.queueStore.count > 0 {
+                self.startFlushTimer()
+            }
+        }
     }
 
     /**
@@ -304,45 +315,80 @@ public class Parsely {
             }
     }
 
+    /// Moves tracked events into the durable queue.
+    private func storeQueuedEvents() {
+        if eventQueue.length() > 0 {
+            queueStore.append(eventQueue.get().compactMap(QueueStore.serialize))
+        }
+    }
+
+    /// Sends the oldest stored batch, unless a send is already in flight.
     @objc private func flush() {
-        if eventQueue.length() == 0 {
+        storeQueuedEvents()
+        guard !sending else {
+            return
+        }
+        queueStore.dropEvents(olderThan: Date().addingTimeInterval(-QueueStore.maxEventAge))
+        let batch = queueStore.oldest(limit: RequestBuilder.maxBatchEvents, maxBytes: RequestBuilder.maxBatchBytes)
+        if batch.isEmpty {
             return
         }
 
-        let task = BackgroundTask.begin()
-
-        os_log("Flushing event queue", log: OSLog.tracker, type: .debug)
-        let events = eventQueue.get()
-        os_log("Got %s events", log: OSLog.tracker, type: .debug, String(describing: events.count))
-        let request = RequestBuilder.buildRequest(events: events)
-        HttpClient.sendRequest(request: request, queue: eventProcessor) { error in
-            if let error = error as? URLError, error.code == .notConnectedToInternet {
-                // When offline, return the events to the queue for the next flush().
-                self.eventQueue.push(contentsOf: events)
-                os_log("Network connection unavailable. Returning %s events to the queue.", String(describing: events.count))
+        sending = true
+        var cancel: () -> Void = {}
+        // If iOS runs out of background time, cancel the send. The batch stays stored for a retry.
+        let task = BackgroundTask.begin { cancel() }
+        os_log("Flushing %s events", log: OSLog.tracker, type: .debug, String(describing: batch.count))
+        cancel = HttpClient.sendRequest(request: RequestBuilder.buildRequest(lines: batch), queue: eventProcessor) { status, error in
+            self.sending = false
+            switch SendOutcome(status: status) {
+            case .sent:
+                self.queueStore.remove(batch)
+                self.consecutiveRetries = 0
+            case .drop:
+                self.queueStore.remove(batch)
+                self.consecutiveRetries = 0
+                os_log("Server rejected %s events with status %s. Not resending them.", log: OSLog.tracker, type: .error,
+                       String(describing: batch.count), String(describing: status ?? 0))
+            case .retry:
+                self.consecutiveRetries += 1
+                os_log("Send failed (%s). Keeping %s events for a retry.", log: OSLog.tracker, type: .info,
+                       status.map { "status \($0)" } ?? error?.localizedDescription ?? "no response",
+                       String(describing: batch.count))
             }
-
+            if self.active {
+                self.scheduleFlush()
+            }
             task.end()
         }
     }
 
     internal func startFlushTimer() {
         os_log("Flush timer starting", log: OSLog.tracker, type: .debug)
-        if flushTimer == nil && active {
+        if flushTimer == nil && active && !sending {
             scheduleFlush()
             os_log("Flush timer started", log: OSLog.tracker, type: .debug)
         }
     }
 
-    /// Arms one tick at a time, rather than a repeating timer, so that each period gets its own jitter.
+    /// Arms one tick at a time, rather than a repeating timer, so that each period gets its own jitter or backoff.
     private func scheduleFlush() {
-        flushTimer = scheduleEventProcessing(inSeconds: flushInterval * flushJitter(), target: self, selector: #selector(flushTimerFired))
+        let delay = consecutiveRetries > 0
+            ? Self.backoffDelay(afterRetries: consecutiveRetries, interval: flushInterval)
+            : flushInterval
+        flushTimer = scheduleEventProcessing(inSeconds: delay * flushJitter(), target: self, selector: #selector(flushTimerFired))
+    }
+
+    /// Doubles the interval after each consecutive failed send, up to 15 minutes.
+    static func backoffDelay(afterRetries retries: Int, interval: TimeInterval) -> TimeInterval {
+        min(interval * pow(2, Double(retries)), maxFlushBackoff)
     }
 
     @objc private func flushTimerFired() {
         flushTimer = nil
         flush()
-        if active {
+        // A send in flight re-arms the timer when it finishes, with a backoff if it failed.
+        if active && !sending {
             scheduleFlush()
         }
     }
@@ -385,9 +431,14 @@ public class Parsely {
         os_log("Stopping execution before background/inactive/terminate", log: OSLog.tracker, type: .info)
         hardShutdown()
 
-        os_log("Flushing queue in background", log: OSLog.tracker, type: .info)
         self.track.sendHeartbeats()
-        self.flush()
+        // During a backoff, store events for later rather than retry early against a failing proxy.
+        if consecutiveRetries == 0 {
+            os_log("Flushing queue in background", log: OSLog.tracker, type: .info)
+            self.flush()
+        } else {
+            storeQueuedEvents()
+        }
     }
 
     internal func hardShutdown() {
@@ -403,9 +454,10 @@ extension OSLog {
 }
 
 private final class BackgroundTask {
-    static func begin() -> Self {
+    static func begin(onExpire: @escaping () -> Void) -> Self {
         let task = Self()
         task.taskIdentifier = UIApplication.shared.beginBackgroundTask {
+            onExpire()
             task.end()
         }
         return task

@@ -2,35 +2,43 @@ import Foundation
 import os.log
 
 class HttpClient {
-    static func sendRequest(request: ParselyRequest, queue: DispatchQueue, completion: ((Error?) -> Void)? = nil) {
+    /// Short enough that a send started on backgrounding usually ends inside iOS's background time.
+    static let timeout: TimeInterval = 20
+
+    /// Reports the HTTP status (nil when no response arrived) and any error on `queue`.
+    /// Returns a function that cancels the request.
+    @discardableResult
+    static func sendRequest(request: ParselyRequest, queue: DispatchQueue, completion: @escaping (Int?, Error?) -> Void) -> () -> Void {
         os_log("Sending request to %s", log: OSLog.tracker, type: .debug, request.url)
 
         guard let url = URL(string: request.url) else {
             os_log("Failed to create URL from %s", log: OSLog.tracker, type: .error, request.url)
-            return
+            queue.async { completion(nil, URLError(.badURL)) }
+            return {}
         }
 
-        var urlRequest = URLRequest(url: url)
+        var urlRequest = URLRequest(url: url, timeoutInterval: timeout)
         urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: request.params)
+        urlRequest.httpBody = request.body ?? (try? JSONSerialization.data(withJSONObject: request.params))
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         request.headers.forEach { key, value in
             urlRequest.setValue(value, forHTTPHeaderField: key)
         }
 
-        URLSession.shared.dataTask(with: urlRequest) { _, _, error in
+        let task = URLSession.shared.dataTask(with: urlRequest) { _, response, error in
+            let status = (response as? HTTPURLResponse)?.statusCode
             if let err = error {
                 os_log("Request failed: %s", log: OSLog.tracker, type: .error, err.localizedDescription)
-                // TODO retry in response to specific errors here
-                // retry only needs to happen on timeouts or similar connection failures, not 500 or 404
             } else {
-                os_log("Request succeeded", log: OSLog.tracker, type: .debug)
+                os_log("Request finished with status %s", log: OSLog.tracker, type: .debug, String(describing: status))
             }
 
             queue.async {
-                completion?(error)
+                completion(status, error)
             }
-        }.resume()
+        }
+        task.resume()
+        return { task.cancel() }
     }
 }

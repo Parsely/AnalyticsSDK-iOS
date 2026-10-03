@@ -157,6 +157,98 @@ class ParselyTrackerTests: ParselyTestCase {
         XCTAssertGreaterThan(Set(factors).count, 1, "Jitter should vary between ticks")
     }
 
+    func testServerErrorKeepsBatchAndResendsTheSameBytes() {
+        let id = trackMarkedPageView(answering: [.status(503)])
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(2), timeout: .seconds(3))
+        let bodies = StubPixelURLProtocol.bodies(containing: id)
+        XCTAssertEqual(bodies.first, bodies.last, "A retry should resend the stored events unchanged")
+        expectParselyState(self.parselyTestTracker.queueStore.count).toEventually(equal(0))
+    }
+
+    func testConnectionFailuresAndTimeoutsKeepBatch() {
+        let id = trackMarkedPageView(answering: [.failure(.cannotConnectToHost), .failure(.timedOut)])
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(3), timeout: .seconds(3))
+        expectParselyState(self.parselyTestTracker.queueStore.count).toEventually(equal(0))
+    }
+
+    func testRejectedBatchIsDroppedNotResent() {
+        let id = trackMarkedPageView(answering: [.status(400)])
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(1), timeout: .seconds(3))
+        expectParselyState(self.parselyTestTracker.queueStore.count).toEventually(equal(0))
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toNever(beGreaterThan(1), until: .milliseconds(500))
+    }
+
+    func testFailedBatchIsStoredOnDisk() {
+        let directory = makeQueueDirectory()
+        parselyTestTracker.eventProcessor.sync { parselyTestTracker.queueStore = QueueStore(directory: directory) }
+        let id = trackMarkedPageView(answering: Array(repeating: .failure(.cannotConnectToHost), count: 100))
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(beGreaterThanOrEqualTo(1), timeout: .seconds(3))
+
+        // A new store reads only the file, as the next launch would.
+        let stored = parselyTestTracker.eventProcessor.sync {
+            QueueStore(directory: directory).oldest(limit: 10, maxBytes: .max)
+        }
+        XCTAssertEqual(stored.count, 1)
+        XCTAssert(stored.first?.contains(id) ?? false, "The unsent pageview should be in the queue file")
+        parselyTestTracker.eventProcessor.sync { parselyTestTracker.queueStore = QueueStore(directory: nil) }
+    }
+
+    func testConfigureSendsEventsLeftFromAnEarlierLaunch() throws {
+        URLProtocol.registerClass(StubPixelURLProtocol.self)
+        addTeardownBlock { URLProtocol.unregisterClass(StubPixelURLProtocol.self) }
+        let directory = makeQueueDirectory()
+        let id = UUID().uuidString
+        let leftover = Event("pageview", url: "http://example.com/leftover-\(id)", urlref: nil, metadata: nil,
+                             extra_data: nil, idsite: Parsely.testAPIKey)
+        QueueStore(directory: directory).append([try XCTUnwrap(QueueStore.serialize(leftover))])
+
+        let tracker = makePareslyTracker()
+        tracker.queueStore = QueueStore(directory: directory)
+        tracker.flushInterval = 0.1
+        tracker.flushJitter = { 1 }
+        addTeardownBlock { tracker.eventProcessor.sync { tracker.flushInterval = 3_600 } }
+        tracker.configure(siteId: Parsely.testAPIKey, handleLifecycle: false)
+
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(1), timeout: .seconds(3))
+        expect(tracker.eventProcessor.sync { tracker.queueStore.count }).toEventually(equal(0))
+    }
+
+    func testSendOutcomeFollowsTheSpecTable() {
+        XCTAssertEqual(SendOutcome(status: 200), .sent)
+        XCTAssertEqual(SendOutcome(status: 204), .sent)
+        XCTAssertEqual(SendOutcome(status: nil), .retry, "No response at all should keep the batch")
+        XCTAssertEqual(SendOutcome(status: 502), .retry)
+        XCTAssertEqual(SendOutcome(status: 503), .retry)
+        XCTAssertEqual(SendOutcome(status: 504), .retry)
+        XCTAssertEqual(SendOutcome(status: 400), .drop)
+        XCTAssertEqual(SendOutcome(status: 413), .drop)
+        XCTAssertEqual(SendOutcome(status: 429), .drop)
+        XCTAssertEqual(SendOutcome(status: 500), .drop, "A repeating proxy error should not loop")
+    }
+
+    func testBackoffDoublesFromTheIntervalUpToFifteenMinutes() {
+        let delays = [1, 2, 3, 4, 5, 40].map { Parsely.backoffDelay(afterRetries: $0, interval: 30) }
+        XCTAssertEqual(delays, [60, 120, 240, 480, 900, 900])
+    }
+
+    /// Tracks a pageview whose url carries a new marker, scripts the stub's answers for it, and
+    /// makes flush ticks fast and unjittered. Returns the marker.
+    private func trackMarkedPageView(answering answers: [StubPixelURLProtocol.Answer]) -> String {
+        URLProtocol.registerClass(StubPixelURLProtocol.self)
+        addTeardownBlock { URLProtocol.unregisterClass(StubPixelURLProtocol.self) }
+        let tracker: Parsely = parselyTestTracker
+        let id = UUID().uuidString
+        StubPixelURLProtocol.script(id, answers)
+        tracker.eventProcessor.sync {
+            tracker.flushInterval = 0.1
+            tracker.flushJitter = { 1 }
+        }
+        addTeardownBlock { tracker.eventProcessor.sync { tracker.flushInterval = 3_600 } }
+        let url = "http://example.com/send-outcome-\(id)"
+        tracker.trackPageView(url: url, urlref: url, metadata: nil, extraData: nil)
+        return id
+    }
+
     // A helper method to safely inspect the tracker's internal state.
     private func expectParselyState<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure @escaping () -> T?) -> SyncExpectation<T> {
         expect(file: file, line: line) {
@@ -171,13 +263,29 @@ class ParselyTrackerTests: ParselyTestCase {
     }
 }
 
-/// Answers every request with a 200 and records its body, so tests that flush never reach p1.parsely.com.
+/// Answers every request without the network and records its body, so tests that flush never reach
+/// p1.parsely.com. Requests whose body contains a scripted marker get the scripted answers in order;
+/// everything else gets a 200.
 final class StubPixelURLProtocol: URLProtocol {
+    enum Answer {
+        case status(Int)
+        case failure(URLError.Code)
+    }
+
     private static let lock = NSLock()
     private static var bodies: [String] = []
+    private static var scripts: [String: [Answer]] = [:]
 
     static func requestCount(containing text: String) -> Int {
         lock.withLock { bodies.filter { $0.contains(text) }.count }
+    }
+
+    static func bodies(containing text: String) -> [String] {
+        lock.withLock { bodies.filter { $0.contains(text) } }
+    }
+
+    static func script(_ marker: String, _ answers: [Answer]) {
+        lock.withLock { scripts[marker] = answers }
     }
 
     override class func canInit(with request: URLRequest) -> Bool { true }
@@ -185,10 +293,23 @@ final class StubPixelURLProtocol: URLProtocol {
 
     override func startLoading() {
         let body = String(decoding: request.httpBody ?? Self.read(request.httpBodyStream), as: UTF8.self)
-        Self.lock.withLock { Self.bodies.append(body) }
-        let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
-        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-        client?.urlProtocolDidFinishLoading(self)
+        let answer: Answer = Self.lock.withLock {
+            Self.bodies.append(body)
+            guard let marker = Self.scripts.keys.first(where: { body.contains($0) }),
+                  let next = Self.scripts[marker]?.first else {
+                return .status(200)
+            }
+            Self.scripts[marker]?.removeFirst()
+            return next
+        }
+        switch answer {
+        case .status(let code):
+            let response = HTTPURLResponse(url: request.url!, statusCode: code, httpVersion: nil, headerFields: nil)!
+            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            client?.urlProtocolDidFinishLoading(self)
+        case .failure(let code):
+            client?.urlProtocol(self, didFailWithError: URLError(code))
+        }
     }
 
     override func stopLoading() {}

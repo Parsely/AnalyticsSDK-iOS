@@ -6,6 +6,8 @@ struct ParselyRequest {
     var url: String
     var headers: Dictionary<String, String>
     var params: Dictionary<String, Any>
+    /// When set, sent as-is instead of serializing `params`.
+    var body: Data? = nil
 }
 
 class RequestBuilder {
@@ -51,6 +53,16 @@ class RequestBuilder {
         )
         os_log("Built request", log: OSLog.tracker, type: .debug)
         return request
+    }
+
+    static let maxBatchEvents = 500
+    /// Leaves room for the replay log, which stores the body JSON-escaped under Kafka's 1 MB message cap.
+    static let maxBatchBytes = 256 * 1024
+
+    /// A request whose body joins stored event lines unchanged, so a resend is byte-identical to the first send.
+    static func buildRequest(lines: [String]) -> ParselyRequest {
+        let body = Data(("{\"events\":[" + lines.joined(separator: ",") + "]}").utf8)
+        return ParselyRequest(url: buildPixelEndpoint(), headers: buildHeadersDict(events: []), params: [:], body: body)
     }
 
     static func buildPixelEndpoint() -> String {
