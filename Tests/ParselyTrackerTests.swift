@@ -125,6 +125,38 @@ class ParselyTrackerTests: ParselyTestCase {
         expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(2), timeout: .seconds(3))
     }
 
+    func testEachFlushTickIsScaledByItsOwnJitter() {
+        URLProtocol.registerClass(StubPixelURLProtocol.self)
+        addTeardownBlock { URLProtocol.unregisterClass(StubPixelURLProtocol.self) }
+        let tracker: Parsely = parselyTestTracker
+        let id = UUID().uuidString
+        let url = "http://example.com/flush-jitter-\(id)"
+        var draws = 0
+        tracker.eventProcessor.sync {
+            tracker.flushInterval = 10
+            // A tick that skipped the jitter would wait 10 s and miss the 2 s deadlines below.
+            tracker.flushJitter = {
+                draws += 1
+                return 0.02
+            }
+        }
+        addTeardownBlock { tracker.eventProcessor.sync { tracker.flushJitter = { 1_000 } } }
+
+        tracker.trackPageView(url: url, urlref: url, metadata: nil, extraData: nil)
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(1), timeout: .seconds(2))
+        tracker.trackPageView(url: url, urlref: url, metadata: nil, extraData: nil)
+        expect(StubPixelURLProtocol.requestCount(containing: id)).toEventually(equal(2), timeout: .seconds(2))
+
+        XCTAssertGreaterThanOrEqual(tracker.eventProcessor.sync { draws }, 2,
+                                    "Every tick should draw a new jitter factor, not reuse the first one")
+    }
+
+    func testFlushJitterSpreadsDelaysAroundTheInterval() {
+        let factors = (0..<200).map { _ in parselyTestTracker.flushJitter() }
+        XCTAssert(factors.allSatisfy { (0.8...1.2).contains($0) }, "Jitter should stay within 20% of the interval")
+        XCTAssertGreaterThan(Set(factors).count, 1, "Jitter should vary between ticks")
+    }
+
     // A helper method to safely inspect the tracker's internal state.
     private func expectParselyState<T>(file: FileString = #file, line: UInt = #line, _ expression: @autoclosure @escaping () -> T?) -> SyncExpectation<T> {
         expect(file: file, line: line) {

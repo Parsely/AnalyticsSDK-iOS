@@ -48,6 +48,8 @@ public class Parsely {
     private var configured = false
     private var flushTimer: Cancellable?
     internal var flushInterval: TimeInterval = 30
+    /// Scales each flush delay, so devices that start together (after a push, say) drift apart.
+    internal var flushJitter: () -> Double = { Double.random(in: 0.8...1.2) }
     private var active: Bool = true
 
     private init() {
@@ -327,14 +329,21 @@ public class Parsely {
     internal func startFlushTimer() {
         os_log("Flush timer starting", log: OSLog.tracker, type: .debug)
         if flushTimer == nil && active {
-            flushTimer = eventProcessor.schedule(
-                after: eventProcessor.now.advanced(by: .seconds(flushInterval)),
-                interval: .seconds(flushInterval),
-                tolerance: .milliseconds(1)
-            ) { [weak self] in
-                self?.flush()
-            }
+            scheduleFlush()
             os_log("Flush timer started", log: OSLog.tracker, type: .debug)
+        }
+    }
+
+    /// Arms one tick at a time, rather than a repeating timer, so that each period gets its own jitter.
+    private func scheduleFlush() {
+        flushTimer = scheduleEventProcessing(inSeconds: flushInterval * flushJitter(), target: self, selector: #selector(flushTimerFired))
+    }
+
+    @objc private func flushTimerFired() {
+        flushTimer = nil
+        flush()
+        if active {
+            scheduleFlush()
         }
     }
 
