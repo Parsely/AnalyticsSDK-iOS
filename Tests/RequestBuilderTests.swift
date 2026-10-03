@@ -30,20 +30,36 @@ class RequestBuilderTests: XCTestCase {
 
     func testHeaders() {
         let events: Array<Event> = makeEvents()
-        let actual: Dictionary<String, Any?> = RequestBuilder.buildHeadersDict(events: events)
+        let actual: Dictionary<String, Any?> = RequestBuilder.buildHeadersDict(events: events, apikey: Parsely.testAPIKey)
         XCTAssert(actual["User-Agent"] != nil, "buildHeadersDict should return a dictionary containing a non-nil " +
                     "user agent string")
     }
 
+    func testHeadersCarryTrackerApikey() {
+        let outboundEvent = Event("pageview", url: "http://test.com", urlref: nil, metadata: nil, extra_data: nil,
+                                  idsite: "outbound.example.com")
+        let headers = RequestBuilder.buildHeadersDict(events: makeEvents() + [outboundEvent], apikey: Parsely.testAPIKey)
+        XCTAssertEqual(headers["X-Parsely-Apikey"], Parsely.testAPIKey,
+                       "The apikey header should carry the tracker's site ID, whatever idsite the events have")
+    }
+
+    func testHeadersOmitApikeyWhenTrackerHasNone() {
+        let headers = RequestBuilder.buildHeadersDict(events: makeEvents(), apikey: "")
+        XCTAssertNil(headers["X-Parsely-Apikey"], "An unconfigured tracker should not send an empty apikey header")
+        XCTAssertNotNil(headers["User-Agent"])
+    }
+
     func testBuildRequest() {
         let events = makeEvents()
-        let request = RequestBuilder.buildRequest(events: events)
+        let request = RequestBuilder.buildRequest(events: events, apikey: Parsely.testAPIKey)
         XCTAssert(request.url.contains("https://p1"),
                   "RequestBuilder.buildRequest should return a request with a valid-looking url attribute")
         XCTAssertNotNil(request.headers,
                         "RequestBuilder.buildRequest should return a request with a non-nil headers attribute")
         XCTAssertNotNil(request.headers["User-Agent"],
                         "RequestBuilder.buildRequest should return a request with a non-nil User-Agent header")
+        XCTAssertEqual(request.headers["X-Parsely-Apikey"], Parsely.testAPIKey,
+                       "RequestBuilder.buildRequest should return a request carrying the tracker's apikey")
         XCTAssertNotNil(request.params,
                         "RequestBuilder.buildRequest should return a request with a non-nil params attribute")
         let actualEvents: Array<Dictionary<String, Any>> = request.params["events"] as! Array<Dictionary<String, Any>>
@@ -54,7 +70,7 @@ class RequestBuilderTests: XCTestCase {
 
     func testParamsJson() {
         let events = makeEvents()
-        let request = RequestBuilder.buildRequest(events: events)
+        let request = RequestBuilder.buildRequest(events: events, apikey: Parsely.testAPIKey)
         var jsonData: Data? = nil
         do {
             jsonData = try JSONSerialization.data(withJSONObject: request.params)
@@ -74,7 +90,14 @@ class RequestBuilderTests: XCTestCase {
         // When the tests run without a host app, like in our setup, the generated User Agent will
         // be in the format
         //
-        // xctest/<Xcode version> iOS/<iOS version> (<architecture>)
-        expect(RequestBuilder.getUserAgent()).to(match("xctest\\/\\d+\\.\\d+(\\.\\d+)? iOS\\/\\d+\\.\\d+(\\.\\d+)? (.*)"))
+        // xctest/<Xcode version> iOS/<iOS version> (<architecture>) ParselySDK/ios/<SDK version>
+        let sdkToken = NSRegularExpression.escapedPattern(for: "ParselySDK/ios/" + RequestBuilder.sdkVersion)
+        expect(RequestBuilder.getUserAgent()).to(match("xctest\\/\\d+\\.\\d+(\\.\\d+)? iOS\\/\\d+\\.\\d+(\\.\\d+)? (.*) " + sdkToken + "$"))
+    }
+
+    func testUserAgentOverrideKeepsSdkToken() {
+        RequestBuilder.userAgent = "CustomAgent/1.0"
+        addTeardownBlock { RequestBuilder.userAgent = nil }
+        XCTAssertEqual(RequestBuilder.getUserAgent(), "CustomAgent/1.0 ParselySDK/ios/" + RequestBuilder.sdkVersion)
     }
 }

@@ -10,6 +10,11 @@ struct ParselyRequest {
 
 class RequestBuilder {
 
+    /// Sent as `ParselySDK/ios/<version>` at the end of the User-Agent. Keep it in step with the podspec.
+    static let sdkVersion = "0.2.6"
+    /// Carries the tracker's own site ID so the edge can route a batch without reading its body.
+    static let apikeyHeader = "X-Parsely-Apikey"
+
     static var _baseURL: String? = nil
     static var userAgent: String? = nil
 
@@ -25,6 +30,10 @@ class RequestBuilder {
     }
 
     static func getUserAgent() -> String {
+        baseUserAgent() + " ParselySDK/ios/" + sdkVersion
+    }
+
+    private static func baseUserAgent() -> String {
         guard let userAgent else {
             var appDescriptor: String = ""
             if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String,
@@ -43,10 +52,10 @@ class RequestBuilder {
         return userAgent
     }
 
-    static func buildRequest(events: Array<Event>) -> ParselyRequest {
+    static func buildRequest(events: Array<Event>, apikey: String) -> ParselyRequest {
         let request = ParselyRequest.init(
             url: buildPixelEndpoint(),
-            headers: buildHeadersDict(events: events),
+            headers: buildHeadersDict(events: events, apikey: apikey),
             params: buildParamsDict(events: events)
         )
         os_log("Built request", log: OSLog.tracker, type: .debug)
@@ -59,9 +68,13 @@ class RequestBuilder {
         return endpoint
     }
 
-    internal static func buildHeadersDict(events: Array<Event>) -> Dictionary<String, String> {
-        let userAgent: String = getUserAgent()
-        return ["User-Agent": userAgent]
+    /// `apikey` is the tracker's configured site ID, not each event's idsite, which can name other sites.
+    internal static func buildHeadersDict(events: Array<Event>, apikey: String) -> Dictionary<String, String> {
+        var headers = ["User-Agent": getUserAgent()]
+        if !apikey.isEmpty {
+            headers[apikeyHeader] = apikey
+        }
+        return headers
     }
 
     internal static func buildParamsDict(events: Array<Event>) -> Dictionary<String, Any> {

@@ -312,7 +312,7 @@ public class Parsely {
         os_log("Flushing event queue", log: OSLog.tracker, type: .debug)
         let events = eventQueue.get()
         os_log("Got %s events", log: OSLog.tracker, type: .debug, String(describing: events.count))
-        let request = RequestBuilder.buildRequest(events: events)
+        let request = RequestBuilder.buildRequest(events: events, apikey: apikey)
         HttpClient.sendRequest(request: request, queue: eventProcessor) { error in
             if let error = error as? URLError, error.code == .notConnectedToInternet {
                 // When offline, return the events to the queue for the next flush().
