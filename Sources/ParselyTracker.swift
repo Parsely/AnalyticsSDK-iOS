@@ -47,7 +47,7 @@ public class Parsely {
     private var _track: Track!
     private var configured = false
     private var flushTimer: Cancellable?
-    internal var flushInterval: TimeInterval = 30
+    internal var flushInterval: TimeInterval = 60
     /// Scales each flush delay, so devices that start together (after a push, say) drift apart.
     internal var flushJitter: () -> Double = { Double.random(in: 0.8...1.2) }
     private var active: Bool = true
